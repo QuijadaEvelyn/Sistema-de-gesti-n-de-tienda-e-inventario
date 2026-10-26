@@ -2,8 +2,171 @@
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
+@source '../views/**/*.blade.php';
+@source '../js/**/*.js';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    /* 🏛️ ARCHIVUM AMETHYST EDITORIAL - Tokens de Color Material Design 3 */
+    --color-primary: #630ed4;
+    --color-primary-hover: #520ab4;
+    --color-primary-container: #7c3aed;
+    --color-on-primary: #ffffff;
+    --color-on-primary-container: #ede0ff;
+    --color-primary-fixed: #eaddff;
+    --color-primary-fixed-dim: #d2bbff;
+    --color-on-primary-fixed: #25005a;
+    --color-on-primary-fixed-variant: #5a00c6;
+
+    --color-secondary: #625595;
+    --color-secondary-container: #c6b7ff;
+    --color-on-secondary: #ffffff;
+    --color-on-secondary-container: #524584;
+    --color-secondary-fixed: #e7deff;
+    --color-secondary-fixed-dim: #ccbeff;
+    --color-on-secondary-fixed: #1e0e4e;
+    --color-on-secondary-fixed-variant: #4a3d7c;
+
+    --color-tertiary: #7300c6;
+    --color-tertiary-container: #8f2de6;
+    --color-on-tertiary: #ffffff;
+    --color-on-tertiary-container: #f2dfff;
+    --color-tertiary-fixed: #f0dbff;
+    --color-tertiary-fixed-dim: #ddb8ff;
+    --color-on-tertiary-fixed: #2c0051;
+    --color-on-tertiary-fixed-variant: #6800b4;
+
+    /* Superficies y Fondos Apergaminados */
+    --color-background: #fbf7fe;
+    --color-surface: #fef7ff;
+    --color-surface-dim: #e2d3ff;
+    --color-surface-bright: #fef7ff;
+    --color-surface-container-lowest: #ffffff;
+    --color-surface-container-low: #f9f1ff;
+    --color-surface-container: #f4eaff;
+    --color-surface-container-high: #efe4ff;
+    --color-surface-container-highest: #eaddff;
+    --color-surface-variant: #eaddff;
+
+    /* Tintas de Lectura y Contraste de Museo */
+    --color-on-surface: #24005b;
+    --color-on-surface-variant: #4a4455;
+    --color-outline: #7b7487;
+    --color-outline-variant: #ccc3d8;
+
+    /* Semántica y Estados */
+    --color-error: #ba1a1a;
+    --color-error-container: #ffdad6;
+    --color-on-error: #ffffff;
+    --color-on-error-container: #93000a;
+
+    /* Familias Tipográficas */
+    --font-quicksand: 'Quicksand', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-barlow: 'Barlow Condensed', sans-serif;
+    --font-newsreader: 'Newsreader', Georgia, serif;
+    --font-roboto: 'Roboto Flex', monospace;
+
+    /* Espaciado del Sistema de Archivo */
+    --spacing-space-xs: 0.25rem;
+    --spacing-space-sm: 0.5rem;
+    --spacing-space-md: 1rem;
+    --spacing-space-lg: 1.5rem;
+    --spacing-space-xl: 2.5rem;
+    --spacing-gutter: 1.5rem;
+    --spacing-margin: 3rem;
+}
+
+/* Clases Utilitarias para la Jerarquía Tipográfica de Archivo */
+@layer utilities {
+    .font-display-lg {
+        font-family: var(--font-quicksand);
+        font-size: 3rem;
+        line-height: 3.5rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+    }
+    .font-headline-lg {
+        font-family: var(--font-quicksand);
+        font-size: 2rem;
+        line-height: 2.5rem;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+    }
+    .font-headline-md {
+        font-family: var(--font-quicksand);
+        font-size: 1.5rem;
+        line-height: 2rem;
+        font-weight: 600;
+    }
+    .font-headline-sm {
+        font-family: var(--font-quicksand);
+        font-size: 1.25rem;
+        line-height: 1.75rem;
+        font-weight: 600;
+    }
+    .font-title-editorial {
+        font-family: var(--font-newsreader);
+        font-size: 1.125rem;
+        line-height: 1.625rem;
+        font-style: italic;
+        font-weight: 500;
+    }
+    .font-label-lg {
+        font-family: var(--font-barlow);
+        font-size: 0.875rem;
+        line-height: 1.125rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+    .font-label-md {
+        font-family: var(--font-barlow);
+        font-size: 0.75rem;
+        line-height: 1rem;
+        font-weight: 600;
+        letter-spacing: 0.10em;
+        text-transform: uppercase;
+    }
+    .font-label-sm {
+        font-family: var(--font-barlow);
+        font-size: 0.625rem;
+        line-height: 0.875rem;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+    }
+    .font-label-code {
+        font-family: var(--font-roboto);
+        font-size: 0.6875rem;
+        line-height: 0.875rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+    }
+    .font-tabular-data {
+        font-family: var(--font-roboto);
+        font-size: 0.8125rem;
+        line-height: 1.125rem;
+        font-weight: 500;
+        font-variant-numeric: tabular-nums;
+        letter-spacing: 0.01em;
+    }
+}
+
+@layer base {
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: var(--color-background);
+        color: var(--color-on-surface);
+        font-family: var(--font-quicksand);
+        -webkit-font-smoothing: antialiased;
+    }
+}
+
+/* Ocultar barra de desplazamiento manteniendo funcionalidad */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
