@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ARCHIVUM — Portal de Autenticación &amp; Registro de Coleccionistas</title>
+<!-- Google Fonts: Quicksand, Barlow Condensed, Roboto Slab -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&amp;family=Quicksand:wght@500;600;700&amp;family=Roboto+Slab:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS CDN v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration with Archivum Amethyst Editorial Light Palette -->
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            amethyst: {
+              950: '#2e1065', // Texto profundo / Títulos
+              900: '#3b0764',
+              800: '#581c87',
+              700: '#6b21a8',
+              600: '#7c3aed', // Amatista primario
+              500: '#8b5cf6',
+              400: '#a78bfa',
+              300: '#c4b5fd',
+              200: '#ddd6fe',
+              100: '#ede9fe',
+              50:  '#f5f3ff',
+              bg:  '#fbf7fe'  // Fondo lila suave
+            }
+          },
+          fontFamily: {
+            quicksand: ['Quicksand', 'sans-serif'],
+            condensed: ['"Barlow Condensed"', 'sans-serif'],
+            slab: ['"Roboto Slab"', 'serif']
+          }
+        }
+      }
+    }
+  </script>
+<!-- Layout & Custom Styles -->
+<style data-purpose="base-styling">
+    body {
+      background-color: #fbf7fe;
+      color: #2e1065;
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+    input:focus, select:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.25);
+    }
+  </style>
+</head>
+<body class="bg-[#fbf7fe] text-amethyst-950 font-condensed min-h-screen flex flex-col selection:bg-amethyst-600 selection:text-white">
+<!-- BEGIN: TopBar -->
+<header class="w-full border-b border-purple-200/80 bg-white/95 backdrop-blur-sm text-amethyst-950 shadow-sm">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+<!-- Brand & Isotype -->
+<div class="flex items-center space-x-3.5">
+<a class="flex items-center space-x-3 group" href="#" title="ARCHIVUM - Bibliotheca &amp; Discos">
+<!-- Monogram Emblem SVG -->
+<div class="w-11 h-11 rounded-lg bg-purple-50 border border-purple-200 flex items-center justify-center text-amethyst-600 group-hover:border-amethyst-500 transition-colors shadow-sm">
+<svg aria-hidden="true" class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75"></path>
+</svg>
+</div>
+<div>
+<div class="font-slab font-bold text-lg tracking-wider text-amethyst-950">ARCHIVUM</div>
+<p class="text-xs uppercase tracking-widest text-amethyst-700 font-condensed">Bibliotheca &amp; Discos Raros</p>
+</div>
+</a>
+</div>
+<!-- Center Status / Protocol Tag -->
+<div class="hidden md:flex items-center space-x-2 text-xs text-amethyst-800 bg-purple-50/90 border border-purple-200 px-3.5 py-1.5 rounded-full font-medium shadow-xs">
+<svg class="w-3.5 h-3.5 text-amethyst-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="tracking-wide">BÓVEDA SEGURA · SHA-256 / 2FA AUDITADO</span>
+</div>
+<!-- Right Controls: Return, Locale, Theme Switcher -->
+<div class="flex items-center space-x-4">
+<a class="hidden sm:inline-flex items-center text-xs tracking-wider text-amethyst-800 hover:text-amethyst-600 uppercase font-semibold transition-colors" href="#">
+<svg class="w-4 h-4 mr-1.5 text-amethyst-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+          Catálogo Público
+        </a>
+<!-- Contrast Mode Indicator -->
+<div class="w-9 h-9 rounded-lg bg-purple-50 border border-purple-200 text-amethyst-700 flex items-center justify-center shadow-xs" title="Modo Claro Activo">
+<!-- Sun Icon (Active) -->
+<svg class="w-4 h-4 text-amethyst-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+</div>
+</header>
+<!-- END: TopBar -->
+<!-- BEGIN: MainContentContainer -->
+<main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex flex-col justify-center">
+<!-- View Mode Selector for Compact Screens (Tabs) -->
+<div class="lg:hidden flex mb-6 bg-white p-1 rounded-xl border border-purple-200 max-w-md mx-auto w-full shadow-sm">
+<button class="flex-1 py-2 text-center text-sm font-quicksand font-bold rounded-lg bg-[#7c3aed] text-white shadow-sm transition-all" id="mobileTabLogin">
+        INICIO DE SESIÓN
+      </button>
+<button class="flex-1 py-2 text-center text-sm font-quicksand font-bold rounded-lg text-amethyst-700 hover:text-amethyst-950 transition-all" id="mobileTabRegister">
+        REGISTRO
+      </button>
+</div>
+<!-- Quick Access Demo Bar -->
+<div class="mb-8 bg-white border border-purple-200 rounded-xl p-3.5 sm:p-4 flex flex-wrap items-center justify-between gap-3 text-xs shadow-sm">
+<div class="flex items-center space-x-2 text-amethyst-950">
+<svg class="w-4 h-4 text-amethyst-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="font-semibold tracking-wide uppercase">Carga Rápida de Credenciales Demo (Esquema de Roles):</span>
+</div>
+<div class="flex flex-wrap items-center gap-2">
+<button class="px-3 py-1.5 bg-purple-50 hover:bg-purple-100 text-amethyst-800 rounded-lg border border-purple-200 transition-colors font-medium hover:border-amethyst-400" id="btnRoleAdmin" type="button">
+          Admin Maestro
+        </button>
+<button class="px-3 py-1.5 bg-purple-50 hover:bg-purple-100 text-amethyst-800 rounded-lg border border-purple-200 transition-colors font-medium hover:border-amethyst-400" id="btnRoleCurador" type="button">
+          Curador / Valuador
+        </button>
+<button class="px-3 py-1.5 bg-purple-50 hover:bg-purple-100 text-amethyst-800 rounded-lg border border-purple-200 transition-colors font-medium hover:border-amethyst-400" id="btnRoleCliente" type="button">
+          Cliente Coleccionista
+        </button>
+</div>
+</div>
+<!-- Wireframe Direct Dual Card Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+<!-- ============================================== -->
+<!-- BEGIN: Card 1 - Inicio de Sesión -->
+<!-- ============================================== -->
+<section class="bg-white border border-[#e9d5ff] rounded-2xl p-6 sm:p-9 shadow-sm hover:shadow-md transition-shadow relative flex flex-col justify-between h-full" id="panelLogin">
+<div>
+<!-- Header of Panel 1 -->
+<div class="text-center pb-6 border-b border-purple-100">
+<h1 class="font-quicksand font-bold text-2xl tracking-widest text-[#2e1065] uppercase">
+              INICIO DE SESIÓN
+            </h1>
+<p class="text-xs tracking-wider uppercase text-amethyst-700 mt-1 font-condensed">
+              Bóveda de Incunables, Primera Edición &amp; Vinilos
+            </p>
+</div>
+<!-- Nested Inner Border Frame -->
+<div class="mt-6 border border-[#e9d5ff] bg-[#faf5ff]/60 rounded-xl p-5 sm:p-7">
+<form class="space-y-5" id="formLogin" onsubmit="event.preventDefault();">
+<!-- Correo / Credencial -->
+<div>
+<label class="block text-xs uppercase tracking-widest font-semibold text-amethyst-950 mb-2" for="loginEmail">
+                  Correo Electrónico Registrado
+                </label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-amethyst-600">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.206" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<input class="w-full pl-10 pr-3.5 py-3 rounded-lg bg-[#faf5ff] border border-purple-200 text-amethyst-950 placeholder-purple-400 text-sm focus:border-[#7c3aed] font-condensed transition-colors" id="loginEmail" name="loginEmail" placeholder="curador@archivum.mx" required="" type="email"/>
+</div>
+</div>
+<!-- Contraseña con botón ver -->
+<div>
+<div class="flex items-center justify-between mb-2">
+<label class="block text-xs uppercase tracking-widest font-semibold text-amethyst-950" for="loginPassword">
+                    Contraseña
+                  </label>
+<a class="text-xs text-amethyst-700 hover:text-amethyst-950 underline underline-offset-4 tracking-wide font-medium transition-colors" href="#modalRecuperacion" id="btnForgotPass">
+                    ¿Olvidaste tu contraseña?
+                  </a>
+</div>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-amethyst-600">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<input class="w-full pl-10 pr-10 py-3 rounded-lg bg-[#faf5ff] border border-purple-200 text-amethyst-950 placeholder-purple-400 text-sm focus:border-[#7c3aed] font-condensed transition-colors" id="loginPassword" name="loginPassword" placeholder="••••••••••••" required="" type="password"/>
+<button class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-amethyst-600 hover:text-amethyst-950" id="toggleLoginPass" title="Mostrar u ocultar contraseña" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+<path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+</div>
+<!-- Recordar sesión -->
+<div class="flex items-center justify-between pt-1">
+<label class="flex items-center text-xs text-amethyst-800 cursor-pointer">
+<input class="rounded bg-[#faf5ff] border-purple-300 text-[#7c3aed] focus:ring-purple-400 w-4 h-4" id="rememberMe" type="checkbox"/>
+<span class="ml-2 font-medium tracking-wide">Recordar terminal seguro</span>
+</label>
+<span class="text-[11px] text-amethyst-700 tracking-wider font-semibold">256-BIT SSL</span>
+</div>
+<!-- Botón principal de login -->
+<div class="pt-3">
+<button class="w-full py-3.5 px-6 rounded-lg bg-[#7c3aed] hover:bg-[#6b21a8] active:bg-[#581c87] text-white font-quicksand font-bold text-sm uppercase tracking-wider transition-colors shadow-md hover:shadow-lg flex items-center justify-center space-x-2" id="btnSubmitLogin" type="submit">
+<span>INGRESAR AL SISTEMA</span>
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+</form>
+</div>
+</div>
+<!-- Footnote: "¿No tienes cuenta? REGÍSTRATE AQUÍ" -->
+<div class="mt-6 pt-4 text-center border-t border-purple-100">
+<p class="text-xs tracking-wider uppercase font-medium text-amethyst-700">
+            ¿No tienes cuenta?
+            <button class="text-amethyst-950 hover:text-amethyst-600 font-bold underline ml-1 cursor-pointer transition-colors" id="linkGoRegister" type="button">
+              REGÍSTRATE AQUÍ
+            </button>
+</p>
+</div>
+</section>
+<!-- END: Card 1 - Inicio de Sesión -->
+<!-- ============================================== -->
+<!-- BEGIN: Card 2 - Registro -->
+<!-- ============================================== -->
+<section class="bg-white border border-[#e9d5ff] rounded-2xl p-6 sm:p-9 shadow-sm hover:shadow-md transition-shadow relative flex flex-col justify-between h-full" id="panelRegister">
+<div>
+<!-- Header of Panel 2 -->
+<div class="text-center pb-6 border-b border-purple-100">
+<h2 class="font-quicksand font-bold text-2xl tracking-widest text-[#2e1065] uppercase">
+              REGISTRO
+            </h2>
+<p class="text-xs tracking-wider uppercase text-amethyst-700 mt-1 font-condensed">
+              Apertura de Cuenta para Adquisiciones &amp; Valuaciones
+            </p>
+</div>
+<!-- Nested Inner Border Frame -->
+<div class="mt-6 border border-[#e9d5ff] bg-[#faf5ff]/60 rounded-xl p-5 sm:p-7">
+<form class="space-y-4" id="formRegister" onsubmit="event.preventDefault();">
+<!-- 1. NOMBRE -->
+<div>
+<label class="block text-xs uppercase tracking-widest font-semibold text-amethyst-950 mb-1.5" for="regNombre">
+                  NOMBRE COMPLETO Y APELLIDOS
+                </label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-amethyst-600">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7 7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<input class="w-full pl-10 pr-3.5 py-2.5 rounded-lg bg-[#faf5ff] border border-purple-200 text-amethyst-950 placeholder-purple-400 text-sm focus:border-[#7c3aed] font-condensed transition-colors" id="regNombre" name="regNombre" placeholder="Mtro. Sebastián de la Peña" required="" type="text"/>
+</div>
+</div>
+<!-- 2. CORREO -->
+<div>
+<label class="block text-xs uppercase tracking-widest font-semibold text-amethyst-950 mb-1.5" for="regEmail">
+                  CORREO ELECTRÓNICO
+                </label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-amethyst-600">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<input class="w-full pl-10 pr-3.5 py-2.5 rounded-lg bg-[#faf5ff] border border-purple-200 text-amethyst-950 placeholder-purple-400 text-sm focus:border-[#7c3aed] font-condensed transition-colors" id="regEmail" name="regEmail" placeholder="coleccion@bibliotheca.org" required="" type="email"/>
+</div>
+</div>
+<!-- PERFIL DEL CLIENTE / TABLA CLIENTES -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+<div>
+<label class="block text-xs uppercase tracking-widest font-semibold text-amethyst-950 mb-1.5" for="regTipoCliente">
+                    TIPO DE PERFIL
+                  </label>
+<select class="w-full py-2.5 px-3 rounded-lg bg-[#faf5ff] border border-purple-200 text-amethyst-950 text-xs focus:border-[#7c3aed] font-condensed transition-colors" id="regTipoCliente">
+<option value="particular">Coleccionista Particular</option>
+<option value="institucional">Institución / Archivo</option>
+<option value="galerista">Galerista / Anticuario</option>
+<option value="curador">Solicitud de Investigador</option>
+</select>
+</div>
+<div>
+<label class="block text-xs uppercase tracking-widest font-semibold text-amethyst-950 mb-1.5" for="regTelefono">
+                    TELÉFONO DE CONTACTO
+                  </label>
+<input class="w-full py-2.5 px-3 rounded-lg bg-[#faf5ff] border border-purple-200 text-amethyst-950 placeholder-purple-400 text-xs focus:border-[#7c3aed] font-condensed transition-colors" id="regTelefono" placeholder="+52 55 1234 5678" type="tel"/>
+</div>
+</div>
+<!-- 3. CONTRASEÑA -->
+<div>
+<label class="block text-xs uppercase tracking-widest font-semibold text-amethyst-950 mb-1.5" for="regPass1">
+                  CONTRASEÑA
+                </label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-amethyst-600">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<input class="w-full pl-10 pr-10 py-2.5 rounded-lg bg-[#faf5ff] border border-purple-200 text-amethyst-950 placeholder-purple-400 text-sm focus:border-[#7c3aed] font-condensed transition-colors" id="regPass1" minlength="8" name="regPass1" placeholder="Mínimo 8 caracteres" required="" type="password"/>
+<button class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-amethyst-600 hover:text-amethyst-950" id="toggleRegPass1" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+<path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+<!-- Fortaleza visual -->
+<div class="mt-1 flex items-center space-x-1.5">
+<div class="h-1 flex-1 rounded bg-purple-200" id="bar1"></div>
+<div class="h-1 flex-1 rounded bg-purple-200" id="bar2"></div>
+<div class="h-1 flex-1 rounded bg-purple-200" id="bar3"></div>
+<span class="text-[10px] text-amethyst-700 uppercase tracking-widest pl-1 font-semibold" id="labelFortaleza">Básica</span>
+</div>
+</div>
+<!-- 4. CONFIRMAR CONTRASEÑA -->
+<div>
+<label class="block text-xs uppercase tracking-widest font-semibold text-amethyst-950 mb-1.5" for="regPass2">
+                  CONFIRMAR CONTRASEÑA
+                </label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-amethyst-600">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<input class="w-full pl-10 pr-3.5 py-2.5 rounded-lg bg-[#faf5ff] border border-purple-200 text-amethyst-950 placeholder-purple-400 text-sm focus:border-[#7c3aed] font-condensed transition-colors" id="regPass2" minlength="8" name="regPass2" placeholder="Repita la contraseña" required="" type="password"/>
+</div>
+</div>
+<!-- Checkbox Términos -->
+<div class="pt-1">
+<label class="flex items-start text-xs text-amethyst-800 cursor-pointer">
+<input class="mt-0.5 rounded bg-[#faf5ff] border-purple-300 text-[#7c3aed] focus:ring-purple-400 w-4 h-4" required="" type="checkbox"/>
+<span class="ml-2 font-normal leading-tight">
+                    Acepto el Código de Custodia de Archivo y los Términos de Protección de Datos (LFPDPPP).
+                  </span>
+</label>
+</div>
+<!-- Botón de Registro -->
+<div class="pt-2">
+<button class="w-full py-3.5 px-6 rounded-lg bg-[#7c3aed] hover:bg-[#6b21a8] active:bg-[#581c87] text-white font-quicksand font-bold text-sm uppercase tracking-wider transition-colors shadow-md hover:shadow-lg flex items-center justify-center space-x-2" id="btnSubmitRegister" type="submit">
+<span>CREAR CUENTA Y ACCEDER</span>
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+</form>
+</div>
+</div>
+<!-- Footnote of Registration -->
+<div class="mt-6 pt-4 text-center border-t border-purple-100">
+<p class="text-xs tracking-wider uppercase font-medium text-amethyst-700">
+            ¿Ya eres miembro del catálogo?
+            <button class="text-amethyst-950 hover:text-amethyst-600 font-bold underline ml-1 cursor-pointer transition-colors" id="linkGoLogin" type="button">
+              INICIAR SESIÓN AQUÍ
+            </button>
+</p>
+</div>
+</section>
+<!-- END: Card 2 - Registro -->
+</div>
+<!-- Feedback Banner / Alert Box -->
+<div class="hidden mt-6 max-w-xl mx-auto p-4 rounded-xl border border-purple-200 bg-white text-amethyst-950 shadow-md flex items-center space-x-3 transition-opacity" id="statusToast">
+<svg class="w-5 h-5 text-amethyst-600 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<div class="text-xs font-condensed">
+<strong class="font-quicksand text-sm block text-amethyst-950" id="statusTitle">Notificación de Bóveda</strong>
+<span class="text-amethyst-800" id="statusMessage">Acción procesada con éxito.</span>
+</div>
+</div>
+</main>
+<!-- END: MainContentContainer -->
+<!-- BEGIN: PasswordRecoveryModal -->
+<aside class="fixed inset-0 z-50 bg-[#2e1065]/40 backdrop-blur-sm hidden items-center justify-center p-4" id="modalRecuperacion">
+<div class="bg-white border border-[#e9d5ff] rounded-2xl max-w-md w-full p-6 sm:p-8 shadow-2xl relative">
+<div class="flex items-center justify-between pb-4 border-b border-purple-100">
+<div>
+<h3 class="font-quicksand font-bold text-lg text-amethyst-950 uppercase tracking-wider">Recuperación de Acceso</h3>
+<p class="text-xs text-amethyst-700">Emisión de token seguro temporal (24 hrs)</p>
+</div>
+<button class="text-amethyst-600 hover:text-amethyst-950 p-1" id="btnCloseModal" type="button">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+<form class="mt-5 space-y-4" id="formRecovery" onsubmit="event.preventDefault();">
+<p class="text-xs text-amethyst-800 leading-relaxed">
+          Ingrese la dirección de correo registrada en el archivo. Se enviará un enlace criptográfico de un solo uso para reestablecer sus credenciales.
+        </p>
+<div>
+<label class="block text-xs uppercase tracking-widest font-semibold text-amethyst-950 mb-1.5" for="recoveryEmail">Correo Electrónico</label>
+<input class="w-full px-3.5 py-2.5 rounded-lg bg-[#faf5ff] border border-purple-200 text-amethyst-950 placeholder-purple-400 text-sm focus:border-[#7c3aed] font-condensed" id="recoveryEmail" placeholder="custodio@archivum.mx" required="" type="email"/>
+</div>
+<div class="pt-2 flex items-center justify-end space-x-3">
+<button class="px-4 py-2 rounded-lg bg-purple-50 hover:bg-purple-100 text-xs font-semibold uppercase tracking-wider text-amethyst-800 border border-purple-200" id="btnCancelModal" type="button">
+            Cancelar
+          </button>
+<button class="px-5 py-2 rounded-lg bg-[#7c3aed] hover:bg-[#6b21a8] text-xs font-quicksand font-bold uppercase tracking-wider text-white shadow-sm" id="btnSendToken" type="submit">
+            Enviar Token
+          </button>
+</div>
+</form>
+</div>
+</aside>
+<!-- END: PasswordRecoveryModal -->
+<!-- BEGIN: PageFooter -->
+<footer class="w-full border-t border-purple-200 bg-white py-6 mt-auto">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-amethyst-700 space-y-3 sm:space-y-0">
+<div class="flex items-center space-x-2">
+<span class="font-slab font-semibold text-amethyst-950">ARCHIVUM HISTÓRICO</span>
+<span>— Catálogo Notarial, Manuscritos y Fonoteca</span>
+</div>
+<div class="flex items-center space-x-6 tracking-wide">
+<a class="hover:text-amethyst-950 transition-colors" href="#">Términos de Bóveda</a>
+<a class="hover:text-amethyst-950 transition-colors" href="#">Privacidad LFPDPPP</a>
+<a class="hover:text-amethyst-950 transition-colors" href="#">Verificación de Valuadores</a>
+</div>
+</div>
+</footer>
+<!-- END: PageFooter -->
+<script data-purpose="auth-interactions">
+    // Password Visibility Toggles
+    function setupPasswordToggle(buttonId, inputId) {
+      const btn = document.getElementById(buttonId);
+      const input = document.getElementById(inputId);
+      if (btn && input) {
+        btn.addEventListener('click', () => {
+          const isPassword = input.getAttribute('type') === 'password';
+          input.setAttribute('type', isPassword ? 'text' : 'password');
+        });
+      }
+    }
+    setupPasswordToggle('toggleLoginPass', 'loginPassword');
+    setupPasswordToggle('toggleRegPass1', 'regPass1');
+
+    // Demo Role Credentials Quick Loader
+    const loginEmailInput = document.getElementById('loginEmail');
+    const loginPassInput = document.getElementById('loginPassword');
+
+    document.getElementById('btnRoleAdmin').addEventListener('click', () => {
+      loginEmailInput.value = 'administrador@archivum.mx';
+      loginPassInput.value = 'ArchivumMaster2026!';
+      showToast('Credenciales Cargadas', 'Perfil activo: Administrador Maestro de Bóveda');
+    });
+
+    document.getElementById('btnRoleCurador').addEventListener('click', () => {
+      loginEmailInput.value = 'curaduria@archivum.mx';
+      loginPassInput.value = 'ValuadorPatrimonial#88';
+      showToast('Credenciales Cargadas', 'Perfil activo: Curador & Valuador Bibliográfico');
+    });
+
+    document.getElementById('btnRoleCliente').addEventListener('click', () => {
+      loginEmailInput.value = 'coleccionista.particular@gmail.com';
+      loginPassInput.value = 'VinylRareGold*99';
+      showToast('Credenciales Cargadas', 'Perfil activo: Cliente Coleccionista Particular');
+    });
+
+    // Mobile View Toggle Tabs
+    const tabLogin = document.getElementById('mobileTabLogin');
+    const tabRegister = document.getElementById('mobileTabRegister');
+    const panelLogin = document.getElementById('panelLogin');
+    const panelRegister = document.getElementById('panelRegister');
+
+    function showMobilePanel(isLogin) {
+      if (isLogin) {
+        panelLogin.classList.remove('hidden');
+        panelRegister.classList.add('hidden');
+        tabLogin.classList.add('bg-[#7c3aed]', 'text-white');
+        tabLogin.classList.remove('text-amethyst-700');
+        tabRegister.classList.remove('bg-[#7c3aed]', 'text-white');
+        tabRegister.classList.add('text-amethyst-700');
+      } else {
+        panelLogin.classList.add('hidden');
+        panelRegister.classList.remove('hidden');
+        tabRegister.classList.add('bg-[#7c3aed]', 'text-white');
+        tabRegister.classList.remove('text-amethyst-700');
+        tabLogin.classList.remove('bg-[#7c3aed]', 'text-white');
+        tabLogin.classList.add('text-amethyst-700');
+      }
+    }
+
+    if (window.innerWidth < 1024) {
+      showMobilePanel(true);
+    }
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 1024) {
+        panelLogin.classList.remove('hidden');
+        panelRegister.classList.remove('hidden');
+      } else {
+        showMobilePanel(true);
+      }
+    });
+
+    tabLogin.addEventListener('click', () => showMobilePanel(true));
+    tabRegister.addEventListener('click', () => showMobilePanel(false));
+    document.getElementById('linkGoRegister').addEventListener('click', () => {
+      if (window.innerWidth < 1024) {
+        showMobilePanel(false);
+      } else {
+        document.getElementById('regNombre').focus();
+      }
+    });
+    document.getElementById('linkGoLogin').addEventListener('click', () => {
+      if (window.innerWidth < 1024) {
+        showMobilePanel(true);
+      } else {
+        loginEmailInput.focus();
+      }
+    });
+
+    // Password Strength Meter
+    const regPass1 = document.getElementById('regPass1');
+    const b1 = document.getElementById('bar1');
+    const b2 = document.getElementById('bar2');
+    const b3 = document.getElementById('bar3');
+    const labelF = document.getElementById('labelFortaleza');
+
+    regPass1.addEventListener('input', (e) => {
+      const val = e.target.value;
+      if (val.length === 0) {
+        b1.className = 'h-1 flex-1 rounded bg-purple-200';
+        b2.className = 'h-1 flex-1 rounded bg-purple-200';
+        b3.className = 'h-1 flex-1 rounded bg-purple-200';
+        labelF.textContent = 'Básica';
+        labelF.className = 'text-[10px] text-amethyst-700 uppercase tracking-widest pl-1 font-semibold';
+      } else if (val.length < 8) {
+        b1.className = 'h-1 flex-1 rounded bg-amber-400';
+        b2.className = 'h-1 flex-1 rounded bg-purple-200';
+        b3.className = 'h-1 flex-1 rounded bg-purple-200';
+        labelF.textContent = 'Débil (< 8)';
+        labelF.className = 'text-[10px] text-amber-600 uppercase tracking-widest pl-1 font-semibold';
+      } else if (val.match(/[A-Z]/) && val.match(/[0-9]/)) {
+        b1.className = 'h-1 flex-1 rounded bg-emerald-500';
+        b2.className = 'h-1 flex-1 rounded bg-emerald-500';
+        b3.className = 'h-1 flex-1 rounded bg-emerald-500';
+        labelF.textContent = 'Robusta (A-Z, 0-9)';
+        labelF.className = 'text-[10px] text-emerald-600 uppercase tracking-widest pl-1 font-semibold';
+      } else {
+        b1.className = 'h-1 flex-1 rounded bg-[#7c3aed]';
+        b2.className = 'h-1 flex-1 rounded bg-[#7c3aed]';
+        b3.className = 'h-1 flex-1 rounded bg-purple-200';
+        labelF.textContent = 'Aceptable';
+        labelF.className = 'text-[10px] text-[#7c3aed] uppercase tracking-widest pl-1 font-semibold';
+      }
+    });
+
+    // Notification Toast System
+    const toast = document.getElementById('statusToast');
+    const statusTitle = document.getElementById('statusTitle');
+    const statusMessage = document.getElementById('statusMessage');
+
+    function showToast(title, message) {
+      statusTitle.textContent = title;
+      statusMessage.textContent = message;
+      toast.classList.remove('hidden');
+      setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 4500);
+    }
+
+    // Modal Recovery Handling
+    const modal = document.getElementById('modalRecuperacion');
+    document.getElementById('btnForgotPass').addEventListener('click', (e) => {
+      e.preventDefault();
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    });
+    document.getElementById('btnCloseModal').addEventListener('click', () => {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    });
+    document.getElementById('btnCancelModal').addEventListener('click', () => {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    });
+    document.getElementById('formRecovery').addEventListener('submit', () => {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      showToast('Token de Recuperación Emitido', 'Se han despachado las instrucciones criptográficas al buzón notificado.');
+    });
+
+    // Form Submit Feedback
+    document.getElementById('formLogin').addEventListener('submit', () => {
+      showToast('Sesión Iniciada con Éxito', 'Accediendo a terminal con privilegios de custodia...');
+    });
+    document.getElementById('formRegister').addEventListener('submit', () => {
+      showToast('Registro Completado', 'Nuevo expediente patrimonial creado. Bienvenido a ARCHIVUM.');
+    });
+  </script>
+</body></html>

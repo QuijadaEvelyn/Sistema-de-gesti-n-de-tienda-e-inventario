@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&amp;family=Newsreader:wght@100..900&amp;family=Quicksand:wght@400;500;600;700&amp;family=Roboto+Flex:wght@400;500;600&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"on-secondary-container":"#524584","primary":"#630ed4","surface-container-low":"#f9f1ff","background":"#fef7ff","inverse-on-surface":"#f6edff","on-error-container":"#93000a","on-error":"#ffffff","inverse-surface":"#391e70","tertiary-fixed-dim":"#ddb8ff","on-primary-fixed":"#25005a","primary-container":"#7c3aed","on-tertiary":"#ffffff","surface-variant":"#eaddff","primary-fixed-dim":"#d2bbff","on-secondary":"#ffffff","on-tertiary-fixed":"#2c0051","secondary-fixed":"#e7deff","secondary":"#625595","surface-dim":"#e2d3ff","on-surface":"#24005b","primary-fixed":"#eaddff","on-secondary-fixed":"#1e0e4e","surface-container":"#f4eaff","on-primary-container":"#ede0ff","outline-variant":"#ccc3d8","error-container":"#ffdad6","secondary-container":"#c6b7ff","on-surface-variant":"#4a4455","surface-container-high":"#efe4ff","surface":"#fef7ff","surface-container-highest":"#eaddff","surface-container-lowest":"#ffffff","on-tertiary-fixed-variant":"#6800b4","outline":"#7b7487","tertiary":"#7300c6","on-tertiary-container":"#f2dfff","on-primary":"#ffffff","surface-bright":"#fef7ff","on-primary-fixed-variant":"#5a00c6","on-secondary-fixed-variant":"#4a3d7c","tertiary-fixed":"#f0dbff","error":"#ba1a1a","tertiary-container":"#8f2de6","surface-tint":"#732ee4","on-background":"#24005b","inverse-primary":"#d2bbff","secondary-fixed-dim":"#ccbeff"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"space-lg":"1.5rem","space-xs":"0.25rem","margin-mobile":"1rem","gutter":"1.5rem","space-xl":"2.5rem","space-sm":"0.5rem","space-md":"1rem","margin":"3rem","gutter-mobile":"1rem"},"fontFamily":{"display-lg-mobile":["Quicksand"],"label-sm":["Barlow Condensed"],"body-lg":["Quicksand"],"title-md":["Quicksand"],"label-md":["Barlow Condensed"],"label-lg":["Barlow Condensed"],"body-sm":["Quicksand"],"headline-sm":["Quicksand"],"headline-md":["Quicksand"],"display-lg":["Quicksand"],"headline-lg-mobile":["Quicksand"],"headline-lg":["Quicksand"],"body-md":["Quicksand"],"label-code":["Roboto Flex"],"title-editorial":["Newsreader"],"tabular-data":["Roboto Flex"]},"fontSize":{"display-lg-mobile":["32px",{"lineHeight":"40px","letterSpacing":"-0.01em","fontWeight":"600"}],"label-sm":["10px",{"lineHeight":"14px","letterSpacing":"0.12em","fontWeight":"500"}],"body-lg":["16px",{"lineHeight":"26px","fontWeight":"400"}],"title-md":["16px",{"lineHeight":"24px","fontWeight":"600"}],"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.1em","fontWeight":"600"}],"label-lg":["14px",{"lineHeight":"18px","letterSpacing":"0.08em","fontWeight":"600"}],"body-sm":["12px",{"lineHeight":"18px","fontWeight":"400"}],"headline-sm":["20px",{"lineHeight":"28px","fontWeight":"500"}],"headline-md":["24px",{"lineHeight":"32px","fontWeight":"500"}],"display-lg":["48px",{"lineHeight":"56px","letterSpacing":"-0.02em","fontWeight":"600"}],"headline-lg-mobile":["24px",{"lineHeight":"32px","letterSpacing":"0","fontWeight":"600"}],"headline-lg":["32px",{"lineHeight":"40px","letterSpacing":"-0.01em","fontWeight":"600"}],"body-md":["14px",{"lineHeight":"22px","fontWeight":"400"}],"label-code":["11px",{"lineHeight":"14px","letterSpacing":"0.06em","fontWeight":"600"}],"title-editorial":["18px",{"lineHeight":"26px","fontWeight":"500"}],"tabular-data":["13px",{"lineHeight":"18px","letterSpacing":"0.01em","fontWeight":"500"}]}}}};</script></head><body class="bg-background font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-72 bg-surface-container-lowest z-50 flex flex-col justify-between border-r border-purple-200/70 shadow-sm"><div class="flex flex-col"><div class="h-16 px-space-lg flex items-center gap-space-sm border-b border-purple-100"><img alt="Archivum Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1XpYL16spys3lquOqmtCnWGeIzo21kYuRkPQI86rtp7YGl3KoG9czPgovVtS17iUlbGfdkTWbJpT50j350S_UyCvqjvK5Lk6h7ytmDdsJSWYAbekTy00s1VNnzyOo-iJmj90crMT371ZkTtROpWDgYaLOErCiR-wFNlhZscQc-ysNVub4O_Ml0PqTTx_FgD3uy90FrqUN8RtVHlEB3h_qxmIhSH0U5VYEpnkTuXxfbP"/><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-primary font-bold tracking-wide leading-none">ARCHIVUM</span><span class="font-label-code text-label-code text-secondary uppercase tracking-widest mt-1">Archival &amp; Curated</span></div></div><div class="px-space-md py-space-sm"><span class="font-label-sm text-label-sm uppercase tracking-wider text-outline px-space-sm block mb-space-xs font-semibold">Dashboard del Administrador</span><nav class="flex flex-col gap-space-xs" data-active-classes="bg-primary-container text-white font-label-md shadow-sm"><a aria-current="page" class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg transition-colors bg-primary-container text-white font-label-md shadow-sm" data-path="dashboard" href="#"><span class="material-symbols-outlined text-[20px]">dashboard</span><span>Dashboard</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg font-body-md text-body-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="alta-empleado" href="#"><span class="material-symbols-outlined text-[20px]">person_add</span><span>Alta Empleado</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg font-body-md text-body-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="baja-empleado" href="#"><span class="material-symbols-outlined text-[20px]">person_remove</span><span>Baja Empleado</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg font-body-md text-body-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="administracion-de-ventas" href="#"><span class="material-symbols-outlined text-[20px]">point_of_sale</span><span>Administración de Ventas</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg font-body-md text-body-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="inventario" href="#"><span class="material-symbols-outlined text-[20px]">inventory_2</span><span>Inventario</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg font-body-md text-body-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="sucursales" href="#"><span class="material-symbols-outlined text-[20px]">store</span><span>Sucursales</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg font-body-md text-body-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="bitacora-del-sistema" href="#"><span class="material-symbols-outlined text-[20px]">history_edu</span><span>Bitácora del Sistema</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg font-body-md text-body-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="roles-y-permisos" href="#"><span class="material-symbols-outlined text-[20px]">admin_panel_settings</span><span>Roles y Permisos</span></a></nav></div></div><div class="p-space-md border-t border-purple-100 bg-surface-container-lowest"><div class="bg-surface-container-low border border-purple-200/70 p-space-sm rounded-lg flex items-center justify-between"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-primary text-[20px]">security</span><div><div class="font-label-sm text-label-sm text-on-surface font-semibold">Terminal Archivo</div><div class="font-label-code text-label-code text-on-surface-variant">v4.8.2-PROD</div></div></div><span class="h-2 w-2 rounded-full bg-emerald-500 ring-2 ring-emerald-100"></span></div></div></aside><div class="pl-72"><header class="fixed top-0 left-72 right-0 h-16 bg-surface-container-lowest/95 backdrop-blur-md z-40 border-b border-purple-200/70 px-space-lg flex items-center justify-between gap-space-md shadow-sm"><div class="flex items-center gap-space-md flex-1 max-w-xl"><div class="relative w-full"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span><input class="w-full bg-surface-container-low pl-10 pr-space-md py-1.5 rounded-lg border border-purple-200/80 font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:border-primary focus:bg-white transition-colors" placeholder="Buscar por SKU, ISBN, catálogo vinilo, título o autor..." type="text"/></div></div><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs bg-surface-container-low px-space-sm py-1 rounded-lg border border-purple-200/80"><span class="material-symbols-outlined text-[18px] text-primary">location_on</span><label class="sr-only" for="branch-select">Sucursal activa</label><select class="bg-transparent font-label-sm text-label-sm text-on-surface font-medium focus:outline-none cursor-pointer pr-space-xs" id="branch-select"><option class="bg-white text-on-surface" value="central">Sucursal Central Bellas Artes</option><option class="bg-white text-on-surface" value="coyoacan">Sucursal Coyoacán</option><option class="bg-white text-on-surface" value="almacen">Almacén General</option></select></div><button class="relative p-2 rounded-lg bg-surface-container-low hover:bg-surface-container border border-purple-200/60 text-on-surface-variant hover:text-on-surface transition-colors" title="Existencias Críticas" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-error ring-2 ring-white"></span></button><button class="p-2 rounded-lg bg-surface-container-low hover:bg-surface-container border border-purple-200/60 text-on-surface-variant hover:text-on-surface transition-colors" title="Alternar Tema Claro/Oscuro" type="button"><span class="material-symbols-outlined text-[20px]">light_mode</span></button><div class="h-6 w-px bg-purple-200"></div><div class="flex items-center gap-space-sm pl-space-xs"><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-2 ring-primary/40 shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDi6YYAhugCQIXIoFm1VFkE8TpQBvXgpnbV9Qsce6ZM0A2kAdSU3p42bT4Ne4_9M4aZfo_t-dSdgDMFvhfFFgMZ4G5ZjE2ZZGQiZFsWLyvIT26jd7xIRUiU7-NF-_uuHOM7lKuMLmzYyYZ0ui6L3x0sh8FMQoT1oz3j8_zhrmNAy8neQ3JthuvZDj4drH3zgPhllR1HnskyeA8R33FbCDxvg6cq9PqFjgR48OOI5AQ"/><div class="hidden xl:flex flex-col text-left"><span class="font-label-md text-label-md text-on-surface leading-tight font-semibold">Curador en Jefe</span><span class="font-label-code text-label-code text-secondary leading-tight">admin@archivum.mx</span></div></div></div></header><main class="w-full pt-16 px-space-lg py-space-lg bg-background min-h-screen"><div class="flex flex-col w-full gap-space-lg">
+<!-- Operational Greeting & Controls Bar -->
+<section class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-space-md bg-surface-container-lowest p-space-lg rounded-xl border border-purple-200/70 shadow-sm">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs mb-1">
+<span class="font-label-code text-label-code uppercase tracking-wider text-primary font-bold">Terminal de Control Maestro</span>
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span class="font-tabular-data text-tabular-data text-on-surface-variant font-medium">SESIÓN ID: #ADM-8841-MX</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight font-bold">Bienvenido, Mateo Vargas</h1>
+<p class="font-title-editorial text-title-editorial text-on-surface-variant italic">Administrador General · Sistema de Catalogación &amp; Logística de Anticuario</p>
+</div>
+<!-- Filters & Actions -->
+<div class="flex flex-wrap items-center gap-space-sm w-full lg:w-auto">
+<!-- Date Range Filter -->
+<div class="flex items-center bg-surface-container-low p-1 rounded-lg border border-purple-200/70">
+<button class="date-filter-btn px-3 py-1.5 rounded font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface transition-colors" data-period="hoy" type="button">Hoy</button>
+<button class="date-filter-btn px-3 py-1.5 rounded font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface transition-colors" data-period="7d" type="button">7D</button>
+<button class="date-filter-btn px-3 py-1.5 rounded bg-primary-container text-white font-label-sm text-label-sm shadow-sm font-semibold" data-period="30d" type="button">30D</button>
+<button class="date-filter-btn px-3 py-1.5 rounded font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface transition-colors" data-period="2026" type="button">Año 2026</button>
+</div>
+<!-- Branch Picker -->
+<div class="relative bg-surface-container-low border border-purple-200/70 rounded-lg px-3 py-1.5 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary">storefront</span>
+<select class="bg-transparent font-label-md text-label-md text-on-surface font-semibold focus:outline-none cursor-pointer pr-4" id="kpi-branch-select">
+<option class="bg-white text-on-surface" value="all">Todas las Sucursales (3)</option>
+<option class="bg-white text-on-surface" value="centro">Sucursal Centro</option>
+<option class="bg-white text-on-surface" value="coyoacan">Sucursal Coyoacán</option>
+<option class="bg-white text-on-surface" value="almacen">Almacén Central</option>
+</select>
+</div>
+<!-- Realtime Sync indicator -->
+<button class="p-2 rounded-lg bg-surface-container-low hover:bg-surface-container border border-purple-200/70 text-primary transition-colors flex items-center justify-center shadow-sm" title="Sincronizar base de datos" type="button">
+<span class="material-symbols-outlined text-[20px]">sync</span>
+</button>
+</div>
+</section>
+<!-- Key Metrics Row: 4 Specialized KPI Cards -->
+<section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-space-md">
+<!-- KPI 1: Ventas Totales del Mes -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl border border-purple-200/70 flex flex-col justify-between hover:border-purple-300 hover:shadow-md transition-all shadow-sm">
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-code text-label-code uppercase tracking-wider text-outline font-semibold">pedidos_table &amp; pagos_table</span>
+<span class="font-label-md text-label-md text-on-surface mt-1 font-semibold">Ventas Totales del Mes</span>
+</div>
+<div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center text-white shadow-sm">
+<span class="material-symbols-outlined text-[22px]">payments</span>
+</div>
+</div>
+<div class="mt-space-md">
+<div class="font-headline-lg text-headline-lg text-primary tracking-tight font-bold">$142,850 <span class="font-label-sm text-label-sm font-normal text-on-surface-variant">MXN</span></div>
+<div class="flex items-center gap-space-xs mt-2">
+<span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-label-code text-label-code flex items-center gap-1 font-semibold">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> +12.4%
+          </span>
+<span class="font-tabular-data text-tabular-data text-outline font-medium">vs periodo anterior</span>
+</div>
+</div>
+<div class="mt-space-sm pt-space-xs bg-surface-container-low rounded border border-purple-100 px-2.5 py-1.5 flex justify-between font-label-code text-label-code text-on-surface font-semibold">
+<span>Transacciones: 418</span>
+<span>Ticket Prom: $341 MXN</span>
+</div>
+</div>
+<!-- KPI 2: Unidades en Inventario -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl border border-purple-200/70 flex flex-col justify-between hover:border-purple-300 hover:shadow-md transition-all shadow-sm">
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-code text-label-code uppercase tracking-wider text-outline font-semibold">existencias_table</span>
+<span class="font-label-md text-label-md text-on-surface mt-1 font-semibold">Unidades en Inventario</span>
+</div>
+<div class="w-10 h-10 rounded-lg bg-secondary-container flex items-center justify-center text-on-secondary-container shadow-sm">
+<span class="material-symbols-outlined text-[22px]">shelves</span>
+</div>
+</div>
+<div class="mt-space-md">
+<div class="font-headline-lg text-headline-lg text-secondary tracking-tight font-bold">8,420 <span class="font-label-sm text-label-sm font-normal text-on-surface-variant">ítems activos</span></div>
+<div class="flex items-center gap-space-xs mt-2">
+<span class="px-2 py-0.5 rounded-full bg-error-container text-error font-label-code text-label-code flex items-center gap-1 font-semibold">
+<span class="material-symbols-outlined text-[14px]">warning</span> 14 bajo stock
+          </span>
+<span class="font-tabular-data text-tabular-data text-outline font-medium">en 3 sedes</span>
+</div>
+</div>
+<div class="mt-space-sm pt-space-xs bg-surface-container-low rounded border border-purple-100 px-2.5 py-1.5 flex justify-between font-label-code text-label-code text-on-surface font-semibold">
+<span>Valoración: $1.92M</span>
+<span>Rotación: 4.8x/año</span>
+</div>
+</div>
+<!-- KPI 3: Reservas & Envíos Activos -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl border border-purple-200/70 flex flex-col justify-between hover:border-purple-300 hover:shadow-md transition-all shadow-sm">
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-code text-label-code uppercase tracking-wider text-outline font-semibold">reservas_stock &amp; envios</span>
+<span class="font-label-md text-label-md text-on-surface mt-1 font-semibold">Logística Activa</span>
+</div>
+<div class="w-10 h-10 rounded-lg bg-tertiary-container flex items-center justify-center text-white shadow-sm">
+<span class="material-symbols-outlined text-[22px]">local_shipping</span>
+</div>
+</div>
+<div class="mt-space-md">
+<div class="font-headline-lg text-headline-lg text-tertiary tracking-tight font-bold">50 <span class="font-label-sm text-label-sm font-normal text-on-surface-variant">en proceso</span></div>
+<div class="flex items-center gap-space-xs mt-2">
+<span class="px-2 py-0.5 rounded-full bg-purple-100 text-purple-900 font-label-code text-label-code font-semibold">
+            38 en ruta
+          </span>
+<span class="px-2 py-0.5 rounded-full bg-purple-200/60 text-primary font-label-code text-label-code font-semibold">
+            12 recolección
+          </span>
+</div>
+</div>
+<div class="mt-space-sm pt-space-xs bg-surface-container-low rounded border border-purple-100 px-2.5 py-1.5 flex justify-between font-label-code text-label-code text-on-surface font-semibold">
+<span>Tiempo Medio: 1.8d</span>
+<span>Entregas Hoy: 9</span>
+</div>
+</div>
+<!-- KPI 4: Catálogo Activo -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl border border-purple-200/70 flex flex-col justify-between hover:border-purple-300 hover:shadow-md transition-all shadow-sm">
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-code text-label-code uppercase tracking-wider text-outline font-semibold">productos_table</span>
+<span class="font-label-md text-label-md text-on-surface mt-1 font-semibold">Catálogo Curado</span>
+</div>
+<div class="w-10 h-10 rounded-lg bg-purple-100 border border-purple-200 flex items-center justify-center text-primary shadow-sm">
+<span class="material-symbols-outlined text-[22px]">auto_stories</span>
+</div>
+</div>
+<div class="mt-space-md">
+<div class="font-headline-lg text-headline-lg text-on-surface tracking-tight font-bold">6,420 <span class="font-label-sm text-label-sm font-normal text-on-surface-variant">títulos/piezas</span></div>
+<div class="grid grid-cols-3 gap-1 mt-2 text-center">
+<div class="bg-surface-container-low border border-purple-100 p-1 rounded">
+<span class="font-label-code text-label-code text-outline block font-semibold">LIBROS</span>
+<span class="font-tabular-data text-tabular-data text-primary font-bold">3,420</span>
+</div>
+<div class="bg-surface-container-low border border-purple-100 p-1 rounded">
+<span class="font-label-code text-label-code text-outline block font-semibold">VINILOS</span>
+<span class="font-tabular-data text-tabular-data text-secondary font-bold">2,150</span>
+</div>
+<div class="bg-surface-container-low border border-purple-100 p-1 rounded">
+<span class="font-label-code text-label-code text-outline block font-semibold">ÚNICAS</span>
+<span class="font-tabular-data text-tabular-data text-tertiary font-bold">850</span>
+</div>
+</div>
+</div>
+<div class="mt-space-sm pt-space-xs bg-surface-container-low rounded border border-purple-100 px-2.5 py-1.5 flex justify-between font-label-code text-label-code text-on-surface font-semibold">
+<span>Digitalizados: 98.2%</span>
+<span>Rarezas: 240</span>
+</div>
+</div>
+</section>
+<!-- Visual Analytics Dual Section -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
+<!-- Chart: Sales & Turnover by Category (7 cols) -->
+<div class="lg:col-span-7 bg-surface-container-lowest p-space-lg rounded-xl border border-purple-200/70 shadow-sm flex flex-col justify-between">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm mb-space-md">
+<div>
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">bar_chart</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">Ventas &amp; Rotación por Categoría</h2>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Distribución mensual de volumen monetario y salidas de almacén</p>
+</div>
+<div class="flex items-center gap-space-sm font-label-code text-label-code">
+<span class="flex items-center gap-1 text-on-surface font-semibold"><span class="w-3 h-3 rounded-full bg-primary inline-block"></span> Libros</span>
+<span class="flex items-center gap-1 text-on-surface font-semibold"><span class="w-3 h-3 rounded-full bg-secondary inline-block"></span> Discos</span>
+<span class="flex items-center gap-1 text-on-surface font-semibold"><span class="w-3 h-3 rounded-full bg-tertiary-container inline-block"></span> Coleccionables</span>
+</div>
+</div>
+<!-- Vector Clean SVG Bar & Turnover Chart -->
+<div class="w-full h-64 flex flex-col justify-end bg-surface-container-low border border-purple-200/50 p-space-md rounded-lg">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 540 180">
+<!-- Horizontal Guideline Rules -->
+<line stroke="#e9d5ff" stroke-dasharray="4 4" stroke-width="1" x1="0" x2="540" y1="30" y2="30"></line>
+<line stroke="#e9d5ff" stroke-dasharray="4 4" stroke-width="1" x1="0" x2="540" y1="80" y2="80"></line>
+<line stroke="#e9d5ff" stroke-dasharray="4 4" stroke-width="1" x1="0" x2="540" y1="130" y2="130"></line>
+<line stroke="#ccc3d8" stroke-width="1" x1="0" x2="540" y1="170" y2="170"></line>
+<!-- Group Jan -->
+<g transform="translate(30, 0)">
+<rect fill="#7c3aed" height="110" rx="3" width="16" x="0" y="60"></rect>
+<rect fill="#a855f7" height="80" rx="3" width="16" x="18" y="90"></rect>
+<rect fill="#c084fc" height="40" rx="3" width="16" x="36" y="130"></rect>
+<text fill="#625595" font-family="Roboto Flex" font-size="10" font-weight="600" text-anchor="middle" x="26" y="180">ENE</text>
+</g>
+<!-- Group Feb -->
+<g transform="translate(120, 0)">
+<rect fill="#7c3aed" height="125" rx="3" width="16" x="0" y="45"></rect>
+<rect fill="#a855f7" height="100" rx="3" width="16" x="18" y="70"></rect>
+<rect fill="#c084fc" height="55" rx="3" width="16" x="36" y="115"></rect>
+<text fill="#625595" font-family="Roboto Flex" font-size="10" font-weight="600" text-anchor="middle" x="26" y="180">FEB</text>
+</g>
+<!-- Group Mar -->
+<g transform="translate(210, 0)">
+<rect fill="#7c3aed" height="135" rx="3" width="16" x="0" y="35"></rect>
+<rect fill="#a855f7" height="105" rx="3" width="16" x="18" y="65"></rect>
+<rect fill="#c084fc" height="70" rx="3" width="16" x="36" y="100"></rect>
+<text fill="#625595" font-family="Roboto Flex" font-size="10" font-weight="600" text-anchor="middle" x="26" y="180">MAR</text>
+</g>
+<!-- Group Abr -->
+<g transform="translate(300, 0)">
+<rect fill="#7c3aed" height="120" rx="3" width="16" x="0" y="50"></rect>
+<rect fill="#a855f7" height="90" rx="3" width="16" x="18" y="80"></rect>
+<rect fill="#c084fc" height="50" rx="3" width="16" x="36" y="120"></rect>
+<text fill="#625595" font-family="Roboto Flex" font-size="10" font-weight="600" text-anchor="middle" x="26" y="180">ABR</text>
+</g>
+<!-- Group May -->
+<g transform="translate(390, 0)">
+<rect fill="#7c3aed" height="145" rx="3" width="16" x="0" y="25"></rect>
+<rect fill="#a855f7" height="115" rx="3" width="16" x="18" y="55"></rect>
+<rect fill="#c084fc" height="85" rx="3" width="16" x="36" y="85"></rect>
+<text fill="#625595" font-family="Roboto Flex" font-size="10" font-weight="600" text-anchor="middle" x="26" y="180">MAY (ACT)</text>
+</g>
+<!-- Clean Trend Line (Turnover Velocity) -->
+<polyline fill="none" points="56,80 146,65 236,55 326,75 416,40" stroke="#4a007f" stroke-width="2.5"></polyline>
+<circle cx="56" cy="80" fill="#ffffff" r="4" stroke="#4a007f" stroke-width="2.5"></circle>
+<circle cx="146" cy="65" fill="#ffffff" r="4" stroke="#4a007f" stroke-width="2.5"></circle>
+<circle cx="236" cy="55" fill="#ffffff" r="4" stroke="#4a007f" stroke-width="2.5"></circle>
+<circle cx="326" cy="75" fill="#ffffff" r="4" stroke="#4a007f" stroke-width="2.5"></circle>
+<circle cx="416" cy="40" fill="#630ed4" r="5" stroke="#ffffff" stroke-width="2"></circle>
+</svg>
+</div>
+<div class="grid grid-cols-3 gap-space-sm mt-space-md pt-space-sm bg-surface-container-low border border-purple-200/50 rounded-lg p-space-sm">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-outline font-semibold">Libros Raros</span>
+<span class="font-headline-sm text-headline-sm text-primary font-bold">$72,400 <span class="text-body-sm font-normal text-on-surface-variant">50.7%</span></span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-outline font-semibold">Vinilos &amp; Acetatos</span>
+<span class="font-headline-sm text-headline-sm text-secondary font-bold">$48,250 <span class="text-body-sm font-normal text-on-surface-variant">33.8%</span></span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-outline font-semibold">Piezas Únicas</span>
+<span class="font-headline-sm text-headline-sm text-tertiary font-bold">$22,200 <span class="text-body-sm font-normal text-on-surface-variant">15.5%</span></span>
+</div>
+</div>
+</div>
+<!-- Chart: Branch Inventory Levels & Capacity (5 cols) -->
+<div class="lg:col-span-5 bg-surface-container-lowest p-space-lg rounded-xl border border-purple-200/70 shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[20px]">domain</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">Capacidad por Sucursal</h2>
+</div>
+<span class="font-label-code text-label-code bg-purple-100 border border-purple-200 px-2 py-1 rounded text-primary font-bold">3 Sedes Activas</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Ocupación física de bóvedas y anaqueles climatizados</p>
+</div>
+<div class="flex flex-col gap-space-md my-space-md">
+<!-- Sucursal Centro -->
+<div class="bg-surface-container-low border border-purple-200/50 p-space-sm rounded-lg flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-primary"></span>
+<span class="font-label-md text-label-md text-on-surface font-bold">Sucursal Centro</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-tabular-data text-tabular-data text-primary font-bold">3,120 ítems</span>
+<span class="font-label-code text-label-code text-outline font-medium">(89% Bóveda)</span>
+</div>
+</div>
+<div class="w-full bg-purple-200/60 h-2.5 rounded-full overflow-hidden flex">
+<div class="bg-primary h-full rounded-full" style="width: 89%"></div>
+</div>
+<div class="flex justify-between font-label-code text-label-code text-on-surface-variant">
+<span>Libros: 1,420 · Vinilos: 1,200 · Rarezas: 500</span>
+<span class="text-error font-bold">4 Alertas</span>
+</div>
+</div>
+<!-- Sucursal Coyoacán -->
+<div class="bg-surface-container-low border border-purple-200/50 p-space-sm rounded-lg flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+<span class="font-label-md text-label-md text-on-surface font-bold">Sucursal Coyoacán</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-tabular-data text-tabular-data text-secondary font-bold">2,480 ítems</span>
+<span class="font-label-code text-label-code text-outline font-medium">(72% Bóveda)</span>
+</div>
+</div>
+<div class="w-full bg-purple-200/60 h-2.5 rounded-full overflow-hidden flex">
+<div class="bg-secondary h-full rounded-full" style="width: 72%"></div>
+</div>
+<div class="flex justify-between font-label-code text-label-code text-on-surface-variant">
+<span>Libros: 1,100 · Vinilos: 950 · Rarezas: 430</span>
+<span class="text-secondary font-bold">2 Alertas</span>
+</div>
+</div>
+<!-- Almacén Central -->
+<div class="bg-surface-container-low border border-purple-200/50 p-space-sm rounded-lg flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary"></span>
+<span class="font-label-md text-label-md text-on-surface font-bold">Almacén Central</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-tabular-data text-tabular-data text-tertiary font-bold">2,820 ítems</span>
+<span class="font-label-code text-label-code text-outline font-medium">(47% Bóveda)</span>
+</div>
+</div>
+<div class="w-full bg-purple-200/60 h-2.5 rounded-full overflow-hidden flex">
+<div class="bg-tertiary h-full rounded-full" style="width: 47%"></div>
+</div>
+<div class="flex justify-between font-label-code text-label-code text-on-surface-variant">
+<span>Libros: 900 · Vinilos: 1,500 · Rarezas: 420</span>
+<span class="text-emerald-700 font-bold">8 Alertas (Stock Reserva)</span>
+</div>
+</div>
+</div>
+<div class="p-space-sm bg-surface-container-low border border-purple-200/60 rounded-lg flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm">
+<span class="flex items-center gap-1.5 font-medium text-on-surface">
+<span class="material-symbols-outlined text-[16px] text-primary">thermostat</span>
+          Climatización: 18.5°C · Humedad: 48% HR
+        </span>
+<button class="text-primary hover:underline font-label-code text-label-code uppercase font-bold" type="button">Ver auditoría térmica</button>
+</div>
+</div>
+</section>
+<!-- Lower Section: Critical Stock Alerts + Bitácora del Sistema (System Logs) -->
+<section class="grid grid-cols-1 xl:grid-cols-12 gap-space-lg">
+<!-- Panel de Alertas de Stock Crítico (5 cols) -->
+<div class="xl:col-span-5 bg-surface-container-lowest p-space-lg rounded-xl border border-purple-200/70 shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-error text-[22px]">notification_important</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">Alertas de Stock Crítico</h2>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-error-container text-error font-label-code text-label-code font-bold">14 EN RIESGO</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-md">Ediciones limitadas, primeras impresiones y vinilos de colección con inventario mínimo o agotado.</p>
+<!-- List of critical items -->
+<div class="flex flex-col gap-space-sm">
+<!-- Item 1 -->
+<div class="bg-surface-container-low border border-purple-200/60 p-space-sm rounded-lg flex items-center justify-between gap-space-sm hover:border-purple-300 hover:bg-white transition-all">
+<div class="w-12 h-12 rounded bg-surface-container-lowest border border-purple-200 flex items-center justify-center shrink-0 overflow-hidden shadow-xs">
+<img class="w-full h-full object-cover rounded" data-alt="First edition vintage leather bound copy of Cien Anos de Soledad with aged gold foil typography and worn texture under warm dramatic archival lighting in dark amethyst background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqIv0K6ihXWZG8fblB_B4ioBvuscu1KOuuVHEn193BCffLAUEldgURxZU_Lmn7AC85p5QBEIYssc_LvKZJ63ITKSWQpVxFneczmEQ1DVBVZi9Q9dbK_1f5izr40wH791gYWoFvP-_d1B-TXrPJOZkE99r_3hHGj-3Nu5O9b_JviCfBfBKntFa_2A9oYamgbYjUkCmXg5bAOTPHHol-reUWt2nO8X-EnrjQ3gnV6ZM"/>
+</div>
+<div class="flex flex-col flex-1 min-w-0">
+<span class="font-label-code text-label-code text-error tracking-wide font-bold">LIB-ANT-1967 · 1 RESTANTE</span>
+<span class="font-label-md text-label-md text-on-surface truncate font-bold">Cien Años de Soledad (1ª Ed. Sudamericana)</span>
+<span class="font-tabular-data text-tabular-data text-on-surface-variant">Sucursal Centro · Bóveda A1</span>
+</div>
+<button class="px-3 py-1.5 rounded-lg bg-primary text-on-primary font-label-sm text-label-sm shrink-0 hover:bg-primary-container shadow-sm font-semibold transition-colors" onclick="alert('Solicitud de reabastecimiento enviada a Curaduría.')" type="button">
+              Reabastecer
+            </button>
+</div>
+<!-- Item 2 -->
+<div class="bg-surface-container-low border border-purple-200/60 p-space-sm rounded-lg flex items-center justify-between gap-space-sm hover:border-purple-300 hover:bg-white transition-all">
+<div class="w-12 h-12 rounded bg-surface-container-lowest border border-purple-200 flex items-center justify-center shrink-0 overflow-hidden shadow-xs">
+<img class="w-full h-full object-cover rounded" data-alt="Original 1973 vinyl record Pink Floyd The Dark Side of the Moon gatefold packaging on velvet display under moody violet studio spotlight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5EgJWqEC-SVQwmmkWz2WGSfULcg7H6z2f9ZtY61l509WC2vuUhQb6yJ3mAUPSAGTwFvPceoweWtOAkvK19MFI45KrsTtcdqzwatdT7hFOrZ3_IKIRmqIdqUgOpgTkicEy7K3pD3jZlFY3Pe9VqqJUI-o109YQ9IuLMFXH3jXwNhOzVpVpDyCuao7e0tf710sEH_-AXpvy59x65lk5zzGNZH-oNa5nOtrUwtJTGC8"/>
+</div>
+<div class="flex flex-col flex-1 min-w-0">
+<span class="font-label-code text-label-code text-error tracking-wide font-bold">VIN-PROG-0089 · AGOTADO (0 DISP)</span>
+<span class="font-label-md text-label-md text-on-surface truncate font-bold">The Dark Side of the Moon (UK Harvest 1st Press)</span>
+<span class="font-tabular-data text-tabular-data text-on-surface-variant">Sucursal Coyoacán · 3 en lista de espera</span>
+</div>
+<button class="px-3 py-1.5 rounded-lg bg-primary text-on-primary font-label-sm text-label-sm shrink-0 hover:bg-primary-container shadow-sm font-semibold transition-colors" onclick="alert('Solicitud de reabastecimiento enviada a Curaduría.')" type="button">
+              Reabastecer
+            </button>
+</div>
+<!-- Item 3 -->
+<div class="bg-surface-container-low border border-purple-200/60 p-space-sm rounded-lg flex items-center justify-between gap-space-sm hover:border-purple-300 hover:bg-white transition-all">
+<div class="w-12 h-12 rounded bg-surface-container-lowest border border-purple-200 flex items-center justify-center shrink-0 overflow-hidden shadow-xs">
+<img class="w-full h-full object-cover rounded" data-alt="Blue Note original jazz vinyl John Coltrane Blue Train deep groove label with preserved vintage obi strip on museum stand" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvyei5lP29FD53G16v_hclDcT_wNwzmGI2tLDJPMfR3VjJC7IGQPsBcJUxMl8JlBbFndbdh1BjkRgXstTPpA5ofPg9Y0YsB1GLpFAwZBtL153Hk0AE62izR-3yxinekgyx6Yf-gHoi4xAuWznG20Rv8naBxVZc4rTpDDp0tolMPCM4rXXP8-2CXXn-dH6ACP8JZYBYcU8EGeOC62hDkhmfmGIyxet_1lGl6Qrfu-w"/>
+</div>
+<div class="flex flex-col flex-1 min-w-0">
+<span class="font-label-code text-label-code text-error tracking-wide font-bold">VIN-JAZZ-4412 · 1 RESTANTE</span>
+<span class="font-label-md text-label-md text-on-surface truncate font-bold">John Coltrane - Blue Train (Mono 1577)</span>
+<span class="font-tabular-data text-tabular-data text-on-surface-variant">Almacén Central · Estado VG+</span>
+</div>
+<button class="px-3 py-1.5 rounded-lg bg-primary text-on-primary font-label-sm text-label-sm shrink-0 hover:bg-primary-container shadow-sm font-semibold transition-colors" onclick="alert('Solicitud de reabastecimiento enviada a Curaduría.')" type="button">
+              Reabastecer
+            </button>
+</div>
+<!-- Item 4 -->
+<div class="bg-surface-container-low border border-purple-200/60 p-space-sm rounded-lg flex items-center justify-between gap-space-sm hover:border-purple-300 hover:bg-white transition-all">
+<div class="w-12 h-12 rounded bg-surface-container-lowest border border-purple-200 flex items-center justify-center shrink-0 overflow-hidden shadow-xs">
+<img class="w-full h-full object-cover rounded" data-alt="Antique manuscript with handwritten fountain pen marginalia signed by Jorge Luis Borges preserved in museum glass display case" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqk3z9vZwOmRy7kXf_QiRQixlyttXDn8R1eyp_WvOsm7AToRgKOfWXODVYJnYZTmmV2fXKOavwooY1INxALdj8_kkpkbIyNndPCg2MGAAjbbOddjyBS6CAHogC_GTGpKYxpLWTsuLYfAt2yB_bApkitasa5I-nM8RpOQstgt9O3Jo0lOYemFa8NeXbDpo_zxTTUEwtju9goIsefxV2gH_c016s1VGNlhOhWvbOW5U"/>
+</div>
+<div class="flex flex-col flex-1 min-w-0">
+<span class="font-label-code text-label-code text-secondary tracking-wide font-bold">COL-MAN-0021 · PIEZA ÚNICA</span>
+<span class="font-label-md text-label-md text-on-surface truncate font-bold">Manuscrito Original Ficciones (Anotaciones)</span>
+<span class="font-tabular-data text-tabular-data text-on-surface-variant">Sucursal Centro · Requiere Refuerzo de Bóveda</span>
+</div>
+<button class="px-3 py-1.5 rounded-lg bg-secondary-container text-on-secondary-container font-label-sm text-label-sm shrink-0 hover:bg-secondary hover:text-white shadow-sm font-semibold transition-colors" onclick="alert('Redirigiendo a ficha técnica de custodia.')" type="button">
+              Custodia
+            </button>
+</div>
+</div>
+</div>
+<div class="mt-space-md pt-space-sm flex items-center justify-between border-t border-purple-100">
+<span class="font-label-code text-label-code text-outline font-semibold">POLÍTICA: MÍNIMO 3 UNIDADES POR TÍTULO REGULAR</span>
+<a class="font-label-sm text-label-sm text-primary hover:underline flex items-center gap-1 font-bold" href="#">Ver todos los 14 ítems <span class="material-symbols-outlined text-[16px]">arrow_forward</span></a>
+</div>
+</div>
+<!-- Tabla Interactiva: Actividad Reciente / Bitácora del Sistema (7 cols) -->
+<div class="xl:col-span-7 bg-surface-container-lowest p-space-lg rounded-xl border border-purple-200/70 shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm mb-space-md">
+<div>
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[22px]">history_edu</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">Actividad Reciente &amp; Bitácora</h2>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Auditoría en tiempo real de bitacoras_table con trazabilidad de operadores</p>
+</div>
+<!-- Table Quick Filter -->
+<div class="flex items-center gap-2">
+<span class="font-label-code text-label-code text-outline uppercase font-semibold">Filtro Rápido:</span>
+<select class="bg-surface-container-low text-on-surface font-label-code text-label-code px-2 py-1 rounded border border-purple-200 focus:outline-none" id="log-filter-select">
+<option value="all">Todas las acciones</option>
+<option value="alta">Altas de SKU</option>
+<option value="reserva">Reservas</option>
+<option value="transfer">Transferencias</option>
+<option value="ajuste">Ajustes</option>
+</select>
+</div>
+</div>
+<!-- Table Shell -->
+<div class="overflow-x-auto rounded-lg border border-purple-200/70 bg-white">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-high/80 text-on-surface font-label-code text-label-code uppercase tracking-wider border-b border-purple-200">
+<th class="py-3 px-3">ID Log</th>
+<th class="py-3 px-3">Fecha / Hora</th>
+<th class="py-3 px-3">Usuario Responsable</th>
+<th class="py-3 px-3">Acción / Módulo</th>
+<th class="py-3 px-3">Detalle / Afectación</th>
+<th class="py-3 px-3 text-right">Estado</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-purple-100 font-body-sm text-body-sm" id="log-table-body">
+<!-- Log Entry 1 -->
+<tr class="hover:bg-purple-50/60 transition-colors log-row" data-type="alta">
+<td class="py-2.5 px-3 font-tabular-data text-tabular-data text-primary font-bold">#LOG-9921</td>
+<td class="py-2.5 px-3 font-tabular-data text-tabular-data text-on-surface-variant whitespace-nowrap font-medium">2026-05-18 10:42:15</td>
+<td class="py-2.5 px-3 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-secondary-container flex items-center justify-center font-label-code text-label-code text-on-secondary-container font-bold">CL</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">Curador López</span>
+</div>
+</td>
+<td class="py-2.5 px-3 whitespace-nowrap">
+<span class="font-label-code text-label-code text-primary bg-purple-100 border border-purple-200 px-2 py-0.5 rounded font-semibold">Catálogo Vinilos</span>
+</td>
+<td class="py-2.5 px-3 text-on-surface font-medium max-w-[200px] truncate" title="Alta de SKU Vinilo Pink Floyd The Wall">
+                  Alta de SKU Vinilo Pink Floyd The Wall (2xLP Columbia 1979)
+                </td>
+<td class="py-2.5 px-3 text-right whitespace-nowrap">
+<span class="inline-block px-2.5 py-0.5 rounded-full bg-primary-container text-white font-label-code text-label-code font-bold">
+                    REGISTRADO
+                  </span>
+</td>
+</tr>
+<!-- Log Entry 2 -->
+<tr class="hover:bg-purple-50/60 transition-colors log-row" data-type="reserva">
+<td class="py-2.5 px-3 font-tabular-data text-tabular-data text-primary font-bold">#LOG-9920</td>
+<td class="py-2.5 px-3 font-tabular-data text-tabular-data text-on-surface-variant whitespace-nowrap font-medium">2026-05-18 10:14:02</td>
+<td class="py-2.5 px-3 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-purple-200 border border-purple-300 flex items-center justify-center font-label-code text-label-code text-primary font-bold">MV</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">Mateo Vargas</span>
+</div>
+</td>
+<td class="py-2.5 px-3 whitespace-nowrap">
+<span class="font-label-code text-label-code text-secondary bg-purple-100 border border-purple-200 px-2 py-0.5 rounded font-semibold">Ventas / POS</span>
+</td>
+<td class="py-2.5 px-3 text-on-surface font-medium max-w-[200px] truncate" title="Reserva de stock para Pedido #2094">
+                  Reserva de stock para Pedido #2094 (Primera Ed. Rayuela)
+                </td>
+<td class="py-2.5 px-3 text-right whitespace-nowrap">
+<span class="inline-block px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-code text-label-code font-bold">
+                    APROBADO
+                  </span>
+</td>
+</tr>
+<!-- Log Entry 3 -->
+<tr class="hover:bg-purple-50/60 transition-colors log-row" data-type="transfer">
+<td class="py-2.5 px-3 font-tabular-data text-tabular-data text-primary font-bold">#LOG-9919</td>
+<td class="py-2.5 px-3 font-tabular-data text-tabular-data text-on-surface-variant whitespace-nowrap font-medium">2026-05-18 09:30:48</td>
+<td class="py-2.5 px-3 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-tertiary-container flex items-center justify-center font-label-code text-label-code text-white font-bold">ER</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">Elena Ramos</span>
+</div>
+</td>
+<td class="py-2.5 px-3 whitespace-nowrap">
+<span class="font-label-code text-label-code text-tertiary bg-purple-100 border border-purple-200 px-2 py-0.5 rounded font-semibold">Logística Sedes</span>
+</td>
+<td class="py-2.5 px-3 text-on-surface font-medium max-w-[200px] truncate" title="Transferencia entre sucursales: Almacén Central -&gt; Coyoacán">
+                  Transferencia entre sucursales: Almacén Central → Coyoacán (12 volúmenes)
+                </td>
+<td class="py-2.5 px-3 text-right whitespace-nowrap">
+<span class="inline-block px-2.5 py-0.5 rounded-full bg-primary text-white font-label-code text-label-code font-bold">
+                    EN TRÁNSITO
+                  </span>
+</td>
+</tr>
+<!-- Log Entry 4 -->
+<tr class="hover:bg-purple-50/60 transition-colors log-row" data-type="ajuste">
+<td class="py-2.5 px-3 font-tabular-data text-tabular-data text-primary font-bold">#LOG-9918</td>
+<td class="py-2.5 px-3 font-tabular-data text-tabular-data text-on-surface-variant whitespace-nowrap font-medium">2026-05-18 08:45:11</td>
+<td class="py-2.5 px-3 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-purple-200 border border-purple-300 flex items-center justify-center font-label-code text-label-code text-primary font-bold">MV</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">Mateo Vargas</span>
+</div>
+</td>
+<td class="py-2.5 px-3 whitespace-nowrap">
+<span class="font-label-code text-label-code text-error bg-error-container/60 border border-red-200 px-2 py-0.5 rounded font-semibold">Bóveda Custodia</span>
+</td>
+<td class="py-2.5 px-3 text-on-surface font-medium max-w-[200px] truncate" title="Ajuste de inventario en pieza única: Grado de Conservación VG a Near Mint">
+                  Ajuste de inventario en pieza única: Grado conservación actualizado a NM
+                </td>
+<td class="py-2.5 px-3 text-right whitespace-nowrap">
+<span class="inline-block px-2.5 py-0.5 rounded-full bg-surface-container-high border border-purple-200 text-on-surface font-label-code text-label-code font-bold">
+                    AUDITADO
+                  </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Pagination & Status strip -->
+<div class="mt-space-md pt-space-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-on-surface-variant font-label-code text-label-code border-t border-purple-100">
+<span class="font-medium">Mostrando 4 de 1,280 registros en bitacoras_table</span>
+<div class="flex items-center gap-1 font-semibold">
+<button class="px-2 py-1 rounded bg-surface-container-low hover:bg-surface-container border border-purple-200 text-on-surface disabled:opacity-50" type="button">Anterior</button>
+<span class="px-2 py-1 rounded bg-primary-container text-white shadow-xs">1</span>
+<button class="px-2 py-1 rounded bg-surface-container-low hover:bg-surface-container border border-purple-200 text-on-surface" type="button">2</button>
+<button class="px-2 py-1 rounded bg-surface-container-low hover:bg-surface-container border border-purple-200 text-on-surface" type="button">3</button>
+<button class="px-2 py-1 rounded bg-surface-container-low hover:bg-surface-container border border-purple-200 text-on-surface" type="button">Siguiente</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Interactive JavaScript controller for filters & live micro-interactions -->
+<script>
+    (function initAdminDashboard() {
+      // Date filter pills toggle
+      const dateButtons = document.querySelectorAll('.date-filter-btn');
+      dateButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          dateButtons.forEach(b => {
+            b.className = 'date-filter-btn px-3 py-1.5 rounded font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface transition-colors';
+          });
+          btn.className = 'date-filter-btn px-3 py-1.5 rounded bg-primary-container text-white font-label-sm text-label-sm shadow-sm font-semibold';
+        });
+      });
+
+      // Branch filter interaction notification
+      const branchSelect = document.getElementById('kpi-branch-select');
+      if (branchSelect) {
+        branchSelect.addEventListener('change', (e) => {
+          const val = e.target.value;
+          const label = e.target.options[e.target.selectedIndex].text;
+          console.log('[ARCHIVUM] Sucursal filtrada:', val, label);
+        });
+      }
+
+      // Log table filter
+      const logFilter = document.getElementById('log-filter-select');
+      const logRows = document.querySelectorAll('.log-row');
+      if (logFilter) {
+        logFilter.addEventListener('change', (e) => {
+          const val = e.target.value;
+          logRows.forEach(row => {
+            if (val === 'all' || row.dataset.type === val) {
+              row.style.display = '';
+            } else {
+              row.style.display = 'none';
+            }
+          });
+        });
+      }
+    })();
+  </script>
+</div></main></div></body></html>

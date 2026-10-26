@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="web_dashboard" name="shell-type"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&amp;family=Quicksand:wght@300;400;500;600;700&amp;family=Roboto+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
+    @layer base {
+      html, body { margin: 0; padding: 0; }
+      body { overscroll-behavior: none; }
+      main > :first-child { margin-top: 0 !important; }
+      main > :last-child { margin-bottom: 0 !important; }
+    }
+    ::-webkit-scrollbar { display: none; }
+  </style>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-secondary-container": "#524584",
+            "primary": "#630ed4",
+            "surface-container-low": "#f9f1ff",
+            "background": "#fbf7fe",
+            "inverse-on-surface": "#f6edff",
+            "on-error-container": "#93000a",
+            "on-error": "#ffffff",
+            "inverse-surface": "#391e70",
+            "tertiary-fixed-dim": "#ddb8ff",
+            "on-primary-fixed": "#25005a",
+            "primary-container": "#7c3aed",
+            "on-tertiary": "#ffffff",
+            "surface-variant": "#f3e8ff",
+            "primary-fixed-dim": "#d2bbff",
+            "on-secondary": "#ffffff",
+            "on-tertiary-fixed": "#2c0051",
+            "secondary-fixed": "#e7deff",
+            "secondary": "#625595",
+            "surface-dim": "#f3e8ff",
+            "on-surface": "#24005b",
+            "primary-fixed": "#eaddff",
+            "on-secondary-fixed": "#1e0e4e",
+            "surface-container": "#f5ebff",
+            "on-primary-container": "#ede0ff",
+            "outline-variant": "#e9d5ff",
+            "error-container": "#ffe4e6",
+            "secondary-container": "#ebdfff",
+            "on-surface-variant": "#584e68",
+            "surface-container-high": "#efe2ff",
+            "surface": "#fbf7fe",
+            "surface-container-highest": "#eaddff",
+            "surface-container-lowest": "#ffffff",
+            "on-tertiary-fixed-variant": "#6800b4",
+            "outline": "#998ba8",
+            "tertiary": "#7300c6",
+            "on-tertiary-container": "#f2dfff",
+            "on-primary": "#ffffff",
+            "surface-bright": "#ffffff",
+            "on-primary-fixed-variant": "#5a00c6",
+            "on-secondary-fixed-variant": "#4a3d7c",
+            "tertiary-fixed": "#f0dbff",
+            "error": "#b91c1c",
+            "tertiary-container": "#8f2de6",
+            "surface-tint": "#732ee4",
+            "on-background": "#24005b",
+            "inverse-primary": "#d2bbff",
+            "secondary-fixed-dim": "#ccbeff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-lg": "1.5rem",
+            "space-xs": "0.25rem",
+            "margin-mobile": "1rem",
+            "gutter": "1.5rem",
+            "space-xl": "2.5rem",
+            "space-sm": "0.5rem",
+            "space-md": "1rem",
+            "margin": "3rem",
+            "gutter-mobile": "1rem"
+          },
+          "fontFamily": {
+            "display-lg-mobile": ["Quicksand", "sans-serif"],
+            "label-sm": ["Barlow Condensed", "sans-serif"],
+            "body-lg": ["Quicksand", "sans-serif"],
+            "title-md": ["Quicksand", "sans-serif"],
+            "label-md": ["Barlow Condensed", "sans-serif"],
+            "label-lg": ["Barlow Condensed", "sans-serif"],
+            "body-sm": ["Quicksand", "sans-serif"],
+            "headline-sm": ["Quicksand", "sans-serif"],
+            "headline-md": ["Quicksand", "sans-serif"],
+            "display-lg": ["Quicksand", "sans-serif"],
+            "headline-lg-mobile": ["Quicksand", "sans-serif"],
+            "headline-lg": ["Quicksand", "sans-serif"],
+            "body-md": ["Quicksand", "sans-serif"],
+            "code": ["Roboto Mono", "monospace"]
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-background font-body-md text-[#2e1065] antialiased min-h-screen">
+<!-- Sidebar -->
+<aside class="fixed left-0 top-0 h-full w-72 bg-surface-container-lowest z-50 flex flex-col justify-between border-r border-outline-variant shadow-sm">
+<div class="flex flex-col">
+<div class="h-16 px-space-lg flex items-center gap-space-sm border-b border-outline-variant/60 bg-surface-container-lowest">
+<div class="w-9 h-9 rounded-lg bg-primary-container/15 flex items-center justify-center text-primary font-bold text-lg border border-primary/20">A</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-[19px] font-bold text-primary tracking-wide leading-none">ARCHIVUM</span>
+<span class="font-label-sm text-[11px] text-outline uppercase tracking-widest mt-1">Archival &amp; Curated</span>
+</div>
+</div>
+<div class="px-space-md py-space-sm">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline px-space-sm block mb-space-xs font-semibold">Dashboard del Administrador</span>
+<nav class="flex flex-col gap-space-xs" data-active-classes="bg-primary-container text-white font-label-md">
+<a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg font-body-md text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors" data-path="dashboard" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg font-body-md text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors" data-path="alta-empleado" href="#">
+<span class="material-symbols-outlined text-[20px]">person_add</span>
+<span>Alta Empleado</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg font-body-md text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors" data-path="baja-empleado" href="#">
+<span class="material-symbols-outlined text-[20px]">person_remove</span>
+<span>Baja Empleado</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg font-body-md text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors" data-path="administracion-de-ventas" href="#">
+<span class="material-symbols-outlined text-[20px]">point_of_sale</span>
+<span>Administración de Ventas</span>
+</a>
+<a aria-current="page" class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg transition-colors bg-primary-container text-white font-semibold shadow-sm shadow-primary/20" data-path="inventario" href="#">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+<span>Inventario</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg font-body-md text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors" data-path="sucursales" href="#">
+<span class="material-symbols-outlined text-[20px]">store</span>
+<span>Sucursales</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg font-body-md text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors" data-path="bitacora-del-sistema" href="#">
+<span class="material-symbols-outlined text-[20px]">history_edu</span>
+<span>Bitácora del Sistema</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg font-body-md text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors" data-path="roles-y-permisos" href="#">
+<span class="material-symbols-outlined text-[20px]">admin_panel_settings</span>
+<span>Roles y Permisos</span>
+</a>
+</nav>
+</div>
+</div>
+<div class="p-space-md border-t border-outline-variant/60 bg-surface-container-lowest">
+<div class="bg-surface-container-low p-space-sm rounded-xl flex items-center justify-between border border-outline-variant">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[20px]">security</span>
+<div>
+<div class="font-label-sm text-label-sm font-bold text-on-surface">Terminal Archivo</div>
+<div class="font-code text-[10px] text-on-surface-variant font-medium">v4.8.2-PROD</div>
+</div>
+</div>
+<span class="h-2 w-2 rounded-full bg-emerald-500 ring-2 ring-emerald-100"></span>
+</div>
+</div>
+</aside>
+<!-- Main Content Wrapper -->
+<div class="pl-72">
+<!-- Top Header -->
+<header class="fixed top-0 left-72 right-0 h-16 bg-surface-container-lowest/95 backdrop-blur-md z-40 border-b border-outline-variant px-space-lg flex items-center justify-between gap-space-md shadow-xs">
+<div class="flex items-center gap-space-md flex-1 max-w-xl">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span>
+<input class="w-full bg-surface-container-low pl-10 pr-space-md py-2 rounded-lg border border-outline-variant font-body-sm text-body-sm text-[#2e1065] placeholder:text-outline focus:outline-none focus:border-primary focus:bg-white transition-colors" placeholder="Buscar por SKU, ISBN, catálogo vinilo, título o autor..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-space-xs bg-surface-container-low px-space-sm py-1.5 rounded-lg border border-outline-variant">
+<span class="material-symbols-outlined text-[18px] text-primary">location_on</span>
+<label class="sr-only" for="branch-select">Sucursal activa</label>
+<select class="bg-transparent font-label-md text-label-md text-on-surface font-semibold focus:outline-none cursor-pointer pr-space-xs" id="branch-select">
+<option value="central">Sucursal Central Bellas Artes</option>
+<option value="coyoacan">Sucursal Coyoacán</option>
+<option value="almacen">Almacén General</option>
+</select>
+</div>
+<button class="relative p-2 rounded-lg bg-surface-container-low hover:bg-surface-container border border-outline-variant text-on-surface-variant hover:text-primary transition-colors" title="Existencias Críticas" type="button">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-error ring-2 ring-white"></span>
+</button>
+<button class="p-2 rounded-lg bg-surface-container-low hover:bg-surface-container border border-outline-variant text-on-surface-variant hover:text-primary transition-colors" title="Alternar Tema Claro/Oscuro" type="button">
+<span class="material-symbols-outlined text-[20px]">light_mode</span>
+</button>
+<div class="h-6 w-px bg-outline-variant"></div>
+<div class="flex items-center gap-space-sm pl-space-xs">
+<img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-2 ring-primary/30" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDi6YYAhugCQIXIoFm1VFkE8TpQBvXgpnbV9Qsce6ZM0A2kAdSU3p42bT4Ne4_9M4aZfo_t-dSdgDMFvhfFFgMZ4G5ZjE2ZZGQiZFsWLyvIT26jd7xIRUiU7-NF-_uuHOM7lKuMLmzYyYZ0ui6L3x0sh8FMQoT1oz3j8_zhrmNAy8neQ3JthuvZDj4drH3zgPhllR1HnskyeA8R33FbCDxvg6cq9PqFjgR48OOI5AQ"/>
+<div class="hidden xl:flex flex-col text-left">
+<span class="font-label-md text-label-md font-bold text-on-surface leading-tight">Curador en Jefe</span>
+<span class="font-code text-[11px] text-outline leading-tight">admin@archivum.mx</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Body -->
+<main class="w-full pt-20 px-space-lg pb-space-xl bg-background min-h-screen">
+<div class="flex flex-col w-full gap-space-lg">
+<!-- Header Page Title -->
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md">
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-sm">
+<span class="font-label-sm text-label-sm font-bold text-primary uppercase tracking-widest bg-surface-container-low border border-outline-variant px-2.5 py-0.5 rounded-full">Módulo Central</span>
+<span class="font-code text-[11px] text-on-surface-variant font-medium">DB Schema: v4.2.1 • 8,420 Items Registrados</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg font-bold text-[#2e1065] tracking-tight">Control Maestro de Inventario y Catálogos</h1>
+<p class="font-body-md text-body-md text-[#584e68]">Gestión unificada de ediciones bibliográficas, fonogramas curados en vinilo y piezas históricas únicas con serialización física.</p>
+</div>
+<div class="flex flex-wrap items-center gap-space-sm">
+<button class="flex items-center gap-space-xs px-space-md py-2.5 rounded-xl bg-white text-primary border border-outline-variant hover:bg-surface-container-low transition-colors font-label-md text-label-md font-bold shadow-xs" id="open-movement-btn">
+<span class="material-symbols-outlined text-[18px]">sync_alt</span>
+<span>Ingresar Movimiento de Stock</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-md py-2.5 rounded-xl bg-primary text-white hover:bg-[#5209b5] transition-colors font-label-md text-label-md font-bold shadow-sm shadow-primary/20" id="open-sku-btn">
+<span class="material-symbols-outlined text-[18px]">add_box</span>
+<span>Nuevo Producto / SKU</span>
+</button>
+</div>
+</div>
+<!-- Metric Stat Cards -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-space-md">
+<div class="bg-surface-container-lowest p-space-md rounded-2xl border border-outline-variant shadow-xs flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider font-bold">Valor Valuado en Existencias</span>
+<div class="w-8 h-8 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">account_balance_wallet</span>
+</div>
+</div>
+<div class="mt-space-sm">
+<span class="font-bold text-[1.6rem] text-[#2e1065] tracking-tight block leading-tight">$4,892,340.00</span>
+<span class="font-code text-[11px] text-primary block mt-1 font-semibold">MXN • Base Contable Sucursales</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-space-md rounded-2xl border border-outline-variant shadow-xs flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider font-bold">Unidades Totales Físicas</span>
+<div class="w-8 h-8 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">inventory</span>
+</div>
+</div>
+<div class="mt-space-sm">
+<span class="font-bold text-[1.6rem] text-[#2e1065] tracking-tight block leading-tight">14,289</span>
+<span class="font-code text-[11px] text-on-surface-variant block mt-1">3 Centros Operativos</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-space-md rounded-2xl border border-outline-variant shadow-xs flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider font-bold">Piezas Únicas Seriadas</span>
+<div class="w-8 h-8 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+</div>
+</div>
+<div class="mt-space-sm">
+<span class="font-bold text-[1.6rem] text-primary tracking-tight block leading-tight">418</span>
+<span class="font-code text-[11px] text-primary/80 block mt-1 font-semibold">Auditoría con Holograma</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-space-md rounded-2xl border border-outline-variant shadow-xs flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-error uppercase tracking-wider font-bold">Alertas de Reposición</span>
+<div class="w-8 h-8 rounded-lg bg-error-container/60 flex items-center justify-center text-error">
+<span class="material-symbols-outlined text-[18px]">warning</span>
+</div>
+</div>
+<div class="mt-space-sm">
+<div class="flex items-baseline gap-space-xs">
+<span class="font-bold text-[1.6rem] text-error tracking-tight leading-tight">14</span>
+<span class="font-label-sm text-label-sm text-error font-bold">críticas</span>
+</div>
+<span class="font-code text-[11px] text-on-surface-variant block mt-1">Stock &lt; Umbral Mínimo</span>
+</div>
+</div>
+</div>
+<!-- Filter Tabs & Toolbar -->
+<div class="flex flex-col gap-space-md">
+<div class="flex items-center gap-space-xs overflow-x-auto pb-1 bg-surface-container-lowest p-1.5 rounded-2xl border border-outline-variant shadow-xs">
+<button class="filter-tab active flex items-center gap-space-xs px-space-md py-2 rounded-xl bg-primary text-white font-label-md text-label-md font-bold whitespace-nowrap transition-colors shadow-xs" data-target="all">
+<span class="material-symbols-outlined text-[18px]">apps</span>
+<span>Todos los Productos</span>
+<span class="bg-white/20 font-code text-[11px] px-1.5 py-0.5 rounded-full ml-1 font-bold">8,420</span>
+</button>
+<button class="filter-tab flex items-center gap-space-xs px-space-md py-2 rounded-xl text-on-surface-variant hover:text-primary hover:bg-surface-container-low font-label-md text-label-md font-bold whitespace-nowrap transition-colors" data-target="libros">
+<span class="material-symbols-outlined text-[18px]">menu_book</span>
+<span>Libros</span>
+<span class="bg-surface-container-low text-primary font-code text-[11px] px-1.5 py-0.5 rounded-full ml-1 border border-outline-variant">4,912</span>
+</button>
+<button class="filter-tab flex items-center gap-space-xs px-space-md py-2 rounded-xl text-on-surface-variant hover:text-primary hover:bg-surface-container-low font-label-md text-label-md font-bold whitespace-nowrap transition-colors" data-target="discos">
+<span class="material-symbols-outlined text-[18px]">album</span>
+<span>Discos &amp; Vinilos</span>
+<span class="bg-surface-container-low text-primary font-code text-[11px] px-1.5 py-0.5 rounded-full ml-1 border border-outline-variant">3,090</span>
+</button>
+<button class="filter-tab flex items-center gap-space-xs px-space-md py-2 rounded-xl text-on-surface-variant hover:text-primary hover:bg-surface-container-low font-label-md text-label-md font-bold whitespace-nowrap transition-colors" data-target="coleccionables">
+<span class="material-symbols-outlined text-[18px]">stars</span>
+<span>Coleccionables</span>
+<span class="bg-surface-container-low text-primary font-code text-[11px] px-1.5 py-0.5 rounded-full ml-1 border border-outline-variant">418</span>
+</button>
+<button class="filter-tab flex items-center gap-space-xs px-space-md py-2 rounded-xl text-error hover:bg-error-container/40 font-label-md text-label-md font-bold whitespace-nowrap transition-colors" data-target="reorden">
+<span class="material-symbols-outlined text-[18px]">production_quantity_limits</span>
+<span>Bajo Stock / Reorden</span>
+<span class="bg-error-container text-error font-code text-[11px] px-1.5 py-0.5 rounded-full ml-1 font-bold">14</span>
+</button>
+</div>
+<div class="bg-surface-container-lowest p-space-md rounded-2xl border border-outline-variant shadow-xs flex flex-col lg:flex-row gap-space-md items-stretch lg:items-center justify-between">
+<div class="flex-1 flex flex-col md:flex-row gap-space-md items-center">
+<div class="relative w-full md:w-80">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">qr_code_scanner</span>
+<input class="w-full bg-surface-container-low pl-10 pr-space-md py-2 rounded-xl border border-outline-variant font-body-sm text-body-sm text-[#2e1065] placeholder:text-outline focus:outline-none focus:bg-white focus:border-primary transition-colors" id="filter-search" placeholder="Escanear SKU, ISBN o Código..." type="text"/>
+</div>
+<div class="flex items-center gap-space-xs w-full md:w-auto">
+<label class="font-label-sm text-label-sm text-outline uppercase tracking-wider whitespace-nowrap font-bold" for="filter-branch">Sucursal:</label>
+<select class="w-full md:w-auto bg-surface-container-low border border-outline-variant text-[#2e1065] font-body-sm text-body-sm px-space-sm py-2 rounded-xl focus:outline-none focus:border-primary cursor-pointer" id="filter-branch">
+<option value="all">Todas las Sedes (Global)</option>
+<option value="bellas_artes">Sucursal Centro Bellas Artes</option>
+<option value="coyoacan">Sucursal Coyoacán Histórico</option>
+<option value="almacen">Almacén Central</option>
+</select>
+</div>
+<div class="flex items-center gap-space-xs w-full md:w-auto">
+<label class="font-label-sm text-label-sm text-outline uppercase tracking-wider whitespace-nowrap font-bold" for="filter-status">Disponibilidad:</label>
+<select class="w-full md:w-auto bg-surface-container-low border border-outline-variant text-[#2e1065] font-body-sm text-body-sm px-space-sm py-2 rounded-xl focus:outline-none focus:border-primary cursor-pointer" id="filter-status">
+<option value="all">Cualquier Estado</option>
+<option value="in_stock">En Existencia (&gt; 0)</option>
+<option value="reserved">Con Reservas Activas</option>
+<option value="low">Alerta de Agotamiento</option>
+</select>
+</div>
+</div>
+<div class="flex items-center gap-space-sm justify-end">
+<button class="flex items-center gap-space-xs px-3.5 py-2 bg-surface-container-low hover:bg-surface-container border border-outline-variant rounded-xl text-on-surface-variant hover:text-primary text-label-md font-label-md font-bold transition-colors">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+<span>Filtros Específicos</span>
+</button>
+<button class="flex items-center gap-space-xs px-3.5 py-2 bg-surface-container-low hover:bg-surface-container border border-outline-variant rounded-xl text-on-surface-variant hover:text-primary text-label-md font-label-md font-bold transition-colors" title="Exportar CSV de Auditoría">
+<span class="material-symbols-outlined text-[16px]">file_download</span>
+<span>Exportar</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Inventory Master Table -->
+<div class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-xs border border-outline-variant">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low/70 border-b border-outline-variant font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider font-bold">
+<th class="py-3 px-space-md">SKU / Identificador</th>
+<th class="py-3 px-space-md">Título &amp; Ficha Técnica</th>
+<th class="py-3 px-space-md">Categoría</th>
+<th class="py-3 px-space-md">Ubicación Física</th>
+<th class="py-3 px-space-md text-right">Existencia</th>
+<th class="py-3 px-space-md text-right">Reservado</th>
+<th class="py-3 px-space-md text-right">P. Unitario</th>
+<th class="py-3 px-space-md">Gradación / Autenticidad</th>
+<th class="py-3 px-space-md text-center">Acciones</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/60 font-body-sm text-body-sm text-[#2e1065]">
+<!-- Row 1: Vinyl -->
+<tr class="hover:bg-surface-container-low/50 transition-colors group">
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-12 h-12 rounded-xl bg-surface-container-low border border-outline-variant flex items-center justify-center shrink-0 overflow-hidden shadow-xs">
+<img alt="Kind of Blue Vinyl" class="w-full h-full object-cover" data-alt="Close up dark artistic shot of a deep blue vinyl record label with classic jazz typography Miles Davis Kind of Blue with vintage micro-grooves under warm spotlight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8ZuTr-EdnXPtYGwclpRBEags6rAPSKA5_6xbaJ5iGcuDlbnb5ad2sSoEup24Iw3_3Hfi9m--6dAOeLtzDUSRpSRmf_DXN2eF3HNtdR5gTizuoA5jzheMEuPECexis-p2D1kJ_pkDKHxCZXnzEYIQFfSezRmDLbuFG1gJa69sUFty86ATs_1RS1GgkGw0bH0b9oGQHeAtH6Hutobl603YGJnlFTiyYips9iZeD8Es"/>
+</div>
+<div>
+<span class="font-code text-[12px] text-primary font-bold block">VIN-1959-KD</span>
+<span class="font-code text-[11px] text-outline">BAR: 88985305141</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-md max-w-xs">
+<div class="font-headline-sm text-body-md font-bold text-[#2e1065] group-hover:text-primary transition-colors">Kind of Blue (LP 180g Original Mono)</div>
+<div class="font-body-sm text-[12px] text-on-surface-variant flex flex-wrap items-center gap-1 mt-0.5">
+<span>Miles Davis</span>
+<span>•</span>
+<span class="font-code text-[11px] text-outline">Columbia / Sony Music</span>
+<span>•</span>
+<span class="font-code text-[11px]">33⅓ RPM</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary-container/60 text-[#3c1d7e] font-label-md text-[11px] font-bold border border-outline-variant">
+<span class="material-symbols-outlined text-[14px]">album</span>
+<span>Disco LP</span>
+</span>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="font-body-sm text-[#2e1065] font-medium">Sucursal Centro Bellas Artes</div>
+<div class="font-code text-[11px] text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">shelves</span>
+<span>Estante JZ-04 • Bins 02</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<span class="font-bold text-[15px] text-[#2e1065]">12</span>
+<span class="font-code text-[11px] text-outline block">unidades</span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<span class="font-bold text-[13px] text-primary">2</span>
+<span class="font-code text-[11px] text-outline block">Apartado Online</span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<span class="font-bold text-body-md text-[#2e1065]">$1,450.00</span>
+<span class="font-code text-[10px] text-outline block">MXN IVA Inc.</span>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-lg bg-surface-container-low border border-outline-variant font-code text-[11px] text-primary font-medium">
+                      Gradación: Mint (Sellado)
+                    </span>
+</td>
+<td class="py-3.5 px-space-md text-center">
+<div class="flex items-center justify-center gap-1">
+<button class="p-1.5 rounded-lg hover:bg-surface-container-low text-on-surface-variant hover:text-primary transition-colors" title="Editar Ficha Técnica">
+<span class="material-symbols-outlined text-[18px]">edit_note</span>
+</button>
+<button class="p-1.5 rounded-lg hover:bg-surface-container-low text-on-surface-variant hover:text-primary transition-colors" title="Trasladar a otra Sucursal">
+<span class="material-symbols-outlined text-[18px]">move_up</span>
+</button>
+<button class="p-1.5 rounded-lg hover:bg-surface-container-low text-on-surface-variant hover:text-error transition-colors" title="Registrar Merma / Daño">
+<span class="material-symbols-outlined text-[18px]">remove_shopping_cart</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2: Book -->
+<tr class="hover:bg-surface-container-low/50 transition-colors group">
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-12 h-12 rounded-xl bg-surface-container-low border border-outline-variant flex items-center justify-center shrink-0 overflow-hidden shadow-xs">
+<img alt="Cien Anos de Soledad" class="w-full h-full object-cover" data-alt="Cover of the book One Hundred Years of Solitude special illustrated jubilee edition with intricate golden archival details on rich deep background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEFFnWJftFSnrglmnsyU3l7Fc4h8KM_ayfcd45tRCyv5tKnGxNZ0tpe4-CLaCIsxo_1CJ-IELqi8RRgYPHXMRRIB5AJa49u7ueYgK2RRcGb_O_UXhzgH3Kq5DVVlqOs_ECCBi5nPiTgCHbO2tuOehpX6UmiVQOWdPTLXx8B4KJJNYwUrxVUOzsLeDcSe8MCARXwEwLEVfKRnrSqXqJo6Z1ouu_Gx_2qJOlvWOUejI"/>
+</div>
+<div>
+<span class="font-code text-[12px] text-primary font-bold block">LIB-1967-CS</span>
+<span class="font-code text-[11px] text-outline">ISBN: 9788420431321</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-md max-w-xs">
+<div class="font-headline-sm text-body-md font-bold text-[#2e1065] group-hover:text-primary transition-colors">Cien Años de Soledad (Ed. Ilustrada 50 Aniv)</div>
+<div class="font-body-sm text-[12px] text-on-surface-variant flex flex-wrap items-center gap-1 mt-0.5">
+<span>Gabriel García Márquez</span>
+<span>•</span>
+<span class="font-code text-[11px] text-outline">RAE / Alfaguara</span>
+<span>•</span>
+<span>Tapa Dura</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container-high text-primary font-label-md text-[11px] font-bold border border-outline-variant">
+<span class="material-symbols-outlined text-[14px]">book_2</span>
+<span>Libro</span>
+</span>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="font-body-sm text-[#2e1065] font-medium">Sucursal Coyoacán Histórico</div>
+<div class="font-code text-[11px] text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">shelves</span>
+<span>Pasillo B • Sección Realismo</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<span class="font-bold text-[15px] text-[#2e1065]">28</span>
+<span class="font-code text-[11px] text-outline block">unidades</span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<span class="font-bold text-[13px] text-outline">0</span>
+<span class="font-code text-[11px] text-outline block">Sin espera</span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<span class="font-bold text-body-md text-[#2e1065]">$890.00</span>
+<span class="font-code text-[10px] text-outline block">MXN IVA Inc.</span>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-lg bg-surface-container-low border border-outline-variant font-code text-[11px] text-on-surface-variant">
+                      Nuevo de Imprenta
+                    </span>
+</td>
+<td class="py-3.5 px-space-md text-center">
+<div class="flex items-center justify-center gap-1">
+<button class="p-1.5 rounded-lg hover:bg-surface-container-low text-on-surface-variant hover:text-primary transition-colors" title="Editar Ficha Técnica">
+<span class="material-symbols-outlined text-[18px]">edit_note</span>
+</button>
+<button class="p-1.5 rounded-lg hover:bg-surface-container-low text-on-surface-variant hover:text-primary transition-colors" title="Trasladar a otra Sucursal">
+<span class="material-symbols-outlined text-[18px]">move_up</span>
+</button>
+<button class="p-1.5 rounded-lg hover:bg-surface-container-low text-on-surface-variant hover:text-error transition-colors" title="Registrar Merma / Daño">
+<span class="material-symbols-outlined text-[18px]">remove_shopping_cart</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3: Collectible / Camera -->
+<tr class="bg-primary/5 hover:bg-primary/10 transition-colors group">
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-12 h-12 rounded-xl bg-surface-container-low border border-outline-variant flex items-center justify-center shrink-0 overflow-hidden shadow-xs">
+<img alt="Camera Rolleiflex" class="w-full h-full object-cover" data-alt="Detailed macro shot of an authentic Rolleiflex TLR twin lens reflex vintage medium format camera with polished chrome dials on a dark archival felt velvet surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAicDlXJXeiYJ9_ESOXBfLwDRQoBSjWbANCypXymEIidqjGiob8mNxXtSd7B41Fbh0ayeeUW9bxnkqRZmnVCNeBWXVpOqxyAoylLcHDs-zvhO-e_-aSFP6hwLY9WBwKfCN4yy8Y202Epwg7qPAFB_KyYZRW7QuVGET2xd5wDVrZvK2eDZMrp7mrP2-tgsw9CisJA1gk9UikvfIn_PTwLLCoTUHm_hB2Xdwg0hqz0Bk"/>
+</div>
+<div>
+<span class="font-code text-[12px] text-primary font-bold block">COL-1965-RF</span>
+<span class="font-code text-[11px] text-primary font-semibold">PU-00821</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-md max-w-xs">
+<div class="font-headline-sm text-body-md font-bold text-[#2e1065] group-hover:text-primary transition-colors">Cámara Rolleiflex 2.8F TLR Vintage 1965</div>
+<div class="font-body-sm text-[12px] text-on-surface-variant flex flex-wrap items-center gap-1 mt-0.5">
+<span>Franke &amp; Heidecke</span>
+<span>•</span>
+<span class="font-code text-[11px] text-outline">Lente Carl Zeiss Planar 80mm</span>
+<span>•</span>
+<span>Alemania</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-primary text-white font-label-md text-[11px] font-bold shadow-xs">
+<span class="material-symbols-outlined text-[14px]">stars</span>
+<span>Pieza Única</span>
+</span>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="font-body-sm text-[#2e1065] font-medium">Sucursal Centro Bellas Artes</div>
+<div class="font-code text-[11px] text-primary flex items-center gap-1 font-semibold">
+<span class="material-symbols-outlined text-[13px]">lock</span>
+<span>Vitrina Aislada Climatizada V-01</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<span class="font-bold text-[15px] text-primary">1</span>
+<span class="font-code text-[11px] text-primary font-semibold block">Pieza Única</span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<span class="font-bold text-[13px] text-outline">0</span>
+<span class="font-code text-[11px] text-outline block">En Exhibición</span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<span class="font-bold text-body-md text-primary">$44,500.00</span>
+<span class="font-code text-[10px] text-outline block font-medium">Curaduría Cert.</span>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col gap-1">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-surface-container-low border border-outline-variant font-code text-[10px] text-[#2e1065] font-semibold">
+<span class="material-symbols-outlined text-[13px] text-primary">verified</span>
+<span>Cert. Autenticidad #AR-940</span>
+</span>
+<span class="font-code text-[10px] text-on-surface-variant font-medium">Estado: Near Mint (9.4/10)</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md text-center">
+<div class="flex items-center justify-center gap-1">
+<button class="p-1.5 rounded-lg hover:bg-surface-container-low text-on-surface-variant hover:text-primary transition-colors" title="Editar Ficha Técnica">
+<span class="material-symbols-outlined text-[18px]">edit_note</span>
+</button>
+<button class="p-1.5 rounded-lg hover:bg-surface-container-low text-on-surface-variant hover:text-primary transition-colors" title="Trasladar a otra Sucursal">
+<span class="material-symbols-outlined text-[18px]">move_up</span>
+</button>
+<button class="p-1.5 rounded-lg hover:bg-surface-container-low text-on-surface-variant hover:text-error transition-colors" title="Registrar Merma / Daño">
+<span class="material-symbols-outlined text-[18px]">remove_shopping_cart</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4: Vinyl Daft Punk -->
+<tr class="hover:bg-surface-container-low/50 transition-colors group">
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-12 h-12 rounded-xl bg-surface-container-low border border-outline-variant flex items-center justify-center shrink-0 overflow-hidden shadow-xs">
+<img alt="Random Access Memories Vinyl" class="w-full h-full object-cover" data-alt="Cover art of Daft Punk Random Access Memories 10th anniversary edition vinyl gatefold packaging in minimalist silver aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwM9C_c7tNteTJlsBKStetQOMxKWCw8YY72RHYZ37iibsWJcmXpyhZEzpUncYQZUbP6Mj0Bnjb1YhrYAeD7x36D5MtkjlRvy9vzwEi8q7QMXgKs3qn28cv0gtRgU3hujvIqCBrtjEU2xp6wFnym3UNgcLyjyAMzT7F78FTB56z6rDLweQW4Lz26Y93M2p_6crD1CVQLbr4GU-oKoVe_-WIJiKrnGXLgtunYFSIQv4"/>
+</div>
+<div>
+<span class="font-code text-[12px] text-primary font-bold block">VIN-2013-DP</span>
+<span class="font-code text-[11px] text-outline">BAR: 19658773731</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-md max-w-xs">
+<div class="font-headline-sm text-body-md font-bold text-[#2e1065] group-hover:text-primary transition-colors">Random Access Memories (2xLP 10° Aniv)</div>
+<div class="font-body-sm text-[12px] text-on-surface-variant flex flex-wrap items-center gap-1 mt-0.5">
+<span>Daft Punk</span>
+<span>•</span>
+<span class="font-code text-[11px] text-outline">Columbia Records</span>
+<span>•</span>
+<span>Gatefold 180g</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary-container/60 text-[#3c1d7e] font-label-md text-[11px] font-bold border border-outline-variant">
+<span class="material-symbols-outlined text-[14px]">album</span>
+<span>Disco LP</span>
+</span>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="font-body-sm text-[#2e1065] font-medium">Almacén Central Tepito</div>
+<div class="font-code text-[11px] text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">shelves</span>
+<span>Rack ELEC-09 • Posición 44</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<span class="font-bold text-[15px] text-[#2e1065]">6</span>
+<span class="font-code text-[11px] text-outline block">unidades</span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<span class="font-bold text-[13px] text-primary">1</span>
+<span class="font-code text-[11px] text-outline block">En Preparación</span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<span class="font-bold text-body-md text-[#2e1065]">$1,980.00</span>
+<span class="font-code text-[10px] text-outline block">MXN IVA Inc.</span>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-lg bg-surface-container-low border border-outline-variant font-code text-[11px] text-on-surface-variant">
+                      Nuevo / Precintado
+                    </span>
+</td>
+<td class="py-3.5 px-space-md text-center">
+<div class="flex items-center justify-center gap-1">
+<button class="p-1.5 rounded-lg hover:bg-surface-container-low text-on-surface-variant hover:text-primary transition-colors" title="Editar Ficha Técnica">
+<span class="material-symbols-outlined text-[18px]">edit_note</span>
+</button>
+<button class="p-1.5 rounded-lg hover:bg-surface-container-low text-on-surface-variant hover:text-primary transition-colors" title="Trasladar a otra Sucursal">
+<span class="material-symbols-outlined text-[18px]">move_up</span>
+</button>
+<button class="p-1.5 rounded-lg hover:bg-surface-container-low text-on-surface-variant hover:text-error transition-colors" title="Registrar Merma / Daño">
+<span class="material-symbols-outlined text-[18px]">remove_shopping_cart</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 5: Critical Stock Book -->
+<tr class="bg-rose-50/70 hover:bg-rose-100/50 transition-colors group">
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-12 h-12 rounded-xl bg-surface-container-low border border-rose-200 flex items-center justify-center shrink-0 overflow-hidden shadow-xs">
+<img alt="Rayuela Cortazar" class="w-full h-full object-cover" data-alt="Cover of the facsimile first edition of the novel Rayuela by Julio Cortazar with vintage yellowed textured paper typography Sudamericana" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4xRi2cmhXLWmG7GhRk7qnJZ__x-7cf6CsqK0LGAaPgUrLASQpNKu80qGXyDRf05wQYkm0HvYtGQ3Bz_W9-IDLcOWqZwOkQMlmLdCEIziYnnxnSzQPNF71ghynJlFfczBOn3VorhOx5-jKpTidBCy3Ly6zrDZY3C2sV2dvephzaLiLCPPMh0l_eRincEtSKM0129lQf8mgPnLzz5goAI5MWvyi6hCTy8OBo7G_4D8"/>
+</div>
+<div>
+<span class="font-code text-[12px] text-primary font-bold block">LIB-1963-RY</span>
+<span class="font-code text-[11px] text-outline">ISBN: 9789500742115</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-md max-w-xs">
+<div class="font-headline-sm text-body-md font-bold text-[#2e1065] group-hover:text-primary transition-colors">Rayuela - Julio Cortázar (Ed. Facsimilar)</div>
+<div class="font-body-sm text-[12px] text-on-surface-variant flex flex-wrap items-center gap-1 mt-0.5">
+<span>Julio Cortázar</span>
+<span>•</span>
+<span class="font-code text-[11px] text-outline">Editorial Sudamericana</span>
+<span>•</span>
+<span>Rústica Especial</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container-high text-primary font-label-md text-[11px] font-bold border border-outline-variant">
+<span class="material-symbols-outlined text-[14px]">book_2</span>
+<span>Libro</span>
+</span>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="font-body-sm text-[#2e1065] font-medium">Sucursal Centro Bellas Artes</div>
+<div class="font-code text-[11px] text-error flex items-center gap-1 font-bold">
+<span class="material-symbols-outlined text-[13px]">warning</span>
+<span>Estante LIT-CORT • B-01</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<span class="font-bold text-[15px] text-error">3</span>
+<span class="font-code text-[11px] text-error font-bold block">Crítico (Mín. 5)</span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<span class="font-bold text-[13px] text-primary font-semibold">2</span>
+<span class="font-code text-[11px] text-outline block">Pre-orden activa</span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<span class="font-bold text-body-md text-[#2e1065]">$1,120.00</span>
+<span class="font-code text-[10px] text-outline block">MXN IVA Inc.</span>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-lg bg-surface-container-low border border-outline-variant font-code text-[11px] text-on-surface-variant">
+                      Impresión Limitada
+                    </span>
+</td>
+<td class="py-3.5 px-space-md text-center">
+<div class="flex items-center justify-center gap-1">
+<button class="p-1.5 rounded-lg bg-error-container text-error hover:bg-error hover:text-white transition-colors" title="Reorden Inmediato a Proveedor">
+<span class="material-symbols-outlined text-[18px]">shopping_cart_checkout</span>
+</button>
+<button class="p-1.5 rounded-lg hover:bg-surface-container-low text-on-surface-variant hover:text-primary transition-colors" title="Trasladar a otra Sucursal">
+<span class="material-symbols-outlined text-[18px]">move_up</span>
+</button>
+<button class="p-1.5 rounded-lg hover:bg-surface-container-low text-on-surface-variant hover:text-primary transition-colors" title="Editar Ficha Técnica">
+<span class="material-symbols-outlined text-[18px]">edit_note</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination Bar -->
+<div class="bg-surface-container-low/70 border-t border-outline-variant px-space-md py-3 flex flex-col sm:flex-row items-center justify-between gap-space-sm">
+<div class="font-code text-[11px] text-on-surface-variant">
+              Mostrando registros 1 a 5 de 8,420 productos consolidados
+            </div>
+<div class="flex items-center gap-space-xs">
+<button class="px-3 py-1 rounded-lg bg-white border border-outline-variant text-outline text-label-md font-label-md cursor-not-allowed">Anterior</button>
+<button class="px-3 py-1 rounded-lg bg-primary text-white font-label-md text-label-md font-bold shadow-xs">1</button>
+<button class="px-3 py-1 rounded-lg bg-white border border-outline-variant hover:bg-surface-container-low text-[#2e1065] font-label-md text-label-md transition-colors font-medium">2</button>
+<button class="px-3 py-1 rounded-lg bg-white border border-outline-variant hover:bg-surface-container-low text-[#2e1065] font-label-md text-label-md transition-colors font-medium">3</button>
+<span class="text-outline text-body-sm px-1 font-bold">...</span>
+<button class="px-3 py-1 rounded-lg bg-white border border-outline-variant hover:bg-surface-container-low text-[#2e1065] font-label-md text-label-md transition-colors font-medium">168</button>
+<button class="px-3 py-1 rounded-lg bg-white border border-outline-variant hover:bg-surface-container-low text-primary font-label-md text-label-md font-bold transition-colors">Siguiente</button>
+</div>
+</div>
+</div>
+<!-- Lower Section: Recent Movements & Distribution -->
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-space-lg">
+<!-- Recent Movements Table -->
+<div class="xl:col-span-2 bg-surface-container-lowest rounded-2xl p-space-lg flex flex-col gap-space-md border border-outline-variant shadow-xs">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-xl bg-surface-container-low border border-outline-variant flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">swap_horiz</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm font-bold text-[#2e1065]">Últimos Movimientos de Inventario</h2>
+<span class="font-code text-[11px] text-on-surface-variant font-medium">Auditoría en tiempo real de transacciones (movimientos_inventario)</span>
+</div>
+</div>
+<a class="font-label-md text-label-md text-primary hover:text-[#5209b5] font-bold flex items-center gap-0.5 transition-colors" href="#">
+<span>Ver Bitácora Completa</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</a>
+</div>
+<div class="overflow-x-auto rounded-xl border border-outline-variant/60">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low/70 font-code text-[11px] text-outline uppercase tracking-wider font-bold border-b border-outline-variant/60">
+<th class="py-2.5 px-space-md">Tipo</th>
+<th class="py-2.5 px-space-md">SKU / Item</th>
+<th class="py-2.5 px-space-md">Origen → Destino</th>
+<th class="py-2.5 px-space-md text-right">Cant.</th>
+<th class="py-2.5 px-space-md">Fecha / Operador</th>
+<th class="py-2.5 px-space-md">Ref. Documental</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/40 font-body-sm text-body-sm text-[#2e1065]">
+<tr class="hover:bg-surface-container-low/40 transition-colors">
+<td class="py-3 px-space-md">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-surface-container-low border border-outline-variant text-primary font-code text-[11px] font-semibold">
+<span class="material-symbols-outlined text-[12px]">move_to_inbox</span>
+<span>Entrada Prov.</span>
+</span>
+</td>
+<td class="py-3 px-space-md">
+<span class="font-code text-primary font-bold block text-[11px]">VIN-1959-KD</span>
+<span class="text-[12px] text-on-surface-variant truncate max-w-[180px] block">Kind of Blue (Mono)</span>
+</td>
+<td class="py-3 px-space-md text-on-surface-variant">
+                      Sony Dist. → <span class="text-[#2e1065] font-medium">Almacén Central</span>
+</td>
+<td class="py-3 px-space-md text-right">
+<span class="font-bold text-emerald-600 font-code text-[13px]">+15</span>
+</td>
+<td class="py-3 px-space-md">
+<span class="font-code text-[11px] text-[#2e1065] font-medium block">Hoy 11:42</span>
+<span class="font-code text-[10px] text-outline">USR-CARLOS-04</span>
+</td>
+<td class="py-3 px-space-md">
+<span class="font-code text-[11px] text-outline">FAC-98421-SY</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/40 transition-colors">
+<td class="py-3 px-space-md">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-secondary-container/60 border border-outline-variant text-[#3c1d7e] font-code text-[11px] font-semibold">
+<span class="material-symbols-outlined text-[12px]">sync_alt</span>
+<span>Transferencia</span>
+</span>
+</td>
+<td class="py-3 px-space-md">
+<span class="font-code text-primary font-bold block text-[11px]">LIB-1967-CS</span>
+<span class="text-[12px] text-on-surface-variant truncate max-w-[180px] block">Cien Años Soledad 50A</span>
+</td>
+<td class="py-3 px-space-md text-on-surface-variant">
+                      Almacén → <span class="text-[#2e1065] font-medium">Bellas Artes</span>
+</td>
+<td class="py-3 px-space-md text-right">
+<span class="font-bold text-[#2e1065] font-code text-[13px]">10</span>
+</td>
+<td class="py-3 px-space-md">
+<span class="font-code text-[11px] text-[#2e1065] font-medium block">Hoy 09:15</span>
+<span class="font-code text-[10px] text-outline">LOG-RAMIREZ-01</span>
+</td>
+<td class="py-3 px-space-md">
+<span class="font-code text-[11px] text-outline">TRF-2023-0941</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/40 transition-colors">
+<td class="py-3 px-space-md">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-surface-container-low border border-outline-variant text-on-surface-variant font-code text-[11px] font-semibold">
+<span class="material-symbols-outlined text-[12px]">point_of_sale</span>
+<span>Venta Mostrador</span>
+</span>
+</td>
+<td class="py-3 px-space-md">
+<span class="font-code text-primary font-bold block text-[11px]">VIN-2013-DP</span>
+<span class="text-[12px] text-on-surface-variant truncate max-w-[180px] block">Random Access Mem.</span>
+</td>
+<td class="py-3 px-space-md text-on-surface-variant">
+                      Sucursal Coyoacán → <span class="text-[#2e1065] font-medium">Cliente Final</span>
+</td>
+<td class="py-3 px-space-md text-right">
+<span class="font-bold text-error font-code text-[13px]">-1</span>
+</td>
+<td class="py-3 px-space-md">
+<span class="font-code text-[11px] text-[#2e1065] font-medium block">Ayer 18:30</span>
+<span class="font-code text-[10px] text-outline">POS-CAJA-02</span>
+</td>
+<td class="py-3 px-space-md">
+<span class="font-code text-[11px] text-outline">TKT-884920</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Catalog Distribution Chart Card -->
+<div class="bg-surface-container-lowest rounded-2xl p-space-lg flex flex-col justify-between border border-outline-variant shadow-xs">
+<div class="flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">pie_chart</span>
+<h3 class="font-headline-sm text-body-lg font-bold text-[#2e1065]">Distribución por Catálogo</h3>
+</div>
+<span class="font-code text-[11px] text-outline font-medium">Existencias Totales</span>
+</div>
+<!-- SVG Donut Chart (Archivum Amethyst Palette) -->
+<div class="flex items-center justify-center py-space-sm">
+<svg class="w-36 h-36 -rotate-90" viewbox="0 0 100 100">
+<circle class="text-surface-container-low" cx="50" cy="50" fill="transparent" r="40" stroke="currentColor" stroke-width="12"></circle>
+<circle class="text-primary" cx="50" cy="50" fill="transparent" r="40" stroke="currentColor" stroke-dasharray="251.2" stroke-dashoffset="105" stroke-width="12"></circle>
+<circle class="text-[#a855f7]" cx="50" cy="50" fill="transparent" r="40" stroke="currentColor" stroke-dasharray="251.2" stroke-dashoffset="180" stroke-width="12"></circle>
+<circle class="text-[#c084fc]" cx="50" cy="50" fill="transparent" r="40" stroke="currentColor" stroke-dasharray="251.2" stroke-dashoffset="238" stroke-width="12"></circle>
+</svg>
+</div>
+<div class="flex flex-col gap-space-xs font-body-sm text-body-sm">
+<div class="flex items-center justify-between p-2.5 rounded-xl bg-surface-container-low border border-outline-variant/60">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-primary"></span>
+<span class="text-[#2e1065] font-medium">Libros &amp; Facsimilares</span>
+</div>
+<span class="font-bold text-primary font-code text-[12px]">58.3%</span>
+</div>
+<div class="flex items-center justify-between p-2.5 rounded-xl bg-surface-container-low border border-outline-variant/60">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-[#a855f7]"></span>
+<span class="text-[#2e1065] font-medium">Discos &amp; Vinilos Curados</span>
+</div>
+<span class="font-bold text-primary font-code text-[12px]">36.7%</span>
+</div>
+<div class="flex items-center justify-between p-2.5 rounded-xl bg-surface-container-low border border-outline-variant/60">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-[#c084fc]"></span>
+<span class="text-[#2e1065] font-medium">Piezas Únicas &amp; Cámaras</span>
+</div>
+<span class="font-bold text-primary font-code text-[12px]">5.0%</span>
+</div>
+</div>
+</div>
+<div class="pt-space-md border-t border-outline-variant/60 mt-space-sm flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-emerald-600">verified_user</span>
+<span class="font-code text-[11px] text-on-surface-variant font-medium">Bóveda Coyoacán Climatizada OK</span>
+</div>
+<button class="font-label-md text-label-md text-primary hover:text-[#5209b5] font-bold">Reporte</button>
+</div>
+</div>
+</div>
+<!-- Inventory Stock Movement Modal -->
+<div class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#24005b]/30 backdrop-blur-xs" id="modal-container">
+<div class="bg-surface-container-lowest rounded-2xl w-full max-w-xl p-space-lg flex flex-col gap-space-md shadow-2xl border border-outline-variant">
+<div class="flex items-center justify-between border-b border-outline-variant/60 pb-3">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[24px]">sync_alt</span>
+<h3 class="font-headline-sm text-headline-sm font-bold text-[#2e1065]" id="modal-title">Ingresar Movimiento de Stock</h3>
+</div>
+<button class="p-1 rounded-lg text-outline hover:text-primary hover:bg-surface-container-low transition-colors" id="close-modal-btn">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<div class="flex flex-col gap-space-sm font-body-sm text-body-sm">
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-outline uppercase tracking-wider font-bold">Tipo de Transacción</label>
+<div class="grid grid-cols-3 gap-2">
+<label class="flex items-center gap-2 p-2.5 rounded-xl bg-surface-container-low border border-outline-variant cursor-pointer hover:border-primary transition-colors">
+<input checked="" class="text-primary focus:ring-0 text-sm" name="movement_type" type="radio" value="in"/>
+<span class="font-label-md text-label-md font-bold text-[#2e1065]">Recepción Entrada</span>
+</label>
+<label class="flex items-center gap-2 p-2.5 rounded-xl bg-surface-container-low border border-outline-variant cursor-pointer hover:border-primary transition-colors">
+<input class="text-primary focus:ring-0 text-sm" name="movement_type" type="radio" value="transfer"/>
+<span class="font-label-md text-label-md font-bold text-[#2e1065]">Transferencia</span>
+</label>
+<label class="flex items-center gap-2 p-2.5 rounded-xl bg-surface-container-low border border-outline-variant cursor-pointer hover:border-primary transition-colors">
+<input class="text-primary focus:ring-0 text-sm" name="movement_type" type="radio" value="out"/>
+<span class="font-label-md text-label-md font-bold text-[#2e1065]">Merma / Baja</span>
+</label>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-outline uppercase tracking-wider font-bold">Producto (SKU o Título)</label>
+<select class="w-full bg-surface-container-low border border-outline-variant p-2.5 rounded-xl text-[#2e1065] font-body-sm focus:outline-none focus:border-primary">
+<option>VIN-1959-KD • Miles Davis - Kind of Blue (Mono)</option>
+<option>LIB-1967-CS • Cien Años de Soledad (50 Aniversario)</option>
+<option>COL-1965-RF • Cámara Rolleiflex 2.8F (#PU-00821)</option>
+<option>VIN-2013-DP • Daft Punk - Random Access Memories</option>
+<option>LIB-1963-RY • Rayuela (Edición Facsimilar)</option>
+</select>
+</div>
+<div class="grid grid-cols-2 gap-space-sm">
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-outline uppercase tracking-wider font-bold">Sucursal Origen</label>
+<select class="w-full bg-surface-container-low border border-outline-variant p-2.5 rounded-xl text-[#2e1065] font-body-sm focus:outline-none focus:border-primary">
+<option>Almacén Central Tepito</option>
+<option>Sucursal Bellas Artes</option>
+<option>Sucursal Coyoacán</option>
+<option>Proveedor Externo</option>
+</select>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-outline uppercase tracking-wider font-bold">Sucursal Destino</label>
+<select class="w-full bg-surface-container-low border border-outline-variant p-2.5 rounded-xl text-[#2e1065] font-body-sm focus:outline-none focus:border-primary">
+<option>Sucursal Bellas Artes</option>
+<option>Sucursal Coyoacán</option>
+<option>Almacén Central Tepito</option>
+<option>Baja Contable / Destrucción</option>
+</select>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-space-sm">
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-outline uppercase tracking-wider font-bold">Cantidad de Unidades</label>
+<input class="w-full bg-surface-container-low border border-outline-variant p-2.5 rounded-xl text-[#2e1065] font-code focus:outline-none focus:border-primary" min="1" type="number" value="1"/>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-outline uppercase tracking-wider font-bold">Referencia / Folio</label>
+<input class="w-full bg-surface-container-low border border-outline-variant p-2.5 rounded-xl text-[#2e1065] font-code focus:outline-none focus:border-primary" placeholder="Ej. REM-2023-882" type="text"/>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-end gap-space-sm pt-space-sm border-t border-outline-variant/60">
+<button class="px-space-md py-2 rounded-xl bg-surface-container-low border border-outline-variant text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md font-bold" id="cancel-modal-btn">
+                Cancelar
+              </button>
+<button class="px-space-md py-2 rounded-xl bg-primary text-white hover:bg-[#5209b5] transition-colors font-label-md text-label-md font-bold shadow-sm shadow-primary/20" id="confirm-modal-btn">
+                Confirmar y Registrar
+              </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<script>
+    const modal = document.getElementById('modal-container');
+    const openMovementBtn = document.getElementById('open-movement-btn');
+    const openSkuBtn = document.getElementById('open-sku-btn');
+    const closeModalBtn = document.getElementById('close-modal-btn');
+    const cancelModalBtn = document.getElementById('cancel-modal-btn');
+    const confirmModalBtn = document.getElementById('confirm-modal-btn');
+    const modalTitle = document.getElementById('modal-title');
+
+    function showModal(title) {
+      if (modalTitle) modalTitle.textContent = title;
+      modal.classList.remove('hidden');
+    }
+
+    function hideModal() {
+      modal.classList.add('hidden');
+    }
+
+    if (openMovementBtn) {
+      openMovementBtn.addEventListener('click', () => showModal('Ingresar Movimiento de Stock'));
+    }
+    if (openSkuBtn) {
+      openSkuBtn.addEventListener('click', () => showModal('Alta de Nuevo Producto o Variante SKU'));
+    }
+    if (closeModalBtn) closeModalBtn.addEventListener('click', hideModal);
+    if (cancelModalBtn) cancelModalBtn.addEventListener('click', hideModal);
+    if (confirmModalBtn) confirmModalBtn.addEventListener('click', hideModal);
+
+    const tabs = document.querySelectorAll('.filter-tab');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => {
+          t.classList.remove('bg-primary', 'text-white', 'shadow-xs');
+          t.classList.add('text-on-surface-variant');
+        });
+        tab.classList.add('bg-primary', 'text-white', 'shadow-xs');
+        tab.classList.remove('text-on-surface-variant');
+      });
+    });
+  </script>
+</body></html>

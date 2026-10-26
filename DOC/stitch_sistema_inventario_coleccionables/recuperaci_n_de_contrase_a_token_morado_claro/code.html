@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ARCHIVUM — Portal de Autenticación &amp; Registro de Coleccionistas</title>
+<!-- Google Fonts: Quicksand, Barlow Condensed -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&amp;family=Quicksand:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS CDN v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration with Target Theme -->
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "on-secondary-container": "#524584",
+          "primary": "#7c3aed",
+          "surface-container-low": "#f9f1ff",
+          "background": "#fbf7fe",
+          "inverse-on-surface": "#f6edff",
+          "on-error-container": "#93000a",
+          "on-error": "#ffffff",
+          "inverse-surface": "#391e70",
+          "tertiary-fixed-dim": "#ddb8ff",
+          "on-primary-fixed": "#25005a",
+          "primary-container": "#7c3aed",
+          "on-tertiary": "#ffffff",
+          "surface-variant": "#eaddff",
+          "primary-fixed-dim": "#d2bbff",
+          "on-secondary": "#ffffff",
+          "on-tertiary-fixed": "#2c0051",
+          "secondary-fixed": "#e7deff",
+          "secondary": "#625595",
+          "surface-dim": "#e2d3ff",
+          "on-surface": "#2e1065",
+          "primary-fixed": "#eaddff",
+          "on-secondary-fixed": "#1e0e4e",
+          "surface-container": "#f4eaff",
+          "on-primary-container": "#ede0ff",
+          "outline-variant": "#e9d5ff",
+          "error-container": "#ffdad6",
+          "secondary-container": "#c6b7ff",
+          "on-surface-variant": "#5b4e75",
+          "surface-container-high": "#efe4ff",
+          "surface": "#fbf7fe",
+          "surface-container-highest": "#eaddff",
+          "surface-container-lowest": "#ffffff",
+          "on-tertiary-fixed-variant": "#6800b4",
+          "outline": "#7b7487",
+          "tertiary": "#6b21a8",
+          "on-tertiary-container": "#f2dfff",
+          "on-primary": "#ffffff",
+          "surface-bright": "#fef7ff",
+          "on-primary-fixed-variant": "#5a00c6",
+          "on-secondary-fixed-variant": "#4a3d7c",
+          "tertiary-fixed": "#f0dbff",
+          "error": "#ba1a1a",
+          "tertiary-container": "#8f2de6",
+          "surface-tint": "#732ee4",
+          "on-background": "#2e1065",
+          "inverse-primary": "#d2bbff",
+          "secondary-fixed-dim": "#ccbeff",
+          "wisteria": "#e9d5ff"
+        },
+        "fontFamily": {
+          "quicksand": ["Quicksand", "sans-serif"],
+          "condensed": ["'Barlow Condensed'", "sans-serif"],
+          "display-lg": ["Quicksand", "sans-serif"],
+          "headline-md": ["Quicksand", "sans-serif"],
+          "headline-sm": ["Quicksand", "sans-serif"],
+          "body-md": ["Quicksand", "sans-serif"],
+          "body-sm": ["Quicksand", "sans-serif"],
+          "label-lg": ["'Barlow Condensed'", "sans-serif"],
+          "label-md": ["'Barlow Condensed'", "sans-serif"],
+          "label-sm": ["'Barlow Condensed'", "sans-serif"]
+        }
+      }
+    }
+  }
+</script>
+<!-- Layout & Custom Styles -->
+<style data-purpose="base-styling">
+    body {
+      transition: background-color 0.25s ease, color 0.25s ease;
+      background-color: #fbf7fe;
+    }
+    input:focus, select:focus {
+      outline: none;
+      box-shadow: none;
+    }
+  </style>
+<meta content="web_dashboard" name="shell-type"/></head>
+<body class="bg-[#fbf7fe] text-[#2e1065] font-quicksand min-h-screen flex flex-col selection:bg-primary selection:text-white">
+<!-- BEGIN: TopBar -->
+<header class="w-full border-b border-[#e9d5ff] bg-white text-[#2e1065] shadow-sm">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+<!-- Brand & Isotype -->
+<div class="flex items-center space-x-3.5">
+<a class="flex items-center space-x-3 group" href="#" title="ARCHIVUM - Bibliotheca &amp; Discos">
+<!-- Monogram Emblem SVG -->
+<div class="w-11 h-11 rounded-lg bg-[#f4eaff] border border-[#e9d5ff] flex items-center justify-center text-primary group-hover:border-primary transition-colors">
+<svg aria-hidden="true" class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75"></path>
+</svg>
+</div>
+<div>
+<div class="font-quicksand font-bold text-lg tracking-wider text-[#2e1065]">ARCHIVUM</div>
+<p class="text-xs uppercase tracking-widest text-[#7c3aed] font-condensed font-semibold">Bibliotheca &amp; Discos Raros</p>
+</div>
+</a>
+</div>
+<!-- Center Status / Protocol Tag -->
+<div class="hidden md:flex items-center space-x-2 text-xs text-[#5b4e75] bg-[#f9f1ff] border border-[#e9d5ff] px-3.5 py-1.5 rounded-full font-condensed">
+<svg class="w-3.5 h-3.5 text-primary" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="tracking-wider font-semibold">BÓVEDA SEGURA · SHA-256 / 2FA AUDITADO</span>
+</div>
+<!-- Right Controls: Return, Locale, Theme Switcher -->
+<div class="flex items-center space-x-4">
+<a class="hidden sm:inline-flex items-center text-xs tracking-wider text-[#5b4e75] hover:text-primary uppercase font-condensed font-bold transition-colors" href="#">
+<svg class="w-4 h-4 mr-1.5 text-primary" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+          Catálogo Público
+        </a>
+<!-- Theme Switcher (Preserved Button) -->
+<button class="w-9 h-9 rounded-lg bg-[#f9f1ff] border border-[#e9d5ff] hover:border-primary text-primary flex items-center justify-center transition-colors" id="themeToggleBtn" title="Cambiar Contraste de Color" type="button">
+<!-- Moon Icon -->
+<svg class="w-4 h-4" fill="none" id="iconMoon" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<!-- Sun Icon -->
+<svg class="w-4 h-4 hidden" fill="none" id="iconSun" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+</div>
+</header>
+<!-- END: TopBar -->
+<!-- BEGIN: MainContentContainer -->
+<main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex flex-col justify-center"><div class="flex flex-col w-full max-w-5xl mx-auto px-2 sm:px-4 py-4 md:py-8 space-y-6">
+<!-- Breadcrumb & Top Navigation Control -->
+<div class="flex items-center justify-between">
+<a class="inline-flex items-center space-x-2 text-primary hover:text-[#2e1065] transition-colors py-1.5 px-3 rounded-lg bg-white border border-[#e9d5ff] shadow-sm" href="#">
+<svg aria-hidden="true" class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="font-condensed font-semibold text-xs uppercase tracking-wider">Volver al Inicio de Sesión / Portal Principal</span>
+</a>
+<div class="hidden sm:flex items-center space-x-2 bg-white border border-[#e9d5ff] px-3.5 py-1.5 rounded-full shadow-sm">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="font-condensed text-xs uppercase tracking-widest font-semibold text-[#5b4e75]">PROTOCOLO CRIPTO-VALUACIÓN v4.2</span>
+</div>
+</div>
+<!-- Main Security Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+<!-- Central Interactive Flow Card (8 cols on lg) - Pure white with wisteria border -->
+<div class="lg:col-span-8 bg-white border border-[#e9d5ff] rounded-2xl p-6 sm:p-8 space-y-8 shadow-sm">
+<!-- Phase Indicator Progress Bar -->
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center font-condensed font-bold text-xs" id="stepBadge1">01</span>
+<span class="font-condensed font-bold text-xs uppercase tracking-wider text-primary" id="stepTitle1">Solicitud Notarial</span>
+</div>
+<div class="flex items-center space-x-2">
+<span class="w-6 h-6 rounded-full bg-[#f4eaff] border border-[#e9d5ff] text-[#7b7487] flex items-center justify-center font-condensed font-bold text-xs" id="stepBadge2">02</span>
+<span class="font-condensed font-bold text-xs uppercase tracking-wider text-[#7b7487]" id="stepTitle2">Verificación &amp; Reasignación</span>
+</div>
+</div>
+<div class="w-full bg-[#f4eaff] h-2 rounded-full overflow-hidden border border-[#e9d5ff]">
+<div class="h-full bg-primary w-1/2 transition-all duration-300 rounded-full" id="flowProgressBar"></div>
+</div>
+</div>
+<!-- FASE 1: Solicitud de Restablecimiento -->
+<section class="space-y-6" id="phase1Section">
+<div class="space-y-1">
+<p class="font-condensed font-bold text-xs text-[#7c3aed] tracking-widest uppercase">RECUPERACIÓN DE ACCESO Y CREDENCIALES</p>
+<h1 class="font-quicksand font-bold text-2xl text-[#2e1065]">Bóveda de Seguridad Archivum · SHA-256</h1>
+<p class="font-quicksand text-sm text-[#5b4e75] pt-2 leading-relaxed">
+            Ingresa el correo electrónico institucional o de coleccionista asociado a tu cuenta patrimonial. Generaremos un token criptográfico de un solo uso con vigencia estricta de 15 minutos sincronizado con el registro institucional.
+          </p>
+</div>
+<form class="space-y-5" id="formRequestToken" onsubmit="event.preventDefault();">
+<div class="space-y-2">
+<label class="block font-condensed font-bold text-xs uppercase tracking-wider text-[#5b4e75]" for="recoveryEmailInput">
+              Correo Electrónico Registrado
+            </label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#7c3aed]">
+<svg aria-hidden="true" class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.206" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+</svg>
+</div>
+<input class="w-full pl-11 pr-4 py-3 rounded-lg bg-[#fbf7fe] border border-[#e9d5ff] text-[#2e1065] placeholder-[#7b7487] font-quicksand text-sm focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary transition-all" id="recoveryEmailInput" placeholder="custodio.manuscritos@archivum.mx" required="" type="email"/>
+</div>
+<p class="font-quicksand text-xs text-[#7b7487]">Verificado contra el catálogo de custodios, libreros anticuarios y coleccionistas verificados.</p>
+</div>
+<div class="p-4 rounded-xl bg-[#f9f1ff] border border-[#e9d5ff] space-y-2">
+<div class="flex items-center space-x-2 text-primary">
+<svg aria-hidden="true" class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="font-condensed font-bold text-xs uppercase tracking-wide">Directiva Notarial de Bóveda</span>
+</div>
+<p class="font-quicksand text-xs text-[#5b4e75]">
+              Toda emisión de token queda firmada e indexada en la tabla <span class="font-mono text-xs text-primary bg-white border border-[#e9d5ff] px-1.5 py-0.5 rounded font-medium">recuperacion_contrasenas</span> con hash unidireccional y georreferencia de terminal.
+            </p>
+</div>
+<button class="w-full py-3.5 px-6 rounded-lg bg-primary hover:bg-[#6b21a8] text-white font-condensed font-bold text-base uppercase tracking-wider flex items-center justify-center space-x-3 transition-colors shadow-sm shadow-purple-200" id="btnGenerateToken" type="submit">
+<svg aria-hidden="true" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>Generar y Enviar Token Temporal</span>
+</button>
+</form>
+</section>
+<!-- FASE 2: Verificación e Ingreso de Nueva Contraseña (Hidden initially) -->
+<section class="space-y-6 hidden" id="phase2Section">
+<!-- Live Status Dispatch Banner -->
+<div class="p-4 rounded-xl bg-[#f9f1ff] border border-[#e9d5ff] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<div class="flex items-center space-x-3">
+<span class="w-2.5 h-2.5 rounded-full bg-primary animate-pulse"></span>
+<div>
+<p class="font-condensed font-bold text-xs uppercase tracking-wider text-[#2e1065]">Token despachado con éxito</p>
+<p class="font-mono text-xs text-[#7c3aed]" id="targetEmailLabel">c***@archivum.mx</p>
+</div>
+</div>
+<div class="flex items-center space-x-2 bg-white border border-[#e9d5ff] px-3 py-1.5 rounded-lg self-start sm:self-auto shadow-sm">
+<svg aria-hidden="true" class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="font-quicksand text-xs text-[#2e1065]">Expira en: <span class="font-bold text-primary" id="countdownTimer">14:59</span> min</span>
+</div>
+</div>
+<form class="space-y-6" id="formConfirmReset" onsubmit="event.preventDefault();">
+<!-- Segmented 6-digit Token Input with Clear States -->
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<label class="block font-condensed font-bold text-xs uppercase tracking-wider text-[#5b4e75]">
+                Código Criptográfico de Validación (6 Caracteres)
+              </label>
+<button class="font-condensed font-bold text-xs uppercase tracking-wider text-primary hover:text-[#6b21a8] underline transition-colors" id="btnResendToken" type="button">
+                Reenviar código
+              </button>
+</div>
+<div class="grid grid-cols-6 gap-2 sm:gap-3" id="tokenInputsGroup">
+<input class="token-digit text-center py-3 rounded-lg bg-[#fbf7fe] border border-[#e9d5ff] text-[#2e1065] font-quicksand font-bold text-xl uppercase focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary transition-all" maxlength="1" type="text"/>
+<input class="token-digit text-center py-3 rounded-lg bg-[#fbf7fe] border border-[#e9d5ff] text-[#2e1065] font-quicksand font-bold text-xl uppercase focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary transition-all" maxlength="1" type="text"/>
+<input class="token-digit text-center py-3 rounded-lg bg-[#fbf7fe] border border-[#e9d5ff] text-[#2e1065] font-quicksand font-bold text-xl uppercase focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary transition-all" maxlength="1" type="text"/>
+<input class="token-digit text-center py-3 rounded-lg bg-[#fbf7fe] border border-[#e9d5ff] text-[#2e1065] font-quicksand font-bold text-xl uppercase focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary transition-all" maxlength="1" type="text"/>
+<input class="token-digit text-center py-3 rounded-lg bg-[#fbf7fe] border border-[#e9d5ff] text-[#2e1065] font-quicksand font-bold text-xl uppercase focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary transition-all" maxlength="1" type="text"/>
+<input class="token-digit text-center py-3 rounded-lg bg-[#fbf7fe] border border-[#e9d5ff] text-[#2e1065] font-quicksand font-bold text-xl uppercase focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary transition-all" maxlength="1" type="text"/>
+</div>
+</div>
+<!-- New Password Input with Toggle -->
+<div class="space-y-2">
+<label class="block font-condensed font-bold text-xs uppercase tracking-wider text-[#5b4e75]" for="newPassword">
+              Nueva Contraseña de Custodia
+            </label>
+<div class="relative">
+<input class="w-full pl-4 pr-12 py-3 rounded-lg bg-[#fbf7fe] border border-[#e9d5ff] text-[#2e1065] placeholder-[#7b7487] font-quicksand text-sm focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary transition-all" id="newPassword" placeholder="••••••••••••" required="" type="password"/>
+<button class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-[#7b7487] hover:text-[#2e1065] transition-colors" id="btnToggleNewPass" title="Mostrar/Ocultar contraseña" type="button">
+<svg aria-hidden="true" class="w-5 h-5" fill="none" id="eyeIconNew" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75"></path>
+<path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75"></path>
+</svg>
+</button>
+</div>
+<!-- Password Requirements Dynamic Check -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 font-condensed text-xs font-semibold">
+<div class="p-2 rounded-lg bg-[#fbf7fe] border border-[#e9d5ff] text-[#7b7487] text-center transition-colors" id="reqLen">8+ Caracteres</div>
+<div class="p-2 rounded-lg bg-[#fbf7fe] border border-[#e9d5ff] text-[#7b7487] text-center transition-colors" id="reqUpper">Mayúscula</div>
+<div class="p-2 rounded-lg bg-[#fbf7fe] border border-[#e9d5ff] text-[#7b7487] text-center transition-colors" id="reqNum">Número</div>
+<div class="p-2 rounded-lg bg-[#fbf7fe] border border-[#e9d5ff] text-[#7b7487] text-center transition-colors" id="reqSym">Símbolo</div>
+</div>
+</div>
+<!-- Confirm Password Input -->
+<div class="space-y-2">
+<label class="block font-condensed font-bold text-xs uppercase tracking-wider text-[#5b4e75]" for="confirmPassword">
+              Confirmar Nueva Contraseña
+            </label>
+<div class="relative">
+<input class="w-full pl-4 pr-12 py-3 rounded-lg bg-[#fbf7fe] border border-[#e9d5ff] text-[#2e1065] placeholder-[#7b7487] font-quicksand text-sm focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary transition-all" id="confirmPassword" placeholder="••••••••••••" required="" type="password"/>
+<button class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-[#7b7487] hover:text-[#2e1065] transition-colors" id="btnToggleConfirmPass" title="Mostrar/Ocultar confirmación" type="button">
+<svg aria-hidden="true" class="w-5 h-5" fill="none" id="eyeIconConfirm" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75"></path>
+<path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75"></path>
+</svg>
+</button>
+</div>
+<p class="font-quicksand text-xs text-[#ba1a1a] hidden" id="matchWarning">Las contraseñas ingresadas no coinciden exactamente.</p>
+</div>
+<!-- Invalidate other sessions checkbox -->
+<div class="p-3.5 rounded-xl bg-[#f9f1ff] border border-[#e9d5ff] flex items-start space-x-3">
+<input checked="" class="mt-1 w-4 h-4 rounded text-primary border-[#e9d5ff] focus:ring-primary focus:ring-offset-0 cursor-pointer" id="chkKillSessions" type="checkbox"/>
+<label class="font-quicksand text-xs text-[#2e1065] cursor-pointer select-none leading-relaxed" for="chkKillSessions">
+<span class="font-bold block text-primary font-condensed text-sm uppercase">Revocación Inmediata de Sesiones</span>
+              Cerrar de inmediato todas las sesiones activas en otros navegadores, lectores RFID de sala y terminales de inventario.
+            </label>
+</div>
+<!-- Buttons Group -->
+<div class="flex flex-col sm:flex-row gap-3 pt-2">
+<button class="py-3 px-5 rounded-lg bg-[#f4eaff] border border-[#e9d5ff] text-[#2e1065] hover:bg-[#eaddff] font-condensed font-bold text-xs uppercase tracking-wider transition-colors order-2 sm:order-1" id="btnBackToPhase1" type="button">
+              Corregir Correo
+            </button>
+<button class="flex-1 py-3.5 px-6 rounded-lg bg-primary hover:bg-[#6b21a8] text-white font-condensed font-bold text-base uppercase tracking-wider flex items-center justify-center space-x-2 transition-colors order-1 sm:order-2 shadow-sm shadow-purple-200" id="btnCompleteReset" type="submit">
+<svg aria-hidden="true" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>Restablecer Contraseña y Acceder al Sistema</span>
+</button>
+</div>
+</form>
+</section>
+<!-- Successful Completion Notice (Hidden) -->
+<div class="hidden p-8 rounded-xl bg-[#f9f1ff] border border-[#e9d5ff] text-center space-y-4" id="resetSuccessScreen">
+<div class="w-14 h-14 rounded-full bg-primary text-white mx-auto flex items-center justify-center shadow-md">
+<svg aria-hidden="true" class="w-8 h-8" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<div class="space-y-1">
+<h2 class="font-quicksand font-bold text-xl text-[#2e1065]">Credenciales Actualizadas en Bóveda</h2>
+<p class="font-quicksand text-sm text-[#5b4e75]">El token ha sido invalidado permanentemente y tu nueva llave notarial se encuentra en vigor.</p>
+</div>
+<p class="font-condensed font-semibold text-xs text-[#7c3aed] uppercase tracking-wider">Redirigiendo a tu terminal de custodia institucional...</p>
+</div>
+</div>
+<!-- Security, Audit Log & Notarial Help Panel (4 cols on lg) -->
+<div class="lg:col-span-4 space-y-6">
+<!-- Vault Audit Registry Snapshot -->
+<div class="bg-white border border-[#e9d5ff] rounded-2xl p-6 space-y-4 shadow-sm">
+<div class="flex items-center space-x-2 text-primary">
+<svg aria-hidden="true" class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<h2 class="font-condensed font-bold text-xs uppercase tracking-wider text-[#2e1065]">Auditoría Notarial de Acceso</h2>
+</div>
+<p class="font-quicksand text-xs text-[#5b4e75]">
+          Este intento queda asentado de conformidad con la norma internacional de trazabilidad de acervos patrimoniales ISO/TC 46.
+        </p>
+<div class="space-y-2.5 pt-2 text-xs">
+<div class="flex justify-between items-center py-2 px-3 rounded-lg bg-[#fbf7fe] border border-[#e9d5ff]">
+<span class="font-condensed font-bold text-[#7b7487] uppercase tracking-wider">IP Notificada</span>
+<span class="font-mono text-[#2e1065] font-semibold">187.190.24.112 (CDMX)</span>
+</div>
+<div class="flex justify-between items-center py-2 px-3 rounded-lg bg-[#fbf7fe] border border-[#e9d5ff]">
+<span class="font-condensed font-bold text-[#7b7487] uppercase tracking-wider">Algoritmo</span>
+<span class="font-mono text-primary font-semibold">PBKDF2-HMAC-SHA256</span>
+</div>
+<div class="flex justify-between items-center py-2 px-3 rounded-lg bg-[#fbf7fe] border border-[#e9d5ff]">
+<span class="font-condensed font-bold text-[#7b7487] uppercase tracking-wider">Timestamp</span>
+<span class="font-mono text-[#2e1065]" id="liveTimestamp">2026-03-30 18:24:02 UTC</span>
+</div>
+<div class="flex justify-between items-center py-2 px-3 rounded-lg bg-[#fbf7fe] border border-[#e9d5ff]">
+<span class="font-condensed font-bold text-[#7b7487] uppercase tracking-wider">Tabla Afectada</span>
+<span class="font-mono text-primary font-semibold">recuperacion_contrasenas</span>
+</div>
+</div>
+</div>
+<!-- Support & Master Curator Contact Card -->
+<div class="bg-white border border-[#e9d5ff] rounded-2xl p-6 space-y-4 shadow-sm">
+<div class="flex items-center space-x-2 text-primary">
+<svg aria-hidden="true" class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<h2 class="font-condensed font-bold text-xs uppercase tracking-wider text-[#2e1065]">Asistencia Especializada</h2>
+</div>
+<p class="font-quicksand text-xs text-[#5b4e75] leading-relaxed">
+          ¿No recibiste el token o tu cuenta fue congelada preventivamente por rebase de intentos fallidos? Contacta a la Mesa de Curaduría Mayor:
+        </p>
+<div class="space-y-3 pt-1">
+<a class="flex items-center space-x-3 p-3 rounded-xl bg-[#fbf7fe] border border-[#e9d5ff] hover:bg-[#f4eaff] transition-colors group" href="mailto:soporte@archivum.mx">
+<div class="w-8 h-8 rounded-lg bg-white border border-[#e9d5ff] flex items-center justify-center text-primary group-hover:border-primary shadow-xs">
+<svg aria-hidden="true" class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<div>
+<p class="font-condensed font-bold text-xs text-[#7b7487] uppercase tracking-wider">Curador de Turno</p>
+<p class="font-quicksand text-sm text-[#2e1065] font-semibold">soporte@archivum.mx</p>
+</div>
+</a>
+<div class="flex items-center space-x-3 p-3 rounded-xl bg-[#fbf7fe] border border-[#e9d5ff]">
+<div class="w-8 h-8 rounded-lg bg-white border border-[#e9d5ff] flex items-center justify-center text-primary shadow-xs">
+<svg aria-hidden="true" class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<div>
+<p class="font-condensed font-bold text-xs text-[#7b7487] uppercase tracking-wider">Línea Notarial Directa</p>
+<p class="font-quicksand text-sm text-[#2e1065] font-semibold">+52 (55) 8900-ARCH</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Institutional Security Badge -->
+<div class="p-4 rounded-xl bg-white border border-[#e9d5ff] flex items-center space-x-3 text-[#5b4e75] shadow-sm">
+<svg aria-hidden="true" class="w-5 h-5 text-primary flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+</svg>
+<span class="font-condensed font-bold text-xs uppercase tracking-wider">Certificación de Custodia Criptográfica Archivum Bóveda Activa</span>
+</div>
+</div>
+</div>
+</div>
+<script>
+  (function initResetVault() {
+    // Phase 1 and 2 elements
+    const phase1 = document.getElementById('phase1Section');
+    const phase2 = document.getElementById('phase2Section');
+    const successScreen = document.getElementById('resetSuccessScreen');
+    const progressBar = document.getElementById('flowProgressBar');
+    const stepBadge1 = document.getElementById('stepBadge1');
+    const stepBadge2 = document.getElementById('stepBadge2');
+    const stepTitle1 = document.getElementById('stepTitle1');
+    const stepTitle2 = document.getElementById('stepTitle2');
+    const emailInput = document.getElementById('recoveryEmailInput');
+    const targetEmailLabel = document.getElementById('targetEmailLabel');
+    const formReq = document.getElementById('formRequestToken');
+    const formConfirm = document.getElementById('formConfirmReset');
+    const btnBack = document.getElementById('btnBackToPhase1');
+    const btnResend = document.getElementById('btnResendToken');
+    const countdownEl = document.getElementById('countdownTimer');
+    const liveTimestamp = document.getElementById('liveTimestamp');
+
+    // Update real-time timestamp display
+    function updateClock() {
+      const d = new Date();
+      if (liveTimestamp) {
+        liveTimestamp.textContent = d.toISOString().replace('T', ' ').slice(0, 19) + ' UTC';
+      }
+    }
+    updateClock();
+
+    // Mask helper
+    function maskEmail(val) {
+      if (!val || !val.includes('@')) return 'c***@archivum.mx';
+      const parts = val.split('@');
+      const name = parts[0];
+      const masked = name.length > 2 ? name[0] + '***' + name[name.length - 1] : name[0] + '***';
+      return masked + '@' + parts[1];
+    }
+
+    // Step Switchers
+    function goToPhase2() {
+      phase1.classList.add('hidden');
+      phase2.classList.remove('hidden');
+      progressBar.classList.remove('w-1/2');
+      progressBar.classList.add('w-full');
+      stepBadge2.classList.remove('bg-[#f4eaff]', 'text-[#7b7487]');
+      stepBadge2.classList.add('bg-primary', 'text-white');
+      stepTitle2.classList.remove('text-[#7b7487]');
+      stepTitle2.classList.add('text-primary');
+
+      targetEmailLabel.textContent = maskEmail(emailInput.value);
+      startCountdown(15 * 60);
+
+      // Focus first token digit
+      const firstDigit = document.querySelector('.token-digit');
+      if (firstDigit) firstDigit.focus();
+    }
+
+    function goToPhase1() {
+      phase2.classList.add('hidden');
+      phase1.classList.remove('hidden');
+      progressBar.classList.remove('w-full');
+      progressBar.classList.add('w-1/2');
+      stepBadge2.classList.add('bg-[#f4eaff]', 'text-[#7b7487]');
+      stepBadge2.classList.remove('bg-primary', 'text-white');
+      stepTitle2.classList.add('text-[#7b7487]');
+      stepTitle2.classList.remove('text-primary');
+      clearInterval(timerInterval);
+    }
+
+    // Form Submissions
+    formReq.addEventListener('submit', () => {
+      if (emailInput.checkValidity()) {
+        goToPhase2();
+      }
+    });
+
+    btnBack.addEventListener('click', goToPhase1);
+
+    // Segmented Token Autotab
+    const tokenInputs = Array.from(document.querySelectorAll('.token-digit'));
+    tokenInputs.forEach((input, index) => {
+      input.addEventListener('input', (e) => {
+        if (e.target.value.length >= 1) {
+          e.target.value = e.target.value.slice(-1).toUpperCase();
+          if (index < tokenInputs.length - 1) {
+            tokenInputs[index + 1].focus();
+          }
+        }
+      });
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !e.target.value && index > 0) {
+          tokenInputs[index - 1].focus();
+        }
+      });
+    });
+
+    // Countdown Timer Logic
+    let timerInterval = null;
+    function startCountdown(durationSeconds) {
+      clearInterval(timerInterval);
+      let remain = durationSeconds;
+      function tick() {
+        const mins = Math.floor(remain / 60);
+        const secs = remain % 60;
+        countdownEl.textContent = String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+        if (remain <= 0) {
+          clearInterval(timerInterval);
+          countdownEl.textContent = '00:00 (Expirado)';
+        }
+        remain--;
+      }
+      tick();
+      timerInterval = setInterval(tick, 1000);
+    }
+
+    btnResend.addEventListener('click', () => {
+      startCountdown(15 * 60);
+      tokenInputs.forEach(i => i.value = '');
+      tokenInputs[0].focus();
+    });
+
+    // Password Toggles
+    function setupToggle(btnId, inputId) {
+      const btn = document.getElementById(btnId);
+      const input = document.getElementById(inputId);
+      if (!btn || !input) return;
+      btn.addEventListener('click', () => {
+        const isPass = input.type === 'password';
+        input.type = isPass ? 'text' : 'password';
+      });
+    }
+    setupToggle('btnToggleNewPass', 'newPassword');
+    setupToggle('btnToggleConfirmPass', 'confirmPassword');
+
+    // Password validation feedback
+    const passInput = document.getElementById('newPassword');
+    const confirmInput = document.getElementById('confirmPassword');
+    const reqLen = document.getElementById('reqLen');
+    const reqUpper = document.getElementById('reqUpper');
+    const reqNum = document.getElementById('reqNum');
+    const reqSym = document.getElementById('reqSym');
+    const matchWarning = document.getElementById('matchWarning');
+
+    passInput.addEventListener('input', () => {
+      const val = passInput.value;
+      const hasLen = val.length >= 8;
+      const hasUpper = /[A-Z]/.test(val);
+      const hasNum = /[0-9]/.test(val);
+      const hasSym = /[^A-Za-z0-9]/.test(val);
+
+      function mark(el, valid) {
+        if (valid) {
+          el.classList.remove('bg-[#fbf7fe]', 'text-[#7b7487]');
+          el.classList.add('bg-primary', 'text-white', 'border-primary');
+        } else {
+          el.classList.add('bg-[#fbf7fe]', 'text-[#7b7487]');
+          el.classList.remove('bg-primary', 'text-white', 'border-primary');
+        }
+      }
+
+      mark(reqLen, hasLen);
+      mark(reqUpper, hasUpper);
+      mark(reqNum, hasNum);
+      mark(reqSym, hasSym);
+    });
+
+    formConfirm.addEventListener('submit', () => {
+      if (passInput.value !== confirmInput.value) {
+        matchWarning.classList.remove('hidden');
+        confirmInput.focus();
+        return;
+      }
+      matchWarning.classList.add('hidden');
+      phase2.classList.add('hidden');
+      successScreen.classList.remove('hidden');
+    });
+
+  })();
+</script></main>
+<!-- END: MainContentContainer -->
+<!-- BEGIN: PasswordRecoveryModal -->
+<aside class="fixed inset-0 z-50 bg-[#2e1065]/40 backdrop-blur-sm hidden items-center justify-center p-4" id="modalRecuperacion">
+<div class="bg-white border border-[#e9d5ff] rounded-2xl max-w-md w-full p-6 sm:p-8 shadow-2xl relative">
+<div class="flex items-center justify-between pb-4 border-b border-[#e9d5ff]">
+<div>
+<h3 class="font-quicksand font-bold text-lg text-[#2e1065] uppercase tracking-wider">Recuperación de Acceso</h3>
+<p class="text-xs text-[#7c3aed] font-condensed font-semibold">Emisión de token seguro temporal (24 hrs)</p>
+</div>
+<button class="text-[#7b7487] hover:text-[#2e1065] p-1 transition-colors" id="btnCloseModal" type="button">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+<form class="mt-5 space-y-4" id="formRecovery" onsubmit="event.preventDefault();">
+<p class="text-xs text-[#5b4e75] leading-relaxed font-quicksand">
+          Ingrese la dirección de correo registrada en el archivo. Se enviará un enlace criptográfico de un solo uso para reestablecer sus credenciales.
+        </p>
+<div>
+<label class="block text-xs uppercase tracking-widest font-condensed font-bold text-[#5b4e75] mb-1.5" for="recoveryEmail">Correo Electrónico</label>
+<input class="w-full px-3.5 py-2.5 rounded-lg bg-[#fbf7fe] border border-[#e9d5ff] text-[#2e1065] placeholder-[#7b7487] text-sm focus:border-primary font-quicksand" id="recoveryEmail" placeholder="custodio@archivum.mx" required="" type="email"/>
+</div>
+<div class="pt-2 flex items-center justify-end space-x-3">
+<button class="px-4 py-2 rounded-lg bg-[#f4eaff] hover:bg-[#eaddff] text-xs font-condensed font-bold uppercase tracking-wider text-[#2e1065] transition-colors" id="btnCancelModal" type="button">
+            Cancelar
+          </button>
+<button class="px-5 py-2 rounded-lg bg-primary hover:bg-[#6b21a8] text-xs font-condensed font-bold uppercase tracking-wider text-white transition-colors" id="btnSendToken" type="submit">
+            Enviar Token
+          </button>
+</div>
+</form>
+</div>
+</aside>
+<!-- END: PasswordRecoveryModal -->
+<!-- BEGIN: PageFooter -->
+<footer class="w-full border-t border-[#e9d5ff] bg-white py-6 mt-auto">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-[#5b4e75] space-y-3 sm:space-y-0">
+<div class="flex items-center space-x-2">
+<span class="font-quicksand font-bold text-[#2e1065]">ARCHIVUM HISTÓRICO</span>
+<span class="font-condensed font-medium text-[#7c3aed]">— Catálogo Notarial, Manuscritos y Fonoteca</span>
+</div>
+<div class="flex items-center space-x-6 tracking-wide font-condensed font-semibold text-xs">
+<a class="hover:text-primary transition-colors" href="#">Términos de Bóveda</a>
+<a class="hover:text-primary transition-colors" href="#">Privacidad LFPDPPP</a>
+<a class="hover:text-primary transition-colors" href="#">Verificación de Valuadores</a>
+</div>
+</div>
+</footer>
+<!-- END: PageFooter -->
+<!-- JavaScript: Theme Toggle & Form Behaviors -->
+<script data-purpose="theme-management">
+    // Theme Toggle Handler
+    const themeBtn = document.getElementById('themeToggleBtn');
+    const iconSun = document.getElementById('iconSun');
+    const iconMoon = document.getElementById('iconMoon');
+    const htmlEl = document.documentElement;
+
+    function applyTheme(isDark) {
+      if (isDark) {
+        htmlEl.classList.add('dark');
+        htmlEl.classList.remove('light');
+        iconSun.classList.add('hidden');
+        iconMoon.classList.remove('hidden');
+      } else {
+        htmlEl.classList.remove('dark');
+        htmlEl.classList.add('light');
+        iconMoon.classList.add('hidden');
+        iconSun.classList.remove('hidden');
+      }
+    }
+
+    themeBtn.addEventListener('click', () => {
+      const isCurrentlyDark = htmlEl.classList.contains('dark');
+      applyTheme(!isCurrentlyDark);
+    });
+  </script>
+</body></html>

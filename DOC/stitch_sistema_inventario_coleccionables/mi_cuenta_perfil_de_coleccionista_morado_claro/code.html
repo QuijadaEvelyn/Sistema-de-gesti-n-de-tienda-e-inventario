@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+
+<html data-theme="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Archivum | Libros Raros, Vinilos y Coleccionables</title>
+<!-- Google Fonts: Quicksand & Barlow Condensed -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&amp;family=Barlow+Condensed:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config using Amethyst Editorial Light Mode Theme -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "on-secondary-container": "#524584",
+            "primary": "#630ed4",
+            "surface-container-low": "#f9f1ff",
+            "background": "#fbf7fe",
+            "inverse-on-surface": "#f6edff",
+            "inverse-surface": "#391e70",
+            "primary-container": "#7c3aed",
+            "on-primary-container": "#ede0ff",
+            "surface-variant": "#eaddff",
+            "secondary-container": "#f3e8ff",
+            "secondary": "#625595",
+            "on-surface": "#2e1065",
+            "on-surface-variant": "#4c1d95",
+            "surface-container": "#f4eaff",
+            "outline-variant": "#e9d5ff",
+            "outline": "#8b5cf6",
+            "surface-container-high": "#efe4ff",
+            "surface": "#fbf7fe",
+            "surface-container-highest": "#eaddff",
+            "surface-container-lowest": "#ffffff",
+            "tertiary": "#7300c6",
+            "on-tertiary-container": "#581c87",
+            "on-primary": "#ffffff",
+          },
+          fontFamily: {
+            quicksand: ['Quicksand', 'sans-serif'],
+            specs: ['"Barlow Condensed"', 'sans-serif'],
+          }
+        },
+      },
+    }
+  </script>
+<style data-purpose="theme-palette">
+    :root {
+      --bg-primary: #fbf7fe;
+      --bg-card: #ffffff;
+      --border-color: #e9d5ff;
+      --text-main: #2e1065;
+      --text-muted: #5b21b6;
+    }
+    body {
+      background-color: #fbf7fe;
+      color: #2e1065;
+      font-family: 'Quicksand', sans-serif;
+    }
+    .font-specs {
+      font-family: 'Barlow Condensed', sans-serif;
+    }
+    #cart-drawer {
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    #cart-drawer.closed {
+      transform: translateX(100%);
+    }
+    #drawer-overlay {
+      transition: opacity 0.3s ease;
+    }
+    #drawer-overlay.hidden-overlay {
+      opacity: 0;
+      pointer-events: none;
+    }
+  </style>
+<meta content="web_dashboard" name="shell-type"/>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-purple-200 selection:text-purple-950 bg-[#fbf7fe]">
+<!-- BEGIN: MainHeader (Light Editorial Amethyst) -->
+<header class="sticky top-0 z-40 border-b border-purple-200/80 bg-white/90 backdrop-blur-md text-[#2e1065]" data-purpose="global-header">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<!-- Top Row: Logo, Search, Branch, User Actions -->
+<div class="flex items-center justify-between h-20 gap-4">
+<!-- Brand Logo -->
+<a aria-label="Ir a inicio" class="flex items-center gap-3 shrink-0 group focus:outline-none" href="#">
+<div class="w-11 h-11 rounded-xl bg-purple-700 flex items-center justify-center text-white border border-purple-500 shadow-sm shadow-purple-200">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+<polyline points="2 17 12 22 22 17"></polyline>
+<polyline points="2 12 12 17 22 12"></polyline>
+</svg>
+</div>
+<div class="flex flex-col">
+<span class="text-xl font-bold tracking-wider font-quicksand uppercase text-[#2e1065]">Archivum</span>
+<span class="text-[10px] font-specs font-semibold tracking-widest text-[#7c3aed] uppercase">Bibliotheca &amp; Discos</span>
+</div>
+</a>
+<!-- Search Bar -->
+<div class="flex-1 max-w-2xl hidden md:block">
+<div class="relative w-full">
+<input class="w-full bg-[#f9f1ff] border border-[#e9d5ff] text-sm rounded-xl pl-11 pr-4 py-2.5 text-[#2e1065] placeholder-[#7c3aed]/50 focus:border-[#7c3aed] focus:ring-1 focus:ring-[#7c3aed] focus:bg-white focus:outline-none transition shadow-sm" data-purpose="search-input" placeholder="Buscar libros raros, vinilos, primeras ediciones, coleccionables o SKU..." type="text"/>
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#7c3aed]">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<circle cx="11" cy="11" r="8"></circle>
+<line x1="21" x2="16.65" y1="21"></line>
+</svg>
+</div>
+</div>
+</div>
+<!-- Utility Controls -->
+<div class="flex items-center gap-3 shrink-0">
+<!-- Sucursal Badge -->
+<div class="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#f3e8ff] border border-[#e9d5ff] text-xs font-specs font-semibold text-[#5b21b6]">
+<svg class="w-3.5 h-3.5 text-[#7c3aed]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+<path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span>Sucursal Central Bellas Artes</span>
+</div>
+<!-- Light / Mode Toggle -->
+<button aria-label="Cambiar tema visual" class="p-2.5 rounded-xl border border-[#e9d5ff] bg-white hover:bg-[#f3e8ff] text-[#630ed4] transition focus:outline-none shadow-sm" data-purpose="theme-toggle" id="theme-toggle-btn" type="button">
+<svg class="w-5 h-5 block" fill="none" id="theme-icon-sun" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<circle cx="12" cy="12" r="5"></circle>
+<line x1="12" x2="12" y1="1" y2="3"></line>
+<line x1="12" x2="12" y1="21" y2="23"></line>
+<line x1="4.22" x2="5.64" y1="4.22" y2="5.64"></line>
+<line x1="18.36" x2="19.78" y1="18.36" y2="19.78"></line>
+<line x1="1" x2="3" y1="12" y2="12"></line>
+<line x1="21" x2="23" y1="12" y2="12"></line>
+<line x1="4.22" x2="5.64" y1="19.78" y2="18.36"></line>
+<line x1="18.36" x2="19.78" y1="5.64" y2="4.22"></line>
+</svg>
+</button>
+<!-- User Account Icon -->
+<a aria-label="Cuenta de usuario" class="p-2.5 rounded-xl border border-[#e9d5ff] bg-white hover:bg-[#f3e8ff] text-[#630ed4] transition shadow-sm" href="#">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</a>
+<!-- Cart Drawer Button -->
+<button aria-label="Abrir carrito de compras" class="relative p-2.5 rounded-xl bg-[#7c3aed] hover:bg-[#630ed4] text-white border border-[#630ed4] shadow-sm shadow-purple-300 flex items-center justify-center transition focus:outline-none" data-purpose="open-cart" id="open-cart-btn" type="button">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<circle cx="9" cy="21" r="1"></circle>
+<circle cx="20" cy="21" r="1"></circle>
+<path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"></path>
+</svg>
+<span class="absolute -top-1.5 -right-1.5 w-5 h-5 bg-[#2e1065] text-white font-specs font-bold text-xs rounded-full flex items-center justify-center shadow" id="cart-counter-badge">
+            3
+          </span>
+</button>
+</div>
+</div>
+<!-- Navigation Categories Bar -->
+<nav aria-label="Categorías principales" class="flex items-center justify-between border-t border-[#e9d5ff] py-2.5 text-xs font-semibold uppercase tracking-wider overflow-x-auto whitespace-nowrap">
+<div class="flex items-center gap-6">
+<a class="text-[#5b21b6] hover:text-[#2e1065] transition pb-0.5 border-b-2 border-transparent" href="#">Inicio</a>
+<a class="text-[#2e1065] font-bold hover:text-[#630ed4] transition pb-0.5 border-b-2 border-[#7c3aed] flex items-center gap-1" href="#">
+<span>Libros Raros</span>
+<svg class="w-3 h-3 text-[#7c3aed]" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</a>
+<a class="text-[#5b21b6] hover:text-[#2e1065] transition pb-0.5 border-b-2 border-transparent flex items-center gap-1" href="#">
+<span>Discos &amp; Vinilos</span>
+<svg class="w-3 h-3 text-[#7c3aed]" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</a>
+<a class="text-[#5b21b6] hover:text-[#2e1065] transition pb-0.5 border-b-2 border-transparent flex items-center gap-1" href="#">
+<span>Coleccionables</span>
+<svg class="w-3 h-3 text-[#7c3aed]" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</a>
+<a class="text-[#7c3aed] font-bold hover:text-[#630ed4] transition font-specs" href="#">Promociones</a>
+</div>
+<div class="hidden sm:block text-[11px] text-[#5b21b6]/80 font-medium normal-case">
+<a class="hover:text-[#2e1065]" href="#">Acerca de nosotros</a>
+</div>
+</nav>
+</div>
+</header>
+<!-- END: MainHeader -->
+<!-- BEGIN: MainContent -->
+<main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8" data-purpose="catalog-content">
+<div class="flex flex-col w-full">
+<!-- Top Profile Dossier Banner in Crisp White with Subtle Lilac Border -->
+<section class="bg-white border border-[#e9d5ff] rounded-2xl p-6 sm:p-8 mb-8 shadow-sm relative overflow-hidden">
+<div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 relative z-10">
+<!-- Identity & Member Meta -->
+<div class="flex items-start sm:items-center gap-5">
+<div class="relative shrink-0">
+<div class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-[#f3e8ff] border border-[#e9d5ff] flex items-center justify-center text-[#630ed4] shadow-sm">
+<span class="font-bold text-3xl font-quicksand text-[#630ed4] select-none">BV</span>
+</div>
+<div class="absolute -bottom-2 -right-2 px-2.5 py-0.5 rounded-full bg-[#7c3aed] text-white font-specs text-[11px] font-bold tracking-wider uppercase shadow">
+              NIVEL IV
+            </div>
+</div>
+<div class="space-y-1.5">
+<div class="flex flex-wrap items-center gap-3">
+<h1 class="text-2xl sm:text-3xl font-bold font-quicksand text-[#2e1065]">Bernardo Vega Montiel</h1>
+<span class="px-2.5 py-0.5 rounded-full bg-[#f3e8ff] text-[#5b21b6] border border-[#e9d5ff] font-specs font-bold text-xs uppercase tracking-wide">
+                Socio Platinum
+              </span>
+</div>
+<div class="flex flex-wrap items-center gap-y-1 gap-x-4 text-xs font-medium text-[#4c1d95]">
+<span>Ficha: <strong class="text-[#2e1065] font-bold">#COL-8821</strong></span>
+<span class="text-purple-300">•</span>
+<span>Miembro desde Octubre 2021</span>
+<span class="text-purple-300">•</span>
+<span class="text-[#7c3aed] font-semibold">Bóveda Notarial Valuada</span>
+</div>
+<!-- Verification Indicators -->
+<div class="flex flex-wrap items-center gap-2 pt-1.5">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#f9f1ff] border border-[#e9d5ff] text-[#5b21b6] font-specs font-semibold text-xs">
+<svg class="w-3.5 h-3.5 text-[#7c3aed]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+</svg>
+                2FA Activo
+              </span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#f9f1ff] border border-[#e9d5ff] text-[#5b21b6] font-specs font-semibold text-xs">
+<svg class="w-3.5 h-3.5 text-[#7c3aed]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+</svg>
+                Certificado Notarial #NOT-8819
+              </span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#f9f1ff] border border-[#e9d5ff] text-[#5b21b6] font-specs font-semibold text-xs">
+<svg class="w-3.5 h-3.5 text-[#7c3aed]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+</svg>
+                Beneficio -5% en Catálogo
+              </span>
+</div>
+</div>
+</div>
+<!-- Quick Action Dossier Profile -->
+<div class="flex flex-wrap items-center gap-3 self-stretch lg:self-center justify-end">
+<button class="px-4 py-2.5 rounded-xl bg-[#f9f1ff] hover:bg-[#f3e8ff] border border-[#e9d5ff] text-[#2e1065] font-semibold text-sm transition flex items-center gap-2 shadow-sm" type="button">
+<svg class="w-4 h-4 text-[#7c3aed]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+</svg>
+<span>Cédula Notarial (PDF)</span>
+</button>
+<button class="px-5 py-2.5 rounded-xl bg-[#7c3aed] hover:bg-[#630ed4] text-white font-semibold text-sm transition flex items-center gap-2 shadow-sm shadow-purple-300" type="button">
+<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path>
+</svg>
+<span>Solicitar Valuación</span>
+</button>
+</div>
+</div>
+<!-- Metric Telemetry Strip in White with Subtle Border -->
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-8 pt-6 border-t border-[#f3e8ff]">
+<div class="p-4 rounded-xl bg-[#fbf7fe] border border-[#e9d5ff] space-y-1">
+<span class="font-specs font-bold text-xs text-[#5b21b6] uppercase tracking-wider block">Acervo Valuado Total</span>
+<div class="flex items-baseline gap-2">
+<span class="text-2xl font-bold font-specs text-[#2e1065]">$148,250.00</span>
+<span class="text-xs font-specs font-bold text-[#7c3aed]">MXN</span>
+</div>
+<span class="text-xs font-semibold text-emerald-600 block">+8.4% apreciación anual</span>
+</div>
+<div class="p-4 rounded-xl bg-[#fbf7fe] border border-[#e9d5ff] space-y-1">
+<span class="font-specs font-bold text-xs text-[#5b21b6] uppercase tracking-wider block">Obras en Custodia</span>
+<div class="flex items-baseline gap-2">
+<span class="text-2xl font-bold font-specs text-[#7c3aed]">19</span>
+<span class="text-xs font-medium text-[#4c1d95]">piezas catalogadas</span>
+</div>
+<span class="text-xs font-medium text-[#5b21b6] truncate block">7 vinilos 1ra ed • 9 raros • 3 memorab.</span>
+</div>
+<div class="p-4 rounded-xl bg-[#fbf7fe] border border-[#e9d5ff] space-y-1">
+<span class="font-specs font-bold text-xs text-[#5b21b6] uppercase tracking-wider block">Historial de Pedidos</span>
+<div class="flex items-baseline gap-2">
+<span class="text-2xl font-bold font-specs text-[#2e1065]">15</span>
+<span class="text-xs font-medium text-[#4c1d95]">transacciones</span>
+</div>
+<div class="flex items-center gap-1.5 font-specs text-xs font-semibold text-[#7c3aed]">
+<span class="w-2 h-2 rounded-full bg-[#7c3aed] animate-pulse"></span>
+<span>1 en tránsito blindado</span>
+</div>
+</div>
+<div class="p-4 rounded-xl bg-[#fbf7fe] border border-[#e9d5ff] space-y-1">
+<span class="font-specs font-bold text-xs text-[#5b21b6] uppercase tracking-wider block">Puntos Notariales</span>
+<div class="flex items-baseline gap-2">
+<span class="text-2xl font-bold font-specs text-[#630ed4]">4,820</span>
+<span class="text-xs font-specs font-bold text-[#5b21b6]">PTS</span>
+</div>
+<span class="text-xs font-medium text-[#5b21b6] block">Nivel Platinum Consolidado</span>
+</div>
+</div>
+</section>
+<!-- Interactive Account Navigation Tabs -->
+<nav aria-label="Secciones del Perfil" class="flex items-center gap-2 overflow-x-auto pb-4 mb-6">
+<button aria-current="page" class="px-4 py-2.5 rounded-xl bg-[#7c3aed] text-white font-semibold text-xs flex items-center gap-2 shrink-0 shadow-sm shadow-purple-200" type="button">
+<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+</svg>
+<span>Historial de Pedidos &amp; Custodia</span>
+<span class="w-5 h-5 rounded-full bg-white text-[#7c3aed] font-specs font-bold text-xs flex items-center justify-center ml-1">15</span>
+</button>
+<button class="px-4 py-2.5 rounded-xl bg-white hover:bg-[#f3e8ff] border border-[#e9d5ff] text-[#4c1d95] hover:text-[#2e1065] font-semibold text-xs flex items-center gap-2 shrink-0 transition" type="button">
+<svg class="w-4 h-4 text-[#7c3aed]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+</svg>
+<span>Mis Obras &amp; Certificados (19)</span>
+</button>
+<button class="px-4 py-2.5 rounded-xl bg-white hover:bg-[#f3e8ff] border border-[#e9d5ff] text-[#4c1d95] hover:text-[#2e1065] font-semibold text-xs flex items-center gap-2 shrink-0 transition" type="button">
+<svg class="w-4 h-4 text-[#7c3aed]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+</svg>
+<span>Direcciones de Custodia (2)</span>
+</button>
+<button class="px-4 py-2.5 rounded-xl bg-white hover:bg-[#f3e8ff] border border-[#e9d5ff] text-[#4c1d95] hover:text-[#2e1065] font-semibold text-xs flex items-center gap-2 shrink-0 transition" type="button">
+<svg class="w-4 h-4 text-[#7c3aed]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<rect height="16" rx="2" width="22" x="1" y="4"></rect>
+<line x1="1" x2="23" y1="10" y2="10"></line>
+</svg>
+<span>Métodos de Pago Tokenizados</span>
+</button>
+<button class="px-4 py-2.5 rounded-xl bg-white hover:bg-[#f3e8ff] border border-[#e9d5ff] text-[#4c1d95] hover:text-[#2e1065] font-semibold text-xs flex items-center gap-2 shrink-0 transition" type="button">
+<svg class="w-4 h-4 text-[#7c3aed]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+</svg>
+<span>Seguridad &amp; Llaves 2FA</span>
+</button>
+</nav>
+<!-- Two-Column Asymmetric Canvas -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- Left Column: Main Order Ledger (8 Cols) -->
+<div class="lg:col-span-8 space-y-6">
+<!-- Filter Toolbar -->
+<div class="bg-white border border-[#e9d5ff] p-4 rounded-2xl shadow-sm flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+<div class="relative flex-1 min-w-[200px]">
+<svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#7c3aed]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<circle cx="11" cy="11" r="8"></circle>
+<line x1="21" x2="16.65" y1="21"></line>
+</svg>
+<input class="w-full pl-9 pr-4 py-2 bg-[#fbf7fe] border border-[#e9d5ff] text-[#2e1065] rounded-xl text-xs font-medium focus:outline-none focus:border-[#7c3aed] placeholder:text-[#5b21b6]/50" placeholder="Buscar por folio (#ORD), SKU o título..." type="text"/>
+</div>
+<div class="flex items-center gap-2 shrink-0">
+<select class="px-3 py-2 bg-[#fbf7fe] border border-[#e9d5ff] text-[#2e1065] rounded-xl font-specs text-xs font-semibold focus:outline-none focus:border-[#7c3aed]">
+<option>Todos los estados (15)</option>
+<option selected="">En Tránsito Blindado (1)</option>
+<option>Entregados en Sucursal (8)</option>
+<option>Custodia Domiciliaria (6)</option>
+</select>
+<select class="px-3 py-2 bg-[#fbf7fe] border border-[#e9d5ff] text-[#2e1065] rounded-xl font-specs text-xs font-semibold focus:outline-none focus:border-[#7c3aed]">
+<option>Año 2026</option>
+<option>Año 2025</option>
+<option>Histórico Completo</option>
+</select>
+</div>
+</div>
+<!-- Pedido 1: ACTIVO EN TRÁNSITO BLINDADO -->
+<article class="bg-white border border-[#e9d5ff] rounded-2xl p-6 shadow-sm relative overflow-hidden space-y-5">
+<!-- Top Status Bar -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 gap-3 bg-[#fbf7fe] border border-[#e9d5ff] p-4 rounded-xl">
+<div class="flex items-center gap-3">
+<span class="w-3 h-3 rounded-full bg-[#7c3aed] animate-ping shrink-0"></span>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-specs font-bold text-lg text-[#2e1065]">#ORD-2026-9042</span>
+<span class="px-2.5 py-0.5 rounded-full bg-[#f3e8ff] border border-[#e9d5ff] text-[#5b21b6] font-specs font-bold text-xs uppercase">
+                    Blindaje Nivel IV
+                  </span>
+</div>
+<span class="text-xs font-medium text-[#4c1d95]">Emitido el 26 de Octubre, 2026 • 11:42 hrs (CST)</span>
+</div>
+</div>
+<div class="text-left sm:text-right">
+<span class="font-specs font-bold text-xl text-[#7c3aed] block">$8,075.00 MXN</span>
+<span class="font-specs text-xs text-[#5b21b6]">Visa Signature •••• 7890</span>
+</div>
+</div>
+<!-- Real-Time Vault Logistics Stepper -->
+<div class="bg-[#f9f1ff] border border-[#e9d5ff] p-4 rounded-xl space-y-3">
+<div class="flex items-center justify-between font-specs text-xs">
+<span class="text-[#5b21b6] font-semibold flex items-center gap-1.5">
+<svg class="w-4 h-4 text-[#7c3aed]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<rect height="13" rx="2" width="15" x="1" y="3"></rect>
+<polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+<circle cx="5.5" cy="18.5" r="2.5"></circle>
+<circle cx="18.5" cy="18.5" r="2.5"></circle>
+</svg>
+                Unidad Blindada #VAL-09 en Ruta (Av. Insurgentes Sur → Roma Norte)
+              </span>
+<span class="font-specs font-bold text-[#2e1065]">Entrega estimada: Hoy, 17:30 hrs</span>
+</div>
+<div class="w-full bg-[#e9d5ff] rounded-full h-2 overflow-hidden flex">
+<div class="bg-[#7c3aed] h-full w-3/4 rounded-full transition-all"></div>
+</div>
+<div class="flex justify-between font-specs text-[11px] uppercase tracking-wider text-[#5b21b6]">
+<span class="text-[#7c3aed] font-semibold">Bóveda Bellas Artes [OK]</span>
+<span class="text-[#7c3aed] font-semibold">Peritaje Notarial [OK]</span>
+<span class="text-[#2e1065] font-bold">Custodia en Tránsito</span>
+<span class="text-purple-400">Recepción Blindada</span>
+</div>
+</div>
+<!-- Items Table Container -->
+<div class="space-y-3">
+<span class="font-specs font-bold text-xs text-[#5b21b6] uppercase tracking-wider block">
+              Manifiesto de Piezas Aseguradas (3 Artículos)
+            </span>
+<div class="space-y-2">
+<!-- Item 1 -->
+<div class="bg-[#fbf7fe] border border-[#e9d5ff] rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-lg bg-white border border-[#e9d5ff] flex items-center justify-center text-[#7c3aed] shrink-0 shadow-sm">
+<svg class="w-6 h-6 text-[#7c3aed]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<circle cx="12" cy="12" r="10"></circle>
+<circle cx="12" cy="12" r="3"></circle>
+</svg>
+</div>
+<div>
+<h4 class="font-semibold text-sm text-[#2e1065]">Kind of Blue (Mono 1959)</h4>
+<p class="text-xs text-[#4c1d95]">Miles Davis Sextet • Columbia Records CL 1355 • 1ra Prensada 180g</p>
+<span class="font-specs text-[11px] font-bold text-[#7c3aed]">SKU: VIN-59-CL1355</span>
+</div>
+</div>
+<div class="text-right shrink-0">
+<span class="font-specs font-bold text-sm text-[#2e1065] block">$1,850.00 MXN</span>
+<span class="font-specs text-xs text-[#5b21b6]">Graduación: Mint (M)</span>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="bg-[#fbf7fe] border border-[#e9d5ff] rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-lg bg-white border border-[#e9d5ff] flex items-center justify-center text-[#7c3aed] shrink-0 shadow-sm">
+<svg class="w-6 h-6 text-[#7c3aed]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+</svg>
+</div>
+<div>
+<h4 class="font-semibold text-sm text-[#2e1065]">Cien Años de Soledad (1ra Edición 1967)</h4>
+<p class="text-xs text-[#4c1d95]">Gabriel García Márquez • Editorial Sudamericana (Buenos Aires)</p>
+<span class="font-specs text-[11px] font-bold text-[#7c3aed]">SKU: LIB-67-SUDAM</span>
+</div>
+</div>
+<div class="text-right shrink-0">
+<span class="font-specs font-bold text-sm text-[#2e1065] block">$4,200.00 MXN</span>
+<span class="font-specs text-xs text-[#5b21b6]">Encuadernación Original</span>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="bg-[#fbf7fe] border border-[#e9d5ff] rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-lg bg-white border border-[#e9d5ff] flex items-center justify-center text-[#7c3aed] shrink-0 shadow-sm">
+<svg class="w-6 h-6 text-[#7c3aed]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<circle cx="12" cy="12" r="10"></circle>
+<circle cx="12" cy="12" r="4"></circle>
+</svg>
+</div>
+<div>
+<h4 class="font-semibold text-sm text-[#2e1065]">The Wall (UK First Press 1979)</h4>
+<p class="text-xs text-[#4c1d95]">Pink Floyd • Harvest Records SHDW 411 • Doble Álbum Gatefold</p>
+<span class="font-specs text-[11px] font-bold text-[#7c3aed]">SKU: VIN-79-HARV</span>
+</div>
+</div>
+<div class="text-right shrink-0">
+<span class="font-specs font-bold text-sm text-[#2e1065] block">$2,450.00 MXN</span>
+<span class="font-specs text-xs text-[#5b21b6]">Graduación: Near Mint (NM)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Contextual Action Bar -->
+<div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[#f3e8ff]">
+<div class="flex items-center gap-2">
+<button class="px-3.5 py-2 rounded-xl bg-[#7c3aed] hover:bg-[#630ed4] text-white font-specs font-bold text-xs transition flex items-center gap-2 shadow-sm" type="button">
+<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+<path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+</svg>
+<span>Rastreo Notarial #LOG-VAL-7729103</span>
+</button>
+<button class="px-3 py-2 rounded-xl bg-white hover:bg-[#f3e8ff] border border-[#e9d5ff] text-[#2e1065] font-specs font-semibold text-xs transition flex items-center gap-1.5" type="button">
+<svg class="w-4 h-4 text-[#7c3aed]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+</svg>
+<span>CFDI 4.0 (UUID)</span>
+</button>
+</div>
+<button class="px-3 py-2 rounded-xl bg-white hover:bg-[#f3e8ff] border border-[#e9d5ff] text-[#5b21b6] font-specs font-bold text-xs transition flex items-center gap-1.5" type="button">
+<svg class="w-4 h-4 text-[#7c3aed]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+</svg>
+<span>Descargar Peritaje Criptográfico</span>
+</button>
+</div>
+</article>
+<!-- Pedido 2: HISTÓRICO ENTREGADO EN SUCURSAL BELLAS ARTES -->
+<article class="bg-white border border-[#e9d5ff] rounded-2xl p-6 shadow-sm space-y-4">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 gap-2">
+<div class="space-y-1">
+<div class="flex items-center gap-2.5">
+<span class="font-specs font-bold text-base text-[#2e1065]">#ORD-2026-8819</span>
+<span class="px-2.5 py-0.5 rounded-full bg-[#f3e8ff] border border-[#e9d5ff] text-[#5b21b6] font-specs font-semibold text-xs uppercase">
+                  Custodia Finalizada
+                </span>
+</div>
+<span class="text-xs font-medium text-[#4c1d95]">Entregado en Sucursal Central Bellas Artes • 14 de Septiembre, 2026</span>
+</div>
+<div class="text-left sm:text-right">
+<span class="font-specs font-bold text-base text-[#2e1065] block">$21,500.00 MXN</span>
+<span class="font-specs text-xs text-[#5b21b6]">SPEI Interbancario Tokenizado</span>
+</div>
+</div>
+<div class="bg-[#fbf7fe] border border-[#e9d5ff] rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-lg bg-white border border-[#e9d5ff] flex items-center justify-center text-[#7c3aed] shrink-0 shadow-sm">
+<svg class="w-6 h-6 text-[#7c3aed]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<rect height="18" rx="2" width="14" x="5" y="3"></rect>
+<circle cx="12" cy="14" r="4"></circle>
+<line x1="12" x2="12.01" y1="7" y2="7"></line>
+</svg>
+</div>
+<div>
+<h4 class="font-semibold text-sm text-[#2e1065]">Thorens TD-124 Tocadiscos Audiófilo Restaurado 1954</h4>
+<p class="text-xs text-[#4c1d95]">Motor sincrónico E50, brazo SME 3009 Serie II • Certificado Notarial de Restauración</p>
+<span class="font-specs text-[11px] font-bold text-[#7c3aed]">SKU: MEM-54-TH124 • Certificado #CERT-TH-54</span>
+</div>
+</div>
+<div class="text-right shrink-0">
+<span class="font-specs font-bold text-sm text-[#2e1065] block">$21,500.00 MXN</span>
+<span class="font-specs text-xs text-[#5b21b6]">Calibración Valuada</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-2 border-t border-[#f3e8ff]">
+<span class="font-specs text-xs text-[#5b21b6]">Entrega presencial con acta notariada firmada</span>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1.5 rounded-lg bg-white hover:bg-[#f3e8ff] border border-[#e9d5ff] text-[#2e1065] font-specs font-semibold text-xs transition" type="button">
+                Ver Recibo Fiscal
+              </button>
+<button class="px-3 py-1.5 rounded-lg bg-white hover:bg-[#f3e8ff] border border-[#e9d5ff] text-[#5b21b6] font-specs font-semibold text-xs transition" type="button">
+                Detalle de Adquisición
+              </button>
+</div>
+</div>
+</article>
+<!-- Pedido 3: HISTÓRICO ENTREGADO CON CUSTODIA DOMICILIO -->
+<article class="bg-white border border-[#e9d5ff] rounded-2xl p-6 shadow-sm space-y-4">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 gap-2">
+<div class="space-y-1">
+<div class="flex items-center gap-2.5">
+<span class="font-specs font-bold text-base text-[#2e1065]">#ORD-2026-7910</span>
+<span class="px-2.5 py-0.5 rounded-full bg-[#f3e8ff] border border-[#e9d5ff] text-[#5b21b6] font-specs font-semibold text-xs uppercase">
+                  Custodia Finalizada
+                </span>
+</div>
+<span class="text-xs font-medium text-[#4c1d95]">Entregado con Custodia a Domicilio • 02 de Junio, 2026</span>
+</div>
+<div class="text-left sm:text-right">
+<span class="font-specs font-bold text-base text-[#2e1065] block">$6,800.00 MXN</span>
+<span class="font-specs text-xs text-[#5b21b6]">Visa Signature •••• 7890</span>
+</div>
+</div>
+<div class="bg-[#fbf7fe] border border-[#e9d5ff] rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-lg bg-white border border-[#e9d5ff] flex items-center justify-center text-[#7c3aed] shrink-0 shadow-sm">
+<svg class="w-6 h-6 text-[#7c3aed]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+</svg>
+</div>
+<div>
+<h4 class="font-semibold text-sm text-[#2e1065]">Ficciones - Jorge Luis Borges (1ra Edición 1944)</h4>
+<p class="text-xs text-[#4c1d95]">Editorial Sur, Buenos Aires • Edición con sello de imprenta de origen</p>
+<span class="font-specs text-[11px] font-bold text-[#7c3aed]">SKU: LIB-44-SURFIC • Certificado #CERT-BG-44</span>
+</div>
+</div>
+<div class="text-right shrink-0">
+<span class="font-specs font-bold text-sm text-[#2e1065] block">$6,800.00 MXN</span>
+<span class="font-specs text-xs text-[#5b21b6]">Conservación Grado A</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-2 border-t border-[#f3e8ff]">
+<span class="font-specs text-xs text-[#5b21b6]">Custodia con sello lacrado y peritaje</span>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1.5 rounded-lg bg-white hover:bg-[#f3e8ff] border border-[#e9d5ff] text-[#2e1065] font-specs font-semibold text-xs transition" type="button">
+                Ver CFDI
+              </button>
+<button class="px-3 py-1.5 rounded-lg bg-white hover:bg-[#f3e8ff] border border-[#e9d5ff] text-[#5b21b6] font-specs font-semibold text-xs transition" type="button">
+                Descargar Garantía Inmutable
+              </button>
+</div>
+</div>
+</article>
+<!-- Pagination Footer -->
+<div class="flex items-center justify-between pt-4">
+<span class="font-specs text-xs text-[#5b21b6]">Mostrando 3 de 15 transacciones</span>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1.5 rounded-xl bg-white border border-[#e9d5ff] text-purple-300 font-specs text-xs cursor-not-allowed" type="button">Anterior</button>
+<button class="px-3 py-1.5 rounded-xl bg-[#7c3aed] text-white font-specs font-bold text-xs shadow-sm" type="button">1</button>
+<button class="px-3 py-1.5 rounded-xl bg-white hover:bg-[#f3e8ff] border border-[#e9d5ff] text-[#2e1065] font-specs text-xs transition" type="button">2</button>
+<button class="px-3 py-1.5 rounded-xl bg-white hover:bg-[#f3e8ff] border border-[#e9d5ff] text-[#2e1065] font-specs text-xs transition" type="button">Siguiente</button>
+</div>
+</div>
+</div>
+<!-- Right Column: Institutional Vault Details & Curator Contact (4 Cols) -->
+<aside class="lg:col-span-4 space-y-6">
+<!-- Assigned Chief Curator Card in Refined Light Purple Palette -->
+<div class="bg-white border border-[#e9d5ff] rounded-2xl p-6 shadow-sm space-y-4">
+<div class="flex items-center justify-between">
+<span class="font-specs font-bold text-xs text-[#5b21b6] uppercase tracking-wider">Curador Personal Asignado</span>
+<span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-14 h-14 rounded-2xl bg-[#f3e8ff] border border-[#e9d5ff] flex items-center justify-center text-[#7c3aed] shrink-0 shadow-sm">
+<svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M12 14l9-5-9-5-9 5 9 5z"></path>
+<path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path>
+</svg>
+</div>
+<div>
+<h4 class="font-bold text-base text-[#2e1065]">Mtro. Rodrigo Silva S.</h4>
+<p class="text-xs font-semibold text-[#7c3aed]">Director de Archivo &amp; Valuaciones</p>
+<span class="font-specs text-xs text-[#5b21b6]">Colegio Mexicano de Bibliofilia</span>
+</div>
+</div>
+<p class="text-xs text-[#4c1d95] leading-relaxed">
+            Su curador exclusivo gestiona reservas de primeras ediciones, pujas en subastas de archivo y certificación física en bóveda.
+          </p>
+<div class="grid grid-cols-2 gap-2 pt-1">
+<button class="px-3 py-2 rounded-xl bg-[#fbf7fe] hover:bg-[#f3e8ff] border border-[#e9d5ff] text-[#2e1065] font-specs font-bold text-xs transition flex items-center justify-center gap-1.5 shadow-sm" type="button">
+<svg class="w-4 h-4 text-[#7c3aed]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+</svg>
+<span>Mensaje Directo</span>
+</button>
+<button class="px-3 py-2 rounded-xl bg-[#7c3aed] hover:bg-[#630ed4] text-white font-specs font-bold text-xs transition flex items-center justify-center gap-1.5 shadow-sm shadow-purple-200" type="button">
+<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<rect height="18" rx="2" width="18" x="3" y="4"></rect>
+<line x1="16" x2="16" y1="2" y2="6"></line>
+<line x1="8" x2="8" y1="2" y2="6"></line>
+<line x1="3" x2="21" y1="10" y2="10"></line>
+</svg>
+<span>Agendar Cita</span>
+</button>
+</div>
+</div>
+<!-- Default Vault Delivery Address -->
+<div class="bg-white border border-[#e9d5ff] rounded-2xl p-6 shadow-sm space-y-4">
+<div class="flex items-center justify-between">
+<span class="font-specs font-bold text-xs text-[#5b21b6] uppercase tracking-wider">Dirección de Custodia Predeterminada</span>
+<button class="text-[#7c3aed] hover:text-[#2e1065] font-specs font-bold text-xs transition" type="button">Modificar</button>
+</div>
+<div class="bg-[#fbf7fe] border border-[#e9d5ff] p-4 rounded-xl space-y-2">
+<div class="flex items-center gap-2">
+<svg class="w-4 h-4 text-[#7c3aed]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<rect height="11" rx="2" width="18" x="3" y="11"></rect>
+<path d="M7 11V7a5 5 0 0110 0v4"></path>
+</svg>
+<span class="font-bold text-sm text-[#2e1065]">Residencia Principal Roma Norte</span>
+</div>
+<p class="text-xs text-[#4c1d95] leading-relaxed">
+              Álvaro Obregón 185, Depto 402<br/>
+              Colonia Roma Norte, Cuauhtémoc<br/>
+              Ciudad de México, CDMX, C.P. 06700
+            </p>
+<div class="flex items-center gap-2 pt-2 font-specs text-xs font-semibold text-[#7c3aed]">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+</svg>
+<span>Protocolo de Entrega Blindada Activado</span>
+</div>
+</div>
+<div class="flex items-center justify-between text-xs text-[#5b21b6]">
+<span>Otras direcciones registradas:</span>
+<span class="font-specs font-bold text-[#2e1065]">1 sucursal + 1 bóveda</span>
+</div>
+</div>
+<!-- Payment & Tokenized Wallets -->
+<div class="bg-white border border-[#e9d5ff] rounded-2xl p-6 shadow-sm space-y-4">
+<div class="flex items-center justify-between">
+<span class="font-specs font-bold text-xs text-[#5b21b6] uppercase tracking-wider">Métodos de Pago Activos</span>
+<button class="text-[#7c3aed] hover:text-[#2e1065] font-specs font-bold text-xs transition" type="button">Administrar</button>
+</div>
+<div class="space-y-2">
+<!-- Card 1 -->
+<div class="bg-[#fbf7fe] border border-[#e9d5ff] p-3.5 rounded-xl flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-7 rounded bg-[#f3e8ff] border border-[#e9d5ff] flex items-center justify-center font-specs text-xs text-[#2e1065] font-bold">
+                  VISA
+                </div>
+<div>
+<span class="text-xs font-bold text-[#2e1065] block">Visa Signature •••• 7890</span>
+<span class="font-specs text-[11px] text-[#5b21b6]">Expira 08/29 • Tokenizada BBVA</span>
+</div>
+</div>
+<span class="px-2.5 py-0.5 rounded-full bg-[#f3e8ff] border border-[#e9d5ff] text-[#5b21b6] font-specs font-bold text-[10px] uppercase">
+                Principal
+              </span>
+</div>
+<!-- Card 2 -->
+<div class="bg-[#fbf7fe] border border-[#e9d5ff] p-3.5 rounded-xl flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-7 rounded bg-[#f3e8ff] border border-[#e9d5ff] flex items-center justify-center font-specs text-xs text-[#2e1065] font-bold">
+                  SPEI
+                </div>
+<div>
+<span class="text-xs font-bold text-[#2e1065] block">CLABE •••• 9104</span>
+<span class="font-specs text-[11px] text-[#5b21b6]">Banorte Custodia Inmediata</span>
+</div>
+</div>
+<svg class="w-4 h-4 text-[#7c3aed]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+</svg>
+</div>
+</div>
+</div>
+<!-- Security & Authenticity Guarantee Callout -->
+<div class="bg-white border border-[#e9d5ff] rounded-2xl p-5 space-y-3 shadow-sm">
+<div class="flex items-center gap-2 text-[#7c3aed]">
+<svg class="w-5 h-5 text-[#7c3aed]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+</svg>
+<h4 class="font-bold text-sm text-[#2e1065]">Garantía Inmutable Archivum</h4>
+</div>
+<p class="text-xs text-[#4c1d95] leading-relaxed">
+            Cada adquisición cuenta con peritaje físico, registro espectrográfico y factura electrónica avalada bajo normatividad de la Secretaría de Cultura y el SAT.
+          </p>
+<a class="inline-flex items-center gap-1.5 font-specs font-bold text-xs text-[#7c3aed] hover:text-[#2e1065] transition" href="#">
+<span>Consultar bases del fideicomiso notarial</span>
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+</svg>
+</a>
+</div>
+</aside>
+</div>
+</div>
+</main>
+<!-- END: MainContent -->
+<!-- BEGIN: CartDrawerSection (Restyled to Amethyst Editorial Light Mode) -->
+<div aria-hidden="true" class="fixed inset-0 bg-purple-950/40 backdrop-blur-sm z-50 hidden-overlay" id="drawer-overlay" onclick="toggleCartDrawer(false)"></div>
+<aside aria-label="Panel lateral de Carrito de compras" class="fixed top-0 right-0 bottom-0 w-full sm:w-[460px] bg-white border-l border-[#e9d5ff] z-50 flex flex-col justify-between shadow-2xl closed" data-purpose="shopping-cart-drawer" id="cart-drawer">
+<!-- Header -->
+<div class="p-6 border-b border-[#e9d5ff] flex items-center justify-between bg-[#fbf7fe]">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-[#7c3aed] flex items-center justify-center text-white shadow-sm">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<circle cx="9" cy="21" r="1"></circle>
+<circle cx="20" cy="21" r="1"></circle>
+<path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"></path>
+</svg>
+</div>
+<div>
+<h2 class="text-base font-bold font-quicksand text-[#2e1065]">Carrito de Compras</h2>
+<span class="text-xs text-[#7c3aed] font-specs font-semibold">ID de Sesión: #CART-94821</span>
+</div>
+</div>
+<button aria-label="Cerrar carrito" class="p-2 rounded-xl text-[#5b21b6] hover:text-[#2e1065] bg-white border border-[#e9d5ff] hover:bg-[#f3e8ff] transition focus:outline-none" onclick="toggleCartDrawer(false)" type="button">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<line x1="18" x2="6" y1="6" y2="18"></line>
+<line x1="6" x2="18" y1="6" y2="18"></line>
+</svg>
+</button>
+</div>
+<!-- Items Body -->
+<div class="flex-1 overflow-y-auto p-6 space-y-4" data-purpose="cart-items-container">
+<!-- Item 1 -->
+<div class="bg-[#fbf7fe] border border-[#e9d5ff] rounded-xl p-3.5 flex gap-3.5 relative group" data-cart-item="1">
+<div class="w-16 h-16 rounded-lg bg-white border border-[#e9d5ff] flex items-center justify-center shrink-0">
+<svg class="w-8 h-8 text-[#7c3aed]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<circle cx="12" cy="12" r="10"></circle>
+<circle cx="12" cy="12" r="3"></circle>
+</svg>
+</div>
+<div class="flex-1 flex flex-col justify-between">
+<div class="pr-6">
+<h3 class="text-xs font-bold text-[#2e1065] leading-tight">Kind of Blue (Mono 1959)</h3>
+<p class="text-[11px] text-[#7c3aed]">Miles Davis Sextet</p>
+<span class="text-[10px] font-specs text-[#5b21b6]">SKU: VIN-59-CL1355</span>
+</div>
+<div class="flex items-center justify-between mt-2 pt-2 border-t border-[#e9d5ff]">
+<div class="flex items-center border border-[#e9d5ff] rounded-lg bg-white">
+<button class="px-2 py-0.5 text-[#5b21b6] hover:text-[#2e1065]" onclick="updateQty(1, -1)" type="button">-</button>
+<span class="px-2 text-xs font-specs font-bold text-[#2e1065]" id="qty-val-1">1</span>
+<button class="px-2 py-0.5 text-[#5b21b6] hover:text-[#2e1065]" onclick="updateQty(1, 1)" type="button">+</button>
+</div>
+<div class="text-right">
+<span class="text-xs font-bold font-specs text-[#2e1065]" id="item-price-1">$1,850.00 MXN</span>
+</div>
+</div>
+</div>
+<button class="absolute top-2.5 right-2.5 text-purple-400 hover:text-rose-600 transition" onclick="removeItem(1)" title="Eliminar artículo" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</div>
+<!-- Item 2 -->
+<div class="bg-[#fbf7fe] border border-[#e9d5ff] rounded-xl p-3.5 flex gap-3.5 relative group" data-cart-item="2">
+<div class="w-16 h-16 rounded-lg bg-white border border-[#e9d5ff] flex items-center justify-center shrink-0">
+<svg class="w-8 h-8 text-[#7c3aed]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+</svg>
+</div>
+<div class="flex-1 flex flex-col justify-between">
+<div class="pr-6">
+<h3 class="text-xs font-bold text-[#2e1065] leading-tight">Cien Años de Soledad</h3>
+<p class="text-[11px] text-[#7c3aed]">Gabriel García Márquez (1ra Ed.)</p>
+<span class="text-[10px] font-specs text-[#5b21b6]">SKU: LIB-67-SUDAM</span>
+</div>
+<div class="flex items-center justify-between mt-2 pt-2 border-t border-[#e9d5ff]">
+<div class="flex items-center border border-[#e9d5ff] rounded-lg bg-white">
+<button class="px-2 py-0.5 text-[#5b21b6] hover:text-[#2e1065]" onclick="updateQty(2, -1)" type="button">-</button>
+<span class="px-2 text-xs font-specs font-bold text-[#2e1065]" id="qty-val-2">1</span>
+<button class="px-2 py-0.5 text-[#5b21b6] hover:text-[#2e1065]" onclick="updateQty(2, 1)" type="button">+</button>
+</div>
+<div class="text-right">
+<span class="text-xs font-bold font-specs text-[#2e1065]" id="item-price-2">$4,200.00 MXN</span>
+</div>
+</div>
+</div>
+<button class="absolute top-2.5 right-2.5 text-purple-400 hover:text-rose-600 transition" onclick="removeItem(2)" title="Eliminar artículo" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</div>
+<!-- Item 3 -->
+<div class="bg-[#fbf7fe] border border-[#e9d5ff] rounded-xl p-3.5 flex gap-3.5 relative group" data-cart-item="3">
+<div class="w-16 h-16 rounded-lg bg-white border border-[#e9d5ff] flex items-center justify-center shrink-0">
+<svg class="w-8 h-8 text-[#7c3aed]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<circle cx="12" cy="12" r="10"></circle>
+<circle cx="12" cy="12" r="4"></circle>
+</svg>
+</div>
+<div class="flex-1 flex flex-col justify-between">
+<div class="pr-6">
+<h3 class="text-xs font-bold text-[#2e1065] leading-tight">The Wall (UK First Press)</h3>
+<p class="text-[11px] text-[#7c3aed]">Pink Floyd</p>
+<span class="text-[10px] font-specs text-[#5b21b6]">SKU: VIN-79-HARV</span>
+</div>
+<div class="flex items-center justify-between mt-2 pt-2 border-t border-[#e9d5ff]">
+<div class="flex items-center border border-[#e9d5ff] rounded-lg bg-white">
+<button class="px-2 py-0.5 text-[#5b21b6] hover:text-[#2e1065]" onclick="updateQty(3, -1)" type="button">-</button>
+<span class="px-2 text-xs font-specs font-bold text-[#2e1065]" id="qty-val-3">1</span>
+<button class="px-2 py-0.5 text-[#5b21b6] hover:text-[#2e1065]" onclick="updateQty(3, 1)" type="button">+</button>
+</div>
+<div class="text-right">
+<span class="text-xs font-bold font-specs text-[#2e1065]" id="item-price-3">$2,450.00 MXN</span>
+</div>
+</div>
+</div>
+<button class="absolute top-2.5 right-2.5 text-purple-400 hover:text-rose-600 transition" onclick="removeItem(3)" title="Eliminar artículo" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</div>
+<!-- Fulfillment Selection -->
+<div class="bg-[#fbf7fe] p-3.5 rounded-xl border border-[#e9d5ff] text-xs space-y-2">
+<span class="font-specs font-bold text-[#5b21b6] uppercase tracking-wider block">Método de Entrega</span>
+<label class="flex items-center gap-2 text-[#2e1065] cursor-pointer font-medium">
+<input checked="" class="text-[#7c3aed] focus:ring-0" name="fulfillment" type="radio"/>
+<span>Recoger gratis en Sucursal Central Bellas Artes</span>
+</label>
+<label class="flex items-center gap-2 text-[#4c1d95] cursor-pointer font-medium">
+<input class="text-[#7c3aed] focus:ring-0" name="fulfillment" type="radio"/>
+<span>Envío blindado asegurado (+ $220.00 MXN)</span>
+</label>
+</div>
+<!-- Coupon Code Input -->
+<div class="flex gap-2">
+<input class="flex-1 bg-[#fbf7fe] border border-[#e9d5ff] rounded-xl px-3 py-2 text-xs text-[#2e1065] placeholder-[#5b21b6]/50 focus:border-[#7c3aed] focus:outline-none" placeholder="Código de promoción / socio" type="text"/>
+<button class="px-4 py-2 bg-[#f3e8ff] hover:bg-[#7c3aed] hover:text-white text-[#5b21b6] text-xs font-semibold rounded-xl border border-[#e9d5ff] transition" type="button">
+        Aplicar
+      </button>
+</div>
+</div>
+<!-- Drawer Footer -->
+<div class="p-6 bg-[#fbf7fe] border-t border-[#e9d5ff] space-y-3">
+<div class="space-y-1.5 text-xs font-specs text-[#5b21b6]">
+<div class="flex justify-between">
+<span>Subtotal (3 artículos):</span>
+<span class="text-[#2e1065] font-bold" id="cart-subtotal">$8,500.00 MXN</span>
+</div>
+<div class="flex justify-between text-[#7c3aed] font-semibold">
+<span>Descuento de Coleccionista (5%):</span>
+<span id="cart-discount">-$425.00 MXN</span>
+</div>
+<div class="flex justify-between">
+<span>Entrega en Bellas Artes:</span>
+<span class="text-emerald-700 font-bold">Gratuito</span>
+</div>
+<div class="flex justify-between text-base font-bold text-[#2e1065] border-t border-[#e9d5ff] pt-2">
+<span>Total Estimado:</span>
+<span class="text-[#7c3aed] font-specs text-lg" id="cart-total">$8,075.00 MXN</span>
+</div>
+</div>
+<button class="w-full py-3.5 bg-[#7c3aed] hover:bg-[#630ed4] text-white rounded-xl font-bold tracking-wide text-sm flex items-center justify-center gap-2 border border-[#630ed4] shadow-md shadow-purple-200 transition active:scale-[0.99]" data-purpose="proceed-checkout-btn" onclick="alert('Redirigiendo a pantalla de Proceso de Pago / Dirección y Tarjeta');" type="button">
+<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<rect height="11" rx="2" width="18" x="3" y="11"></rect>
+<path d="M7 11V7a5 5 0 0110 0v4"></path>
+</svg>
+<span>Hacer Compra / Finalizar Pedido</span>
+</button>
+<p class="text-[10px] text-center text-[#5b21b6] font-specs">
+      Transacción encriptada SSL de 256 bits conforme a regulaciones CNBV.
+    </p>
+</div>
+</aside>
+<!-- END: CartDrawerSection -->
+<!-- BEGIN: PageFooter -->
+<footer class="border-t border-[#e9d5ff] bg-white text-[#5b21b6] py-8 mt-12" data-purpose="site-footer">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-specs">
+<div class="flex items-center gap-3">
+<span class="text-[#2e1065] font-bold font-quicksand">ARCHIVUM</span>
+<span>•</span>
+<span>Bibliotheca &amp; Discos Antiguos S.A. de C.V.</span>
+</div>
+<div class="flex items-center gap-6 font-semibold">
+<a class="hover:text-[#2e1065] transition" href="#">Términos de Catálogo</a>
+<a class="hover:text-[#2e1065] transition" href="#">Garantía de Autenticidad</a>
+<a class="hover:text-[#2e1065] transition" href="#">Sucursal Bellas Artes</a>
+</div>
+<div>
+<span>© 2026 Archivum México. Todos los derechos reservados.</span>
+</div>
+</div>
+</footer>
+<!-- END: PageFooter -->
+<!-- BEGIN: InteractiveScripts -->
+<script data-purpose="cart-drawer-behavior">
+  function toggleCartDrawer(open) {
+    const drawer = document.getElementById('cart-drawer');
+    const overlay = document.getElementById('drawer-overlay');
+    if (open) {
+      drawer.classList.remove('closed');
+      overlay.classList.remove('hidden-overlay');
+      document.body.style.overflow = 'hidden';
+    } else {
+      drawer.classList.add('closed');
+      overlay.classList.add('hidden-overlay');
+      document.body.style.overflow = '';
+    }
+  }
+
+  document.getElementById('open-cart-btn').addEventListener('click', function() {
+    toggleCartDrawer(true);
+  });
+
+  const itemPrices = {
+    1: 1850.00,
+    2: 4200.00,
+    3: 2450.00
+  };
+  const itemQuantities = {
+    1: 1,
+    2: 1,
+    3: 1
+  };
+
+  function updateQty(itemId, change) {
+    if (!itemQuantities[itemId]) return;
+    const newQty = itemQuantities[itemId] + change;
+    if (newQty < 1) return;
+    itemQuantities[itemId] = newQty;
+    
+    const qtyElem = document.getElementById('qty-val-' + itemId);
+    if (qtyElem) qtyElem.textContent = newQty;
+
+    const priceElem = document.getElementById('item-price-' + itemId);
+    if (priceElem) {
+      const itemTotal = itemPrices[itemId] * newQty;
+      priceElem.textContent = '$' + itemTotal.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' MXN';
+    }
+
+    calculateCartTotals();
+  }
+
+  function removeItem(itemId) {
+    const card = document.querySelector(`[data-cart-item="${itemId}"]`);
+    if (card) {
+      delete itemQuantities[itemId];
+      card.remove();
+      calculateCartTotals();
+    }
+  }
+
+  function calculateCartTotals() {
+    let subtotal = 0;
+    let totalItems = 0;
+    for (const id in itemQuantities) {
+      subtotal += itemPrices[id] * itemQuantities[id];
+      totalItems += itemQuantities[id];
+    }
+
+    const discount = subtotal * 0.05;
+    const total = subtotal - discount;
+
+    const subtotalElem = document.getElementById('cart-subtotal');
+    const discountElem = document.getElementById('cart-discount');
+    const totalElem = document.getElementById('cart-total');
+    const counterBadge = document.getElementById('cart-counter-badge');
+
+    if (subtotalElem) subtotalElem.textContent = '$' + subtotal.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' MXN';
+    if (discountElem) discountElem.textContent = '-$' + discount.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' MXN';
+    if (totalElem) totalElem.textContent = '$' + total.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' MXN';
+    if (counterBadge) counterBadge.textContent = totalItems;
+  }
+</script>
+<!-- END: InteractiveScripts -->
+</body></html>
