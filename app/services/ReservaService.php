@@ -128,11 +128,15 @@ class ReservaService
 
                     // Revertir el estado de la pieza única asociada al pedido, si aplica.
                     if ($reserva->pedido_id) {
-                        PiezaUnica::query()
+                        $piezaUnica = PiezaUnica::query()
                             ->where('existencia_id', $existencia->id)
                             ->where('estado', 'reservada')
-                            ->limit(1)
-                            ->update(['estado' => 'disponible']);
+                            ->lockForUpdate()
+                            ->first();
+
+                        if ($piezaUnica) {
+                            $piezaUnica->update(['estado' => 'disponible']);
+                        }
                     }
                 }
 
@@ -190,11 +194,15 @@ class ReservaService
                 ]);
 
                 // Marcar la pieza única reservada (si existe) como vendida definitivamente.
-                PiezaUnica::query()
+                $piezaUnica = PiezaUnica::query()
                     ->where('existencia_id', $reserva->existencia_id)
                     ->where('estado', 'reservada')
-                    ->limit(1)
-                    ->update(['estado' => 'vendida']);
+                    ->lockForUpdate()
+                    ->first();
+
+                if ($piezaUnica) {
+                    $piezaUnica->update(['estado' => 'vendida']);
+                }
 
                 // Cerrar la reserva como consumida.
                 $reserva->update([

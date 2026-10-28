@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\PedidoPagado;
 use App\Models\Bitacora;
 use App\Models\Carrito;
 use App\Models\Cliente;
@@ -141,6 +142,8 @@ class VentaService
                 'created_at' => now(),
             ]);
 
+            PedidoPagado::dispatch($pedido);
+
             return $pedido;
         });
     }
@@ -260,6 +263,8 @@ class VentaService
                 'created_at' => now(),
             ]);
 
+            PedidoPagado::dispatch($pedido);
+
             return $pedido;
         });
     }
@@ -322,6 +327,8 @@ class VentaService
                 'ip' => request()->ip() ?? '127.0.0.1',
                 'created_at' => now(),
             ]);
+
+            PedidoPagado::dispatch($pedido);
 
             return $pedido;
         });

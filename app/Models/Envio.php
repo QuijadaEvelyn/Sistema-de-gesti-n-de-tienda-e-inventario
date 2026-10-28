@@ -23,6 +23,8 @@ class Envio extends Model
         'sucursal_id',
         'paqueteria',
         'numero_guia',
+        'estado_actual',
+        'fecha_estimada_entrega',
         'estatus',
         'enviado_en',
         'entregado_en',
@@ -36,6 +38,7 @@ class Envio extends Model
     protected function casts(): array
     {
         return [
+            'fecha_estimada_entrega' => 'datetime',
             'enviado_en' => 'datetime',
             'entregado_en' => 'datetime',
         ];
@@ -63,5 +66,13 @@ class Envio extends Model
     public function detalles(): HasMany
     {
         return $this->hasMany(DetalleEnvio::class, 'envio_id');
+    }
+
+    /**
+     * Historial de eventos y actualizaciones de rastreo tipo Amazon del envío.
+     */
+    public function historial(): HasMany
+    {
+        return $this->hasMany(HistorialEnvio::class, 'envio_id');
     }
 }

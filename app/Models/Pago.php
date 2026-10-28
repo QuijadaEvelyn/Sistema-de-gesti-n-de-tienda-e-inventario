@@ -21,7 +21,12 @@ class Pago extends Model
     protected $fillable = [
         'pedido_id',
         'metodo',
+        'metodo_pago',
         'monto',
+        'codigo_oxxo',
+        'referencia_bancaria',
+        'expira_at',
+        'comprobante_url',
         'estatus',
         'pagado_en',
     ];
@@ -35,6 +40,7 @@ class Pago extends Model
     {
         return [
             'monto' => 'decimal:2',
+            'expira_at' => 'datetime',
             'pagado_en' => 'datetime',
         ];
     }

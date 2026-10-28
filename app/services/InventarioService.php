@@ -6,10 +6,12 @@ use App\Exceptions\StockInsuficienteException;
 use App\Models\Bitacora;
 use App\Models\Existencia;
 use App\Models\MovimientoInventario;
+use App\Models\PiezaUnica;
 use App\Models\Sucursal;
 use App\Models\Usuario;
 use App\Models\VarianteSku;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use RuntimeException;
 
 class InventarioService
@@ -121,41 +123,56 @@ class InventarioService
         ?Model $referencia = null,
         string $motivo = 'Salida de almacén por venta'
     ): MovimientoInventario {
-        $existencia = $this->verificarStock($variante, $cantidad, $sucursalId, bloquear: true);
+        return DB::transaction(function () use ($variante, $cantidad, $sucursalId, $usuario, $referencia, $motivo): MovimientoInventario {
+            $existencia = $this->verificarStock($variante, $cantidad, $sucursalId, bloquear: true);
 
-        $existencia->cantidad -= $cantidad;
-        $existencia->save();
+            $existencia->cantidad -= $cantidad;
+            $existencia->save();
 
-        $movimiento = MovimientoInventario::create([
-            'existencia_id' => $existencia->id,
-            'usuario_id' => $usuario?->id ?? auth()->id(),
-            'tipo' => 'salida',
-            'cantidad' => -abs($cantidad),
-            'motivo' => $motivo,
-            'referencia_type' => $referencia ? $referencia::class : null,
-            'referencia_id' => $referencia?->getKey(),
-            'created_at' => now(),
-        ]);
+            // Bloquear piezas únicas disponibles si existen para esta existencia y marcarlas como vendidas
+            $piezas = PiezaUnica::query()
+                ->where('existencia_id', $existencia->id)
+                ->where('estado', 'disponible')
+                ->lockForUpdate()
+                ->limit($cantidad)
+                ->get();
 
-        Bitacora::create([
-            'usuario_id' => $usuario?->id ?? auth()->id(),
-            'accion' => 'STOCK_DESCONTADO',
-            'tabla_afectada' => 'existencias',
-            'registro_id' => $existencia->id,
-            'detalle' => [
-                'variante_sku_id' => $existencia->variante_sku_id,
-                'sucursal_id' => $existencia->sucursal_id,
-                'cantidad_descontada' => $cantidad,
-                'stock_restante' => $existencia->cantidad,
+            foreach ($piezas as $pieza) {
+                $pieza->update(['estado' => 'vendida']);
+            }
+
+            $movimiento = MovimientoInventario::create([
+                'existencia_id' => $existencia->id,
+                'usuario_id' => $usuario?->id ?? auth()->id(),
+                'tipo' => 'salida',
+                'cantidad' => -abs($cantidad),
                 'motivo' => $motivo,
-                'referencia_tipo' => $referencia ? class_basename($referencia) : null,
+                'referencia_type' => $referencia ? $referencia::class : null,
                 'referencia_id' => $referencia?->getKey(),
-            ],
-            'ip' => request()->ip() ?? '127.0.0.1',
-            'created_at' => now(),
-        ]);
+                'created_at' => now(),
+            ]);
 
-        return $movimiento;
+            Bitacora::create([
+                'usuario_id' => $usuario?->id ?? auth()->id(),
+                'accion' => 'STOCK_DESCONTADO',
+                'tabla_afectada' => 'existencias',
+                'registro_id' => $existencia->id,
+                'detalle' => [
+                    'variante_sku_id' => $existencia->variante_sku_id,
+                    'sucursal_id' => $existencia->sucursal_id,
+                    'cantidad_descontada' => $cantidad,
+                    'stock_restante' => $existencia->cantidad,
+                    'motivo' => $motivo,
+                    'referencia_tipo' => $referencia ? class_basename($referencia) : null,
+                    'referencia_id' => $referencia?->getKey(),
+                    'piezas_unicas_afectadas' => $piezas->pluck('numero_serie')->toArray(),
+                ],
+                'ip' => request()->ip() ?? '127.0.0.1',
+                'created_at' => now(),
+            ]);
+
+            return $movimiento;
+        });
     }
 
     /**
@@ -174,38 +191,54 @@ class InventarioService
             throw new RuntimeException('La cantidad a ingresar debe ser mayor a cero.');
         }
 
-        $existencia = $this->obtenerExistencia($variante, $sucursalId, bloquear: true);
-        $existencia->cantidad += $cantidad;
-        $existencia->save();
+        return DB::transaction(function () use ($variante, $cantidad, $sucursalId, $usuario, $referencia, $motivo, $tipo): MovimientoInventario {
+            $existencia = $this->obtenerExistencia($variante, $sucursalId, bloquear: true);
+            $existencia->cantidad += $cantidad;
+            $existencia->save();
 
-        $movimiento = MovimientoInventario::create([
-            'existencia_id' => $existencia->id,
-            'usuario_id' => $usuario?->id ?? auth()->id(),
-            'tipo' => $tipo,
-            'cantidad' => abs($cantidad),
-            'motivo' => $motivo,
-            'referencia_type' => $referencia ? $referencia::class : null,
-            'referencia_id' => $referencia?->getKey(),
-            'created_at' => now(),
-        ]);
+            // Si es devolucion y hay piezas vendidas asociadas, restaurarlas a disponible con lock
+            if ($tipo === 'devolucion') {
+                $piezasDevueltas = PiezaUnica::query()
+                    ->where('existencia_id', $existencia->id)
+                    ->where('estado', 'vendida')
+                    ->lockForUpdate()
+                    ->limit($cantidad)
+                    ->get();
 
-        Bitacora::create([
-            'usuario_id' => $usuario?->id ?? auth()->id(),
-            'accion' => 'STOCK_AUMENTADO',
-            'tabla_afectada' => 'existencias',
-            'registro_id' => $existencia->id,
-            'detalle' => [
-                'variante_sku_id' => $existencia->variante_sku_id,
-                'sucursal_id' => $existencia->sucursal_id,
-                'cantidad_ingresada' => $cantidad,
-                'stock_resultante' => $existencia->cantidad,
+                foreach ($piezasDevueltas as $pieza) {
+                    $pieza->update(['estado' => 'disponible']);
+                }
+            }
+
+            $movimiento = MovimientoInventario::create([
+                'existencia_id' => $existencia->id,
+                'usuario_id' => $usuario?->id ?? auth()->id(),
+                'tipo' => $tipo,
+                'cantidad' => abs($cantidad),
                 'motivo' => $motivo,
-                'tipo_movimiento' => $tipo,
-            ],
-            'ip' => request()->ip() ?? '127.0.0.1',
-            'created_at' => now(),
-        ]);
+                'referencia_type' => $referencia ? $referencia::class : null,
+                'referencia_id' => $referencia?->getKey(),
+                'created_at' => now(),
+            ]);
 
-        return $movimiento;
+            Bitacora::create([
+                'usuario_id' => $usuario?->id ?? auth()->id(),
+                'accion' => 'STOCK_AUMENTADO',
+                'tabla_afectada' => 'existencias',
+                'registro_id' => $existencia->id,
+                'detalle' => [
+                    'variante_sku_id' => $existencia->variante_sku_id,
+                    'sucursal_id' => $existencia->sucursal_id,
+                    'cantidad_ingresada' => $cantidad,
+                    'stock_resultante' => $existencia->cantidad,
+                    'motivo' => $motivo,
+                    'tipo_movimiento' => $tipo,
+                ],
+                'ip' => request()->ip() ?? '127.0.0.1',
+                'created_at' => now(),
+            ]);
+
+            return $movimiento;
+        });
     }
 }

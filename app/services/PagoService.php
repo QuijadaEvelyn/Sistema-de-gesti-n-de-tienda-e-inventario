@@ -73,7 +73,10 @@ class PagoService
             $pago = Pago::create([
                 'pedido_id' => $pedido->id,
                 'metodo' => 'efectivo',
+                'metodo_pago' => 'oxxo',
                 'monto' => $pedido->total,
+                'codigo_oxxo' => $codigoOxxo,
+                'expira_at' => $expiraEn,
                 'estatus' => 'pendiente',
                 'pagado_en' => null,
             ]);
@@ -168,7 +171,10 @@ class PagoService
             $pago = Pago::create([
                 'pedido_id' => $pedido->id,
                 'metodo' => 'transferencia',
+                'metodo_pago' => 'transferencia',
                 'monto' => $pedido->total,
+                'referencia_bancaria' => $referencia,
+                'comprobante_url' => $comprobanteUrl,
                 'estatus' => 'pendiente',
                 'pagado_en' => null,
             ]);

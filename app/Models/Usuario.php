@@ -64,6 +64,126 @@ class Usuario extends Authenticatable
     }
 
     /**
+     * Determina si el usuario posee al menos uno de los roles especificados.
+     *
+     * @param  string|array<int, string>  ...$roles
+     */
+    public function tieneRol(string|array ...$roles): bool
+    {
+        $rolesSolicitados = collect($roles)
+            ->flatten()
+            ->flatMap(function (mixed $r): array {
+                if ($r instanceof Rol) {
+                    return [$r->nombre];
+                }
+
+                return is_string($r) ? (preg_split('/[,|]/', $r) ?: [$r]) : [];
+            })
+            ->map(fn (string $r): string => mb_strtolower(trim($r)))
+            ->filter()
+            ->values()
+            ->all();
+
+        if (empty($rolesSolicitados)) {
+            return false;
+        }
+
+        $aliasMap = [
+            'admin' => ['admin', 'administrador'],
+            'administrador' => ['admin', 'administrador'],
+            'encargado' => ['encargado', 'supervisor', 'almacenista', 'gerente'],
+            'almacenista' => ['almacenista', 'encargado'],
+            'cliente' => ['cliente', 'comprador', 'consumidor'],
+        ];
+
+        $rolesPermitidos = collect($rolesSolicitados)
+            ->flatMap(fn (string $r): array => $aliasMap[$r] ?? [$r])
+            ->unique()
+            ->all();
+
+        $rolesActuales = ($this->relationLoaded('roles') ? $this->roles : $this->roles()->get())
+            ->pluck('nombre')
+            ->map(fn (mixed $r): string => mb_strtolower(trim((string) $r)))
+            ->all();
+
+        return ! empty(array_intersect($rolesPermitidos, $rolesActuales));
+    }
+
+    /**
+     * Alias de tieneRol en inglés.
+     *
+     * @param  string|array<int, string>  ...$roles
+     */
+    public function hasRole(string|array ...$roles): bool
+    {
+        return $this->tieneRol(...$roles);
+    }
+
+    /**
+     * Determina si el usuario tiene todos los roles solicitados.
+     *
+     * @param  string|array<int, string>  ...$roles
+     */
+    public function tieneTodosLosRoles(string|array ...$roles): bool
+    {
+        $rolesSolicitados = collect($roles)
+            ->flatten()
+            ->map(fn (mixed $r): string => mb_strtolower(trim((string) $r)))
+            ->filter()
+            ->values()
+            ->all();
+
+        if (empty($rolesSolicitados)) {
+            return false;
+        }
+
+        $rolesActuales = ($this->relationLoaded('roles') ? $this->roles : $this->roles()->get())
+            ->pluck('nombre')
+            ->map(fn (mixed $r): string => mb_strtolower(trim((string) $r)))
+            ->all();
+
+        return collect($rolesSolicitados)->diff($rolesActuales)->isEmpty();
+    }
+
+    /**
+     * Comprueba si el usuario tiene rol de Administrador.
+     */
+    public function esAdmin(): bool
+    {
+        return $this->tieneRol('admin', 'administrador');
+    }
+
+    /**
+     * Comprueba si el usuario tiene rol de Encargado o Almacén.
+     */
+    public function esEncargado(): bool
+    {
+        return $this->tieneRol('encargado', 'supervisor', 'almacenista');
+    }
+
+    /**
+     * Comprueba si el usuario tiene rol de Cliente.
+     */
+    public function esCliente(): bool
+    {
+        return $this->tieneRol('cliente');
+    }
+
+    /**
+     * Asigna un rol al usuario por nombre de rol o modelo Rol.
+     */
+    public function asignarRol(string|Rol $rol): self
+    {
+        $rolModel = is_string($rol)
+            ? Rol::firstOrCreate(['nombre' => $rol])
+            : $rol;
+
+        $this->roles()->syncWithoutDetaching([$rolModel->id]);
+
+        return $this;
+    }
+
+    /**
      * Solicitudes de recuperación de contraseña generadas para el usuario.
      */
     public function recuperacionesContrasena(): HasMany

@@ -7,6 +7,7 @@ namespace App\Services;
 use App\Models\Bitacora;
 use App\Models\DetalleEnvio;
 use App\Models\Envio;
+use App\Models\HistorialEnvio;
 use App\Models\Pedido;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -75,9 +76,20 @@ class EnvioService
                 'sucursal_id' => $sucursalId,
                 'paqueteria' => $paqueteria,
                 'numero_guia' => $numeroGuia,
+                'estado_actual' => 'en_preparacion',
+                'fecha_estimada_entrega' => now()->addDays(3),
                 'estatus' => 'preparando',
                 'enviado_en' => null,
                 'entregado_en' => null,
+            ]);
+
+            // Registrar primer hito en el historial de rastreo
+            HistorialEnvio::create([
+                'envio_id' => $envio->id,
+                'estado' => 'en_preparacion',
+                'ubicacion' => 'Almacén de origen',
+                'descripcion' => 'Guía de envío generada y paquete en preparación.',
+                'created_at' => now(),
             ]);
 
             // Crear el detalle de envio por cada linea del pedido.
@@ -89,8 +101,8 @@ class EnvioService
                 ]);
             }
 
-            // Actualizar el estatus del pedido a "enviado".
-            $pedido->update(['estatus' => 'enviado']);
+            // El estatus del pedido permanece "pagado" mientras el envio esta en preparacion.
+            // Se actualizara a "enviado" cuando el paquete pase a "en_transito".
 
             Bitacora::create([
                 'usuario_id' => auth()->id(),
@@ -139,7 +151,16 @@ class EnvioService
         string $ubicacion,
         string $comentario
     ): Envio {
-        $estatusValidos = ['preparando', 'en_transito', 'entregado', 'devuelto'];
+        $estatusValidos = [
+            'preparando',
+            'en_transito',
+            'entregado',
+            'devuelto',
+            'pendiente',
+            'en_preparacion',
+            'en_camino',
+            'incidencia',
+        ];
 
         if (! in_array($estado, $estatusValidos, true)) {
             throw new RuntimeException(
@@ -148,7 +169,18 @@ class EnvioService
             );
         }
 
-        return DB::transaction(function () use ($envioId, $estado, $ubicacion, $comentario): Envio {
+        $mapaEstadoActual = [
+            'preparando' => 'en_preparacion',
+            'en_preparacion' => 'en_preparacion',
+            'en_transito' => 'en_transito',
+            'en_camino' => 'en_camino',
+            'entregado' => 'entregado',
+            'devuelto' => 'incidencia',
+            'incidencia' => 'incidencia',
+            'pendiente' => 'pendiente',
+        ];
+
+        return DB::transaction(function () use ($envioId, $estado, $ubicacion, $comentario, $mapaEstadoActual): Envio {
             /** @var Envio $envio */
             $envio = Envio::query()->lockForUpdate()->findOrFail($envioId);
 
@@ -159,19 +191,37 @@ class EnvioService
                 'comentario' => $comentario,
             ];
 
-            $cambios = ['estatus' => $estado];
+            $cambios = [
+                'estatus' => in_array($estado, ['preparando', 'en_transito', 'entregado', 'devuelto'], true)
+                    ? $estado
+                    : ($estado === 'en_camino' ? 'en_transito' : 'devuelto'),
+                'estado_actual' => $mapaEstadoActual[$estado] ?? 'en_transito',
+            ];
 
             // Registrar la marca de tiempo cuando el paquete sale por primera vez.
-            if ($estado === 'en_transito' && ! $envio->enviado_en) {
-                $cambios['enviado_en'] = now();
+            if (in_array($estado, ['en_transito', 'en_camino'], true)) {
+                if (! $envio->enviado_en) {
+                    $cambios['enviado_en'] = now();
+                }
+                $envio->pedido?->update(['estatus' => 'enviado']);
             }
 
             // Registrar la marca de tiempo de entrega definitiva.
             if ($estado === 'entregado') {
                 $cambios['entregado_en'] = now();
+                $envio->pedido?->update(['estatus' => 'entregado']);
             }
 
             $envio->update($cambios);
+
+            // Registrar hito cronológico en historial_envios
+            HistorialEnvio::create([
+                'envio_id' => $envio->id,
+                'estado' => $estado,
+                'ubicacion' => $ubicacion,
+                'descripcion' => $comentario,
+                'created_at' => now(),
+            ]);
 
             // Persistir el hito en la bitacora de auditoria como historial de rastreo.
             Bitacora::create([
