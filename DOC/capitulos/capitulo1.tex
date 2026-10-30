@@ -38,11 +38,62 @@ Desarrollar un sistema web de gestión de inventario y punto de venta para libro
 
 \section{Alcance}
 
+Gestión de Tienda y Sucursales:
+
+Catálogo de productos especializado para libros, discos de vinilo y piezas de colección.
+
+Manejo de inventario híbrido: control por volumen para productos comunes y control individual para piezas únicas o de edición limitada.
+
+Panel de acceso privado donde el personal administra únicamente el inventario y los pedidos de su sucursal asignada.
+
+
+Tienda en Línea (E-Commerce):
+
+Portal público para clientes con catálogo interactivo, filtros de búsqueda rápidos, carrito de compras y registro de usuarios.
+
+Panel interno para que los trabajadores procesen, preparen y gestionen las compras recibidas por la plataforma web.
+
+
+Seguridad en las Compras e Inventarios:
+
+Congelamiento inmediato del producto exclusivo durante el proceso de compra para evitar que dos personas adquieran la misma pieza única al mismo tiempo.
+
+Registro permanente del precio, descuentos y totales aplicados en el momento exacto en que el cliente realiza su pedido.
+
+
+Procesos de Pagos y Envíos:
+
+Módulo para recepción de pagos mediante transferencia bancaria y validación de comprobantes por parte del equipo interno.
+
+Sistema de envíos que registra datos de entrega, genera guías de rastreo y permite dar seguimiento paso a paso al pedido.
+
+
+Automatización del Sistema:
+
+Cancelación automática de fichas de pago y liberación de productos apartados cuando vence el tiempo límite sin requerir intervención manual.
+
+Envío automático de correos electrónicos al cliente para confirmar su pago, notificar la salida del almacén y compartir su número de guía.
+
+
 
 \section{Limitación}
+La validación de pagos por transferencia depende del registro/verificación administrativa del comprobante y no de una comunicación directa vía API con el core de las entidades bancarias.
+
+La generación de guías y el rastreo paso a paso se gestionan internamente dentro del ecosistema del sistema, salvo integración posterior mediante APIs de proveedores logísticos terceros (como FedEx o DHL).
+
+La liberación automática de apartados y la cancelación de fichas depenenden de la ejecución continua del programador de tareas (Laravel Scheduler) configurado en el servidor web.
+
+El rendimiento general de los bloqueos pesimistas y eventos en segundo plano está limitado por los recursos del hardware del servidor de base de datos y el motor de colas asignado.
 
 \section{Problemática}
+La gestión comercial de artículos de especialidad -como libros, discos de vinilo y piezas de colección- presenta una alta complejidad operativa debido al manejo simultáneo de mercancía masiva y unidades únicas de edición limitada. En sistemas tradicionales o no adaptados, esta dualidad provoca saturación en las bases de datos por la rigidez de sus esquemas, discrepancias de inventario entre múltiples sucursales y vulnerabilidades en la integridad financiera al no congelar los precios al momento de la venta.
 
+Asimismo, la alta demanda de piezas exclusivas suele causar problemas de sobreventa por falta de concurrencia controlada, mientras que el control manual de apartados vencidos, validación de transferencias y generación de guías de envío incrementa la carga administrativa, provocando demoras en la atención y pérdida de trazabilidad en los pedidos.
 
 \section{Justificación}
+El desarrollo de esta plataforma en Laravel se justifica por la necesidad de ofrecer un entorno moderno, seguro y automatizado que resuelva de manera eficiente la administración de tiendas especializadas en libros, vinilos y artículos de colección.
+
+Al estructurar la información de forma flexible, el sistema optimiza el almacenamiento de los detalles propios de cada producto sin desperdiciar espacio. Asimismo, cuenta con mecanismos de control estrictos que garantizan que los precios acordados al momento de la compra se conserven intactos en el historial de los pedidos, y que las piezas exclusivas de edición limitada no sufran problemas de sobreventa.
+
+Finalmente, la integración de servicios automatizados reduce significativamente la carga de trabajo manual, encargándose de tareas rutinarias como la liberación de apartados expirados, la actualización del inventario en tiempo real y el envío automático de notificaciones a los clientes tras confirmar su pago. Esto no solo mejora la experiencia de compra en línea, sino que asegura un control administrativo confiable y transparente en cada una de las sucursales.
 
