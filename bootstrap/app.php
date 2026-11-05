@@ -16,6 +16,16 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Redirección condicional para usuarios con sesión activa que intenten acceder a /login o /register
+        $middleware->redirectUsersTo(function (Request $request): string {
+            $user = $request->user();
+            if ($user && $user->tieneRol('administrador', 'encargado', 'ventas', 'almacen', 'compras')) {
+                return route('admin.dashboard');
+            }
+
+            return route('public.home');
+        });
+
         $middleware->alias([
             // Control de acceso por rol
             'rol' => CheckRole::class,

@@ -17,8 +17,11 @@ class CheckRole
     protected array $aliasMap = [
         'admin' => ['admin', 'administrador'],
         'administrador' => ['admin', 'administrador'],
-        'encargado' => ['encargado', 'supervisor', 'almacenista', 'gerente'],
-        'almacenista' => ['almacenista', 'encargado'],
+        'ventas' => ['ventas', 'vendedor'],
+        'almacen' => ['almacen', 'almacenista', 'encargado', 'bodega'],
+        'almacenista' => ['almacenista', 'almacen', 'encargado'],
+        'compras' => ['compras', 'comprador', 'adquisiciones'],
+        'encargado' => ['encargado', 'supervisor', 'almacenista', 'almacen', 'gerente'],
         'cliente' => ['cliente', 'comprador', 'consumidor'],
     ];
 
@@ -101,6 +104,16 @@ class CheckRole
                     'message' => 'Acceso denegado: no cuentas con los permisos requeridos.',
                     'roles_requeridos' => $rolesSolicitados,
                 ], 403);
+            }
+
+            // Redirección amigable para usuarios con sesión activa de cliente
+            // que intenten acceder al panel /admin o rutas restringidas sin mostrar pantalla 403 directa
+            if ($user->esCliente() && ! $user->tieneRol('administrador', 'encargado', 'ventas', 'almacen', 'compras')) {
+                $mensaje = $request->is('admin*')
+                    ? 'Acceso denegado: Tu cuenta de cliente no tiene permisos para acceder al panel de administración.'
+                    : 'Acceso denegado: Tu cuenta de cliente no tiene permisos para acceder a esta sección.';
+
+                return redirect()->route('public.home')->with('warning', $mensaje);
             }
 
             abort(

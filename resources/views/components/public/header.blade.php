@@ -1,15 +1,15 @@
 @props([
     'activeBranch' => 'Sucursal Central Bellas Artes',
-    'cartCount' => 3
+    'cartCount'    => 3
 ])
 
 <header class="sticky top-0 z-40 border-b border-purple-200/80 bg-white/95 backdrop-blur-md shadow-xs text-on-surface" data-purpose="global-header">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Fila Superior: Marca, Búsqueda, Sucursal, Acciones de Usuario -->
         <div class="flex items-center justify-between h-20 gap-4">
-            
+
             <!-- Logotipo y Monograma de Archivo -->
-            <a href="{{ route('public.home') ?? url('/') }}" class="flex items-center gap-3 shrink-0 group focus:outline-none" aria-label="Ir al inicio de Archivum">
+            <a href="{{ route('public.home') }}" class="flex items-center gap-3 shrink-0 group focus:outline-none" aria-label="Ir al inicio de Archivum">
                 <div class="w-11 h-11 rounded-xl bg-primary-container flex items-center justify-center text-white border border-purple-300/40 shadow-sm transition-transform group-hover:scale-105">
                     <!-- Isotipo Geométrico de Bóveda / Vault -->
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
@@ -27,11 +27,11 @@
             <!-- Barra de Búsqueda Global Omnicanal -->
             <div class="flex-1 max-w-2xl hidden md:block">
                 <form action="#" method="GET" class="relative w-full">
-                    <input 
-                        type="search" 
+                    <input
+                        type="search"
                         name="q"
-                        placeholder="Buscar libros raros, vinilos 180g, primeras ediciones, memorabilia o SKU..." 
-                        class="w-full bg-surface-container-low/70 border border-purple-200/80 text-sm rounded-xl pl-11 pr-4 py-2.5 text-on-surface placeholder:text-outline focus:border-primary focus:bg-white focus:ring-1 focus:ring-primary focus:outline-none transition shadow-2xs" 
+                        placeholder="Buscar libros raros, vinilos 180g, primeras ediciones, memorabilia o SKU..."
+                        class="w-full bg-surface-container-low/70 border border-purple-200/80 text-sm rounded-xl pl-11 pr-4 py-2.5 text-on-surface placeholder:text-outline focus:border-primary focus:bg-white focus:ring-1 focus:ring-primary focus:outline-none transition shadow-2xs"
                     />
                     <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-primary">
                         <span class="material-symbols-outlined text-[20px]">search</span>
@@ -41,7 +41,7 @@
 
             <!-- Controles Utilitarios: Sucursal, Tema, Acceso y Carrito -->
             <div class="flex items-center gap-3 shrink-0">
-                
+
                 <!-- Selector de Sucursal Activa -->
                 <div class="hidden lg:flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-surface-container border border-purple-200/80 text-xs font-label-md text-secondary font-medium">
                     <span class="material-symbols-outlined text-[16px] text-primary">storefront</span>
@@ -53,11 +53,152 @@
                     <span class="material-symbols-outlined text-[20px] text-primary">light_mode</span>
                 </button>
 
-                <!-- Acceso de Coleccionista / Portal Privado -->
-                <a href="{{ url('/admin') }}" class="p-2.5 rounded-xl border border-purple-200/80 bg-white hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition shadow-2xs flex items-center gap-2" title="Portal de Coleccionista y Administración">
-                    <span class="material-symbols-outlined text-[20px] text-secondary">person</span>
-                    <span class="hidden xl:inline text-xs font-label-md">Acceso</span>
-                </a>
+                {{-- ===== Zona de Usuario: Dinámica por Estado de Sesión y Rol ===== --}}
+
+                @guest
+                    {{-- Invitado: Menú desplegable con opciones de acceso --}}
+                    <div class="relative" id="user-menu-guest">
+                        <button
+                            type="button"
+                            id="btn-acceso"
+                            aria-haspopup="true"
+                            aria-controls="dropdown-acceso"
+                            aria-expanded="false"
+                            class="p-2.5 rounded-xl border border-purple-200/80 bg-white hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition shadow-2xs flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-primary/40"
+                            title="Iniciar Sesión o Crear cuenta de cliente"
+                        >
+                            <span class="material-symbols-outlined text-[20px] text-secondary">person</span>
+                            <span class="hidden xl:inline text-xs font-label-md">Acceso</span>
+                            <span class="hidden xl:inline material-symbols-outlined text-[14px] text-outline" id="btn-acceso-icon">expand_more</span>
+                        </button>
+
+                        <div
+                            id="dropdown-acceso"
+                            role="menu"
+                            aria-labelledby="btn-acceso"
+                            class="hidden absolute right-0 mt-2 w-56 rounded-2xl bg-white border border-purple-200/80 shadow-lg py-2 z-50"
+                        >
+                            <div class="px-4 py-2 border-b border-purple-100">
+                                <p class="text-[11px] font-label-code text-outline uppercase tracking-wider">Clientes &amp; Coleccionistas</p>
+                            </div>
+                            <a href="{{ route('login') }}" role="menuitem" class="flex items-center gap-3 px-4 py-2.5 text-sm font-label-md text-on-surface hover:bg-surface-container-low hover:text-primary transition group">
+                                <span class="material-symbols-outlined text-[18px] text-secondary group-hover:text-primary">login</span>
+                                <span>Iniciar Sesión</span>
+                            </a>
+                            <a href="{{ route('register') }}" role="menuitem" class="flex items-center gap-3 px-4 py-2.5 text-sm font-label-md text-on-surface hover:bg-surface-container-low hover:text-primary transition group">
+                                <span class="material-symbols-outlined text-[18px] text-secondary group-hover:text-primary">person_add</span>
+                                <span>Crear Cuenta Gratis</span>
+                            </a>
+
+                            <div class="px-4 pt-2 pb-1 border-t border-purple-100 mt-1">
+                                <p class="text-[11px] font-label-code text-outline uppercase tracking-wider">Personal ARCHIVUM</p>
+                            </div>
+                            <a href="{{ route('admin.login') }}" role="menuitem" class="flex items-center gap-3 px-4 py-2.5 text-sm font-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition group">
+                                <span class="material-symbols-outlined text-[18px] text-outline group-hover:text-primary">admin_panel_settings</span>
+                                <span>Acceso Personal Interno</span>
+                            </a>
+                        </div>
+                    </div>
+                @endguest
+
+                @auth
+                    @php
+                        /** @var \App\Models\Usuario $authUser */
+                        $authUser   = auth()->user();
+                        $esPersonal = $authUser->tieneRol('administrador', 'encargado', 'ventas', 'almacen', 'compras');
+                        $esCliente  = $authUser->esCliente() && ! $esPersonal;
+                        $iniciales  = collect(explode(' ', $authUser->nombre))
+                            ->map(fn ($parte) => strtoupper(substr($parte, 0, 1)))
+                            ->take(2)
+                            ->implode('');
+                    @endphp
+
+                    {{-- Usuario autenticado: avatar + menú contextual por rol --}}
+                    <div class="relative" id="user-menu-auth">
+                        <button
+                            type="button"
+                            id="btn-usuario"
+                            aria-haspopup="true"
+                            aria-controls="dropdown-usuario"
+                            aria-expanded="false"
+                            class="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-purple-200/80 bg-white hover:bg-surface-container text-on-surface transition shadow-2xs focus:outline-none focus:ring-2 focus:ring-primary/40"
+                        >
+                            {{-- Avatar con iniciales --}}
+                            <span class="w-7 h-7 rounded-full bg-primary-container text-white text-xs font-bold flex items-center justify-center ring-1 ring-primary/30 select-none">
+                                {{ $iniciales }}
+                            </span>
+                            <span class="hidden xl:block text-xs font-label-md truncate max-w-[100px]">{{ $authUser->nombre }}</span>
+                            <span class="material-symbols-outlined text-[14px] text-outline" id="btn-usuario-icon">expand_more</span>
+                        </button>
+
+                        <div
+                            id="dropdown-usuario"
+                            role="menu"
+                            aria-labelledby="btn-usuario"
+                            class="hidden absolute right-0 mt-2 w-64 rounded-2xl bg-white border border-purple-200/80 shadow-lg py-2 z-50"
+                        >
+                            {{-- Cabecera con nombre, email y badge de rol --}}
+                            <div class="px-4 py-3 border-b border-purple-100">
+                                <p class="text-sm font-semibold text-on-surface font-quicksand truncate">{{ $authUser->nombre }}</p>
+                                <p class="text-[11px] text-outline font-label-code truncate">{{ $authUser->email }}</p>
+                                @if ($esPersonal)
+                                    <span class="inline-flex items-center gap-1 mt-1.5 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-label-code uppercase tracking-wider border border-primary/20">
+                                        <span class="material-symbols-outlined text-[11px]">admin_panel_settings</span>
+                                        Personal Interno
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center gap-1 mt-1.5 px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 text-[10px] font-label-code uppercase tracking-wider border border-purple-200">
+                                        <span class="material-symbols-outlined text-[11px]">verified_user</span>
+                                        Coleccionista
+                                    </span>
+                                @endif
+                            </div>
+
+                            {{-- Opciones exclusivas para Clientes --}}
+                            @if ($esCliente)
+                                <a href="{{ route('cliente.dashboard') }}" role="menuitem" class="flex items-center gap-3 px-4 py-2.5 text-sm font-label-md text-on-surface hover:bg-surface-container-low hover:text-primary transition group">
+                                    <span class="material-symbols-outlined text-[18px] text-secondary group-hover:text-primary">manage_accounts</span>
+                                    <span>Mi Cuenta</span>
+                                </a>
+                                <a href="{{ route('cliente.pedidos') }}" role="menuitem" class="flex items-center gap-3 px-4 py-2.5 text-sm font-label-md text-on-surface hover:bg-surface-container-low hover:text-primary transition group">
+                                    <span class="material-symbols-outlined text-[18px] text-secondary group-hover:text-primary">package_2</span>
+                                    <span>Mis Pedidos</span>
+                                </a>
+                                <a href="{{ route('profile.edit') }}" role="menuitem" class="flex items-center gap-3 px-4 py-2.5 text-sm font-label-md text-on-surface hover:bg-surface-container-low hover:text-primary transition group">
+                                    <span class="material-symbols-outlined text-[18px] text-secondary group-hover:text-primary">edit</span>
+                                    <span>Editar Perfil</span>
+                                </a>
+                            @endif
+
+                            {{-- Opciones exclusivas para Personal / Staff --}}
+                            @if ($esPersonal)
+                                <a href="{{ route('admin.dashboard') }}" role="menuitem" class="flex items-center gap-3 px-4 py-2.5 text-sm font-label-md text-on-surface hover:bg-surface-container-low hover:text-primary transition group">
+                                    <span class="material-symbols-outlined text-[18px] text-secondary group-hover:text-primary">dashboard</span>
+                                    <span>Panel de Administración</span>
+                                </a>
+                                <a href="{{ url('/') }}" role="menuitem" class="flex items-center gap-3 px-4 py-2.5 text-sm font-label-md text-on-surface hover:bg-surface-container-low hover:text-primary transition group">
+                                    <span class="material-symbols-outlined text-[18px] text-secondary group-hover:text-primary">storefront</span>
+                                    <span>Ver Tienda Pública</span>
+                                </a>
+                                <a href="{{ route('profile.edit') }}" role="menuitem" class="flex items-center gap-3 px-4 py-2.5 text-sm font-label-md text-on-surface hover:bg-surface-container-low hover:text-primary transition group">
+                                    <span class="material-symbols-outlined text-[18px] text-secondary group-hover:text-primary">settings</span>
+                                    <span>Mi Perfil</span>
+                                </a>
+                            @endif
+
+                            {{-- Cerrar Sesión --}}
+                            <div class="border-t border-purple-100 mt-1 pt-1">
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit" role="menuitem" class="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-label-md text-error hover:bg-rose-50 transition group text-left">
+                                        <span class="material-symbols-outlined text-[18px] group-hover:text-error">logout</span>
+                                        <span>Cerrar Sesión</span>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                @endauth
 
                 <!-- Disparador del Carrito Desplegable con Contador de Reserva -->
                 <button type="button" id="open-cart-btn" class="relative p-2.5 rounded-xl bg-primary-container hover:bg-primary text-white border border-purple-400/40 shadow-sm flex items-center justify-center transition focus:outline-none" aria-label="Abrir Carrito de Adquisiciones">
@@ -102,3 +243,52 @@
         </nav>
     </div>
 </header>
+
+{{-- Script de menús desplegables sin dependencias externas --}}
+<script>
+(function () {
+    'use strict';
+
+    function initDropdown(btnId, dropdownId, iconId) {
+        const btn      = document.getElementById(btnId);
+        const dropdown = document.getElementById(dropdownId);
+        const icon     = document.getElementById(iconId);
+
+        if (!btn || !dropdown) { return; }
+
+        function open() {
+            dropdown.classList.remove('hidden');
+            btn.setAttribute('aria-expanded', 'true');
+            if (icon) { icon.textContent = 'expand_less'; }
+        }
+
+        function close() {
+            dropdown.classList.add('hidden');
+            btn.setAttribute('aria-expanded', 'false');
+            if (icon) { icon.textContent = 'expand_more'; }
+        }
+
+        btn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            dropdown.classList.contains('hidden') ? open() : close();
+        });
+
+        // Cerrar al presionar Escape
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') { close(); }
+        });
+
+        // Cerrar al hacer clic fuera
+        document.addEventListener('click', function (e) {
+            if (!btn.contains(e.target) && !dropdown.contains(e.target)) {
+                close();
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        initDropdown('btn-acceso',  'dropdown-acceso',  'btn-acceso-icon');
+        initDropdown('btn-usuario', 'dropdown-usuario', 'btn-usuario-icon');
+    });
+}());
+</script>

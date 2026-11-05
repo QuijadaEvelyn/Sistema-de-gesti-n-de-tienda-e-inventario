@@ -91,8 +91,11 @@ class Usuario extends Authenticatable
         $aliasMap = [
             'admin' => ['admin', 'administrador'],
             'administrador' => ['admin', 'administrador'],
-            'encargado' => ['encargado', 'supervisor', 'almacenista', 'gerente'],
-            'almacenista' => ['almacenista', 'encargado'],
+            'ventas' => ['ventas', 'vendedor'],
+            'almacen' => ['almacen', 'almacenista', 'encargado', 'bodega'],
+            'almacenista' => ['almacenista', 'almacen', 'encargado'],
+            'compras' => ['compras', 'comprador', 'adquisiciones'],
+            'encargado' => ['encargado', 'supervisor', 'almacenista', 'almacen', 'gerente'],
             'cliente' => ['cliente', 'comprador', 'consumidor'],
         ];
 
@@ -158,7 +161,31 @@ class Usuario extends Authenticatable
      */
     public function esEncargado(): bool
     {
-        return $this->tieneRol('encargado', 'supervisor', 'almacenista');
+        return $this->tieneRol('encargado', 'supervisor', 'almacenista', 'almacen');
+    }
+
+    /**
+     * Comprueba si el usuario tiene rol de Ventas.
+     */
+    public function esVentas(): bool
+    {
+        return $this->tieneRol('ventas');
+    }
+
+    /**
+     * Comprueba si el usuario tiene rol de Almacén.
+     */
+    public function esAlmacen(): bool
+    {
+        return $this->tieneRol('almacen', 'almacenista');
+    }
+
+    /**
+     * Comprueba si el usuario tiene rol de Compras.
+     */
+    public function esCompras(): bool
+    {
+        return $this->tieneRol('compras');
     }
 
     /**

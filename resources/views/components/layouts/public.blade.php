@@ -28,6 +28,27 @@
 
     <!-- Contenedor Principal Dinámico -->
     <main class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        @if (session('warning'))
+            <div class="mb-6 flex items-center gap-3 p-4 bg-amber-500/10 border border-amber-500/30 text-amber-900 rounded-xl shadow-xs" role="alert">
+                <span class="material-symbols-outlined text-amber-600 text-xl">warning</span>
+                <p class="text-sm font-medium">{{ session('warning') }}</p>
+            </div>
+        @endif
+
+        @if (session('status'))
+            <div class="mb-6 flex items-center gap-3 p-4 bg-emerald-500/10 border border-emerald-500/30 text-emerald-900 rounded-xl shadow-xs" role="alert">
+                <span class="material-symbols-outlined text-emerald-600 text-xl">check_circle</span>
+                <p class="text-sm font-medium">{{ session('status') }}</p>
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="mb-6 flex items-center gap-3 p-4 bg-rose-500/10 border border-rose-500/30 text-rose-900 rounded-xl shadow-xs" role="alert">
+                <span class="material-symbols-outlined text-rose-600 text-xl">error</span>
+                <p class="text-sm font-medium">{{ session('error') }}</p>
+            </div>
+        @endif
+
         {{ $slot ?? '' }}
         @yield('content')
     </main>
