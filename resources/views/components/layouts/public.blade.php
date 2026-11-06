@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="light">
 <head>
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -58,6 +62,11 @@
 
     <!-- Cajón Desplegable de Carrito y Reserva Temporal -->
     <x-public.cart-drawer />
+
+    <!-- Cajón Lateral Desplegable de Inicio de Sesión y Registro (50% Ancho) -->
+    @guest
+        <x-public.login-drawer />
+    @endguest
 
     <!-- Scripts Esenciales de Interacción Pública (Cart Drawer & Modo Claro/Oscuro) -->
     <script>

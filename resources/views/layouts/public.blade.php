@@ -38,6 +38,11 @@
     <!-- Cajón Desplegable de Carrito y Reserva Temporal -->
     <x-public.cart-drawer />
 
+    <!-- Cajón Lateral Desplegable de Inicio de Sesión y Registro (50% Ancho) -->
+    @guest
+        <x-public.login-drawer />
+    @endguest
+
     <!-- Scripts Esenciales de Interacción Pública (Cart Drawer & Modo Claro/Oscuro) -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {

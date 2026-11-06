@@ -21,30 +21,58 @@
     @stack('styles')
 </head>
 <body class="bg-background text-on-surface antialiased font-quicksand selection:bg-primary-container selection:text-white">
-    
+
     <!-- Sidebar de Navegación Fija (280px / w-72) -->
     <x-admin.sidebar :active-route="$activeRoute ?? 'dashboard'" />
 
     <!-- Área de Trabajo Principal Desplazada (pl-72) -->
     <div class="pl-72 min-h-screen flex flex-col">
-        
+
         <!-- Barra Superior Administrativa Fija (left-72) -->
-        <x-admin.header :user-name="$userName ?? 'Mateo Vargas'" :user-role="$userRole ?? 'Curador en Jefe'" />
+        <x-admin.header :user-name="$userName ?? null" :user-role="$userRole ?? null" />
 
         <!-- Lienzo de Contenido Operativo -->
         <main class="w-full pt-20 px-space-lg py-space-lg bg-background flex-1">
+            @if (session('status'))
+                <div class="mb-6 flex items-center gap-3 p-4 bg-emerald-500/10 border border-emerald-500/30 text-emerald-900 rounded-xl shadow-xs" role="alert">
+                    <span class="material-symbols-outlined text-emerald-600 text-xl">check_circle</span>
+                    <p class="text-sm font-medium">{{ session('status') }}</p>
+                </div>
+            @endif
+
+            @if (session('warning'))
+                <div class="mb-6 flex items-center gap-3 p-4 bg-amber-500/10 border border-amber-500/30 text-amber-900 rounded-xl shadow-xs" role="alert">
+                    <span class="material-symbols-outlined text-amber-600 text-xl">warning</span>
+                    <p class="text-sm font-medium">{{ session('warning') }}</p>
+                </div>
+            @endif
+
+            @if ($errors->any())
+                <div class="mb-6 p-4 bg-rose-500/10 border border-rose-500/30 text-rose-900 rounded-xl shadow-xs space-y-1" role="alert">
+                    @foreach ($errors->all() as $error)
+                        <p class="text-sm font-medium">{{ $error }}</p>
+                    @endforeach
+                </div>
+            @endif
+
             {{ $slot ?? '' }}
             @yield('content')
         </main>
-        
+
         <!-- Micro-Pie de Página Administrativo -->
         <footer class="px-space-lg py-4 border-t border-purple-200/50 bg-surface-container-lowest/70 text-xs font-label-code text-on-surface-variant flex items-center justify-between">
             <div class="flex items-center gap-2">
                 <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
                 <span>Base de Datos de Colecciones: Sincronizada con Almacén Central</span>
             </div>
-            <div>
-                Archivum Admin Suite v4.8.2-PROD · Protocolo de Seguridad Notarial Activo
+            <div class="flex items-center gap-4">
+                <a href="{{ route('admin.terminal') }}" class="hover:text-primary font-semibold transition">
+                    TERMINAL ARCHIVO v4.8.2-PROD
+                </a>
+                <span>&middot;</span>
+                <a href="{{ route('public.home') }}" class="hover:text-primary transition">
+                    Ver Tienda Pública
+                </a>
             </div>
         </footer>
 

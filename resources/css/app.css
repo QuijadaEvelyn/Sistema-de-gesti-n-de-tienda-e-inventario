@@ -84,6 +84,7 @@
         font-weight: 700;
         letter-spacing: -0.02em;
     }
+
     .font-headline-lg {
         font-family: var(--font-quicksand);
         font-size: 2rem;
@@ -91,18 +92,21 @@
         font-weight: 700;
         letter-spacing: -0.01em;
     }
+
     .font-headline-md {
         font-family: var(--font-quicksand);
         font-size: 1.5rem;
         line-height: 2rem;
         font-weight: 600;
     }
+
     .font-headline-sm {
         font-family: var(--font-quicksand);
         font-size: 1.25rem;
         line-height: 1.75rem;
         font-weight: 600;
     }
+
     .font-title-editorial {
         font-family: var(--font-newsreader);
         font-size: 1.125rem;
@@ -110,6 +114,7 @@
         font-style: italic;
         font-weight: 500;
     }
+
     .font-label-lg {
         font-family: var(--font-barlow);
         font-size: 0.875rem;
@@ -118,6 +123,7 @@
         letter-spacing: 0.08em;
         text-transform: uppercase;
     }
+
     .font-label-md {
         font-family: var(--font-barlow);
         font-size: 0.75rem;
@@ -126,6 +132,7 @@
         letter-spacing: 0.10em;
         text-transform: uppercase;
     }
+
     .font-label-sm {
         font-family: var(--font-barlow);
         font-size: 0.625rem;
@@ -134,6 +141,7 @@
         letter-spacing: 0.12em;
         text-transform: uppercase;
     }
+
     .font-label-code {
         font-family: var(--font-roboto);
         font-size: 0.6875rem;
@@ -141,6 +149,7 @@
         font-weight: 600;
         letter-spacing: 0.06em;
     }
+
     .font-tabular-data {
         font-family: var(--font-roboto);
         font-size: 0.8125rem;
@@ -166,7 +175,81 @@
 .no-scrollbar::-webkit-scrollbar {
     display: none;
 }
+
 .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
+}
+
+@layer base {
+
+    /* Aplicar variables de fondo y color tanto al html como al body */
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: var(--color-background);
+        color: var(--color-on-surface);
+        font-family: var(--font-quicksand);
+        -webkit-font-smoothing: antialiased;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        min-height: 100vh;
+    }
+
+    /* Redefinición de variables cuando la clase .dark está activa */
+    .dark {
+        --color-background: #120d18;
+        --color-surface: #1a1324;
+        --color-surface-container: #231932;
+        --color-surface-container-high: #2d213f;
+        --color-on-surface: #f3edfc;
+        --color-on-surface-variant: #d0c4e8;
+        --color-outline: #9a8bbd;
+    }
+}
+
+/* Ocultar barra de desplazamiento manteniendo funcionalidad */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.product3DCarousel {
+    width: 100%;
+    padding-top: 20px;
+    padding-bottom: 50px;
+}
+
+.product3DCarousel .swiper-slide {
+    background-position: center;
+    background-size: cover;
+    width: 300px;
+    height: auto;
+}
+
+/* Ocultar barra de desplazamiento manteniendo funcionalidad */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.product3DCarousel {
+    width: 100%;
+    padding-top: 20px;
+    padding-bottom: 50px;
+}
+
+.product3DCarousel .swiper-slide {
+    background-position: center;
+    background-size: cover;
+    width: 300px;
+    height: auto;
 }

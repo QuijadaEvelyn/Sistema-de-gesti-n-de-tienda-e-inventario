@@ -59,6 +59,10 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('gestionar-almacen', fn (Usuario $user): bool => $user->esAlmacen());
         Gate::define('gestionar-compras', fn (Usuario $user): bool => $user->esCompras());
 
+        // Gates de navegación del panel administrativo (sidebar)
+        Gate::define('ver-dashboard-general', fn (Usuario $user): bool => $user->esAdmin());
+        Gate::define('ver-inventario', fn (Usuario $user): bool => $user->esAlmacen() || $user->esCompras());
+
         // Aislamiento de Datos de Cliente (Seguridad y Privacidad Estricta)
         Gate::define('ver-pedido-propio', function (Usuario $user, Pedido $pedido): bool {
             return $user->cliente !== null && (int) $pedido->cliente_id === (int) $user->cliente->id;

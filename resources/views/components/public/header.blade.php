@@ -1,7 +1,12 @@
 @props([
     'activeBranch' => 'Sucursal Central Bellas Artes',
-    'cartCount'    => 3
+    'cartCount'    => null
 ])
+
+@php
+    $estadoCarritoHeader = \App\Http\Controllers\CheckoutSimuladoController::obtenerEstadoCarrito();
+    $contadorCarrito = $estadoCarritoHeader['cantidad_total'] ?: ($cartCount ?? 0);
+@endphp
 
 <header class="sticky top-0 z-40 border-b border-purple-200/80 bg-white/95 backdrop-blur-md shadow-xs text-on-surface" data-purpose="global-header">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -11,8 +16,8 @@
             <!-- Logotipo y Monograma de Archivo -->
             <a href="{{ route('public.home') }}" class="flex items-center gap-3 shrink-0 group focus:outline-none" aria-label="Ir al inicio de Archivum">
                 <div class="w-11 h-11 rounded-xl bg-primary-container flex items-center justify-center text-white border border-purple-300/40 shadow-sm transition-transform group-hover:scale-105">
-                    <!-- Isotipo Geométrico de Bóveda / Vault -->
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+                    <!-- Isotipo Geométrico con Salto y Giro Continuo -->
+                    <svg class="w-6 h-6 animate-bounce" style="animation-duration: 2s; animation: bounce 2s infinite, spin 8s linear infinite;" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
                         <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
                         <polyline points="2 17 12 22 22 17"></polyline>
                         <polyline points="2 12 12 17 22 12"></polyline>
@@ -26,10 +31,11 @@
 
             <!-- Barra de Búsqueda Global Omnicanal -->
             <div class="flex-1 max-w-2xl hidden md:block">
-                <form action="#" method="GET" class="relative w-full">
+                <form action="{{ route('public.home') }}" method="GET" class="relative w-full">
                     <input
                         type="search"
                         name="q"
+                        value="{{ request('q') }}"
                         placeholder="Buscar libros raros, vinilos 180g, primeras ediciones, memorabilia o SKU..."
                         class="w-full bg-surface-container-low/70 border border-purple-200/80 text-sm rounded-xl pl-11 pr-4 py-2.5 text-on-surface placeholder:text-outline focus:border-primary focus:bg-white focus:ring-1 focus:ring-primary focus:outline-none transition shadow-2xs"
                     />
@@ -56,48 +62,18 @@
                 {{-- ===== Zona de Usuario: Dinámica por Estado de Sesión y Rol ===== --}}
 
                 @guest
-                    {{-- Invitado: Menú desplegable con opciones de acceso --}}
-                    <div class="relative" id="user-menu-guest">
-                        <button
-                            type="button"
-                            id="btn-acceso"
-                            aria-haspopup="true"
-                            aria-controls="dropdown-acceso"
-                            aria-expanded="false"
-                            class="p-2.5 rounded-xl border border-purple-200/80 bg-white hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition shadow-2xs flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-primary/40"
-                            title="Iniciar Sesión o Crear cuenta de cliente"
+                    {{-- Invitado: Botón "Iniciar Sesión / Registro" que abre el Slide-Over Lateral de Login al 50% --}}
+                    <div class="flex items-center gap-2" id="user-menu-guest">
+                        <a
+                            href="{{ route('login') }}"
+                            id="open-login-drawer-btn"
+                            data-open-login-drawer="login"
+                            class="p-2.5 px-3.5 rounded-xl border border-purple-200/80 bg-white hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition shadow-2xs flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-primary/40"
+                            title="Iniciar Sesión o Registrarse en ARCHIVUM"
                         >
                             <span class="material-symbols-outlined text-[20px] text-secondary">person</span>
-                            <span class="hidden xl:inline text-xs font-label-md">Acceso</span>
-                            <span class="hidden xl:inline material-symbols-outlined text-[14px] text-outline" id="btn-acceso-icon">expand_more</span>
-                        </button>
-
-                        <div
-                            id="dropdown-acceso"
-                            role="menu"
-                            aria-labelledby="btn-acceso"
-                            class="hidden absolute right-0 mt-2 w-56 rounded-2xl bg-white border border-purple-200/80 shadow-lg py-2 z-50"
-                        >
-                            <div class="px-4 py-2 border-b border-purple-100">
-                                <p class="text-[11px] font-label-code text-outline uppercase tracking-wider">Clientes &amp; Coleccionistas</p>
-                            </div>
-                            <a href="{{ route('login') }}" role="menuitem" class="flex items-center gap-3 px-4 py-2.5 text-sm font-label-md text-on-surface hover:bg-surface-container-low hover:text-primary transition group">
-                                <span class="material-symbols-outlined text-[18px] text-secondary group-hover:text-primary">login</span>
-                                <span>Iniciar Sesión</span>
-                            </a>
-                            <a href="{{ route('register') }}" role="menuitem" class="flex items-center gap-3 px-4 py-2.5 text-sm font-label-md text-on-surface hover:bg-surface-container-low hover:text-primary transition group">
-                                <span class="material-symbols-outlined text-[18px] text-secondary group-hover:text-primary">person_add</span>
-                                <span>Crear Cuenta Gratis</span>
-                            </a>
-
-                            <div class="px-4 pt-2 pb-1 border-t border-purple-100 mt-1">
-                                <p class="text-[11px] font-label-code text-outline uppercase tracking-wider">Personal ARCHIVUM</p>
-                            </div>
-                            <a href="{{ route('admin.login') }}" role="menuitem" class="flex items-center gap-3 px-4 py-2.5 text-sm font-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition group">
-                                <span class="material-symbols-outlined text-[18px] text-outline group-hover:text-primary">admin_panel_settings</span>
-                                <span>Acceso Personal Interno</span>
-                            </a>
-                        </div>
+                            <span class="hidden xl:inline text-xs font-label-md font-semibold">Iniciar Sesión / Registro</span>
+                        </a>
                     </div>
                 @endguest
 
@@ -204,41 +180,49 @@
                 <button type="button" id="open-cart-btn" class="relative p-2.5 rounded-xl bg-primary-container hover:bg-primary text-white border border-purple-400/40 shadow-sm flex items-center justify-center transition focus:outline-none" aria-label="Abrir Carrito de Adquisiciones">
                     <span class="material-symbols-outlined text-[20px]">shopping_bag</span>
                     <span id="cart-counter-badge" class="absolute -top-1.5 -right-1.5 w-5 h-5 bg-surface-container-high text-on-surface font-tabular-data font-bold text-xs rounded-full flex items-center justify-center shadow-xs border border-primary/40">
-                        {{ $cartCount }}
+                        {{ $contadorCarrito }}
                     </span>
                 </button>
             </div>
         </div>
 
-        <!-- Barra de Navegación por Categorías Temáticas -->
+        <!-- Barra de Navegación por Categorías Temáticas Independientes -->
         <nav aria-label="Categorías principales" class="flex items-center justify-between border-t border-purple-200/60 py-2.5 text-xs font-label-md uppercase tracking-wider overflow-x-auto whitespace-nowrap no-scrollbar">
             <div class="flex items-center gap-6">
-                <a href="{{ url('/') }}" class="text-primary font-bold pb-0.5 border-b-2 border-primary transition flex items-center gap-1">
+                <a href="{{ route('public.home') }}"
+                   class="pb-0.5 border-b-2 transition flex items-center gap-1 {{ request()->routeIs('public.home') ? 'text-primary font-bold border-primary' : 'text-on-surface-variant hover:text-primary border-transparent hover:border-primary' }}">
                     <span>Inicio</span>
                 </a>
-                <a href="#libros" class="text-on-surface-variant hover:text-primary transition pb-0.5 border-b-2 border-transparent hover:border-primary flex items-center gap-1">
+                <a href="{{ route('public.libros') }}"
+                   class="pb-0.5 border-b-2 transition flex items-center gap-1 {{ request()->routeIs('public.libros') ? 'text-primary font-bold border-primary' : 'text-on-surface-variant hover:text-primary border-transparent hover:border-primary' }}">
+                    <span class="material-symbols-outlined text-[15px]">auto_stories</span>
                     <span>Libros Raros &amp; Incunables</span>
-                    <span class="material-symbols-outlined text-[14px]">expand_more</span>
                 </a>
-                <a href="#vinilos" class="text-on-surface-variant hover:text-primary transition pb-0.5 border-b-2 border-transparent hover:border-primary flex items-center gap-1">
+                <a href="{{ route('public.vinilos') }}"
+                   class="pb-0.5 border-b-2 transition flex items-center gap-1 {{ request()->routeIs('public.vinilos') ? 'text-primary font-bold border-primary' : 'text-on-surface-variant hover:text-primary border-transparent hover:border-primary' }}">
+                    <span class="material-symbols-outlined text-[15px]">album</span>
                     <span>Discos &amp; Vinilos Históricos</span>
-                    <span class="material-symbols-outlined text-[14px]">expand_more</span>
                 </a>
-                <a href="#memorabilia" class="text-on-surface-variant hover:text-primary transition pb-0.5 border-b-2 border-transparent hover:border-primary flex items-center gap-1">
+                <a href="{{ route('public.memorabilia') }}"
+                   class="pb-0.5 border-b-2 transition flex items-center gap-1 {{ request()->routeIs('public.memorabilia') ? 'text-primary font-bold border-primary' : 'text-on-surface-variant hover:text-primary border-transparent hover:border-primary' }}">
+                    <span class="material-symbols-outlined text-[15px]">history_edu</span>
                     <span>Memorabilia &amp; Archivo</span>
-                    <span class="material-symbols-outlined text-[14px]">expand_more</span>
                 </a>
-                <a href="#adquisiciones" class="text-primary hover:text-primary-hover transition font-bold flex items-center gap-1">
+                <a href="{{ route('public.adquisiciones') }}"
+                   class="pb-0.5 border-b-2 transition flex items-center gap-1 {{ request()->routeIs('public.adquisiciones') ? 'text-primary font-bold border-primary' : 'text-primary hover:text-primary-hover font-bold border-transparent hover:border-primary' }}">
                     <span class="material-symbols-outlined text-[15px]">auto_awesome</span>
                     <span>Adquisiciones Selectas</span>
                 </a>
             </div>
             <div class="hidden sm:flex items-center gap-4 text-xs font-normal normal-case text-on-surface-variant">
+                <a href="{{ route('checkout.index') }}" class="flex items-center gap-1 text-primary hover:underline font-semibold">
+                    <span class="material-symbols-outlined text-[15px]">shopping_cart_checkout</span>
+                    <span>Checkout ({{ $contadorCarrito }})</span>
+                </a>
                 <span class="flex items-center gap-1 text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 text-[11px] font-label-code">
                     <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                     Bóveda Abierta
                 </span>
-                <a href="#acerca-de" class="hover:text-primary transition">Salón de Curaduría</a>
             </div>
         </nav>
     </div>
