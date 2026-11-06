@@ -79,13 +79,13 @@ class CatalogoPublicoController extends Controller
     }
 
     /**
-     * Sección: Discos & Vinilos Históricos (filtra exclusivamente discos/vinilos).
+     * Sección: Discos & Vinilos Históricos (filtra exclusivamente discos/vinilos y renderiza el 3D Disc Showcase).
      */
     public function vinilos(Request $request): View
     {
         $productos = $this->consultarProductos($request, 'vinilos');
 
-        return view('public.categoria', [
+        return view('public.vinilos', [
             'categoriaSlug' => 'vinilos',
             'meta' => self::CATEGORIAS['vinilos'],
             'productos' => $productos,

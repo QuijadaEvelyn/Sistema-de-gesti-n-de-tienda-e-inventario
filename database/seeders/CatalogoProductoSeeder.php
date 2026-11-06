@@ -241,6 +241,22 @@ class CatalogoProductoSeeder extends Seeder
                 'serie_unica' => 'ARC-VIN-1969-004',
                 'certificado' => 'COA-AUD-2026-112',
             ],
+            [
+                'sku' => 'CD-1983-CP35',
+                'nombre' => 'The Dark Side of the Moon (1st Japan Black Triangle CD)',
+                'descripcion' => 'Primera edición mundial en Disco Compacto (1983) prensada por Toshiba-EMI en Japón (CP35-3017). Superficie plateada refractiva con triángulo negro.',
+                'precio' => 14800.00,
+                'graduacion' => 'MINT (M) · CD COMPACT DISC · ADQUISICIÓN SELECTA',
+                'artista' => 'Pink Floyd',
+                'sello' => 'Harvest / Toshiba-EMI CP35-3017',
+                'genero' => 'Rock Progresivo',
+                'formato' => 'CD',
+                'anio_lanzamiento' => 1983,
+                'stock_central' => 2,
+                'stock_coyoacan' => 1,
+                'serie_unica' => 'ARC-CD-1983-005',
+                'certificado' => 'COA-AUD-2026-118',
+            ],
         ];
 
         foreach ($vinilos as $item) {

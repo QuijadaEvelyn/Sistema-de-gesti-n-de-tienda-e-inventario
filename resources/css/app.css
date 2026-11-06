@@ -161,6 +161,7 @@
 }
 
 @layer base {
+
     /* Aplicar variables de fondo y color tanto al html como al body */
     html,
     body {
@@ -182,9 +183,9 @@
         --color-surface-container-low: #21182e;
         --color-surface-container: #231932;
         --color-surface-container-high: #2d213f;
-        --color-on-surface: #e9ddff;
-        --color-on-surface-variant: #c8b8e8;
-        --color-outline: #9a8bbd;
+        --color-on-surface: #463861;
+        --color-on-surface-variant: #967bcb;
+        --color-outline: #44395e;
     }
 }
 
@@ -227,7 +228,7 @@
     transition: transform 0.35s ease, box-shadow 0.35s ease;
 }
 
-.product3DCarousel .swiper-slide > * {
+.product3DCarousel .swiper-slide>* {
     width: 100%;
 }
 
@@ -290,4 +291,129 @@
 .product3DCarousel .swiper-button-next::after {
     font-size: 16px;
     font-weight: 700;
+}
+
+/* ==========================================================================
+   DISCOS & VINILOS 3D INTERACTIVE SHOWCASE (Spin, Tilt 3D, Flip & Grooves)
+   ========================================================================== */
+@keyframes archivumDiscSpin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.disc-showcase-stage {
+    perspective: 1500px;
+    transform-style: preserve-3d;
+}
+
+.disc-3d-slot {
+    transform-style: preserve-3d;
+    transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.55s ease, filter 0.55s ease;
+    will-change: transform, opacity;
+}
+
+.disc-3d-tilt {
+    transform-style: preserve-3d;
+    transition: transform 0.18s ease-out;
+    will-change: transform;
+}
+
+.disc-3d-flipper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.disc-3d-flipper.is-flipped {
+    transform: rotateY(180deg);
+}
+
+.disc-face {
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    overflow: hidden;
+}
+
+.disc-face-back {
+    transform: rotateY(180deg);
+}
+
+.disc-spin-rotor {
+    width: 100%;
+    height: 100%;
+    border-radius: 9999px;
+    animation: archivumDiscSpin 9s linear infinite;
+    will-change: transform;
+}
+
+.disc-spin-rotor.is-paused {
+    animation-play-state: paused;
+}
+
+/* Textura Fiel de Vinilo Analógico 180g: Surcos Concéntricos + Brillo Plástico Anisotrópico */
+.vinyl-surface {
+    background-color: #0b0910;
+    background-image:
+        conic-gradient(
+            from 25deg at 50% 50%,
+            rgba(255, 255, 255, 0) 0deg,
+            rgba(255, 255, 255, 0.14) 28deg,
+            rgba(168, 85, 247, 0.08) 44deg,
+            rgba(255, 255, 255, 0) 75deg,
+            rgba(255, 255, 255, 0) 180deg,
+            rgba(255, 255, 255, 0.15) 208deg,
+            rgba(217, 119, 6, 0.06) 224deg,
+            rgba(255, 255, 255, 0) 255deg,
+            rgba(255, 255, 255, 0) 360deg
+        ),
+        repeating-radial-gradient(
+            circle at 50% 50%,
+            #0c0a12 0px,
+            #0c0a12 2px,
+            #1a1625 2.5px,
+            #09070d 4px
+        );
+    box-shadow:
+        0 28px 60px -12px rgba(0, 0, 0, 0.78),
+        inset 0 0 0 3px rgba(255, 255, 255, 0.09),
+        inset 0 0 22px rgba(0, 0, 0, 0.9);
+}
+
+/* Textura Fiel de CD / Disco Compacto: Acabado Plateado / Refractivo Iridiscente */
+.cd-surface {
+    background-color: #d4d8e2;
+    background-image:
+        conic-gradient(
+            from 0deg at 50% 50%,
+            rgba(226, 232, 240, 0.9) 0deg,
+            rgba(165, 243, 252, 0.75) 35deg,
+            rgba(232, 121, 249, 0.68) 65deg,
+            rgba(241, 245, 249, 0.95) 110deg,
+            rgba(196, 181, 253, 0.75) 155deg,
+            rgba(226, 232, 240, 0.92) 190deg,
+            rgba(110, 231, 183, 0.65) 225deg,
+            rgba(253, 224, 71, 0.55) 255deg,
+            rgba(248, 250, 252, 0.95) 305deg,
+            rgba(226, 232, 240, 0.9) 360deg
+        ),
+        repeating-radial-gradient(
+            circle at 50% 50%,
+            rgba(255, 255, 255, 0.25) 0px,
+            rgba(255, 255, 255, 0.25) 1.5px,
+            rgba(148, 163, 184, 0.35) 2.5px,
+            rgba(255, 255, 255, 0.15) 3.5px
+        );
+    box-shadow:
+        0 28px 60px -12px rgba(0, 0, 0, 0.75),
+        inset 0 0 0 3px rgba(255, 255, 255, 0.7),
+        inset 0 0 18px rgba(15, 23, 42, 0.25);
 }

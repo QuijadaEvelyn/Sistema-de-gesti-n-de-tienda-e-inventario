@@ -379,4 +379,21 @@ class CatalogoCheckoutRastreoTest extends TestCase
         $response->assertSee('Kind of Blue');
         $response->assertSee('Carta Manuscrita Bellas Artes');
     }
+
+    public function test_vista_vinilos_renderiza_showcase_3d_interactivo_con_controles_y_reserva(): void
+    {
+        $response = $this->get(route('public.vinilos'));
+
+        $response->assertStatus(200);
+        $response->assertSee('disc-showcase-stage', false);
+        $response->assertSee('vinyl-surface', false);
+        $response->assertSee('cd-surface', false);
+        $response->assertSee('disc-spin-rotor', false);
+        $response->assertSee('disc-flip-btn', false);
+        $response->assertSee('disc-play-pause-btn', false);
+        $response->assertSee('disc-replay-btn', false);
+        $response->assertSee('showcase-reserve-form', false);
+        $response->assertSee('Kind of Blue (Mono 1st Press 6-Eye)');
+        $response->assertSee('The Dark Side of the Moon (1st Japan Black Triangle CD)');
+    }
 }
