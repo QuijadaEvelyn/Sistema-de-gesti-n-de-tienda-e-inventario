@@ -198,4 +198,80 @@ class CatalogoCheckoutRastreoTest extends TestCase
             ->assertSee('Entregado en Sede / Domicilio')
             ->assertSee($envio->numero_guia);
     }
+
+    public function test_tarjeta_de_producto_con_stock_cero_muestra_etiqueta_roja_agotado_y_deshabilita_boton_reservar(): void
+    {
+        $productoAgotado = Producto::with('variantesSku.existencias')
+            ->where('nombre', 'Fotografía en Plata sobre Gelatina Firmada (1934)')
+            ->firstOrFail();
+
+        $this->assertSame(0, (int) $productoAgotado->variantesSku->firstOrFail()->existencias->sum('cantidad'));
+
+        $response = $this->get(route('public.memorabilia'));
+        $response->assertStatus(200);
+        $response->assertSee('Fotografía en Plata sobre Gelatina Firmada (1934)');
+        $response->assertSee('AGOTADO');
+        $response->assertDontSee('0 en bóveda');
+        $response->assertSee('bg-red-600', false);
+        $response->assertSee('cursor-not-allowed', false);
+    }
+
+    public function test_backend_bloquea_agregar_al_carrito_o_comprar_articulo_con_stock_cero(): void
+    {
+        $cliente = Usuario::whereHas('roles', fn ($q) => $q->where('nombre', 'cliente'))->firstOrFail();
+        $productoAgotado = Producto::with('variantesSku')
+            ->where('nombre', 'Fotografía en Plata sobre Gelatina Firmada (1934)')
+            ->firstOrFail();
+        $varianteAgotada = $productoAgotado->variantesSku->firstOrFail();
+
+        // 1. Intento de agregar al carrito vía petición manipulada (Web)
+        $responseAgregar = $this->actingAs($cliente)
+            ->from(route('public.memorabilia'))
+            ->post(route('carrito.agregar'), [
+                'variante_sku_id' => $varianteAgotada->id,
+                'cantidad' => 1,
+            ]);
+
+        $responseAgregar->assertRedirect(route('public.memorabilia'));
+        $responseAgregar->assertSessionHasErrors('stock');
+        $this->assertStringContainsString(
+            'no se encuentra disponible en bóveda',
+            (string) session('error')
+        );
+        $this->assertEmpty(session('carrito_archivum', []));
+
+        // 2. Intento de agregar al carrito vía petición JSON / AJAX
+        $this->actingAs($cliente)
+            ->postJson(route('carrito.agregar'), [
+                'variante_sku_id' => $varianteAgotada->id,
+                'cantidad' => 1,
+            ])
+            ->assertStatus(422)
+            ->assertJsonFragment(['status' => 'error']);
+
+        // 3. Intento de forzar el pago en checkout si el artículo se agotó mientras estaba en sesión
+        $pedidosAntes = Pedido::count();
+
+        $responseCheckoutForzado = $this->actingAs($cliente)
+            ->withSession(['carrito_archivum' => [$varianteAgotada->id => 1]])
+            ->from(route('checkout.index'))
+            ->post(route('checkout.pagar'), [
+                'nombre_completo' => 'Cliente Archivo',
+                'email' => $cliente->email,
+                'telefono' => '5559876543',
+                'calle' => 'Av. Universidad 3000',
+                'colonia' => 'Coyoacán',
+                'ciudad' => 'Ciudad de México',
+                'estado' => 'CDMX',
+                'codigo_postal' => '04510',
+                'nombre_titular' => 'Cliente Archivo',
+                'numero_tarjeta' => '4111222233334444',
+                'expiracion' => '08/28',
+                'cvv' => '123',
+            ]);
+
+        $responseCheckoutForzado->assertRedirect(route('checkout.index'));
+        $responseCheckoutForzado->assertSessionHasErrors('stock');
+        $this->assertSame($pedidosAntes, Pedido::count());
+    }
 }

@@ -306,8 +306,8 @@ class CatalogoProductoSeeder extends Seeder
                 'serie' => 'Vanguardia Documental S. XX',
                 'material' => 'Plata sobre Gelatina en Papel Fibra',
                 'edicion_limitada' => true,
-                'stock_central' => 1,
-                'stock_coyoacan' => 1,
+                'stock_central' => 0,
+                'stock_coyoacan' => 0,
                 'serie_unica' => 'ARC-MEM-1934-002',
                 'certificado' => 'COA-NOT-2026-309',
             ],
@@ -439,4 +439,3 @@ class CatalogoProductoSeeder extends Seeder
         }
     }
 }
-

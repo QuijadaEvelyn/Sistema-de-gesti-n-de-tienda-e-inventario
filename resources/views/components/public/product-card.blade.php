@@ -32,7 +32,8 @@
         default => ($producto->coleccionable?->marca ?? 'Archivo Histórico').' · '.($producto->coleccionable?->material ?? 'Pieza Autenticada'),
     };
 
-    $stockTotal = $variante ? (int) $variante->existencias->sum('cantidad') : 1;
+    $stockTotal = $variante ? (int) $variante->existencias->sum('cantidad') : 0;
+    $estaAgotado = $stockTotal <= 0;
 @endphp
 
 <article class="bg-white border border-purple-200/80 rounded-2xl p-5 flex flex-col justify-between hover:border-primary hover:shadow-lg transition-all duration-200 group shadow-xs">
@@ -41,9 +42,15 @@
             <span class="absolute top-2.5 left-2.5 bg-primary-container text-white text-[10px] font-label-sm font-semibold uppercase px-2.5 py-0.5 rounded shadow-2xs">
                 {{ $etiquetaSuperior }}
             </span>
-            <span class="absolute bottom-2.5 right-2.5 bg-white/90 text-emerald-700 border border-emerald-200 text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full">
-                {{ $stockTotal }} en bóveda
-            </span>
+            @if ($estaAgotado)
+                <span class="absolute bottom-2.5 right-2.5 bg-red-600 text-white border border-red-700 text-[10px] font-label-code font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-xs">
+                    AGOTADO
+                </span>
+            @else
+                <span class="absolute bottom-2.5 right-2.5 bg-white/90 text-emerald-700 border border-emerald-200 text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full">
+                    {{ $stockTotal }} en bóveda
+                </span>
+            @endif
             <span class="material-symbols-outlined text-purple-300 group-hover:text-primary transition-colors text-[64px]">{{ $iconoCategoria }}</span>
         </div>
 
@@ -73,20 +80,31 @@
             </span>
         </div>
 
-        @if ($variante)
+        @if ($variante && ! $estaAgotado)
             <form method="POST" action="{{ route('carrito.agregar') }}">
                 @csrf
                 <input type="hidden" name="variante_sku_id" value="{{ $variante->id }}" />
                 <input type="hidden" name="cantidad" value="1" />
                 <button
                     type="submit"
-                    class="px-3.5 py-2.5 rounded-xl bg-primary-container hover:bg-primary text-white text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 transition shadow-2xs"
+                    class="px-3.5 py-2.5 rounded-xl bg-primary-container hover:bg-primary text-white text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 transition shadow-2xs cursor-pointer"
                     title="Reservar en Bóveda de Adquisición"
                 >
                     <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
                     <span>Reservar</span>
                 </button>
             </form>
+        @else
+            <button
+                type="button"
+                disabled
+                aria-disabled="true"
+                class="px-3.5 py-2.5 rounded-xl bg-slate-200 text-slate-500 border border-slate-300 text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 opacity-50 cursor-not-allowed pointer-events-none select-none"
+                title="Pieza agotada en bóveda"
+            >
+                <span class="material-symbols-outlined text-[18px]">block</span>
+                <span>Reservar</span>
+            </button>
         @endif
     </div>
 </article>

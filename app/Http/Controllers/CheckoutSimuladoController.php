@@ -158,7 +158,7 @@ class CheckoutSimuladoController extends Controller
     }
 
     /**
-     * Agrega una pieza al carrito de adquisiciones.
+     * Agrega una pieza al carrito de adquisiciones validando estrictamente que exista stock disponible en bóveda.
      */
     public function agregar(Request $request): RedirectResponse|JsonResponse
     {
@@ -170,15 +170,48 @@ class CheckoutSimuladoController extends Controller
         $varianteId = (int) $validated['variante_sku_id'];
         $cantidad = (int) ($validated['cantidad'] ?? 1);
 
+        $variante = VarianteSku::with(['producto', 'existencias'])->findOrFail($varianteId);
+        $nombrePieza = $variante->producto?->nombre ?? 'Pieza seleccionada';
+        $stockDisponible = (int) $variante->existencias->sum('cantidad');
+
+        if ($stockDisponible <= 0) {
+            $mensajeAgotado = "Operación bloqueada: El artículo «{$nombrePieza}» se encuentra AGOTADO y no se encuentra disponible en bóveda.";
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $mensajeAgotado,
+                ], 422);
+            }
+
+            return back()
+                ->with('error', $mensajeAgotado)
+                ->withErrors(['stock' => $mensajeAgotado]);
+        }
+
         /** @var array<int, int> $carrito */
         $carrito = session('carrito_archivum', []);
-        $carrito[$varianteId] = ($carrito[$varianteId] ?? 0) + $cantidad;
+        $cantidadActualEnCarrito = (int) ($carrito[$varianteId] ?? 0);
+
+        if (($cantidadActualEnCarrito + $cantidad) > $stockDisponible) {
+            $mensajeInsuficiente = "Operación bloqueada: No hay suficientes ejemplares de «{$nombrePieza}» disponibles en bóveda (stock actual: {$stockDisponible}).";
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $mensajeInsuficiente,
+                ], 422);
+            }
+
+            return back()
+                ->with('error', $mensajeInsuficiente)
+                ->withErrors(['stock' => $mensajeInsuficiente]);
+        }
+
+        $carrito[$varianteId] = $cantidadActualEnCarrito + $cantidad;
         session(['carrito_archivum' => $carrito]);
 
         $this->sincronizarCarritoBaseDatos($carrito);
-
-        $variante = VarianteSku::with('producto')->find($varianteId);
-        $nombrePieza = $variante?->producto?->nombre ?? 'Pieza seleccionada';
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -256,6 +289,30 @@ class CheckoutSimuladoController extends Controller
             'cvv' => ['required', 'string', 'min:3', 'max:4'],
         ]);
 
+        // Validación estricta de disponibilidad de inventario antes de procesar el pago
+        foreach ($estadoCarrito['items'] as $linea) {
+            $stockEnBoveda = (int) Existencia::where('variante_sku_id', $linea['variante_sku_id'])->sum('cantidad');
+
+            if ($stockEnBoveda <= 0 || $stockEnBoveda < (int) $linea['cantidad']) {
+                /** @var array<int, int> $carritoActual */
+                $carritoActual = session('carrito_archivum', []);
+                if ($stockEnBoveda <= 0) {
+                    unset($carritoActual[(int) $linea['variante_sku_id']]);
+                } else {
+                    $carritoActual[(int) $linea['variante_sku_id']] = $stockEnBoveda;
+                }
+                session(['carrito_archivum' => $carritoActual]);
+                $this->sincronizarCarritoBaseDatos($carritoActual);
+
+                $mensajeErrorStock = "Transacción bloqueada: El producto «{$linea['nombre']}» no se encuentra disponible en bóveda (stock agotado o insuficiente).";
+
+                return back()
+                    ->withInput()
+                    ->with('error', $mensajeErrorStock)
+                    ->withErrors(['stock' => $mensajeErrorStock]);
+            }
+        }
+
         /** @var Pedido $pedido */
         $pedido = DB::transaction(function () use ($validated, $estadoCarrito, $request): Pedido {
             $partesNombre = explode(' ', trim($validated['nombre_completo']), 2);
@@ -307,7 +364,7 @@ class CheckoutSimuladoController extends Controller
 
             $sucursalOrigen = Sucursal::where('activa', true)->first();
 
-            // 4. Crear DetallePedido y descontar stock si existe
+            // 4. Crear DetallePedido y descontar stock entre las sucursales disponibles
             foreach ($estadoCarrito['items'] as $linea) {
                 DetallePedido::create([
                     'pedido_id' => $pedido->id,
@@ -317,13 +374,20 @@ class CheckoutSimuladoController extends Controller
                     'subtotal' => $linea['subtotal'],
                 ]);
 
-                $existencia = Existencia::where('variante_sku_id', $linea['variante_sku_id'])
-                    ->where('cantidad', '>=', $linea['cantidad'])
+                $porDescontar = (int) $linea['cantidad'];
+                $existencias = Existencia::where('variante_sku_id', $linea['variante_sku_id'])
+                    ->where('cantidad', '>', 0)
+                    ->orderByDesc('cantidad')
                     ->lockForUpdate()
-                    ->first();
+                    ->get();
 
-                if ($existencia) {
-                    $existencia->decrement('cantidad', $linea['cantidad']);
+                foreach ($existencias as $existencia) {
+                    if ($porDescontar <= 0) {
+                        break;
+                    }
+                    $descuentoSucursal = min((int) $existencia->cantidad, $porDescontar);
+                    $existencia->decrement('cantidad', $descuentoSucursal);
+                    $porDescontar -= $descuentoSucursal;
                 }
             }
 
