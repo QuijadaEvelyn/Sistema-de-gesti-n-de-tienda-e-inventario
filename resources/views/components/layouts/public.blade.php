@@ -70,6 +70,11 @@
 
     <!-- Scripts Esenciales de Interacción Pública (Cart Drawer & Modo Claro/Oscuro) -->
     <script>
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
         document.addEventListener('DOMContentLoaded', () => {
             const drawer = document.getElementById('cart-drawer');
             const overlay = document.getElementById('drawer-overlay');
