@@ -26,6 +26,8 @@ class Producto extends Model
         'descripcion',
         'precio',
         'activo',
+        'es_preventa',
+        'limite_preventa',
     ];
 
     /**
@@ -38,6 +40,8 @@ class Producto extends Model
         return [
             'precio' => 'decimal:2',
             'activo' => 'boolean',
+            'es_preventa' => 'boolean',
+            'limite_preventa' => 'integer',
         ];
     }
 

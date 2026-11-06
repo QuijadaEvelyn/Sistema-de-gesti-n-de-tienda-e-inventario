@@ -28,19 +28,22 @@ use Illuminate\Support\Facades\Route;
 // =========================================================================
 // 1. Portal Público de Navegación por Categorías, Carrito y Checkout Simulado
 // =========================================================================
-Route::get('/', [CatalogoPublicoController::class, 'home'])->name('public.home');
-Route::get('/catalogo/libros', [CatalogoPublicoController::class, 'libros'])->name('public.libros');
-Route::get('/catalogo/vinilos', [CatalogoPublicoController::class, 'vinilos'])->name('public.vinilos');
-Route::get('/catalogo/memorabilia', [CatalogoPublicoController::class, 'memorabilia'])->name('public.memorabilia');
-Route::get('/catalogo/adquisiciones-selectas', [CatalogoPublicoController::class, 'adquisiciones'])->name('public.adquisiciones');
+Route::middleware('reservas.liberar')->group(function (): void {
+    Route::get('/', [CatalogoPublicoController::class, 'home'])->name('public.home');
+    Route::get('/catalogo/libros', [CatalogoPublicoController::class, 'libros'])->name('public.libros');
+    Route::get('/catalogo/vinilos', [CatalogoPublicoController::class, 'vinilos'])->name('public.vinilos');
+    Route::get('/catalogo/memorabilia', [CatalogoPublicoController::class, 'memorabilia'])->name('public.memorabilia');
+    Route::get('/catalogo/adquisiciones-selectas', [CatalogoPublicoController::class, 'adquisiciones'])->name('public.adquisiciones');
 
-// Gestión de Carrito, Pasarela de Pago Simulada y Confirmación / Seguimiento de Paquete
-Route::post('/carrito/agregar', [CheckoutSimuladoController::class, 'agregar'])->name('carrito.agregar');
-Route::delete('/carrito/remover/{varianteSkuId}', [CheckoutSimuladoController::class, 'remover'])->name('carrito.remover');
-Route::get('/checkout', [CheckoutSimuladoController::class, 'checkout'])->name('checkout.index');
-Route::post('/checkout/pagar', [CheckoutSimuladoController::class, 'procesarPago'])->name('checkout.pagar');
-Route::get('/checkout/confirmacion/{pedido}', [CheckoutSimuladoController::class, 'confirmacion'])->name('checkout.confirmacion');
-Route::post('/checkout/pedidos/{pedido}/simular-envio', [CheckoutSimuladoController::class, 'simularAvanceEnvio'])->name('checkout.simular-envio');
+    // Gestión de Carrito, Expiración de Reserva (5 min), Pasarela de Pago Simulada y Seguimiento de Paquete
+    Route::post('/carrito/agregar', [CheckoutSimuladoController::class, 'agregar'])->name('carrito.agregar');
+    Route::delete('/carrito/remover/{varianteSkuId}', [CheckoutSimuladoController::class, 'remover'])->name('carrito.remover');
+    Route::post('/carrito/expirar', [CheckoutSimuladoController::class, 'expirarReservas'])->name('carrito.expirar');
+    Route::get('/checkout', [CheckoutSimuladoController::class, 'checkout'])->name('checkout.index');
+    Route::post('/checkout/pagar', [CheckoutSimuladoController::class, 'procesarPago'])->name('checkout.pagar');
+    Route::get('/checkout/confirmacion/{pedido}', [CheckoutSimuladoController::class, 'confirmacion'])->name('checkout.confirmacion');
+    Route::post('/checkout/pedidos/{pedido}/simular-envio', [CheckoutSimuladoController::class, 'simularAvanceEnvio'])->name('checkout.simular-envio');
+});
 
 // =========================================================================
 // 2. Rutas de Invitados (Autenticación y Recuperación de Contraseña)

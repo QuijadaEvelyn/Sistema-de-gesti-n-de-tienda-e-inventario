@@ -2,10 +2,19 @@
 
     <div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-purple-200/80 pb-5">
         <div>
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-label-code uppercase tracking-wider mb-2">
-                <span class="material-symbols-outlined text-[14px]">verified_user</span>
-                <span>Pasarela de Prueba / Simulación Activa</span>
-            </span>
+            <div class="flex flex-wrap items-center gap-2 mb-2">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-label-code uppercase tracking-wider">
+                    <span class="material-symbols-outlined text-[14px]">verified_user</span>
+                    <span>Pasarela de Prueba / Simulación Activa</span>
+                </span>
+                @if (! empty($carrito['items']))
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 border border-amber-300 text-amber-900 text-xs font-label-code font-bold uppercase tracking-wider">
+                        <span class="material-symbols-outlined text-[14px] text-amber-700 animate-pulse">timer</span>
+                        <span>Reserva Expira en:</span>
+                        <span id="checkout-reservation-timer" class="font-tabular-data">{{ $carrito['tiempo_formateado'] ?? '05:00 min' }}</span>
+                    </span>
+                @endif
+            </div>
             <h1 class="text-2xl sm:text-3xl font-bold text-on-surface font-quicksand">Checkout &amp; Formalización de Adquisición</h1>
             <p class="text-xs text-on-surface-variant mt-1">
                 En modo simulación puedes ingresar cualquier número de tarjeta de crédito para completar la compra y probar el rastreo de envío.

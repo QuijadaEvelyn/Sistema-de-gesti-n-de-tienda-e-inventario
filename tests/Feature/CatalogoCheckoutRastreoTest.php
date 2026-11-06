@@ -274,4 +274,109 @@ class CatalogoCheckoutRastreoTest extends TestCase
         $responseCheckoutForzado->assertSessionHasErrors('stock');
         $this->assertSame($pedidosAntes, Pedido::count());
     }
+
+    public function test_reserva_temporal_disminuye_stock_inmediatamente_y_libera_al_expirar_5_minutos(): void
+    {
+        $cliente = Usuario::whereHas('roles', fn ($q) => $q->where('nombre', 'cliente'))->firstOrFail();
+
+        // "Partitura Autógrafa de Estudio en Sol Menor (1912)" tiene 2 unidades en bóveda inicialmente
+        $producto = Producto::with('variantesSku.existencias')
+            ->where('nombre', 'Partitura Autógrafa de Estudio en Sol Menor (1912)')
+            ->firstOrFail();
+        $variante = $producto->variantesSku->firstOrFail();
+
+        $this->assertSame(2, (int) $variante->existencias()->sum('cantidad'));
+
+        // 1. El cliente pulsa "RESERVAR" (añade 1 unidad al carrito sin haber pagado aún)
+        $this->actingAs($cliente)
+            ->from(route('public.memorabilia'))
+            ->post(route('carrito.agregar'), [
+                'variante_sku_id' => $variante->id,
+                'cantidad' => 1,
+            ])
+            ->assertRedirect(route('public.memorabilia'));
+
+        // El stock en base de datos pasa inmediatamente de 2 a 1
+        $this->assertSame(1, (int) $variante->existencias()->sum('cantidad'));
+
+        // Existe una reserva activa con expiración a 5 minutos
+        $this->assertDatabaseHas('reservas_stock', [
+            'cantidad' => 1,
+            'estado' => 'activa',
+        ]);
+
+        // En el catálogo público se muestra "1 en bóveda" y el temporizador de 5 minutos en el drawer
+        $responseCatalogo = $this->actingAs($cliente)->get(route('public.memorabilia'));
+        $responseCatalogo->assertStatus(200);
+        $responseCatalogo->assertSee('1 en bóveda');
+        $responseCatalogo->assertSee('Reserva Temporal (5 min):');
+
+        // 2. Avanzamos el reloj 6 minutos sin concretar la compra (expira el countdown de 5 minutos)
+        $this->travel(6)->minutes();
+
+        // Al consultar el catálogo, el sistema libera automáticamente la reserva vencida y devuelve el stock a 2
+        $responseTrasExpirar = $this->actingAs($cliente)->get(route('public.memorabilia'));
+        $responseTrasExpirar->assertStatus(200);
+
+        $this->assertSame(2, (int) $variante->existencias()->sum('cantidad'));
+        $this->assertDatabaseHas('reservas_stock', [
+            'cantidad' => 1,
+            'estado' => 'expirada',
+        ]);
+        $this->assertEmpty(session('carrito_archivum', []));
+    }
+
+    public function test_control_estricto_en_preventas_bloquea_sobreventa_sobre_lote_autorizado(): void
+    {
+        $cliente = Usuario::whereHas('roles', fn ($q) => $q->where('nombre', 'cliente'))->firstOrFail();
+
+        $productoPreventa = Producto::with('variantesSku.existencias')
+            ->where('nombre', 'El Laberinto de la Soledad (1ª Edición Cuadernos Americanos)')
+            ->firstOrFail();
+
+        // Configurar pieza como preventa con lote autorizado por compras de máximo 2 unidades
+        $productoPreventa->update([
+            'es_preventa' => true,
+            'limite_preventa' => 2,
+        ]);
+
+        $variante = $productoPreventa->variantesSku->firstOrFail();
+
+        // Reservar 2 unidades (dentro del lote autorizado por compras) es permitido
+        $this->actingAs($cliente)
+            ->from(route('public.libros'))
+            ->post(route('carrito.agregar'), [
+                'variante_sku_id' => $variante->id,
+                'cantidad' => 2,
+            ])
+            ->assertRedirect(route('public.libros'))
+            ->assertSessionHasNoErrors();
+
+        // Intentar reservar 1 unidad adicional (superando el lote autorizado de 2) se bloquea por sobreventa
+        $responseSobreventa = $this->actingAs($cliente)
+            ->from(route('public.libros'))
+            ->post(route('carrito.agregar'), [
+                'variante_sku_id' => $variante->id,
+                'cantidad' => 1,
+            ]);
+
+        $responseSobreventa->assertRedirect(route('public.libros'));
+        $responseSobreventa->assertSessionHasErrors('stock');
+        $this->assertStringContainsString('Sobreventa bloqueada', (string) session('error'));
+    }
+
+    public function test_pagina_principal_renderiza_carrusel_3d_swiper_con_fichas_curatoriales(): void
+    {
+        $response = $this->get(route('public.home'));
+
+        $response->assertStatus(200);
+        $response->assertSee('swiper product3DCarousel', false);
+        $response->assertSee('swiper-wrapper', false);
+        $response->assertSee('swiper-slide', false);
+        $response->assertSee("new Swiper('.product3DCarousel'", false);
+        $response->assertSee("effect: 'coverflow'", false);
+        $response->assertSee('Cien Años de Soledad');
+        $response->assertSee('Kind of Blue');
+        $response->assertSee('Carta Manuscrita Bellas Artes');
+    }
 }

@@ -34,13 +34,14 @@
 
     $stockTotal = $variante ? (int) $variante->existencias->sum('cantidad') : 0;
     $estaAgotado = $stockTotal <= 0;
+    $esPreventa = \App\Http\Controllers\CheckoutSimuladoController::esPiezaPreventa($producto, $variante);
 @endphp
 
 <article class="bg-white border border-purple-200/80 rounded-2xl p-5 flex flex-col justify-between hover:border-primary hover:shadow-lg transition-all duration-200 group shadow-xs">
     <div>
         <div class="w-full aspect-square rounded-xl bg-surface-container-low border border-purple-200/60 flex items-center justify-center relative overflow-hidden mb-4 group-hover:bg-purple-50 transition-colors">
             <span class="absolute top-2.5 left-2.5 bg-primary-container text-white text-[10px] font-label-sm font-semibold uppercase px-2.5 py-0.5 rounded shadow-2xs">
-                {{ $etiquetaSuperior }}
+                {{ $esPreventa ? 'PREVENTA · '.$etiquetaSuperior : $etiquetaSuperior }}
             </span>
             @if ($estaAgotado)
                 <span class="absolute bottom-2.5 right-2.5 bg-red-600 text-white border border-red-700 text-[10px] font-label-code font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-xs">

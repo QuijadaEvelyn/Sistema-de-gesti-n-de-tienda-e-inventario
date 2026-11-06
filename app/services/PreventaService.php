@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Models\DetallePedido;
 use App\Models\Existencia;
 use App\Models\MovimientoInventario;
 use App\Models\Pedido;
@@ -22,16 +23,14 @@ class PreventaService
     public const LIMITE_PREVENTA_DEFECTO = 5;
 
     /**
-     * Valida que la cantidad solicitada no supere el limite de preventa configurado
-     * para un producto o su variante SKU.
-     *
-     * Se busca el campo `limite_preventa` en el modelo Producto y, si no existe,
-     * se usa la constante de fallback.
+     * Valida que la cantidad solicitada no supere el limite de preventa (lote autorizado
+     * por compras) configurado para un producto o su variante SKU, bloqueando cualquier
+     * intento de sobreventa.
      *
      * @param  int  $productoId  ID del Producto base.
      * @param  int  $cantidad  Unidades que el cliente desea reservar en preventa.
      *
-     * @throws RuntimeException Si la cantidad excede el cupo permitido.
+     * @throws RuntimeException Si la cantidad o el acumulado excede el lote autorizado.
      */
     public function validarCupoPreventa(int $productoId, int $cantidad): void
     {
@@ -40,15 +39,27 @@ class PreventaService
         }
 
         /** @var Producto $producto */
-        $producto = Producto::query()->findOrFail($productoId);
+        $producto = Producto::with('variantesSku')->findOrFail($productoId);
 
-        // El limite puede estar en el producto o en la variante; se toma el menor definido.
+        // El limite puede estar en el producto o en la constante por defecto.
         $limitePreventa = $this->resolverLimitePreventa($producto);
 
-        if ($cantidad > $limitePreventa) {
+        $varianteIds = $producto->variantesSku->pluck('id')->all();
+        $unidadesComprometidas = 0;
+
+        if (! empty($varianteIds)) {
+            $unidadesComprometidas = (int) DetallePedido::query()
+                ->whereIn('variante_sku_id', $varianteIds)
+                ->whereHas('pedido', fn ($q) => $q->where('estatus', '!=', 'cancelado'))
+                ->sum('cantidad');
+        }
+
+        if ($cantidad > $limitePreventa || ($unidadesComprometidas + $cantidad) > $limitePreventa) {
+            $disponiblesPreventa = max(0, $limitePreventa - $unidadesComprometidas);
+
             throw new RuntimeException(
-                "La cantidad solicitada ({$cantidad}) supera el limite de preventa "
-                ."permitido ({$limitePreventa}) para el producto '{$producto->nombre}'."
+                "Sobreventa bloqueada: La cantidad solicitada ({$cantidad}) supera el lote de preventa "
+                ."autorizado por Compras ({$limitePreventa} uds., disponibles: {$disponiblesPreventa}) para «{$producto->nombre}»."
             );
         }
 
@@ -56,6 +67,7 @@ class PreventaService
             'producto_id' => $productoId,
             'cantidad' => $cantidad,
             'limite_preventa' => $limitePreventa,
+            'unidades_comprometidas' => $unidadesComprometidas,
         ]);
     }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Models\CarritoItem;
 use App\Models\Existencia;
 use App\Models\MovimientoInventario;
 use App\Models\Pedido;
@@ -18,9 +19,9 @@ use RuntimeException;
 class ReservaService
 {
     /**
-     * Duración predeterminada (en minutos) de una reserva temporal de carrito.
+     * Duración predeterminada (en minutos) de una reserva temporal de carrito (5 minutos).
      */
-    public const MINUTOS_RESERVA_CARRITO = 15;
+    public const MINUTOS_RESERVA_CARRITO = 5;
 
     /**
      * Crea una reserva de stock vinculada a un pedido.
@@ -126,17 +127,32 @@ class ReservaService
                     $existencia->cantidad += $reserva->cantidad;
                     $existencia->save();
 
-                    // Revertir el estado de la pieza única asociada al pedido, si aplica.
-                    if ($reserva->pedido_id) {
-                        $piezaUnica = PiezaUnica::query()
-                            ->where('existencia_id', $existencia->id)
-                            ->where('estado', 'reservada')
+                    // Si la reserva estaba vinculada a un carrito en base de datos, descontar o retirar el item expirado.
+                    if ($reserva->carrito_id) {
+                        $itemCarrito = CarritoItem::query()
+                            ->where('carrito_id', $reserva->carrito_id)
+                            ->where('variante_sku_id', $existencia->variante_sku_id)
                             ->lockForUpdate()
                             ->first();
 
-                        if ($piezaUnica) {
-                            $piezaUnica->update(['estado' => 'disponible']);
+                        if ($itemCarrito) {
+                            if ($itemCarrito->cantidad <= $reserva->cantidad) {
+                                $itemCarrito->delete();
+                            } else {
+                                $itemCarrito->decrement('cantidad', $reserva->cantidad);
+                            }
                         }
+                    }
+
+                    // Revertir el estado de la pieza única asociada, si aplica.
+                    $piezaUnica = PiezaUnica::query()
+                        ->where('existencia_id', $existencia->id)
+                        ->where('estado', 'reservada')
+                        ->lockForUpdate()
+                        ->first();
+
+                    if ($piezaUnica) {
+                        $piezaUnica->update(['estado' => 'disponible']);
                     }
                 }
 

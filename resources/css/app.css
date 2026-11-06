@@ -161,28 +161,6 @@
 }
 
 @layer base {
-    body {
-        margin: 0;
-        padding: 0;
-        background-color: var(--color-background);
-        color: var(--color-on-surface);
-        font-family: var(--font-quicksand);
-        -webkit-font-smoothing: antialiased;
-    }
-}
-
-/* Ocultar barra de desplazamiento manteniendo funcionalidad */
-.no-scrollbar::-webkit-scrollbar {
-    display: none;
-}
-
-.no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-}
-
-@layer base {
-
     /* Aplicar variables de fondo y color tanto al html como al body */
     html,
     body {
@@ -200,35 +178,20 @@
     .dark {
         --color-background: #120d18;
         --color-surface: #1a1324;
+        --color-surface-container-lowest: #1d1528;
+        --color-surface-container-low: #21182e;
         --color-surface-container: #231932;
         --color-surface-container-high: #2d213f;
-        --color-on-surface: #875bca;
-        --color-on-surface-variant: #503586;
-        --color-outline: #5e4d86;
+        --color-on-surface: #e9ddff;
+        --color-on-surface-variant: #c8b8e8;
+        --color-outline: #9a8bbd;
     }
 }
 
-/* Ocultar barra de desplazamiento manteniendo funcionalidad */
-.no-scrollbar::-webkit-scrollbar {
-    display: none;
-}
-
-.no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-}
-
-.product3DCarousel {
-    width: 100%;
-    padding-top: 20px;
-    padding-bottom: 50px;
-}
-
-.product3DCarousel .swiper-slide {
-    background-position: center;
-    background-size: cover;
-    width: 300px;
-    height: auto;
+/* Adaptación de tarjetas blancas en modo oscuro sin conflictos visuales */
+.dark article.bg-white {
+    background-color: #1d1528;
+    border-color: rgba(139, 92, 246, 0.28);
 }
 
 /* Ocultar barra de desplazamiento manteniendo funcionalidad */
@@ -241,15 +204,90 @@
     scrollbar-width: none;
 }
 
+/* Carrusel 3D Curatorial con Swiper.js (Efecto Coverflow) */
 .product3DCarousel {
     width: 100%;
-    padding-top: 20px;
-    padding-bottom: 50px;
+    padding-top: 28px;
+    padding-bottom: 58px;
+    overflow: hidden;
+    perspective: 1200px;
+}
+
+.product3DCarousel .swiper-wrapper {
+    align-items: stretch;
 }
 
 .product3DCarousel .swiper-slide {
     background-position: center;
     background-size: cover;
-    width: 300px;
+    width: 310px;
     height: auto;
+    display: flex;
+    border-radius: 1rem;
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.product3DCarousel .swiper-slide > * {
+    width: 100%;
+}
+
+.product3DCarousel .swiper-slide-active {
+    z-index: 10;
+}
+
+.product3DCarousel .swiper-3d .swiper-slide-shadow-left,
+.product3DCarousel .swiper-3d .swiper-slide-shadow-right {
+    border-radius: 1rem;
+    background-image: linear-gradient(to left, rgba(59, 7, 100, 0.22), rgba(0, 0, 0, 0));
+}
+
+.dark .product3DCarousel .swiper-3d .swiper-slide-shadow-left,
+.dark .product3DCarousel .swiper-3d .swiper-slide-shadow-right {
+    background-image: linear-gradient(to left, rgba(9, 4, 18, 0.55), rgba(0, 0, 0, 0));
+}
+
+.product3DCarousel .swiper-pagination-bullet {
+    width: 9px;
+    height: 9px;
+    background-color: var(--color-outline);
+    opacity: 0.45;
+    transition: all 0.25s ease;
+}
+
+.product3DCarousel .swiper-pagination-bullet-active {
+    width: 26px;
+    border-radius: 9999px;
+    background-color: var(--color-primary-container);
+    opacity: 1;
+}
+
+.product3DCarousel .swiper-button-prev,
+.product3DCarousel .swiper-button-next {
+    width: 42px;
+    height: 42px;
+    border-radius: 9999px;
+    background-color: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(196, 181, 253, 0.8);
+    color: var(--color-primary);
+    box-shadow: 0 4px 14px rgba(99, 14, 212, 0.14);
+    transition: all 0.2s ease;
+}
+
+.product3DCarousel .swiper-button-prev:hover,
+.product3DCarousel .swiper-button-next:hover {
+    background-color: var(--color-primary-container);
+    color: #ffffff;
+}
+
+.dark .product3DCarousel .swiper-button-prev,
+.dark .product3DCarousel .swiper-button-next {
+    background-color: rgba(35, 25, 50, 0.92);
+    border-color: rgba(139, 92, 246, 0.4);
+    color: #e9ddff;
+}
+
+.product3DCarousel .swiper-button-prev::after,
+.product3DCarousel .swiper-button-next::after {
+    font-size: 16px;
+    font-weight: 700;
 }

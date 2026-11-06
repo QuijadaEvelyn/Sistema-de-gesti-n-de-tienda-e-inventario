@@ -1,5 +1,6 @@
 @php
     $carritoDrawer = \App\Http\Controllers\CheckoutSimuladoController::obtenerEstadoCarrito();
+    $tieneItemsActivos = $carritoDrawer['cantidad_total'] > 0;
 @endphp
 
 <!-- Overlay Translúcido de Bóveda -->
@@ -25,14 +26,24 @@
             </button>
         </div>
 
-        <!-- Temporizador de Reserva Exclusiva de Lote Único -->
-        <div class="mt-3 bg-primary-container/10 border border-primary/20 rounded-lg p-2.5 flex items-center justify-between text-xs">
+        <!-- Temporizador de Expiración de Reserva (Countdown Estricto de 5 Minutos) -->
+        <div
+            id="reservation-timer-box"
+            class="mt-3 {{ $tieneItemsActivos ? 'bg-primary-container/10 border-primary/20' : 'bg-surface-container border-purple-200/60 opacity-75' }} border rounded-lg p-2.5 flex items-center justify-between text-xs transition-colors"
+        >
             <div class="flex items-center gap-2 text-primary font-medium">
-                <span class="material-symbols-outlined text-[16px] animate-pulse">timer</span>
-                <span>Reserva de Piezas Únicas:</span>
+                <span class="material-symbols-outlined text-[16px] {{ $tieneItemsActivos ? 'animate-pulse' : '' }}">timer</span>
+                <span>Reserva Temporal (5 min):</span>
             </div>
-            <span id="reservation-timer" class="font-tabular-data font-bold text-primary bg-white px-2 py-0.5 rounded shadow-2xs">
-                29:59 min
+            <span
+                id="reservation-timer"
+                data-active="{{ $tieneItemsActivos ? '1' : '0' }}"
+                data-seconds="{{ $carritoDrawer['segundos_restantes'] }}"
+                data-expires-ms="{{ $carritoDrawer['expira_en_ms'] }}"
+                data-expire-url="{{ route('carrito.expirar') }}"
+                class="font-tabular-data font-bold text-primary bg-white px-2.5 py-0.5 rounded shadow-2xs border border-purple-200/60"
+            >
+                {{ $tieneItemsActivos ? $carritoDrawer['tiempo_formateado'] : '05:00 min' }}
             </span>
         </div>
     </div>
@@ -52,7 +63,12 @@
                     <span class="material-symbols-outlined text-secondary text-[28px]">{{ $iconoItem }}</span>
                 </div>
                 <div class="flex-1 min-w-0 pr-6">
-                    <span class="font-label-sm text-primary font-bold uppercase">SKU: #{{ $item['sku'] }}</span>
+                    <div class="flex items-center gap-1.5">
+                        <span class="font-label-sm text-primary font-bold uppercase">SKU: #{{ $item['sku'] }}</span>
+                        @if (! empty($item['es_preventa']))
+                            <span class="bg-amber-100 text-amber-800 border border-amber-300 text-[9px] font-label-code font-bold uppercase px-1.5 py-0.5 rounded">Preventa</span>
+                        @endif
+                    </div>
                     <h3 class="font-bold text-on-surface text-sm truncate font-quicksand">{{ $item['nombre'] }}</h3>
                     <p class="font-title-editorial text-xs text-on-surface-variant italic">{{ $item['subtitulo'] }} &middot; Cant: {{ $item['cantidad'] }}</p>
                     <div class="flex items-center justify-between mt-2">
@@ -63,7 +79,7 @@
                 <form method="POST" action="{{ route('carrito.remover', $item['variante_sku_id']) }}" class="absolute top-2 right-2">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="text-outline hover:text-error transition" title="Liberar de reserva">
+                    <button type="submit" class="text-outline hover:text-error transition" title="Liberar de reserva y devolver a bóveda">
                         <span class="material-symbols-outlined text-[16px]">delete</span>
                     </button>
                 </form>
@@ -75,7 +91,7 @@
                 </div>
                 <p class="text-sm font-bold text-on-surface font-quicksand">Tu Bóveda de Adquisición está vacía</p>
                 <p class="text-xs text-on-surface-variant max-w-xs mx-auto">
-                    Explora nuestras secciones de Libros Raros, Vinilos Históricos o Memorabilia y pulsa el botón de carrito para reservar una pieza.
+                    Explora nuestras secciones de Libros Raros, Vinilos Históricos o Memorabilia y pulsa «Reservar» para apartar temporalmente una pieza por 5 minutos.
                 </p>
             </div>
         @endforelse
@@ -104,19 +120,88 @@
         </a>
 
         <p class="text-[10px] text-center text-outline font-label-code">
-            Adquisición protegida bajo Ley Federal de Protección al Patrimonio &amp; Comercio Seguro.
+            Si no completas tu adquisición en 5 minutos, las piezas se liberan automáticamente a la bóveda.
         </p>
     </div>
 
 </aside>
 
-@if (session('abrir_carrito'))
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const openBtn = document.getElementById('open-cart-btn');
-        if (openBtn) {
-            setTimeout(() => openBtn.click(), 120);
+        @if (session('abrir_carrito'))
+            const openBtn = document.getElementById('open-cart-btn');
+            if (openBtn) {
+                setTimeout(() => openBtn.click(), 120);
+            }
+        @endif
+
+        const timerEl = document.getElementById('reservation-timer');
+        if (!timerEl || timerEl.dataset.active !== '1') {
+            return;
         }
+
+        const expireUrl = timerEl.dataset.expireUrl;
+        const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+        const csrfToken = csrfMeta ? csrfMeta.getAttribute('content') : '';
+        let remainingSeconds = parseInt(timerEl.dataset.seconds || '300', 10);
+        let expiringInProgress = false;
+
+        function formatCountdown(sec) {
+            const safeSec = Math.max(0, sec);
+            const mins = Math.floor(safeSec / 60);
+            const secs = safeSec % 60;
+            return String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0') + ' min';
+        }
+
+        function updateTimerDisplay() {
+            const text = formatCountdown(remainingSeconds);
+            timerEl.textContent = text;
+
+            const checkoutTimerEl = document.getElementById('checkout-reservation-timer');
+            if (checkoutTimerEl) {
+                checkoutTimerEl.textContent = text;
+            }
+
+            if (remainingSeconds <= 60) {
+                timerEl.classList.remove('text-primary');
+                timerEl.classList.add('text-red-600', 'border-red-300', 'bg-red-50');
+            }
+        }
+
+        async function triggerExpirationRelease() {
+            if (expiringInProgress) {
+                return;
+            }
+            expiringInProgress = true;
+            timerEl.textContent = '00:00 min';
+
+            try {
+                await fetch(expireUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                    },
+                    body: JSON.stringify({ reason: 'timeout_5_min' }),
+                });
+            } catch (e) {
+                // La liberación también se ejecuta automáticamente en el servidor al recargar
+            }
+
+            window.location.reload();
+        }
+
+        updateTimerDisplay();
+
+        const intervalId = setInterval(function () {
+            remainingSeconds -= 1;
+            updateTimerDisplay();
+
+            if (remainingSeconds <= 0) {
+                clearInterval(intervalId);
+                triggerExpirationRelease();
+            }
+        }, 1000);
     });
 </script>
-@endif

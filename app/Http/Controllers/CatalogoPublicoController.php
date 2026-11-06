@@ -135,6 +135,9 @@ class CatalogoPublicoController extends Controller
             return collect();
         }
 
+        // Liberar automáticamente cualquier reserva de carrito cuyo temporizador de 5 minutos haya expirado
+        CheckoutSimuladoController::liberarReservasExpiradas();
+
         // Si estamos en entorno web interactivo y aún no se han sembrado los productos, poblar automáticamente
         if (! app()->runningUnitTests() && Producto::count() === 0) {
             app(CatalogoProductoSeeder::class)->run();
@@ -181,4 +184,3 @@ class CatalogoPublicoController extends Controller
         return $query->get();
     }
 }
-

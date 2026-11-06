@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="light">
 <head>
-    <!-- Swiper CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <!-- Swiper JS -->
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ $title ?? 'ARCHIVUM · Bibliotheca & Vinilos Históricos' }}</title>
     <meta name="description" content="{{ $description ?? 'Catálogo selecto de libros raros, primeras ediciones, discos de vinilo 180g y memorabilia con procedencia certificada.' }}">
+
+    <!-- Swiper CSS & JS (Carrusel 3D Coverflow) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
     <!-- Google Fonts: Quicksand, Barlow Condensed, Newsreader, Roboto Flex -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
