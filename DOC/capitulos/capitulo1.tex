@@ -1,20 +1,51 @@
 \chapter{Marco de Referencia}
 
- Desde finales del siglo pasado, los avances tecnológicos en la miniaturización de la electrónica y los componentes mecánicos han allanado el camino para la creación y desarrollo de objetos voladores de pequeñas dimensiones, tales como aviones y helicópteros, los cuales están adquiriendo cada vez más habilidades para realizar vuelos de forma autónoma. Estos dispositivos son popularmente conocidos como drones, un término derivado del inglés \say{abejorros}, y se consideran máquinas voladoras autónomas o semi-autónomas capaces de llevar a cabo misiones de vuelo. En el ámbito internacional, se les conoce como UAVs del ingles \say{Unmanned Aerial Vehicles}, y representan una tecnología compleja cuyo control presenta desafíos, dado que sus características aerodinámicas son similares a las de las aeronaves convencionales \cite{eisenbeiss2004mini}.
+En los últimos años, el uso de la tecnología en el comercio ha facilitado el desarrollo de tiendas en línea y sistemas de punto de venta diseñados para controlar los productos y las ventas en tiempo real. Sin embargo, la mayoría de las plataformas comerciales comunes (como Shopify, WooCommerce o los sistemas de ventas tradicionales) están pensadas para negocios de volumen alto, donde los productos son idénticos y se pueden resurtir constantemente sin mayor complicación.
 
-El estudio de estos dispositivos despierta un gran interés debido a su versatilidad y capacidad de maniobra, lo que les permite llevar a cabo una amplia gama de tareas en diversas aplicaciones, tales como el uso civil, militar y aeroespacial \cite{nawaz2019applications, shakhatreh2019unmanned, xiaoning2020analysis}. En la figura \ref{fig1_aplicacion_UAV}, se presenta una clasificación detallada de las aplicaciones más importantes de los UAVs.
+En tiendas especializadas —como las dedicadas a la venta de libros raros, discos de vinilo de época y artículos de colección— existe una situación diferente: se debe manejar al mismo tiempo tanto inventario general como piezas únicas de edición limitada. Administrar ambos tipos de productos en plataformas comunes causa problemas constantes, como vender dos veces el mismo producto exclusivo por falta de un control en tiempo real, perder el historial exacto del precio al momento de la venta y depender de procesos manuales para cancelar apartados que no se pagaron o para revisar las transferencias.
 
+Crear un sistema web hecho a la medida mediante una estructura bien organizada (Modelo-Vista-Controlador) y herramientas modernas como Laravel permite solucionar estos inconvenientes. Este enfoque facilita apartar productos de forma inmediata en cuanto se agregan al carrito, ejecutar tareas automáticas para liberar inventario vencido y mantener la información organizada de forma segura, agilizando el trabajo administrativo entre las distintas sucursales del negocio.
+
+A diferencia de las soluciones genéricas del mercado, un sistema desarrollado a la medida permite registrar las características reales que valora el cliente de este tipo de productos, tales como el estado de conservación del ejemplar, ediciones especiales o certificados de autenticidad. Asimismo, el uso de pantallas claras y adaptables a cualquier dispositivo asegura una navegación sencilla para los usuarios, logrando un control operativo más confiable y una mejor experiencia al momento de realizar la compra.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=16cm, height=7.5cm]{imagenes/Aplicaciones_UAV.png}
-    \caption{Áreas de aplicación UAVS.}
+    \includegraphics[width=16cm, height=7.5cm]{imagenes/Interfaz página.png}
+    \caption{Vista general de la interfaz pública y catálogo especializado en ARCHIVUM.}
     \label{fig1_aplicacion_UAV}
 \end{figure}
 
 \section{Antecedentes.}
 
-Los drones han atraído la atención de la comunidad investigadora que trabaja tanto en el campo militar como en el civil, con una gran cantidad de usos que han sido propuestos por los grupos de investigación, debido a sus características como capacidad y configuraciones, donde el helicóptero de cuatro rotores tiene el mayor número de citas en la literatura de control y ha sido ampliamente investigado para pruebas tanto en interiores como en exteriores . 
+El análisis de las soluciones actuales para la gestión de inventarios y puntos de venta revela una brecha tecnológica significativa cuando se aplican a comercios de alta especialidad cultural y coleccionables:
 
+\begin{enumerate}
+    \item \textbf{Sistemas POS Generales y E-commerce Tradicionales:} Placas como Shopify, Magento o puntos de venta locales manejan los artículos mediante un conteo entero global (\textit{stock count}). Cuando se intenta comercializar una pieza única (ej. una primera edición autografiada o una matriz original de prensado en vinilo), el sistema no diferencia el valor ni la condición curatorial individual (graduación Mint, Near Mint, Very Fine) de otros ejemplares del mismo título.
+    
+    \item \textbf{Falta de Control de Concurrencia y Reservas en Tiempo Real:} En la mayoría de las tiendas en línea estándar, el producto no se reserva al agregarlo al carrito, sino hasta que el pago es procesado por la pasarela. En piezas exclusivas de alta demanda, esto ocasiona conflictos de sobreventa (\textit{race conditions}), donde múltiples clientes pagan simultáneamente por el mismo ejemplar físico.
+
+    \item \textbf{Rigidez en Fichas de Precio e Historial Financiero:} Las plataformas convencionales suelen actualizar el precio del producto a nivel global. Si un producto cambia de precio en el catálogo posterior a la compra, muchos sistemas sin arquitectura de snapshots alteran indirectamente el historial de pedidos antiguos o requieren esquemas de facturación externos complejos.
+\end{enumerate}
+
+\subsection{Cuadro Comparativo de Soluciones}
+
+A continuación, en la Tabla \ref{tabla_comparativa_antecedentes}, se presenta una comparativa técnica entre los sistemas tradicionales existentes y la solución propuesta en este proyecto (\textbf{ARCHIVUM}).
+
+\begin{table}[H]
+\centering
+\caption{Comparativa técnica de soluciones de inventario y e-commerce.}
+\label{tabla_comparativa_antecedentes}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|l|p{4cm}|p{4cm}|p{5cm}|}
+\hline
+\textbf{Criterio / Característica} & \textbf{Sistemas POS Tradicionales} & \textbf{Plataformas E-commerce Estándar} & \textbf{ARCHIVUM (Propuesta)} \\ \hline
+\textbf{Modelo de Inventario} & Exclusivamente cuantitativo masivo. & Cuantitativo por variantes básicas (talla/color). & \textbf{Híbrido:} Control por volumen y registro individualizado para piezas únicas/coleccionables. \\ \hline
+\textbf{Gestión de Concurrencia} & Sin reserva previa en carrito. & Reserva únicamente en Checkout (dependiente de pasarela). & \textbf{Reserva Inmediata en Bóveda:} Bloqueo pesimista al agregar al carrito con temporizador de 5 min. \\ \hline
+\textbf{Integridad de Precios} & Riesgo de alteración en reportes históricos. & Registra total final de orden. & \textbf{Snapshot Transaccional Atomic:} Congelamiento permanente de precios y descuentos al momento del pedido. \\ \hline
+\textbf{Liberación de Existencias} & Manual o inexistente. & Requiere intervención del administrador. & \textbf{Automatización Autónoma:} Liberación por temporizador expirado mediante scheduler en segundo plano. \\ \hline
+\textbf{Administración Multisucursal} & Requiere módulos de pago adicionales por sede. & Limitado por plan comercial. & \textbf{Aislamiento por Rol y Sucursal:} Acceso privado delimitado a la sede asignada. \\ \hline
+\end{tabular}%
+}
+\end{table}
 \section{Objetivo General}
 Desarrollar un sistema web de gestión de inventario y punto de venta para libros, discos y coleccionables, utilizando el framework laravel y arquitectura MVC, con el propósito del control de existencias y la mejora de los procesos administrativos de las sucursales.
 
