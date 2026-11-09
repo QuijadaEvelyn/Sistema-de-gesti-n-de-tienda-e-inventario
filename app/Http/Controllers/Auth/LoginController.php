@@ -6,12 +6,14 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Bitacora;
+use App\Models\Producto;
 use App\Models\Usuario;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
@@ -19,7 +21,7 @@ use Illuminate\View\View;
 class LoginController extends Controller
 {
     /**
-     * Muestra el formulario de inicio de sesión.
+     * Muestra el formulario de inicio de sesión unificado dentro del Drawer Lateral sobre la tienda pública.
      */
     public function showLoginForm(Request $request): View|JsonResponse
     {
@@ -30,12 +32,22 @@ class LoginController extends Controller
             ]);
         }
 
-        return view('auth.login');
+        $productos = Schema::hasTable('productos')
+            ? Producto::with(['catalogo', 'libro', 'disco', 'coleccionable', 'variantesSku.existencias'])
+                ->where('activo', true)
+                ->orderByDesc('precio')
+                ->get()
+            : collect();
+
+        return view('auth.login', [
+            'productos' => $productos,
+            'drawerAutoOpen' => true,
+            'drawerDefaultTab' => 'login',
+        ]);
     }
 
     /**
-     * Muestra el portal de acceso exclusivo para personal interno (staff).
-     * Ruta: GET /admin/login → contexto visual diferenciado del portal público.
+     * Muestra el portal de acceso para personal interno unificado con el Drawer Lateral.
      */
     public function showAdminLoginForm(Request $request): View|JsonResponse
     {
@@ -46,7 +58,18 @@ class LoginController extends Controller
             ]);
         }
 
-        return view('auth.admin-login');
+        $productos = Schema::hasTable('productos')
+            ? Producto::with(['catalogo', 'libro', 'disco', 'coleccionable', 'variantesSku.existencias'])
+                ->where('activo', true)
+                ->orderByDesc('precio')
+                ->get()
+            : collect();
+
+        return view('auth.admin-login', [
+            'productos' => $productos,
+            'drawerAutoOpen' => true,
+            'drawerDefaultTab' => 'login',
+        ]);
     }
 
     /**
@@ -247,10 +270,11 @@ class LoginController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'Sesión cerrada exitosamente.',
+                'redirect' => route('public.home'),
             ]);
         }
 
-        return redirect('/login')->with('status', 'Has cerrado sesión exitosamente.');
+        return redirect()->route('public.home')->with('status', 'Has cerrado sesión exitosamente.');
     }
 
     /**

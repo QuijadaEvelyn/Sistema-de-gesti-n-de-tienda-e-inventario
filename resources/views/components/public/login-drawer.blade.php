@@ -1,10 +1,16 @@
+@php
+    $esRutaAuth = request()->routeIs('login', 'admin.login', 'register');
+    $abrirPorDefecto = $esRutaAuth || $errors->any() || request('login') === '1';
+    $tabInicial = (request()->routeIs('register') || request('tab') === 'register') ? 'register' : 'login';
+@endphp
+
 <!-- Overlay Translúcido de Acceso Lateral -->
-<div id="login-drawer-overlay" class="fixed inset-0 bg-purple-950/50 backdrop-blur-xs z-50 transition-opacity duration-300 opacity-0 pointer-events-none" aria-hidden="true"></div>
+<div id="login-drawer-overlay" class="fixed inset-0 bg-purple-950/50 backdrop-blur-xs z-50 transition-opacity duration-300 {{ $abrirPorDefecto ? 'opacity-100' : 'opacity-0 pointer-events-none' }}" aria-hidden="true"></div>
 
 <!-- Cajón Desplegable de Autenticación al 50% de Ancho (Login Slide-Over Drawer) -->
 <aside
     id="login-drawer"
-    class="fixed top-0 right-0 h-full w-full md:w-1/2 bg-surface-container-lowest border-l border-purple-200/80 z-50 shadow-2xl flex flex-col justify-between transform translate-x-full transition-transform duration-300 ease-out"
+    class="fixed top-0 right-0 h-full w-full md:w-1/2 bg-surface-container-lowest border-l border-purple-200/80 z-50 shadow-2xl flex flex-col justify-between transform {{ $abrirPorDefecto ? 'translate-x-0' : 'translate-x-full' }} transition-transform duration-300 ease-out"
     role="dialog"
     aria-modal="true"
     aria-labelledby="login-drawer-title"
@@ -266,15 +272,15 @@
         </div>
     </div>
 
-    <!-- Pie del Cajón de Autenticación -->
+        <!-- Pie del Cajón de Autenticación -->
     <div class="p-6 border-t border-purple-200/70 bg-surface-container-lowest flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-outline font-label-code">
         <div class="flex items-center gap-1.5">
             <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
             <span>Protocolo SSL / TLS 1.3 · Sesión Protegida</span>
         </div>
-        <a href="{{ route('admin.login') }}" class="text-primary hover:underline font-semibold">
-            Portal de Personal Interno &rarr;
-        </a>
+        <button type="button" data-open-login-drawer="login" class="text-primary hover:underline font-semibold cursor-pointer">
+            Acceso Unificado (Clientes &amp; Personal Interno) &rarr;
+        </button>
     </div>
 </aside>
 
@@ -332,10 +338,14 @@
                     setTimeout(() => emailInput.focus(), 150);
                 }
             } else {
+                drawer.classList.remove('translate-x-0');
                 drawer.classList.add('translate-x-full');
                 overlay.classList.add('opacity-0', 'pointer-events-none');
                 overlay.classList.remove('opacity-100');
                 document.body.style.overflow = '';
+                if (['/login', '/register', '/admin/login'].includes(window.location.pathname)) {
+                    window.history.replaceState({}, '', '{{ route('public.home') }}');
+                }
             }
         }
 
@@ -454,10 +464,10 @@
         bindAjaxForm('drawer-login-form', 'drawer-login-submit', 'drawer-login-submit-text', 'Entrar a la Bóveda');
         bindAjaxForm('drawer-register-form', 'drawer-register-submit', 'drawer-register-submit-text', 'Crear mi Cuenta de Cliente');
 
-        // Si existen errores de validación en sesión o ?login=1 en la URL, abrir el drawer automáticamente
+        // Si estamos en /login, /register, /admin/login, ?login=1 o existen errores de validación, abrir el drawer automáticamente
         const params = new URLSearchParams(window.location.search);
-        if (params.get('login') === '1' || {{ $errors->any() ? 'true' : 'false' }}) {
-            toggleLoginDrawer(true, params.get('tab') === 'register' ? 'register' : 'login');
+        if ({{ $abrirPorDefecto ? 'true' : 'false' }} || params.get('login') === '1') {
+            toggleLoginDrawer(true, params.get('tab') === 'register' ? 'register' : '{{ $tabInicial }}');
         }
     });
 }());

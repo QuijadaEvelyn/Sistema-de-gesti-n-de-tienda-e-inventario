@@ -6,6 +6,9 @@
 @php
     $estadoCarritoHeader = \App\Http\Controllers\CheckoutSimuladoController::obtenerEstadoCarrito();
     $contadorCarrito = $estadoCarritoHeader['cantidad_total'] ?: ($cartCount ?? 0);
+    $contextoPublico = app(\App\Services\SucursalContextoService::class);
+    $sucursalesPublicas = $contextoPublico->obtenerSucursalesActivas();
+    $sucursalPublicaActiva = $contextoPublico->resolverSucursalPublica(request());
 @endphp
 
 <header class="sticky top-0 z-40 border-b border-purple-200/80 bg-white/95 backdrop-blur-md shadow-xs text-on-surface" data-purpose="global-header">
@@ -48,11 +51,29 @@
             <!-- Controles Utilitarios: Sucursal, Tema, Acceso y Carrito -->
             <div class="flex items-center gap-3 shrink-0">
 
-                <!-- Selector de Sucursal Activa -->
-                <div class="hidden lg:flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-surface-container border border-purple-200/80 text-xs font-label-md text-secondary font-medium">
+                <!-- Selector de Sucursal Activa en Vista Pública -->
+                <form method="POST" action="{{ route('sucursal.cambiar') }}" class="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container border border-purple-200/80 text-xs font-label-md text-secondary font-medium">
+                    @csrf
                     <span class="material-symbols-outlined text-[16px] text-primary">storefront</span>
-                    <span>{{ $activeBranch }}</span>
-                </div>
+                    <label for="public-branch-select" class="sr-only">Seleccionar sucursal de consulta</label>
+                    <select
+                        id="public-branch-select"
+                        name="sucursal_id"
+                        onchange="this.form.submit()"
+                        class="bg-transparent text-xs font-label-md text-secondary font-semibold focus:outline-none cursor-pointer pr-1"
+                    >
+                        <option value="all" @selected($sucursalPublicaActiva === null)>Todas las Sedes ({{ $sucursalesPublicas->count() ?: 3 }})</option>
+                        @forelse ($sucursalesPublicas as $sucItem)
+                            <option value="{{ $sucItem->id }}" @selected($sucursalPublicaActiva?->id === $sucItem->id)>
+                                {{ $sucItem->nombre }}
+                            </option>
+                        @empty
+                            <option value="central">{{ $activeBranch }}</option>
+                            <option value="coyoacan">Sucursal Coyoacán</option>
+                            <option value="almacen">Almacén General</option>
+                        @endforelse
+                    </select>
+                </form>
 
                 <!-- Botón de Alternancia de Tema Claro/Oscuro -->
                 <button type="button" id="theme-toggle-btn" class="p-2.5 rounded-xl border border-purple-200/80 bg-white hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition focus:outline-none shadow-2xs" title="Alternar Modo Claro/Oscuro" aria-label="Cambiar tema visual">

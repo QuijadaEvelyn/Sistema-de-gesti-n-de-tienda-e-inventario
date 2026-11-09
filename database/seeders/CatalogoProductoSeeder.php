@@ -43,6 +43,15 @@ class CatalogoProductoSeeder extends Seeder
             ]
         );
 
+        $sucursalAlmacen = Sucursal::firstOrCreate(
+            ['nombre' => 'Almacén General'],
+            [
+                'direccion' => 'Calz. Vallejo 1020, Industrial Vallejo, Azcapotzalco, CDMX',
+                'telefono' => '5553689100',
+                'activa' => true,
+            ]
+        );
+
         // 2. Catálogos principales por tipo ('libro', 'disco', 'coleccionable')
         $catLibros = Catalogo::updateOrCreate(
             ['nombre' => 'Libros Raros & Incunables'],
@@ -441,6 +450,24 @@ class CatalogoProductoSeeder extends Seeder
                 'stock_minimo' => 1,
             ]
         );
+
+        $sucursalAlmacen = Sucursal::where('nombre', 'Almacén General')->first();
+        if ($sucursalAlmacen) {
+            $stockAlmacen = in_array($sku, ['MEM-1934-FOT', 'MEM-1912-PAR'], true)
+                ? 0
+                : 1;
+
+            Existencia::updateOrCreate(
+                [
+                    'variante_sku_id' => $variante->id,
+                    'sucursal_id' => $sucursalAlmacen->id,
+                ],
+                [
+                    'cantidad' => $stockAlmacen,
+                    'stock_minimo' => 1,
+                ]
+            );
+        }
 
         if ($serieUnica !== null) {
             PiezaUnica::updateOrCreate(

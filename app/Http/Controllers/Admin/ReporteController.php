@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Sucursal;
 use App\Services\ReporteInventarioService;
+use App\Services\SucursalContextoService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -15,7 +16,8 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 class ReporteController extends Controller
 {
     public function __construct(
-        private readonly ReporteInventarioService $reporteInventarioService
+        private readonly ReporteInventarioService $reporteInventarioService,
+        private readonly SucursalContextoService $sucursalContextoService
     ) {}
 
     /**
@@ -24,7 +26,8 @@ class ReporteController extends Controller
      */
     public function index(Request $request): View
     {
-        $sucursalId = $request->filled('sucursal_id') ? (int) $request->input('sucursal_id') : null;
+        $sucursalActiva = $this->sucursalContextoService->resolverSucursalAdmin($request, $request->user());
+        $sucursalId = $sucursalActiva?->id;
         $tipoCatalogo = $request->filled('tipo_catalogo') ? (string) $request->input('tipo_catalogo') : null;
 
         $sucursales = Sucursal::query()->where('activa', true)->orderBy('nombre')->get();
@@ -37,6 +40,7 @@ class ReporteController extends Controller
 
         return view('admin.reportes.index', [
             'sucursales' => $sucursales,
+            'sucursalActiva' => $sucursalActiva,
             'sucursalSeleccionada' => $sucursalId,
             'categoriaSeleccionada' => $tipoCatalogo,
             'resumen' => $resumen,
@@ -113,4 +117,3 @@ class ReporteController extends Controller
         ]);
     }
 }
-

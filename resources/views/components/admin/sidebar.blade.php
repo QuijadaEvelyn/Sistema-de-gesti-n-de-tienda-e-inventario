@@ -37,14 +37,14 @@
 
             <nav class="flex flex-col gap-space-xs" aria-label="Menú administrativo por rol">
 
-                {{-- 1. DASHBOARD GENERAL: Exclusivo Administrador --}}
-                @can('ver-dashboard-general')
+                {{-- 1. DASHBOARD GENERAL O PANEL DE SEDE --}}
+                @if ($esAdmin || $esAlmacen || $esVentas || $esCompras)
                     <a href="{{ route('admin.dashboard') }}"
-                       class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg transition-colors {{ $activeRoute === 'dashboard' ? 'bg-primary-container text-white font-label-md shadow-xs' : 'font-body-md text-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface' }}">
+                       class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg transition-colors {{ $activeRoute === 'dashboard' || request()->routeIs('admin.dashboard', 'almacen.dashboard') ? 'bg-primary-container text-white font-label-md shadow-xs' : 'font-body-md text-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface' }}">
                         <span class="material-symbols-outlined text-[20px]">dashboard</span>
-                        <span>Dashboard General</span>
+                        <span>{{ $esAdmin ? 'Dashboard General' : 'Panel Operativo de Sede' }}</span>
                     </a>
-                @endcan
+                @endif
 
                 {{-- 1.B REPORTES Y EXPORTACIÓN DE DATOS (CSV Y PDF): Personal Operativo y Administrador --}}
                 <a href="{{ route('admin.reportes') }}"
@@ -56,7 +56,7 @@
                 {{-- 2. INVENTARIO UNIFICADO: Administrador, Almacén y Compras --}}
                 @if ($esAdmin || $esAlmacen || $esCompras)
                     <a href="{{ route('admin.inventario') }}"
-                       class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg transition-colors {{ $activeRoute === 'inventario' ? 'bg-primary-container text-white font-label-md shadow-xs' : 'font-body-md text-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface' }}">
+                       class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg transition-colors {{ $activeRoute === 'inventario' || request()->routeIs('admin.inventario') ? 'bg-primary-container text-white font-label-md shadow-xs' : 'font-body-md text-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface' }}">
                         <span class="material-symbols-outlined text-[20px]">inventory_2</span>
                         <span>Inventario Unificado</span>
                     </a>
@@ -65,46 +65,54 @@
                 {{-- Submódulos de Almacén: Ajustes de Stock, Recepciones, Transferencias y Envíos --}}
                 @if ($esAdmin || $esAlmacen)
                     <a href="{{ route('almacen.ajustes') }}"
-                       class="flex items-center gap-space-sm px-space-md py-2 rounded-lg transition-colors {{ $activeRoute === 'almacen-ajustes' ? 'bg-primary-container text-white font-label-md shadow-xs' : 'font-body-md text-xs text-on-surface-variant hover:bg-surface-container hover:text-on-surface pl-8' }}">
+                       class="flex items-center gap-space-sm px-space-md py-2 rounded-lg transition-colors {{ $activeRoute === 'almacen-ajustes' || request()->routeIs('almacen.ajustes*', 'almacen.recepciones*', 'admin.ajustes*', 'admin.recepciones*') ? 'bg-primary-container text-white font-label-md shadow-xs' : 'font-body-md text-xs text-on-surface-variant hover:bg-surface-container hover:text-on-surface pl-8' }}">
                         <span class="material-symbols-outlined text-[18px]">tune</span>
                         <span>Ajustes &amp; Recepciones</span>
                     </a>
 
                     <a href="{{ route('almacen.transferencias') }}"
-                       class="flex items-center gap-space-sm px-space-md py-2 rounded-lg transition-colors {{ $activeRoute === 'almacen-transferencias' ? 'bg-primary-container text-white font-label-md shadow-xs' : 'font-body-md text-xs text-on-surface-variant hover:bg-surface-container hover:text-on-surface pl-8' }}">
+                       class="flex items-center gap-space-sm px-space-md py-2 rounded-lg transition-colors {{ $activeRoute === 'almacen-transferencias' || request()->routeIs('almacen.transferencias*', 'admin.transferencias*') ? 'bg-primary-container text-white font-label-md shadow-xs' : 'font-body-md text-xs text-on-surface-variant hover:bg-surface-container hover:text-on-surface pl-8' }}">
                         <span class="material-symbols-outlined text-[18px]">swap_horiz</span>
                         <span>Transferencias de Stock</span>
                     </a>
 
                     <a href="{{ route('almacen.envios') }}"
-                       class="flex items-center gap-space-sm px-space-md py-2 rounded-lg transition-colors {{ $activeRoute === 'almacen-envios' ? 'bg-primary-container text-white font-label-md shadow-xs' : 'font-body-md text-xs text-on-surface-variant hover:bg-surface-container hover:text-on-surface pl-8' }}">
+                       class="flex items-center gap-space-sm px-space-md py-2 rounded-lg transition-colors {{ $activeRoute === 'almacen-envios' || request()->routeIs('almacen.envios*', 'admin.envios*') ? 'bg-primary-container text-white font-label-md shadow-xs' : 'font-body-md text-xs text-on-surface-variant hover:bg-surface-container hover:text-on-surface pl-8' }}">
                         <span class="material-symbols-outlined text-[18px]">local_shipping</span>
                         <span>Envíos &amp; Despacho</span>
                     </a>
+
+                    @if (! $esAdmin && ! $esVentas)
+                        <a href="{{ route('ventas.devoluciones') }}"
+                           class="flex items-center gap-space-sm px-space-md py-2 rounded-lg transition-colors {{ $activeRoute === 'ventas-devoluciones' || request()->routeIs('ventas.devoluciones*', 'admin.devoluciones*') ? 'bg-primary-container text-white font-label-md shadow-xs' : 'font-body-md text-xs text-on-surface-variant hover:bg-surface-container hover:text-on-surface pl-8' }}">
+                            <span class="material-symbols-outlined text-[18px]">assignment_return</span>
+                            <span>Devoluciones &amp; Garantías</span>
+                        </a>
+                    @endif
                 @endif
 
                 {{-- 3. ADMINISTRACIÓN DE VENTAS: Administrador y Ventas --}}
                 @if ($esAdmin || $esVentas)
                     <a href="{{ route('admin.ventas') }}"
-                       class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg transition-colors {{ $activeRoute === 'ventas' ? 'bg-primary-container text-white font-label-md shadow-xs' : 'font-body-md text-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface' }}">
+                       class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg transition-colors {{ $activeRoute === 'ventas' && ! request()->routeIs('ventas.devoluciones*', 'admin.devoluciones*', 'ventas.pagos*', 'ventas.promociones*') ? 'bg-primary-container text-white font-label-md shadow-xs' : 'font-body-md text-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface' }}">
                         <span class="material-symbols-outlined text-[20px]">point_of_sale</span>
                         <span>Administración de Ventas</span>
                     </a>
 
                     <a href="{{ route('ventas.pagos') }}"
-                       class="flex items-center gap-space-sm px-space-md py-2 rounded-lg transition-colors {{ $activeRoute === 'ventas-pagos' ? 'bg-primary-container text-white font-label-md shadow-xs' : 'font-body-md text-xs text-on-surface-variant hover:bg-surface-container hover:text-on-surface pl-8' }}">
+                       class="flex items-center gap-space-sm px-space-md py-2 rounded-lg transition-colors {{ $activeRoute === 'ventas-pagos' || request()->routeIs('ventas.pagos*') ? 'bg-primary-container text-white font-label-md shadow-xs' : 'font-body-md text-xs text-on-surface-variant hover:bg-surface-container hover:text-on-surface pl-8' }}">
                         <span class="material-symbols-outlined text-[18px]">payments</span>
                         <span>Validación de Pagos</span>
                     </a>
 
                     <a href="{{ route('ventas.devoluciones') }}"
-                       class="flex items-center gap-space-sm px-space-md py-2 rounded-lg transition-colors {{ $activeRoute === 'ventas-devoluciones' ? 'bg-primary-container text-white font-label-md shadow-xs' : 'font-body-md text-xs text-on-surface-variant hover:bg-surface-container hover:text-on-surface pl-8' }}">
+                       class="flex items-center gap-space-sm px-space-md py-2 rounded-lg transition-colors {{ $activeRoute === 'ventas-devoluciones' || request()->routeIs('ventas.devoluciones*', 'admin.devoluciones*') ? 'bg-primary-container text-white font-label-md shadow-xs' : 'font-body-md text-xs text-on-surface-variant hover:bg-surface-container hover:text-on-surface pl-8' }}">
                         <span class="material-symbols-outlined text-[18px]">assignment_return</span>
-                        <span>Devoluciones</span>
+                        <span>Devoluciones &amp; Garantías</span>
                     </a>
 
                     <a href="{{ route('ventas.promociones') }}"
-                       class="flex items-center gap-space-sm px-space-md py-2 rounded-lg transition-colors {{ $activeRoute === 'ventas-promociones' ? 'bg-primary-container text-white font-label-md shadow-xs' : 'font-body-md text-xs text-on-surface-variant hover:bg-surface-container hover:text-on-surface pl-8' }}">
+                       class="flex items-center gap-space-sm px-space-md py-2 rounded-lg transition-colors {{ $activeRoute === 'ventas-promociones' || request()->routeIs('ventas.promociones*') ? 'bg-primary-container text-white font-label-md shadow-xs' : 'font-body-md text-xs text-on-surface-variant hover:bg-surface-container hover:text-on-surface pl-8' }}">
                         <span class="material-symbols-outlined text-[18px]">sell</span>
                         <span>Precios &amp; Promociones</span>
                     </a>

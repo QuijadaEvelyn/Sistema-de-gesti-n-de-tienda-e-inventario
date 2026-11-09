@@ -1,19 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Middleware;
 
+use App\Services\SucursalContextoService;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 use Symfony\Component\HttpFoundation\Response;
 
 class VerifyBranchAccess
 {
     /**
-     * Roles que requieren validación de sucursal asignada.
+     * Roles que operan bajo contexto de sucursal en almacén o ventas.
      *
      * @var list<string>
      */
     protected array $rolesConSucursal = [
+        'almacen',
         'almacenista',
         'encargado',
         'ventas',
@@ -21,16 +26,13 @@ class VerifyBranchAccess
     ];
 
     /**
-     * Verifica que los usuarios con rol de Almacén o Ventas tengan una sucursal asignada
-     * (campo sucursal_id en el modelo Usuario) y que las operaciones correspondan
-     * únicamente a su sucursal autorizada.
+     * Verifica y sincroniza el acceso por sucursal para usuarios con rol de Almacén o Ventas.
      *
-     * El parámetro de sucursal puede venir como:
-     *  - Parámetro de ruta:     {sucursal_id}
-     *  - Query string:          ?sucursal_id=1
-     *  - Body JSON/form:        sucursal_id=1
-     *
-     * Uso en rutas: ->middleware('sucursal.acceso')
+     * - Si el modelo Usuario tiene un atributo `sucursal_id` explícitamente asignado, valida que
+     *   cualquier `sucursal_id` solicitado coincida con dicha sucursal autorizada.
+     * - Si la tabla `usuarios` no posee columna `sucursal_id` (o el usuario opera mediante el selector
+     *   de sede en sesión), resuelve y asigna automáticamente la sede activa mediante SucursalContextoService
+     *   para permitir la navegación fluida entre Ajustes, Recepciones, Transferencias y Envíos.
      *
      * @param  Closure(Request): Response  $next
      */
@@ -47,47 +49,51 @@ class VerifyBranchAccess
             return $next($request);
         }
 
-        // Verificar si el usuario posee alguno de los roles que requieren sucursal
-        $requiereSucursal = false;
-
-        if (method_exists($user, 'tieneRol')) {
-            $requiereSucursal = $user->tieneRol($this->rolesConSucursal);
-        }
+        $requiereSucursal = method_exists($user, 'tieneRol')
+            && $user->tieneRol($this->rolesConSucursal);
 
         if (! $requiereSucursal) {
-            // Usuarios sin roles de almacén/ventas no están sujetos a esta restricción
             return $next($request);
         }
 
-        // 1. Verificar que el usuario tenga una sucursal asignada
-        $sucursalAsignada = $user->sucursal_id ?? null;
+        $tieneColumnaSucursal = Schema::hasTable('usuarios') && Schema::hasColumn('usuarios', 'sucursal_id');
+        $sucursalAsignadaExplicita = $user->getAttributes()['sucursal_id'] ?? null;
 
-        if (! $sucursalAsignada) {
+        // Caso 1: El usuario tiene una sucursal fija asignada explícitamente en su registro
+        if ($sucursalAsignadaExplicita !== null) {
+            $sucursalSolicitada = $this->resolverSucursalSolicitada($request);
+
+            if ($sucursalSolicitada !== null && (int) $sucursalSolicitada !== (int) $sucursalAsignadaExplicita) {
+                return $this->responderForbidden(
+                    $request,
+                    "Acceso denegado: solo puedes operar en tu sucursal asignada (ID: {$sucursalAsignadaExplicita})."
+                );
+            }
+
+            $request->merge(['sucursal_id' => (int) $sucursalAsignadaExplicita]);
+
+            return $next($request);
+        }
+
+        // Caso 2: Si existe la columna sucursal_id en la tabla usuarios pero el usuario no tiene ninguna asignada
+        if ($tieneColumnaSucursal && $sucursalAsignadaExplicita === null) {
             return $this->responderForbidden(
                 $request,
                 'Tu usuario no tiene una sucursal asignada. Contacta al administrador del sistema.'
             );
         }
 
-        // 2. Si la solicitud incluye un sucursal_id, validar que coincida con la sucursal autorizada
-        $sucursalSolicitada = $this->resolverSucursalSolicitada($request);
-
-        if ($sucursalSolicitada !== null && (int) $sucursalSolicitada !== (int) $sucursalAsignada) {
-            return $this->responderForbidden(
-                $request,
-                "Acceso denegado: solo puedes operar en tu sucursal asignada (ID: {$sucursalAsignada})."
-            );
+        // Caso 3: El sistema gestiona la sede activa mediante SucursalContextoService (sesión / selector de sede)
+        $sucursalActiva = app(SucursalContextoService::class)->resolverSucursalAdmin($request, $user);
+        if ($sucursalActiva !== null && ! $request->filled('sucursal_id')) {
+            $request->merge(['sucursal_id' => $sucursalActiva->id]);
         }
-
-        // 3. Inyectar la sucursal autorizada en el request para que los controladores la lean
-        $request->merge(['sucursal_id' => (int) $sucursalAsignada]);
 
         return $next($request);
     }
 
     /**
      * Resuelve el sucursal_id que la solicitud intenta utilizar.
-     * Prioridad: parámetro de ruta > body > query string.
      */
     protected function resolverSucursalSolicitada(Request $request): ?int
     {

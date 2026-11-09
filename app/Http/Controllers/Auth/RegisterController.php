@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Bitacora;
 use App\Models\Carrito;
 use App\Models\Cliente;
+use App\Models\Producto;
 use App\Models\Rol;
 use App\Models\Usuario;
 use Illuminate\Http\JsonResponse;
@@ -16,6 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\View\View;
@@ -23,7 +25,7 @@ use Illuminate\View\View;
 class RegisterController extends Controller
 {
     /**
-     * Muestra el formulario público de registro de clientes.
+     * Muestra el formulario público de registro de clientes unificado en el Drawer Lateral.
      */
     public function showRegistrationForm(Request $request): View|JsonResponse
     {
@@ -34,7 +36,18 @@ class RegisterController extends Controller
             ]);
         }
 
-        return view('auth.register');
+        $productos = Schema::hasTable('productos')
+            ? Producto::with(['catalogo', 'libro', 'disco', 'coleccionable', 'variantesSku.existencias'])
+                ->where('activo', true)
+                ->orderByDesc('precio')
+                ->get()
+            : collect();
+
+        return view('auth.register', [
+            'productos' => $productos,
+            'drawerAutoOpen' => true,
+            'drawerDefaultTab' => 'register',
+        ]);
     }
 
     /**

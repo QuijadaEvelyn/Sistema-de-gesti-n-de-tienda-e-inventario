@@ -36,6 +36,9 @@ Route::middleware('reservas.liberar')->group(function (): void {
     Route::get('/catalogo/memorabilia', [CatalogoPublicoController::class, 'memorabilia'])->name('public.memorabilia');
     Route::get('/catalogo/adquisiciones-selectas', [CatalogoPublicoController::class, 'adquisiciones'])->name('public.adquisiciones');
 
+    // Selector global síncrono de Sucursal Activa y Temporalidad (Público y Panel de Gestión)
+    Route::post('/contexto/sucursal', [DashboardController::class, 'cambiarContexto'])->name('sucursal.cambiar');
+
     // Gestión de Carrito, Expiración de Reserva (5 min), Pasarela de Pago Simulada y Seguimiento de Paquete
     Route::post('/carrito/agregar', [CheckoutSimuladoController::class, 'agregar'])->name('carrito.agregar');
     Route::delete('/carrito/remover/{varianteSkuId}', [CheckoutSimuladoController::class, 'remover'])->name('carrito.remover');
@@ -44,6 +47,7 @@ Route::middleware('reservas.liberar')->group(function (): void {
     Route::post('/checkout/pagar', [CheckoutSimuladoController::class, 'procesarPago'])->name('checkout.pagar');
     Route::get('/checkout/confirmacion/{pedido}', [CheckoutSimuladoController::class, 'confirmacion'])->name('checkout.confirmacion');
     Route::post('/checkout/pedidos/{pedido}/simular-envio', [CheckoutSimuladoController::class, 'simularAvanceEnvio'])->name('checkout.simular-envio');
+    Route::post('/checkout/pedidos/{pedido}/devoluciones', [CheckoutSimuladoController::class, 'solicitarDevolucion'])->name('cliente.devoluciones.store');
 });
 
 // =========================================================================
@@ -105,14 +109,23 @@ Route::prefix('admin')
         Route::get('/reportes/exportar/csv', [ReporteController::class, 'exportarCsv'])->name('admin.reportes.csv');
         Route::get('/reportes/exportar/pdf', [ReporteController::class, 'exportarPdf'])->name('admin.reportes.pdf');
 
-        // Inventario Unificado (accesible para Administrador, Encargado, Almacén y Compras)
+        // Inventario Unificado y Submódulos de Almacén (accesibles para Administrador, Encargado, Almacén y Compras)
         Route::middleware('rol:administrador,encargado,almacen,compras')->group(function (): void {
             Route::get('/inventario', [InventarioController::class, 'index'])->name('admin.inventario');
+            Route::get('/ajustes', [InventarioController::class, 'movimientos'])->name('admin.ajustes');
+            Route::get('/recepciones', [InventarioController::class, 'movimientos'])->name('admin.recepciones');
+            Route::get('/transferencias', [InventarioController::class, 'transferencias'])->name('admin.transferencias');
+            Route::get('/envios', [InventarioController::class, 'envios'])->name('admin.envios');
         });
 
         // Administración de Ventas desde el prefijo /admin/ventas (Administrador y Ventas)
         Route::middleware('rol:administrador,ventas')->group(function (): void {
             Route::get('/ventas', [VentasController::class, 'pedidos'])->name('admin.ventas');
+        });
+
+        // Gestión de Devoluciones y Garantías (Administrador, Ventas y Almacén)
+        Route::middleware('rol:administrador,ventas,almacen,encargado')->group(function (): void {
+            Route::get('/devoluciones', [VentasController::class, 'devoluciones'])->name('admin.devoluciones');
         });
 
         // Proveedores y Órdenes de Compra desde el prefijo /admin (Administrador y Compras)
@@ -161,16 +174,25 @@ Route::prefix('ventas')
         Route::get('/pedidos/{pedido}', [VentasController::class, 'show'])->name('ventas.pedidos.show');
         Route::patch('/pedidos/{pedido}/estatus', [VentasController::class, 'actualizarEstatus'])->name('ventas.pedidos.estatus');
         Route::get('/pagos', [VentasController::class, 'pagos'])->name('ventas.pagos');
-        Route::get('/devoluciones', [VentasController::class, 'devoluciones'])->name('ventas.devoluciones');
         Route::get('/promociones', [VentasController::class, 'promociones'])->name('ventas.promociones');
+    });
+
+// Gestión de Devoluciones y Garantías por Defectos (Administración, Ventas y Almacén)
+Route::prefix('ventas')
+    ->middleware(['auth', 'rol:ventas,administrador,almacen,encargado'])
+    ->group(function (): void {
+        Route::get('/devoluciones', [VentasController::class, 'devoluciones'])->name('ventas.devoluciones');
+        Route::post('/devoluciones/{devolucion}/dictaminar', [VentasController::class, 'dictaminarDevolucion'])->name('ventas.devoluciones.dictaminar');
+        Route::post('/devoluciones/{devolucion}/recepcion', [VentasController::class, 'procesarRecepcionDevolucion'])->name('ventas.devoluciones.recepcion');
     });
 
 // Rol 3: ALMACÉN (Preparación y entrega de pedidos, ajustes de inventario, transferencias y recepciones)
 Route::prefix('almacen')
-    ->middleware(['auth', 'rol:almacen,administrador', 'sucursal.acceso'])
+    ->middleware(['auth', 'rol:almacen,encargado,administrador', 'sucursal.acceso'])
     ->group(function (): void {
         Route::get('/', [InventarioController::class, 'index'])->name('almacen.dashboard');
         Route::get('/envios', [InventarioController::class, 'envios'])->name('almacen.envios');
+        Route::post('/envios/{envio}/avanzar', [InventarioController::class, 'avanzarEstadoEnvio'])->name('almacen.envios.avanzar');
         Route::get('/transferencias', [InventarioController::class, 'transferencias'])->name('almacen.transferencias');
         Route::post('/transferencias', [InventarioController::class, 'registrarTransferencia'])->name('almacen.transferencias.store');
         Route::post('/transferencias/{movimiento}/confirmar', [InventarioController::class, 'confirmarTransferencia'])->name('almacen.transferencias.confirmar');
@@ -201,6 +223,10 @@ Route::prefix('mi-cuenta')
         // Inspección de pedido propio con validación estricta de propiedad
         Route::get('/pedidos/{pedido}', [CheckoutSimuladoController::class, 'confirmacion'])
             ->name('cliente.pedidos.detalle')
+            ->middleware('cliente.propietario:pedido');
+
+        Route::post('/pedidos/{pedido}/devoluciones', [CheckoutSimuladoController::class, 'solicitarDevolucion'])
+            ->name('mi-cuenta.devoluciones.store')
             ->middleware('cliente.propietario:pedido');
 
         // Carrito personal con validación estricta de propiedad

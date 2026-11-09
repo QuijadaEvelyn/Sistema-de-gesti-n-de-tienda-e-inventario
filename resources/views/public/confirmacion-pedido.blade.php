@@ -151,5 +151,134 @@
         </div>
     </section>
 
+    <!-- Sección de Garantía de Autenticidad y Solicitud de Devolución por Defectos -->
+    @php
+        $catalogoMotivos = $motivosDevolucion ?? \App\Models\Devolucion::MOTIVOS_CATALOGO;
+    @endphp
+    <section class="bg-white rounded-2xl border border-purple-200/80 p-6 sm:p-8 shadow-xs mt-8 space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-purple-100 pb-4">
+            <div>
+                <span class="text-[11px] font-label-code uppercase tracking-wider text-primary font-bold">
+                    Garantía Curatorial ARCHIVUM
+                </span>
+                <h2 class="text-lg font-bold text-on-surface font-quicksand">
+                    Solicitud de Devolución o Garantía por Defectos
+                </h2>
+                <p class="text-xs text-on-surface-variant">
+                    Si tu pieza llegó en mal estado, presenta daños de traslado o no coincide con la graduación certificada, registra aquí tu solicitud adjuntando evidencia fotográfica.
+                </p>
+            </div>
+        </div>
+
+        @if ($pedido->devoluciones && $pedido->devoluciones->isNotEmpty())
+            <div class="space-y-3">
+                <h3 class="text-xs font-label-code uppercase tracking-wider text-secondary font-bold">
+                    Estado de tus Solicitudes de Devolución ({{ $pedido->devoluciones->count() }})
+                </h3>
+                @foreach ($pedido->devoluciones as $dev)
+                    @php
+                        $etapaDev = $dev->estadoOperativo();
+                        $badgeDev = match ($etapaDev) {
+                            'aprobada' => 'bg-blue-100 text-blue-800 border-blue-300',
+                            'producto_retornado' => 'bg-indigo-100 text-indigo-800 border-indigo-300',
+                            'reembolso_procesado' => 'bg-emerald-100 text-emerald-800 border-emerald-300',
+                            'rechazada' => 'bg-rose-100 text-rose-800 border-rose-300',
+                            default => 'bg-amber-100 text-amber-800 border-amber-300',
+                        };
+                    @endphp
+                    <div class="p-4 rounded-xl bg-purple-50/50 border border-purple-200/70 space-y-2 text-xs">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <div>
+                                <span class="font-label-code font-bold text-primary">{{ $dev->folio_devolucion ?? ('#DEV-'.$dev->id) }}</span>
+                                <span class="font-bold text-on-surface ml-1">
+                                    &middot; {{ $dev->detallePedido?->varianteSku?->producto?->nombre ?? 'Pieza' }} ({{ $dev->cantidad }} u.)
+                                </span>
+                                <span class="text-outline ml-2">&middot; Reembolso estimado: ${{ number_format((float) $dev->monto_reembolso, 2) }} MXN</span>
+                            </div>
+                            <span class="px-2.5 py-0.5 rounded-full border text-[11px] font-label-code font-bold uppercase {{ $badgeDev }}">
+                                {{ $dev->etiquetaEstado() }}
+                            </span>
+                        </div>
+                        <p class="text-on-surface-variant">
+                            <strong>Motivo declarado:</strong> {{ $dev->etiquetaMotivo() }}
+                            @if ($dev->comentarios_cliente)
+                                &mdash; <em>"{{ $dev->comentarios_cliente }}"</em>
+                            @endif
+                        </p>
+                        @if ($dev->guia_retorno)
+                            <div class="p-3 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-900">
+                                <div class="font-label-code font-bold">GUÍA DE RETORNO EMITIDA: {{ $dev->guia_retorno }}</div>
+                                @if ($dev->instrucciones_retorno)
+                                    <p class="mt-0.5 text-[11px]">{{ $dev->instrucciones_retorno }}</p>
+                                @endif
+                            </div>
+                        @endif
+                    </div>
+                @endforeach
+            </div>
+        @endif
+
+        @if (in_array($pedido->estatus, ['pagado', 'enviado', 'entregado'], true))
+            <form method="POST"
+                  action="{{ route('cliente.devoluciones.store', $pedido) }}"
+                  enctype="multipart/form-data"
+                  class="space-y-4 text-xs pt-2">
+                @csrf
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block font-label-code uppercase text-secondary font-bold mb-1">Pieza Afectada *</label>
+                        <select name="detalle_pedido_id" required class="w-full px-3 py-2 rounded-xl border border-purple-200 bg-white text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/30">
+                            @foreach ($pedido->detalles as $detalle)
+                                <option value="{{ $detalle->id }}">
+                                    {{ $detalle->varianteSku?->sku }} — {{ $detalle->varianteSku?->producto?->nombre ?? 'Pieza' }} ({{ $detalle->cantidad }} u.)
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block font-label-code uppercase text-secondary font-bold mb-1">Motivo de la Devolución *</label>
+                        <select name="motivo" required class="w-full px-3 py-2 rounded-xl border border-purple-200 bg-white text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/30">
+                            @foreach ($catalogoMotivos as $codigoMotivo => $etiquetaMotivo)
+                                <option value="{{ $codigoMotivo }}">{{ $etiquetaMotivo }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block font-label-code uppercase text-secondary font-bold mb-1">Cantidad *</label>
+                        <input type="number" name="cantidad" min="1" max="10" value="1" required
+                               class="w-full px-3 py-2 rounded-xl border border-purple-200 bg-white text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/30" />
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-label-code uppercase text-secondary font-bold mb-1">
+                            Fotografías de Evidencia (JPG, PNG, WEBP)
+                        </label>
+                        <input type="file" name="evidencias[]" multiple accept="image/*"
+                               class="w-full px-3 py-2 rounded-xl border border-purple-200 bg-surface-container-low text-on-surface file:mr-3 file:px-3 file:py-1 file:rounded-lg file:border-0 file:bg-primary-container file:text-white file:text-xs file:font-semibold" />
+                    </div>
+
+                    <div>
+                        <label class="block font-label-code uppercase text-secondary font-bold mb-1">
+                            Comentarios Explicativos *
+                        </label>
+                        <textarea name="comentarios_cliente" rows="2" required
+                                  placeholder="Detalla el daño físico o la discrepancia con la descripción curatorial..."
+                                  class="w-full px-3 py-2 rounded-xl border border-purple-200 bg-white text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/30"></textarea>
+                    </div>
+                </div>
+
+                <div class="flex justify-end">
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-primary-container hover:bg-primary text-white text-xs font-bold uppercase tracking-wider transition cursor-pointer">
+                        Solicitar Devolución por Garantía
+                    </button>
+                </div>
+            </form>
+        @endif
+    </section>
+
 </x-layouts.public>
 

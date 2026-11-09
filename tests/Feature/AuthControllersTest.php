@@ -47,6 +47,8 @@ class AuthControllersTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertViewIs('auth.login');
+        $response->assertSee('login-drawer', false);
+        $response->assertSee('Bóveda de Autenticación ARCHIVUM');
     }
 
     public function test_inicio_de_sesion_exitoso_para_cliente(): void
@@ -159,7 +161,7 @@ class AuthControllersTest extends TestCase
 
         $response = $this->post('/logout');
 
-        $response->assertRedirect('/login');
+        $response->assertRedirect(route('public.home'));
         $this->assertGuest();
     }
 

@@ -8,7 +8,10 @@
                 <h1 class="text-2xl font-bold font-quicksand text-on-surface">Mi Cuenta y Perfil</h1>
                 <p class="text-sm text-on-surface-variant font-label-md">Actualiza tus datos personales y credenciales de acceso</p>
             </div>
-            <div class="flex gap-1.5 flex-wrap">
+            <div class="flex items-center gap-2 flex-wrap">
+                <a href="{{ route('cliente.mis-pedidos') }}" class="px-3.5 py-1.5 rounded-xl bg-primary-container text-white text-xs font-bold uppercase tracking-wider hover:bg-primary transition">
+                    Mis Pedidos &amp; Devoluciones
+                </a>
                 @foreach ($usuario->roles as $rol)
                     <span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-primary/10 text-primary font-label-code">
                         {{ $rol->nombre }}

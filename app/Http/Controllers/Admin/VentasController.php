@@ -10,12 +10,16 @@ use App\Models\Devolucion;
 use App\Models\Pago;
 use App\Models\Pedido;
 use App\Models\Promocion;
+use App\Models\Sucursal;
+use App\Services\DevolucionService;
+use App\Services\SucursalContextoService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
+use RuntimeException;
 
 class VentasController extends Controller
 {
@@ -114,19 +118,132 @@ class VentasController extends Controller
     }
 
     /**
-     * Solicitudes de devolución.
+     * Panel de Gestión de Devoluciones y Garantías por Defectos.
      */
     public function devoluciones(Request $request): View
     {
+        $sucursalActiva = app(SucursalContextoService::class)->resolverSucursalAdmin($request, $request->user());
+        $sucursales = Sucursal::query()->where('activa', true)->orderBy('id')->get();
+        $filtroEstado = $request->filled('etapa')
+            ? $request->string('etapa')->toString()
+            : ($request->filled('estatus') ? $request->string('estatus')->toString() : null);
+
+        $query = Devolucion::query()
+            ->with([
+                'pedido.envios.sucursal',
+                'cliente',
+                'detallePedido.varianteSku.producto',
+                'sucursalDestino',
+                'revisor',
+            ])
+            ->when($filtroEstado !== null && $filtroEstado !== '', function (Builder $q) use ($filtroEstado): void {
+                $q->where(function (Builder $sub) use ($filtroEstado): void {
+                    $sub->where('etapa_devolucion', $filtroEstado)
+                        ->orWhere('estatus', $filtroEstado);
+                });
+            })
+            ->when($request->filled('buscar'), function (Builder $q) use ($request): void {
+                $termino = '%'.$request->string('buscar')->trim().'%';
+                $q->where(function (Builder $sub) use ($termino): void {
+                    $sub->where('folio_devolucion', 'like', $termino)
+                        ->orWhere('guia_retorno', 'like', $termino)
+                        ->orWhereHas('pedido', fn (Builder $p) => $p->where('folio', 'like', $termino));
+                });
+            });
+
+        $todas = Devolucion::query()->get();
+        $resumenDevoluciones = [
+            'solicitada' => $todas->filter(fn (Devolucion $d) => $d->estadoOperativo() === 'solicitada')->count(),
+            'aprobada' => $todas->filter(fn (Devolucion $d) => $d->estadoOperativo() === 'aprobada')->count(),
+            'rechazada' => $todas->filter(fn (Devolucion $d) => $d->estadoOperativo() === 'rechazada')->count(),
+            'producto_retornado' => $todas->filter(fn (Devolucion $d) => $d->estadoOperativo() === 'producto_retornado')->count(),
+            'reembolso_procesado' => $todas->filter(fn (Devolucion $d) => $d->estadoOperativo() === 'reembolso_procesado')->count(),
+        ];
+
         return view('admin.ventas.index', [
             'seccion' => 'devoluciones',
-            'registros' => Devolucion::query()
-                ->with(['pedido', 'cliente'])
-                ->when($request->filled('estatus'), fn (Builder $q) => $q->where('estatus', $request->string('estatus')))
-                ->latest()
-                ->paginate(20)
-                ->withQueryString(),
+            'registros' => $query->latest()->paginate(20)->withQueryString(),
+            'resumenDevoluciones' => $resumenDevoluciones,
+            'etapasDevolucion' => Devolucion::ETAPAS,
+            'motivosDevolucion' => Devolucion::MOTIVOS_CATALOGO,
+            'filtroEstado' => $filtroEstado,
+            'sucursales' => $sucursales,
+            'sucursalActiva' => $sucursalActiva,
         ]);
+    }
+
+    /**
+     * Autoriza o rechaza una solicitud de devolución entrante y genera la guía/indicaciones de retorno.
+     */
+    public function dictaminarDevolucion(Request $request, Devolucion $devolucion): RedirectResponse
+    {
+        $validated = $request->validate([
+            'decision' => ['required', Rule::in(['aprobar', 'rechazar'])],
+            'dictamen_admin' => ['nullable', 'string', 'max:1500'],
+            'guia_retorno' => ['nullable', 'string', 'max:50'],
+            'instrucciones_retorno' => ['nullable', 'string', 'max:1500'],
+        ]);
+
+        try {
+            $actualizada = app(DevolucionService::class)->dictaminarSolicitud(
+                devolucion: $devolucion,
+                decision: (string) $validated['decision'],
+                dictamenAdmin: $validated['dictamen_admin'] ?? null,
+                guiaRetorno: $validated['guia_retorno'] ?? null,
+                instruccionesRetorno: $validated['instrucciones_retorno'] ?? null,
+                usuarioId: (int) $request->user()->id
+            );
+        } catch (RuntimeException $e) {
+            return back()->with('error', $e->getMessage())->withErrors(['devolucion' => $e->getMessage()]);
+        }
+
+        $mensaje = $actualizada->estatus === 'aprobada'
+            ? "Devolución {$actualizada->folio_devolucion} APROBADA. Guía de retorno emitida: {$actualizada->guia_retorno}."
+            : "Devolución {$actualizada->folio_devolucion} RECHAZADA.";
+
+        return back()->with('status', $mensaje);
+    }
+
+    /**
+     * Registra la recepción física del artículo devuelto y actualiza las existencias
+     * (reintegrando la pieza al stock de la sucursal con su graduación o enviándola a mermas/baja).
+     */
+    public function procesarRecepcionDevolucion(Request $request, Devolucion $devolucion): RedirectResponse
+    {
+        $validated = $request->validate([
+            'destino_inventario' => ['required', Rule::in(['reintegrar_stock', 'merma_baja'])],
+            'sucursal_destino_id' => ['nullable', 'integer', 'exists:sucursales,id'],
+            'nueva_graduacion' => ['nullable', 'string', 'max:120'],
+            'dictamen_admin' => ['nullable', 'string', 'max:1500'],
+            'procesar_reembolso' => ['nullable', 'boolean'],
+        ]);
+
+        try {
+            $procesarReembolso = $request->has('procesar_reembolso')
+                ? $request->boolean('procesar_reembolso')
+                : true;
+
+            $actualizada = app(DevolucionService::class)->procesarRetornoFisicoYStock(
+                devolucion: $devolucion,
+                destinoInventario: (string) $validated['destino_inventario'],
+                sucursalDestinoId: isset($validated['sucursal_destino_id']) ? (int) $validated['sucursal_destino_id'] : null,
+                nuevaGraduacion: $validated['nueva_graduacion'] ?? null,
+                dictamenAdmin: $validated['dictamen_admin'] ?? null,
+                procesarReembolso: $procesarReembolso,
+                usuarioId: (int) $request->user()->id
+            );
+        } catch (RuntimeException $e) {
+            return back()->with('error', $e->getMessage())->withErrors(['devolucion' => $e->getMessage()]);
+        }
+
+        $accionStock = $actualizada->destino_inventario === 'reintegrar_stock'
+            ? 'reintegrada al stock de la sucursal'
+            : 'enviada a mermas / baja de inventario';
+
+        return back()->with(
+            'status',
+            "Recepción física de {$actualizada->folio_devolucion} procesada: pieza {$accionStock} ({$actualizada->etiquetaEstado()})."
+        );
     }
 
     /**

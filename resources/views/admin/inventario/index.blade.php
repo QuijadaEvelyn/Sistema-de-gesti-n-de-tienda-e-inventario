@@ -2,17 +2,22 @@
     <div class="space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <h1 class="text-2xl font-bold text-on-surface font-quicksand">Inventario Unificado por Sucursal</h1>
+                <h1 class="text-2xl font-bold text-on-surface font-quicksand">
+                    Inventario Unificado por Sucursal
+                    @if (! empty($sucursalActiva))
+                        <span class="text-primary">· {{ $sucursalActiva->nombre }}</span>
+                    @endif
+                </h1>
                 <p class="text-xs text-on-surface-variant font-label-code uppercase tracking-wider mt-1">
-                    Total en custodia: {{ number_format($totalUnidades) }} unidades &middot; Alertas de stock mínimo: {{ $alertasStock }}
+                    Sede: {{ $sucursalActiva?->nombre ?? 'Todas las Sedes (Vista Global)' }} &middot; Total en custodia: {{ number_format($totalUnidades) }} unidades &middot; Alertas de stock mínimo: {{ $alertasStock }}
                 </p>
             </div>
             <div class="flex flex-wrap gap-2">
-                <a href="{{ route('admin.reportes.csv', array_filter(['sucursal_id' => request('sucursal_id')])) }}" class="px-4 py-2 rounded-xl border border-purple-200 bg-white hover:bg-purple-50 text-primary text-xs font-label-md flex items-center gap-1.5 transition">
+                <a href="{{ route('admin.reportes.csv', array_filter(['sucursal_id' => $sucursalActiva?->id ?? request('sucursal_id')])) }}" class="px-4 py-2 rounded-xl border border-purple-200 bg-white hover:bg-purple-50 text-primary text-xs font-label-md flex items-center gap-1.5 transition">
                     <span class="material-symbols-outlined text-[16px]">table_view</span>
                     <span>Exportar CSV (.csv)</span>
                 </a>
-                <a href="{{ route('admin.reportes.pdf', array_filter(['sucursal_id' => request('sucursal_id')])) }}" class="px-4 py-2 rounded-xl border border-purple-200 bg-white hover:bg-purple-50 text-primary text-xs font-label-md flex items-center gap-1.5 transition">
+                <a href="{{ route('admin.reportes.pdf', array_filter(['sucursal_id' => $sucursalActiva?->id ?? request('sucursal_id')])) }}" class="px-4 py-2 rounded-xl border border-purple-200 bg-white hover:bg-purple-50 text-primary text-xs font-label-md flex items-center gap-1.5 transition">
                     <span class="material-symbols-outlined text-[16px]">picture_as_pdf</span>
                     <span>Exportar PDF (.pdf)</span>
                 </a>
@@ -31,10 +36,12 @@
 
         <form method="GET" action="{{ route('admin.inventario') }}" class="bg-surface-container-lowest p-4 rounded-2xl border border-purple-200/70 flex flex-wrap items-center gap-3">
             <input type="text" name="buscar" value="{{ request('buscar') }}" placeholder="Buscar SKU o producto..." class="flex-1 min-w-[200px] px-3.5 py-2 rounded-xl border border-purple-200 text-sm" />
-            <select name="sucursal_id" class="px-3.5 py-2 rounded-xl border border-purple-200 text-sm bg-white">
-                <option value="">Todas las sucursales</option>
+            <select name="sucursal_id" onchange="this.form.submit()" class="px-3.5 py-2 rounded-xl border border-purple-200 text-sm bg-white">
+                @if ($puedeVerGlobal ?? true)
+                    <option value="all" @selected(($sucursalActiva ?? null) === null)>Todas las sucursales</option>
+                @endif
                 @foreach ($sucursales as $sucursal)
-                    <option value="{{ $sucursal->id }}" @selected(request('sucursal_id') == $sucursal->id)>{{ $sucursal->nombre }}</option>
+                    <option value="{{ $sucursal->id }}" @selected(($sucursalActiva?->id ?? (int) request('sucursal_id')) === $sucursal->id)>{{ $sucursal->nombre }}</option>
                 @endforeach
             </select>
             <label class="flex items-center gap-2 text-xs text-on-surface-variant">

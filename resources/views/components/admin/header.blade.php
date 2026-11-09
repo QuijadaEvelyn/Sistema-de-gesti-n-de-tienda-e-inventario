@@ -15,6 +15,11 @@
         ->map(fn ($part) => strtoupper(substr($part, 0, 1)))
         ->take(2)
         ->implode('') ?: 'AR';
+
+    $contextoHeaderAdmin = app(\App\Services\SucursalContextoService::class);
+    $sucursalesHeaderAdmin = $contextoHeaderAdmin->obtenerSucursalesActivas();
+    $sucursalActivaHeader = $contextoHeaderAdmin->resolverSucursalAdmin(request(), $authUser);
+    $puedeVerGlobalHeader = $contextoHeaderAdmin->puedeVerVistaGlobal($authUser);
 @endphp
 
 <header class="fixed top-0 left-72 right-0 h-16 bg-surface-container-lowest/95 backdrop-blur-md z-40 border-b border-purple-200/70 px-space-lg flex items-center justify-between gap-space-md shadow-xs">
@@ -42,16 +47,31 @@
             <span>Ver Tienda Pública</span>
         </a>
 
-        <!-- Selector de Sucursal Operativa -->
-        <div class="hidden lg:flex items-center gap-space-xs bg-surface-container-low px-space-sm py-1 rounded-lg border border-purple-200/80">
+        <!-- Selector de Sucursal Operativa Síncrono -->
+        <form method="POST" action="{{ route('sucursal.cambiar') }}" class="hidden lg:flex items-center gap-space-xs bg-surface-container-low px-space-sm py-1 rounded-lg border border-purple-200/80">
+            @csrf
             <span class="material-symbols-outlined text-[18px] text-primary">location_on</span>
             <label class="sr-only" for="branch-select">Sucursal activa</label>
-            <select id="branch-select" class="bg-transparent font-label-sm text-on-surface font-medium focus:outline-none cursor-pointer pr-space-xs text-xs">
-                <option value="central" {{ $activeBranch === 'central' ? 'selected' : '' }}>Sucursal Central Bellas Artes</option>
-                <option value="coyoacan" {{ $activeBranch === 'coyoacan' ? 'selected' : '' }}>Sucursal Coyoacán</option>
-                <option value="almacen" {{ $activeBranch === 'almacen' ? 'selected' : '' }}>Almacén General</option>
+            <select
+                id="branch-select"
+                name="sucursal_id"
+                onchange="this.form.submit()"
+                class="bg-transparent font-label-sm text-on-surface font-medium focus:outline-none cursor-pointer pr-space-xs text-xs"
+            >
+                @if ($puedeVerGlobalHeader)
+                    <option value="all" @selected($sucursalActivaHeader === null)>Todas las Sedes ({{ $sucursalesHeaderAdmin->count() ?: 3 }})</option>
+                @endif
+                @forelse ($sucursalesHeaderAdmin as $sucOp)
+                    <option value="{{ $sucOp->id }}" @selected($sucursalActivaHeader?->id === $sucOp->id)>
+                        {{ $sucOp->nombre }}
+                    </option>
+                @empty
+                    <option value="central" {{ $activeBranch === 'central' ? 'selected' : '' }}>Sucursal Central Bellas Artes</option>
+                    <option value="coyoacan" {{ $activeBranch === 'coyoacan' ? 'selected' : '' }}>Sucursal Coyoacán</option>
+                    <option value="almacen" {{ $activeBranch === 'almacen' ? 'selected' : '' }}>Almacén General</option>
+                @endforelse
             </select>
-        </div>
+        </form>
 
         <!-- Conmutador de Tema Claro / Oscuro -->
         <button type="button" id="admin-theme-toggle" class="p-2 rounded-lg bg-surface-container-low hover:bg-surface-container border border-purple-200/60 text-on-surface-variant hover:text-on-surface transition-colors" title="Alternar Tema Claro/Oscuro">

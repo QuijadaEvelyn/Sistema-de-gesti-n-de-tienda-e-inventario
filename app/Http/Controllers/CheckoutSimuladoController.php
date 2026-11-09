@@ -11,6 +11,7 @@ use App\Models\Cliente;
 use App\Models\DetalleEnvio;
 use App\Models\DetallePago;
 use App\Models\DetallePedido;
+use App\Models\Devolucion;
 use App\Models\Direccion;
 use App\Models\Envio;
 use App\Models\Existencia;
@@ -22,6 +23,7 @@ use App\Models\Producto;
 use App\Models\ReservaStock;
 use App\Models\Sucursal;
 use App\Models\VarianteSku;
+use App\Services\DevolucionService;
 use App\Services\PreventaService;
 use App\Services\ReservaService;
 use Illuminate\Http\JsonResponse;
@@ -899,6 +901,8 @@ class CheckoutSimuladoController extends Controller
             'cliente',
             'direccionEnvio',
             'detalles.varianteSku.producto',
+            'detalles.devoluciones',
+            'devoluciones.detallePedido.varianteSku.producto',
             'pagos.detalles',
             'envios.historial' => fn ($q) => $q->orderBy('created_at')->orderBy('id'),
         ]);
@@ -908,6 +912,7 @@ class CheckoutSimuladoController extends Controller
             'envio' => $pedido->envios->first(),
             'pago' => $pedido->pagos->first(),
             'etapasRastreo' => self::ETAPAS_RASTREO,
+            'motivosDevolucion' => Devolucion::MOTIVOS_CATALOGO,
         ]);
     }
 
@@ -984,7 +989,13 @@ class CheckoutSimuladoController extends Controller
             }
 
             if ($clienteId || ! empty($idsSesion)) {
-                $pedidos = Pedido::with(['detalles.varianteSku.producto', 'envios.historial', 'pagos'])
+                $pedidos = Pedido::with([
+                    'detalles.varianteSku.producto',
+                    'detalles.devoluciones',
+                    'devoluciones.detallePedido.varianteSku.producto',
+                    'envios.historial',
+                    'pagos',
+                ])
                     ->where(function ($q) use ($clienteId, $idsSesion): void {
                         if ($clienteId) {
                             $q->where('cliente_id', $clienteId);
@@ -1001,7 +1012,59 @@ class CheckoutSimuladoController extends Controller
         return view('public.mis-pedidos', [
             'pedidos' => $pedidos,
             'etapasRastreo' => self::ETAPAS_RASTREO,
+            'motivosDevolucion' => Devolucion::MOTIVOS_CATALOGO,
         ]);
+    }
+
+    /**
+     * Registra una solicitud de devolución o garantía enviada por el cliente desde su historial de compras
+     * o desde la vista de confirmación/detalle del pedido, adjuntando motivo, comentarios y fotografías de evidencia.
+     */
+    public function solicitarDevolucion(Request $request, Pedido $pedido): RedirectResponse
+    {
+        $validated = $request->validate([
+            'detalle_pedido_id' => ['required', 'integer', 'exists:detalle_pedidos,id'],
+            'cantidad' => ['nullable', 'integer', 'min:1'],
+            'motivo' => ['required', 'string', 'max:255'],
+            'comentarios_cliente' => ['nullable', 'string', 'max:2000'],
+            'evidencias' => ['nullable', 'array', 'max:5'],
+            'evidencias.*' => ['file', 'image', 'max:5120'],
+            'evidencia_urls' => ['nullable', 'array', 'max:5'],
+            'evidencia_urls.*' => ['nullable', 'string', 'max:500'],
+        ]);
+
+        $archivosEvidencia = [];
+        if ($request->hasFile('evidencias')) {
+            $archivosEvidencia = array_merge($archivosEvidencia, (array) $request->file('evidencias'));
+        }
+        if (! empty($validated['evidencia_urls'])) {
+            foreach ($validated['evidencia_urls'] as $url) {
+                if (is_string($url) && trim($url) !== '') {
+                    $archivosEvidencia[] = trim($url);
+                }
+            }
+        }
+
+        try {
+            $devolucion = app(DevolucionService::class)->solicitarDevolucionCliente(
+                pedido: $pedido,
+                detallePedidoId: (int) $validated['detalle_pedido_id'],
+                cantidad: (int) ($validated['cantidad'] ?? 1),
+                motivo: (string) $validated['motivo'],
+                comentariosCliente: $validated['comentarios_cliente'] ?? null,
+                archivosEvidencia: $archivosEvidencia
+            );
+        } catch (RuntimeException $e) {
+            return back()
+                ->withInput()
+                ->with('error', $e->getMessage())
+                ->withErrors(['devolucion' => $e->getMessage()]);
+        }
+
+        return back()->with(
+            'status',
+            "Solicitud de devolución y garantía registrada con folio {$devolucion->folio_devolucion} (Estado: Pendiente de revisión)."
+        );
     }
 
     /**

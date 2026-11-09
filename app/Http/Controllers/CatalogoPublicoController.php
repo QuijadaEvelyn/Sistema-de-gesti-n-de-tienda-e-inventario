@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Producto;
+use App\Services\SucursalContextoService;
 use Database\Seeders\CatalogoProductoSeeder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -143,8 +144,21 @@ class CatalogoPublicoController extends Controller
             app(CatalogoProductoSeeder::class)->run();
         }
 
+        $sucursalActiva = app(SucursalContextoService::class)->resolverSucursalPublica($request);
+        $sucursalId = $sucursalActiva?->id;
+
         $query = Producto::query()
-            ->with(['catalogo', 'libro', 'disco', 'coleccionable', 'variantesSku.existencias'])
+            ->with([
+                'catalogo',
+                'libro',
+                'disco',
+                'coleccionable',
+                'variantesSku.existencias' => function ($q) use ($sucursalId): void {
+                    if ($sucursalId !== null) {
+                        $q->where('sucursal_id', $sucursalId);
+                    }
+                },
+            ])
             ->where('activo', true);
 
         if ($categoria === 'libros') {
