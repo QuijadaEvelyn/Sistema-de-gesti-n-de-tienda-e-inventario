@@ -7,8 +7,16 @@
                     Total en custodia: {{ number_format($totalUnidades) }} unidades &middot; Alertas de stock mínimo: {{ $alertasStock }}
                 </p>
             </div>
-            @if ($puedeAjustar)
-                <div class="flex flex-wrap gap-2">
+            <div class="flex flex-wrap gap-2">
+                <a href="{{ route('admin.reportes.csv', array_filter(['sucursal_id' => request('sucursal_id')])) }}" class="px-4 py-2 rounded-xl border border-purple-200 bg-white hover:bg-purple-50 text-primary text-xs font-label-md flex items-center gap-1.5 transition">
+                    <span class="material-symbols-outlined text-[16px]">table_view</span>
+                    <span>Exportar CSV (.csv)</span>
+                </a>
+                <a href="{{ route('admin.reportes.pdf', array_filter(['sucursal_id' => request('sucursal_id')])) }}" class="px-4 py-2 rounded-xl border border-purple-200 bg-white hover:bg-purple-50 text-primary text-xs font-label-md flex items-center gap-1.5 transition">
+                    <span class="material-symbols-outlined text-[16px]">picture_as_pdf</span>
+                    <span>Exportar PDF (.pdf)</span>
+                </a>
+                @if ($puedeAjustar)
                     <a href="{{ route('almacen.ajustes') }}" class="px-4 py-2 rounded-xl bg-primary-container hover:bg-primary text-white text-xs font-label-md flex items-center gap-1.5 transition">
                         <span class="material-symbols-outlined text-[16px]">tune</span>
                         <span>Ajustes &amp; Recepciones</span>
@@ -17,8 +25,8 @@
                         <span class="material-symbols-outlined text-[16px]">swap_horiz</span>
                         <span>Transferencias</span>
                     </a>
-                </div>
-            @endif
+                @endif
+            </div>
         </div>
 
         <form method="GET" action="{{ route('admin.inventario') }}" class="bg-surface-container-lowest p-4 rounded-2xl border border-purple-200/70 flex flex-wrap items-center gap-3">

@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\ComprasController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EmpleadoController;
 use App\Http\Controllers\Admin\InventarioController;
+use App\Http\Controllers\Admin\ReporteController;
 use App\Http\Controllers\Admin\RolController;
 use App\Http\Controllers\Admin\SucursalController;
 use App\Http\Controllers\Admin\VentasController;
@@ -98,6 +99,11 @@ Route::prefix('admin')
         // Dashboard General y Estado de Terminal Operativa
         Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
         Route::get('/terminal', [DashboardController::class, 'terminal'])->name('admin.terminal');
+
+        // Módulo de Reportes Calculados y Exportación Oficial de Datos (CSV y PDF)
+        Route::get('/reportes', [ReporteController::class, 'index'])->name('admin.reportes');
+        Route::get('/reportes/exportar/csv', [ReporteController::class, 'exportarCsv'])->name('admin.reportes.csv');
+        Route::get('/reportes/exportar/pdf', [ReporteController::class, 'exportarPdf'])->name('admin.reportes.pdf');
 
         // Inventario Unificado (accesible para Administrador, Encargado, Almacén y Compras)
         Route::middleware('rol:administrador,encargado,almacen,compras')->group(function (): void {

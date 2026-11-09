@@ -46,6 +46,13 @@
                     </a>
                 @endcan
 
+                {{-- 1.B REPORTES Y EXPORTACIÓN DE DATOS (CSV Y PDF): Personal Operativo y Administrador --}}
+                <a href="{{ route('admin.reportes') }}"
+                   class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg transition-colors {{ $activeRoute === 'reportes' || request()->routeIs('admin.reportes*') ? 'bg-primary-container text-white font-label-md shadow-xs' : 'font-body-md text-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface' }}">
+                    <span class="material-symbols-outlined text-[20px]">analytics</span>
+                    <span>Reportes &amp; Exportación</span>
+                </a>
+
                 {{-- 2. INVENTARIO UNIFICADO: Administrador, Almacén y Compras --}}
                 @if ($esAdmin || $esAlmacen || $esCompras)
                     <a href="{{ route('admin.inventario') }}"

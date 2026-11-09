@@ -8,6 +8,31 @@
         active-period="30d"
     />
 
+    <!-- Acceso Rápido a Reportes Calculados y Exportación (CSV / PDF) -->
+    <div class="mb-space-md bg-surface-container-lowest rounded-2xl border border-purple-200/70 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs">
+        <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-primary text-2xl">analytics</span>
+            <div>
+                <h2 class="text-sm font-bold text-on-surface font-quicksand">Módulo de Reportes Oficiales &amp; Exportación de Acervo</h2>
+                <p class="text-xs text-on-surface-variant">Genera resúmenes calculados de inventario en bóveda, lotes certificados COA y descargas directas en CSV y PDF.</p>
+            </div>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+            <a href="{{ route('admin.reportes') }}" class="px-3.5 py-2 rounded-xl border border-purple-200 bg-white hover:bg-purple-50 text-primary text-xs font-label-md flex items-center gap-1.5 transition">
+                <span class="material-symbols-outlined text-[16px]">monitoring</span>
+                <span>Ver Reportes Calculados</span>
+            </a>
+            <a href="{{ route('admin.reportes.csv') }}" class="px-3.5 py-2 rounded-xl border border-purple-200 bg-white hover:bg-purple-50 text-primary text-xs font-label-md flex items-center gap-1.5 transition">
+                <span class="material-symbols-outlined text-[16px]">table_view</span>
+                <span>Exportar CSV</span>
+            </a>
+            <a href="{{ route('admin.reportes.pdf') }}" class="px-4 py-2 rounded-xl bg-primary-container hover:bg-primary text-white text-xs font-label-md flex items-center gap-1.5 transition">
+                <span class="material-symbols-outlined text-[16px]">picture_as_pdf</span>
+                <span>Exportar PDF Oficial</span>
+            </a>
+        </div>
+    </div>
+
     <!-- Fila de Métricas Clave: 4 Tarjetas Especializadas de KPI -->
     <section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-space-md mb-space-lg">
         
