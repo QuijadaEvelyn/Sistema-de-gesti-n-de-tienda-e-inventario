@@ -218,9 +218,27 @@ INPUT C:\Users\quija\AppData\Local\Programs\MiKTeX\tex\latex\l3packages\xparse\x
 INPUT .\Proeycto.aux
 INPUT .\Proeycto.aux
 INPUT Proeycto.aux
+INPUT .\capitulos\capitulo1.aux
+INPUT .\capitulos\capitulo1.aux
+INPUT capitulos\capitulo1.aux
+INPUT .\capitulos\capitulo2.aux
+INPUT .\capitulos\capitulo2.aux
+INPUT capitulos\capitulo2.aux
+INPUT .\capitulos\capitulo3.aux
+INPUT .\capitulos\capitulo3.aux
+INPUT capitulos\capitulo3.aux
+INPUT .\capitulos\capitulo4.aux
+INPUT .\capitulos\capitulo4.aux
+INPUT capitulos\capitulo4.aux
 OUTPUT Proeycto.aux
-OUTPUT Proeycto.out
+INPUT .\Proeycto.out
+INPUT .\Proeycto.out
+INPUT Proeycto.out
+INPUT Proeycto.out
 OUTPUT Proeycto.pdf
+INPUT .\Proeycto.out
+INPUT .\Proeycto.out
+OUTPUT Proeycto.out
 INPUT C:\Users\quija\AppData\Local\Programs\MiKTeX\tex\context\base\mkii\supp-pdf.mkii
 INPUT C:\Users\quija\AppData\Local\Programs\MiKTeX\tex\context\base\mkii\supp-pdf.mkii
 INPUT C:\Users\quija\AppData\Local\Programs\MiKTeX\tex\context\base\mkii\supp-pdf.mkii
@@ -293,8 +311,17 @@ INPUT .\capitulos\_resumen2.tex
 INPUT capitulos\_resumen2.tex
 INPUT C:\Users\quija\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecrm2488.tfm
 INPUT C:\Users\quija\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecbx2488.tfm
+INPUT .\Proeycto.toc
+INPUT .\Proeycto.toc
+INPUT Proeycto.toc
 OUTPUT Proeycto.toc
+INPUT .\Proeycto.lof
+INPUT .\Proeycto.lof
+INPUT Proeycto.lof
 OUTPUT Proeycto.lof
+INPUT .\Proeycto.lot
+INPUT .\Proeycto.lot
+INPUT Proeycto.lot
 OUTPUT Proeycto.lot
 INPUT .\capitulos\capitulo1.tex
 INPUT .\capitulos\capitulo1.tex
@@ -309,13 +336,13 @@ INPUT .\imagenes\Interfaz página.png
 INPUT .\imagenes\Interfaz página.png
 INPUT .\imagenes\Interfaz página.png
 INPUT .\imagenes\Interfaz página.png
-INPUT C:\Users\quija\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecti1200.tfm
 INPUT .\capitulos\capitulo2.tex
 INPUT .\capitulos\capitulo2.tex
 OUTPUT capitulos\capitulo2.aux
 INPUT .\capitulos\capitulo2.tex
 INPUT .\capitulos\capitulo2.tex
 INPUT capitulos\capitulo2.tex
+INPUT C:\Users\quija\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecti1200.tfm
 INPUT .\capitulos\capitulo3.tex
 INPUT .\capitulos\capitulo3.tex
 OUTPUT capitulos\capitulo3.aux
@@ -328,6 +355,7 @@ OUTPUT capitulos\capitulo4.aux
 INPUT .\capitulos\capitulo4.tex
 INPUT .\capitulos\capitulo4.tex
 INPUT capitulos\capitulo4.tex
+INPUT C:\Users\quija\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecrm0800.tfm
 INPUT C:\Users\quija\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\eccc1200.tfm
 INPUT C:\Users\quija\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ectt1200.tfm
 INPUT Proeycto.aux
@@ -345,11 +373,14 @@ INPUT .\capitulos\capitulo4.aux
 INPUT capitulos\capitulo4.aux
 INPUT .\Proeycto.out
 INPUT .\Proeycto.out
+INPUT Proeycto.run.xml
 OUTPUT Proeycto.run.xml
 INPUT C:\Users\quija\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ectt1200.pk
 INPUT C:\Users\quija\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ectt1200.pk
 INPUT C:\Users\quija\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\eccc1200.pk
 INPUT C:\Users\quija\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\eccc1200.pk
+INPUT C:\Users\quija\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm0800.pk
+INPUT C:\Users\quija\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm0800.pk
 INPUT C:\Users\quija\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecti1200.pk
 INPUT C:\Users\quija\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecti1200.pk
 INPUT C:\Users\quija\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1200.pk

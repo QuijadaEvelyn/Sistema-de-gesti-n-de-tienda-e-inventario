@@ -1,51 +1,21 @@
 \chapter{Marco de Referencia}
 
-En los últimos años, el uso de la tecnología en el comercio ha facilitado el desarrollo de tiendas en línea y sistemas de punto de venta diseñados para controlar los productos y las ventas en tiempo real. Sin embargo, la mayoría de las plataformas comerciales comunes (como Shopify, WooCommerce o los sistemas de ventas tradicionales) están pensadas para negocios de volumen alto, donde los productos son idénticos y se pueden resurtir constantemente sin mayor complicación.
-
-En tiendas especializadas —como las dedicadas a la venta de libros raros, discos de vinilo de época y artículos de colección— existe una situación diferente: se debe manejar al mismo tiempo tanto inventario general como piezas únicas de edición limitada. Administrar ambos tipos de productos en plataformas comunes causa problemas constantes, como vender dos veces el mismo producto exclusivo por falta de un control en tiempo real, perder el historial exacto del precio al momento de la venta y depender de procesos manuales para cancelar apartados que no se pagaron o para revisar las transferencias.
-
-Crear un sistema web hecho a la medida mediante una estructura bien organizada (Modelo-Vista-Controlador) y herramientas modernas como Laravel permite solucionar estos inconvenientes. Este enfoque facilita apartar productos de forma inmediata en cuanto se agregan al carrito, ejecutar tareas automáticas para liberar inventario vencido y mantener la información organizada de forma segura, agilizando el trabajo administrativo entre las distintas sucursales del negocio.
-
-A diferencia de las soluciones genéricas del mercado, un sistema desarrollado a la medida permite registrar las características reales que valora el cliente de este tipo de productos, tales como el estado de conservación del ejemplar, ediciones especiales o certificados de autenticidad. Asimismo, el uso de pantallas claras y adaptables a cualquier dispositivo asegura una navegación sencilla para los usuarios, logrando un control operativo más confiable y una mejor experiencia al momento de realizar la compra.
+En los últimos años, el comercio electrónico se ha consolidado como un canal de venta habitual, apoyado en el uso de Internet y de aplicaciones web para realizar transacciones comerciales \cite{laudon2021ecommerce}. Existen mercados en línea dedicados a artículos de colección, como Discogs para discos y AbeBooks para libros usados o raros \cite{discogs2026, abebooks2026}, pero en ellos participan múltiples vendedores y la tienda no controla su propio inventario ni su flujo de pago. Por otro lado, plataformas de propósito general como WooCommerce ofrecen control de existencias, incluida una opción para retener el inventario mientras un pedido está pendiente de pago \cite{woocommerce2026inventory}. Esa retención se aplica en el proceso de pedido y a pedidos pendientes de pago, por lo que no cubre, por sí sola, apartar una pieza única desde que se agrega al carrito ni liberar los apartados de transferencias en espera.
+ 
+Las tiendas especializadas en Archivum operan de otra manera: conviven en un mismo catálogo productos de existencia general y piezas únicas o de edición limitada, cuyo valor depende de características como el estado de conservación, la edición o la existencia de un certificado de autenticidad.
+ 
+Desde el punto de vista técnico, el problema de que varios usuarios intenten adquirir al mismo tiempo la misma pieza corresponde al control de concurrencia en bases de datos \cite{bernstein1987concurrency}. Frameworks como Laravel incorporan herramientas para abordarlo, entre ellas transacciones, bloqueos de registros, colas de trabajo y tareas programadas \cite{laravel2026docs}, y siguen el patrón Modelo-Vista-Controlador (MVC), que separa los datos, la lógica y la interfaz del sistema \cite{krasner1988cookbook}. A esto se suma el diseño responsivo, que adapta las interfaces a distintos tamaños de pantalla \cite{marcotte2010responsive}.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=16cm, height=7.5cm]{imagenes/Interfaz página.png}
+    \includegraphics[width=10cm, height=8cm]{imagenes/Interfaz página.png}
     \caption{Vista general de la interfaz pública y catálogo especializado en ARCHIVUM.}
     \label{fig1_aplicacion_UAV}
 \end{figure}
 
 \section{Antecedentes.}
 
-El análisis de las soluciones actuales para la gestión de inventarios y puntos de venta revela una brecha tecnológica significativa cuando se aplican a comercios de alta especialidad cultural y coleccionables:
+Los mercados en línea de artículos de colección permiten vender piezas únicas, pero al ser espacios abiertos a múltiples vendedores no resuelven las necesidades de una tienda propia con varias sucursales, que requiere controlar su inventario, su flujo de pago y la información que registra de cada pieza. Las plataformas de comercio electrónico de propósito general, por su parte, cuentan con control de existencias y con mecanismos de retención de inventario, pero estos están pensados para productos de reposición constante y su alcance es limitado frente a las piezas de existencia única. Las necesidades que quedan fuera, como apartar una pieza desde el carrito o liberar apartados vencidos de pedidos que esperan la validación de una transferencia, suelen resolverse con extensiones o con procesos manuales. Esto motiva el desarrollo de un sistema a la medida para la tienda.
 
-\begin{enumerate}
-    \item \textbf{Sistemas POS Generales y E-commerce Tradicionales:} Placas como Shopify, Magento o puntos de venta locales manejan los artículos mediante un conteo entero global (\textit{stock count}). Cuando se intenta comercializar una pieza única (ej. una primera edición autografiada o una matriz original de prensado en vinilo), el sistema no diferencia el valor ni la condición curatorial individual (graduación Mint, Near Mint, Very Fine) de otros ejemplares del mismo título.
-    
-    \item \textbf{Falta de Control de Concurrencia y Reservas en Tiempo Real:} En la mayoría de las tiendas en línea estándar, el producto no se reserva al agregarlo al carrito, sino hasta que el pago es procesado por la pasarela. En piezas exclusivas de alta demanda, esto ocasiona conflictos de sobreventa (\textit{race conditions}), donde múltiples clientes pagan simultáneamente por el mismo ejemplar físico.
-
-    \item \textbf{Rigidez en Fichas de Precio e Historial Financiero:} Las plataformas convencionales suelen actualizar el precio del producto a nivel global. Si un producto cambia de precio en el catálogo posterior a la compra, muchos sistemas sin arquitectura de snapshots alteran indirectamente el historial de pedidos antiguos o requieren esquemas de facturación externos complejos.
-\end{enumerate}
-
-\subsection{Cuadro Comparativo de Soluciones}
-
-A continuación, en la Tabla \ref{tabla_comparativa_antecedentes}, se presenta una comparativa técnica entre los sistemas tradicionales existentes y la solución propuesta en este proyecto (\textbf{ARCHIVUM}).
-
-\begin{table}[H]
-\centering
-\caption{Comparativa técnica de soluciones de inventario y e-commerce.}
-\label{tabla_comparativa_antecedentes}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{|l|p{4cm}|p{4cm}|p{5cm}|}
-\hline
-\textbf{Criterio / Característica} & \textbf{Sistemas POS Tradicionales} & \textbf{Plataformas E-commerce Estándar} & \textbf{ARCHIVUM (Propuesta)} \\ \hline
-\textbf{Modelo de Inventario} & Exclusivamente cuantitativo masivo. & Cuantitativo por variantes básicas (talla/color). & \textbf{Híbrido:} Control por volumen y registro individualizado para piezas únicas/coleccionables. \\ \hline
-\textbf{Gestión de Concurrencia} & Sin reserva previa en carrito. & Reserva únicamente en Checkout (dependiente de pasarela). & \textbf{Reserva Inmediata en Bóveda:} Bloqueo pesimista al agregar al carrito con temporizador de 5 min. \\ \hline
-\textbf{Integridad de Precios} & Riesgo de alteración en reportes históricos. & Registra total final de orden. & \textbf{Snapshot Transaccional Atomic:} Congelamiento permanente de precios y descuentos al momento del pedido. \\ \hline
-\textbf{Liberación de Existencias} & Manual o inexistente. & Requiere intervención del administrador. & \textbf{Automatización Autónoma:} Liberación por temporizador expirado mediante scheduler en segundo plano. \\ \hline
-\textbf{Administración Multisucursal} & Requiere módulos de pago adicionales por sede. & Limitado por plan comercial. & \textbf{Aislamiento por Rol y Sucursal:} Acceso privado delimitado a la sede asignada. \\ \hline
-\end{tabular}%
-}
-\end{table}
 \section{Objetivo General}
 Desarrollar un sistema web de gestión de inventario y punto de venta para libros, discos y coleccionables, utilizando el framework laravel y arquitectura MVC, con el propósito del control de existencias y la mejora de los procesos administrativos de las sucursales.
 

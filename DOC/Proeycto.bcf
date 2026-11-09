@@ -2373,11 +2373,19 @@
     <bcf:datasource type="file" datatype="bibtex">Referencias.bib</bcf:datasource>
   </bcf:bibdata>
   <bcf:section number="0">
-    <bcf:citekey order="1" intorder="1">johnson1997arti</bcf:citekey>
-    <bcf:citekey order="2" intorder="1">9129495</bcf:citekey>
-    <bcf:citekey order="3" intorder="1">5278262</bcf:citekey>
-    <bcf:citekey order="4" intorder="1">lin1999robust</bcf:citekey>
-    <bcf:citekey order="5" intorder="1">torres2002robots</bcf:citekey>
+    <bcf:citekey order="1" intorder="1">laudon2021ecommerce</bcf:citekey>
+    <bcf:citekey order="2" intorder="1">discogs2026</bcf:citekey>
+    <bcf:citekey order="2" intorder="2">abebooks2026</bcf:citekey>
+    <bcf:citekey order="3" intorder="1">woocommerce2026inventory</bcf:citekey>
+    <bcf:citekey order="4" intorder="1">bernstein1987concurrency</bcf:citekey>
+    <bcf:citekey order="5" intorder="1">laravel2026docs</bcf:citekey>
+    <bcf:citekey order="6" intorder="1">krasner1988cookbook</bcf:citekey>
+    <bcf:citekey order="7" intorder="1">marcotte2010responsive</bcf:citekey>
+    <bcf:citekey order="8" intorder="1">johnson1997arti</bcf:citekey>
+    <bcf:citekey order="9" intorder="1">9129495</bcf:citekey>
+    <bcf:citekey order="10" intorder="1">5278262</bcf:citekey>
+    <bcf:citekey order="11" intorder="1">lin1999robust</bcf:citekey>
+    <bcf:citekey order="12" intorder="1">torres2002robots</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="none">

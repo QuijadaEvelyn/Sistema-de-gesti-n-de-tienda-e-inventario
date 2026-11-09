@@ -19,192 +19,284 @@
 
 \refsection{0}
   \datalist[entry]{none/global//global/global/global}
-    \entry{johnson1997arti}{article}{}{}
-      \name{author}{1}{}{%
-        {{hash=8c41afbec95f0ea87452b63aba943737}{%
-           family={Johnson},
-           familyi={J\bibinitperiod},
-           given={R.\bibnamedelimi E},
-           giveni={R\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+    \entry{laudon2021ecommerce}{book}{}{}
+      \name{author}{2}{}{%
+        {{hash=2a3d8893ad04ba3c98081349c47e2f6c}{%
+           family={Laudon},
+           familyi={L\bibinitperiod},
+           given={Kenneth\bibnamedelima C.},
+           giveni={K\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+        {{hash=73c73d319be5d68772eec39008c5c95e}{%
+           family={Traver},
+           familyi={T\bibinitperiod},
+           given={Carol\bibnamedelima Guercio},
+           giveni={C\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
       }
-      \strng{namehash}{8c41afbec95f0ea87452b63aba943737}
-      \strng{fullhash}{8c41afbec95f0ea87452b63aba943737}
-      \strng{fullhashraw}{8c41afbec95f0ea87452b63aba943737}
-      \strng{bibnamehash}{8c41afbec95f0ea87452b63aba943737}
-      \strng{authorbibnamehash}{8c41afbec95f0ea87452b63aba943737}
-      \strng{authornamehash}{8c41afbec95f0ea87452b63aba943737}
-      \strng{authorfullhash}{8c41afbec95f0ea87452b63aba943737}
-      \strng{authorfullhashraw}{8c41afbec95f0ea87452b63aba943737}
+      \list{publisher}{1}{%
+        {Pearson}%
+      }
+      \strng{namehash}{b33b3faec34fd04fd5b0b354bd132804}
+      \strng{fullhash}{b33b3faec34fd04fd5b0b354bd132804}
+      \strng{fullhashraw}{b33b3faec34fd04fd5b0b354bd132804}
+      \strng{bibnamehash}{b33b3faec34fd04fd5b0b354bd132804}
+      \strng{authorbibnamehash}{b33b3faec34fd04fd5b0b354bd132804}
+      \strng{authornamehash}{b33b3faec34fd04fd5b0b354bd132804}
+      \strng{authorfullhash}{b33b3faec34fd04fd5b0b354bd132804}
+      \strng{authorfullhashraw}{b33b3faec34fd04fd5b0b354bd132804}
       \field{sortinit}{1}
       \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{journaltitle}{-----}
-      \field{number}{40/10}
-      \field{title}{Frameworks=(components+ patterns). Communications of the ACM}
-      \field{volume}{-}
-      \field{year}{1997}
-      \field{pages}{39\bibrangedash 42}
-      \range{pages}{4}
+      \field{edition}{16}
+      \field{title}{E-commerce 2021--2022: Business, Technology, Society}
+      \field{year}{2021}
     \endentry
-    \entry{9129495}{inproceedings}{}{}
-      \name{author}{2}{}{%
-        {{hash=019594840542c40396ef3585dbcab39d}{%
-           family={Khosravi},
-           familyi={K\bibinitperiod},
-           given={Mohammadjavad},
-           giveni={M\bibinitperiod}}}%
-        {{hash=33c512a801f6604a8ccf9e8a4570a45e}{%
-           family={Pishro-Nik},
-           familyi={P\bibinithyphendelim N\bibinitperiod},
-           given={Hossein},
-           giveni={H\bibinitperiod}}}%
+    \entry{discogs2026}{online}{}{}
+      \name{author}{1}{}{%
+        {{hash=2ee4f79910c7906af26d3b9909291354}{%
+           family={{Discogs}},
+           familyi={D\bibinitperiod}}}%
       }
-      \strng{namehash}{03e521e698008e0232391ec992630b56}
-      \strng{fullhash}{03e521e698008e0232391ec992630b56}
-      \strng{fullhashraw}{03e521e698008e0232391ec992630b56}
-      \strng{bibnamehash}{03e521e698008e0232391ec992630b56}
-      \strng{authorbibnamehash}{03e521e698008e0232391ec992630b56}
-      \strng{authornamehash}{03e521e698008e0232391ec992630b56}
-      \strng{authorfullhash}{03e521e698008e0232391ec992630b56}
-      \strng{authorfullhashraw}{03e521e698008e0232391ec992630b56}
+      \strng{namehash}{2ee4f79910c7906af26d3b9909291354}
+      \strng{fullhash}{2ee4f79910c7906af26d3b9909291354}
+      \strng{fullhashraw}{2ee4f79910c7906af26d3b9909291354}
+      \strng{bibnamehash}{2ee4f79910c7906af26d3b9909291354}
+      \strng{authorbibnamehash}{2ee4f79910c7906af26d3b9909291354}
+      \strng{authornamehash}{2ee4f79910c7906af26d3b9909291354}
+      \strng{authorfullhash}{2ee4f79910c7906af26d3b9909291354}
+      \strng{authorfullhashraw}{2ee4f79910c7906af26d3b9909291354}
       \field{sortinit}{2}
       \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{booktitle}{2020 IEEE 91st Vehicular Technology Conference (VTC2020-Spring)}
-      \field{title}{Unmanned Aerial Vehicles for Package Delivery and Network Coverage}
-      \field{year}{2020}
-      \field{pages}{1\bibrangedash 5}
-      \range{pages}{5}
-      \verb{doi}
-      \verb 10.1109/VTC2020-Spring48590.2020.9129495
+      \field{title}{Discogs: Music database and marketplace}
+      \field{urlday}{8}
+      \field{urlmonth}{11}
+      \field{urlyear}{2026}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://www.discogs.com
       \endverb
-      \keyw{Drones;Trajectory;Surveillance;Mathematical model;Task analysis;Shape;Unmanned aerial vehicles;multi-purpose drones;package delivery;uniform network coverage}
+      \verb{url}
+      \verb https://www.discogs.com
+      \endverb
     \endentry
-    \entry{5278262}{inproceedings}{}{}
-      \name{author}{3}{}{%
-        {{hash=63fba6206c5fdf8267ad8e20bd44041f}{%
-           family={Sujit},
-           familyi={S\bibinitperiod},
-           given={P.B.},
-           giveni={P\bibinitperiod}}}%
-        {{hash=6069115beb2c8c8533c02fa5b50337d5}{%
-           family={Sousa},
-           familyi={S\bibinitperiod},
-           given={Joao},
-           giveni={J\bibinitperiod}}}%
-        {{hash=086de1693c9f7319df0d8da12cd3f068}{%
-           family={Pereira},
-           familyi={P\bibinitperiod},
-           given={F.\bibnamedelimi L.},
-           giveni={F\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+    \entry{abebooks2026}{online}{}{}
+      \name{author}{1}{}{%
+        {{hash=922978682544ad0b7c12b48bcea6b91e}{%
+           family={{AbeBooks}},
+           familyi={A\bibinitperiod}}}%
       }
-      \strng{namehash}{0665757d44a898dfbaa92d6e2e0f89cf}
-      \strng{fullhash}{0665757d44a898dfbaa92d6e2e0f89cf}
-      \strng{fullhashraw}{0665757d44a898dfbaa92d6e2e0f89cf}
-      \strng{bibnamehash}{0665757d44a898dfbaa92d6e2e0f89cf}
-      \strng{authorbibnamehash}{0665757d44a898dfbaa92d6e2e0f89cf}
-      \strng{authornamehash}{0665757d44a898dfbaa92d6e2e0f89cf}
-      \strng{authorfullhash}{0665757d44a898dfbaa92d6e2e0f89cf}
-      \strng{authorfullhashraw}{0665757d44a898dfbaa92d6e2e0f89cf}
+      \strng{namehash}{922978682544ad0b7c12b48bcea6b91e}
+      \strng{fullhash}{922978682544ad0b7c12b48bcea6b91e}
+      \strng{fullhashraw}{922978682544ad0b7c12b48bcea6b91e}
+      \strng{bibnamehash}{922978682544ad0b7c12b48bcea6b91e}
+      \strng{authorbibnamehash}{922978682544ad0b7c12b48bcea6b91e}
+      \strng{authornamehash}{922978682544ad0b7c12b48bcea6b91e}
+      \strng{authorfullhash}{922978682544ad0b7c12b48bcea6b91e}
+      \strng{authorfullhashraw}{922978682544ad0b7c12b48bcea6b91e}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{AbeBooks: Marketplace for new, used, rare and out-of-print books}
+      \field{urlday}{8}
+      \field{urlmonth}{11}
+      \field{urlyear}{2026}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://www.abebooks.com
+      \endverb
+      \verb{url}
+      \verb https://www.abebooks.com
+      \endverb
+    \endentry
+    \entry{woocommerce2026inventory}{online}{}{}
+      \name{author}{1}{}{%
+        {{hash=b6bc1dc9269cb0b7db7cffd51cb6e2d5}{%
+           family={{WooCommerce}},
+           familyi={W\bibinitperiod}}}%
+      }
+      \strng{namehash}{b6bc1dc9269cb0b7db7cffd51cb6e2d5}
+      \strng{fullhash}{b6bc1dc9269cb0b7db7cffd51cb6e2d5}
+      \strng{fullhashraw}{b6bc1dc9269cb0b7db7cffd51cb6e2d5}
+      \strng{bibnamehash}{b6bc1dc9269cb0b7db7cffd51cb6e2d5}
+      \strng{authorbibnamehash}{b6bc1dc9269cb0b7db7cffd51cb6e2d5}
+      \strng{authornamehash}{b6bc1dc9269cb0b7db7cffd51cb6e2d5}
+      \strng{authorfullhash}{b6bc1dc9269cb0b7db7cffd51cb6e2d5}
+      \strng{authorfullhashraw}{b6bc1dc9269cb0b7db7cffd51cb6e2d5}
       \field{sortinit}{3}
       \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{booktitle}{OCEANS 2009-EUROPE}
-      \field{title}{UAV and AUVs coordination for ocean exploration}
-      \field{year}{2009}
-      \field{pages}{1\bibrangedash 7}
-      \range{pages}{7}
-      \verb{doi}
-      \verb 10.1109/OCEANSE.2009.5278262
+      \field{title}{Configuring WooCommerce settings: Products, Inventory options}
+      \field{urlday}{8}
+      \field{urlmonth}{11}
+      \field{urlyear}{2026}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://docs.woocommerce.com/document/configuring-woocommerce-settings/
       \endverb
-      \keyw{Unmanned aerial vehicles;Oceans;Base stations;Sea surface;Leg;Robot kinematics;Underwater vehicles;Robustness;Broadcasting;Humans}
+      \verb{url}
+      \verb https://docs.woocommerce.com/document/configuring-woocommerce-settings/
+      \endverb
     \endentry
-    \entry{lin1999robust}{article}{}{}
+    \entry{bernstein1987concurrency}{book}{}{}
       \name{author}{3}{}{%
-        {{hash=37177639f418a6c6c34ed11f1d8ee99c}{%
-           family={Lin},
-           familyi={L\bibinitperiod},
-           given={Feng},
-           giveni={F\bibinitperiod}}}%
-        {{hash=4f3dfb68997ebd788dcb6aff6c1dbded}{%
-           family={Zhang},
-           familyi={Z\bibinitperiod},
-           given={William},
-           giveni={W\bibinitperiod}}}%
-        {{hash=d4a8562d29baf76371faf44f15eaa38d}{%
-           family={Brandt},
+        {{hash=1f65631b3e9a886e5bb27b5f18828316}{%
+           family={Bernstein},
            familyi={B\bibinitperiod},
-           given={Robert\bibnamedelima D},
-           giveni={R\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+           given={Philip\bibnamedelima A.},
+           giveni={P\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=808a457a96222ecfe77029a1500cce9f}{%
+           family={Hadzilacos},
+           familyi={H\bibinitperiod},
+           given={Vassos},
+           giveni={V\bibinitperiod}}}%
+        {{hash=89c73c6f0e4d71ccf6f16f7607bac96d}{%
+           family={Goodman},
+           familyi={G\bibinitperiod},
+           given={Nathan},
+           giveni={N\bibinitperiod}}}%
       }
       \list{publisher}{1}{%
-        {IEEE}%
+        {Addison-Wesley}%
       }
-      \strng{namehash}{662b72b9547a78567d9183742e9b2e54}
-      \strng{fullhash}{662b72b9547a78567d9183742e9b2e54}
-      \strng{fullhashraw}{662b72b9547a78567d9183742e9b2e54}
-      \strng{bibnamehash}{662b72b9547a78567d9183742e9b2e54}
-      \strng{authorbibnamehash}{662b72b9547a78567d9183742e9b2e54}
-      \strng{authornamehash}{662b72b9547a78567d9183742e9b2e54}
-      \strng{authorfullhash}{662b72b9547a78567d9183742e9b2e54}
-      \strng{authorfullhashraw}{662b72b9547a78567d9183742e9b2e54}
+      \strng{namehash}{fa3331ef0a3df8698b1f33bc3cfc2b8d}
+      \strng{fullhash}{fa3331ef0a3df8698b1f33bc3cfc2b8d}
+      \strng{fullhashraw}{fa3331ef0a3df8698b1f33bc3cfc2b8d}
+      \strng{bibnamehash}{fa3331ef0a3df8698b1f33bc3cfc2b8d}
+      \strng{authorbibnamehash}{fa3331ef0a3df8698b1f33bc3cfc2b8d}
+      \strng{authornamehash}{fa3331ef0a3df8698b1f33bc3cfc2b8d}
+      \strng{authorfullhash}{fa3331ef0a3df8698b1f33bc3cfc2b8d}
+      \strng{authorfullhashraw}{fa3331ef0a3df8698b1f33bc3cfc2b8d}
       \field{sortinit}{4}
       \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{journaltitle}{IEEE Transactions on Control Systems Technology}
-      \field{number}{3}
-      \field{title}{Robust hovering control of a PVTOL aircraft}
-      \field{volume}{7}
-      \field{year}{1999}
-      \field{pages}{343\bibrangedash 351}
-      \range{pages}{9}
+      \field{title}{Concurrency Control and Recovery in Database Systems}
+      \field{year}{1987}
+      \verb{urlraw}
+      \verb https://www.microsoft.com/en-us/research/people/philbe/book
+      \endverb
+      \verb{url}
+      \verb https://www.microsoft.com/en-us/research/people/philbe/book
+      \endverb
     \endentry
-    \entry{torres2002robots}{book}{}{}
-      \name{author}{4}{}{%
-        {{hash=fd40167722a3b329b77fbfd741e6a1ac}{%
-           family={Torres},
-           familyi={T\bibinitperiod},
-           given={Fernando},
-           giveni={F\bibinitperiod}}}%
-        {{hash=7539be85b8b5c3d2362fa25f5c363485}{%
-           family={Gil},
-           familyi={G\bibinitperiod},
-           given={Pablo},
-           giveni={P\bibinitperiod}}}%
-        {{hash=b9cfbadc462fe0ff81d192fe18f77a84}{%
-           family={Puente},
-           familyi={P\bibinitperiod},
-           given={Santiago\bibnamedelima T},
-           giveni={S\bibinitperiod\bibinitdelim T\bibinitperiod}}}%
-        {{hash=e907df91cedb599fbf3fad7e1648b98a}{%
-           family={Aracil},
-           familyi={A\bibinitperiod},
-           given={Rafael},
-           giveni={R\bibinitperiod}}}%
+    \entry{laravel2026docs}{online}{}{}
+      \name{author}{1}{}{%
+        {{hash=a5c95b86291ea299fcbe64458ed12702}{%
+           family={{Laravel}},
+           familyi={L\bibinitperiod}}}%
       }
-      \list{publisher}{1}{%
-        {Pearson Educación}%
-      }
-      \strng{namehash}{2269d8bee7feb8c13037b2f2c02c177b}
-      \strng{fullhash}{f827fffeb5de6818aec926f5e1d3de27}
-      \strng{fullhashraw}{f827fffeb5de6818aec926f5e1d3de27}
-      \strng{bibnamehash}{2269d8bee7feb8c13037b2f2c02c177b}
-      \strng{authorbibnamehash}{2269d8bee7feb8c13037b2f2c02c177b}
-      \strng{authornamehash}{2269d8bee7feb8c13037b2f2c02c177b}
-      \strng{authorfullhash}{f827fffeb5de6818aec926f5e1d3de27}
-      \strng{authorfullhashraw}{f827fffeb5de6818aec926f5e1d3de27}
+      \strng{namehash}{a5c95b86291ea299fcbe64458ed12702}
+      \strng{fullhash}{a5c95b86291ea299fcbe64458ed12702}
+      \strng{fullhashraw}{a5c95b86291ea299fcbe64458ed12702}
+      \strng{bibnamehash}{a5c95b86291ea299fcbe64458ed12702}
+      \strng{authorbibnamehash}{a5c95b86291ea299fcbe64458ed12702}
+      \strng{authornamehash}{a5c95b86291ea299fcbe64458ed12702}
+      \strng{authorfullhash}{a5c95b86291ea299fcbe64458ed12702}
+      \strng{authorfullhashraw}{a5c95b86291ea299fcbe64458ed12702}
       \field{sortinit}{5}
       \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{title}{Robots y sistemas sensoriales}
-      \field{year}{2002}
+      \field{title}{Laravel Documentation}
+      \field{urlday}{8}
+      \field{urlmonth}{11}
+      \field{urlyear}{2026}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://laravel.com/docs
+      \endverb
+      \verb{url}
+      \verb https://laravel.com/docs
+      \endverb
+    \endentry
+    \entry{krasner1988cookbook}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=9bfbfad21c965b54d0802df075d65b20}{%
+           family={Krasner},
+           familyi={K\bibinitperiod},
+           given={Glenn\bibnamedelima E.},
+           giveni={G\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+        {{hash=e607b1001c34ae04a5ded9806b457bd1}{%
+           family={Pope},
+           familyi={P\bibinitperiod},
+           given={Stephen\bibnamedelima T.},
+           giveni={S\bibinitperiod\bibinitdelim T\bibinitperiod}}}%
+      }
+      \strng{namehash}{10a70c3fe8bcda7adb6ee36438ee004c}
+      \strng{fullhash}{10a70c3fe8bcda7adb6ee36438ee004c}
+      \strng{fullhashraw}{10a70c3fe8bcda7adb6ee36438ee004c}
+      \strng{bibnamehash}{10a70c3fe8bcda7adb6ee36438ee004c}
+      \strng{authorbibnamehash}{10a70c3fe8bcda7adb6ee36438ee004c}
+      \strng{authornamehash}{10a70c3fe8bcda7adb6ee36438ee004c}
+      \strng{authorfullhash}{10a70c3fe8bcda7adb6ee36438ee004c}
+      \strng{authorfullhashraw}{10a70c3fe8bcda7adb6ee36438ee004c}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of Object-Oriented Programming}
+      \field{number}{3}
+      \field{title}{A cookbook for using the model-view-controller user interface paradigm in Smalltalk-80}
+      \field{volume}{1}
+      \field{year}{1988}
+      \field{pages}{26\bibrangedash 49}
+      \range{pages}{24}
+      \verb{urlraw}
+      \verb https://www.ics.uci.edu/~redmiles/ics227-SQ04/papers/KrasnerPope88.pdf
+      \endverb
+      \verb{url}
+      \verb https://www.ics.uci.edu/~redmiles/ics227-SQ04/papers/KrasnerPope88.pdf
+      \endverb
+    \endentry
+    \entry{marcotte2010responsive}{online}{}{}
+      \name{author}{1}{}{%
+        {{hash=ca762f825f70c5a1f00a689ca3e9869e}{%
+           family={Marcotte},
+           familyi={M\bibinitperiod},
+           given={Ethan},
+           giveni={E\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {A List Apart}%
+      }
+      \strng{namehash}{ca762f825f70c5a1f00a689ca3e9869e}
+      \strng{fullhash}{ca762f825f70c5a1f00a689ca3e9869e}
+      \strng{fullhashraw}{ca762f825f70c5a1f00a689ca3e9869e}
+      \strng{bibnamehash}{ca762f825f70c5a1f00a689ca3e9869e}
+      \strng{authorbibnamehash}{ca762f825f70c5a1f00a689ca3e9869e}
+      \strng{authornamehash}{ca762f825f70c5a1f00a689ca3e9869e}
+      \strng{authorfullhash}{ca762f825f70c5a1f00a689ca3e9869e}
+      \strng{authorfullhashraw}{ca762f825f70c5a1f00a689ca3e9869e}
+      \field{sortinit}{7}
+      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{25}
+      \field{month}{5}
+      \field{title}{Responsive Web Design}
+      \field{urlday}{8}
+      \field{urlmonth}{11}
+      \field{urlyear}{2026}
+      \field{year}{2010}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://alistapart.com/article/responsive-web-design/
+      \endverb
+      \verb{url}
+      \verb https://alistapart.com/article/responsive-web-design/
+      \endverb
     \endentry
   \enddatalist
+  \missing{5278262}
+  \missing{9129495}
+  \missing{johnson1997arti}
+  \missing{lin1999robust}
+  \missing{torres2002robots}
 \endrefsection
 \endinput
 
