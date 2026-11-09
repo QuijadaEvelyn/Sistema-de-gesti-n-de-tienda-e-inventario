@@ -19,8 +19,24 @@ return Application::configure(basePath: dirname(__DIR__))
         // Redirección condicional para usuarios con sesión activa que intenten acceder a /login o /register
         $middleware->redirectUsersTo(function (Request $request): string {
             $user = $request->user();
-            if ($user && $user->tieneRol('administrador', 'encargado', 'ventas', 'almacen', 'compras')) {
+            if (! $user) {
+                return route('public.home');
+            }
+
+            if ($user->esAdmin()) {
                 return route('admin.dashboard');
+            }
+
+            if ($user->tieneRol('almacen', 'encargado')) {
+                return route('almacen.dashboard');
+            }
+
+            if ($user->esVentas()) {
+                return route('ventas.dashboard');
+            }
+
+            if ($user->esCompras()) {
+                return route('compras.dashboard');
             }
 
             return route('public.home');

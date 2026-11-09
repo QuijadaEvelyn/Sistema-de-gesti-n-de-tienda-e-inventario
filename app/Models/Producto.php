@@ -28,6 +28,7 @@ class Producto extends Model
         'activo',
         'es_preventa',
         'limite_preventa',
+        'preventa_exclusiva_hasta',
     ];
 
     /**
@@ -42,6 +43,7 @@ class Producto extends Model
             'activo' => 'boolean',
             'es_preventa' => 'boolean',
             'limite_preventa' => 'integer',
+            'preventa_exclusiva_hasta' => 'datetime',
         ];
     }
 
@@ -83,5 +85,13 @@ class Producto extends Model
     public function variantesSku(): HasMany
     {
         return $this->hasMany(VarianteSku::class, 'producto_id');
+    }
+
+    /**
+     * Promociones y lanzamientos de preventa vinculados a este producto.
+     */
+    public function promociones(): HasMany
+    {
+        return $this->hasMany(Promocion::class, 'producto_id');
     }
 }

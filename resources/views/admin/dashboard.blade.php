@@ -5,6 +5,9 @@
     $etiquetaPeriodo = $periodo['etiqueta'] ?? 'ÚLTIMOS 30 DÍAS';
     $etiquetaSede = $sucursalActiva ? $sucursalActiva->nombre : 'Todas las Sedes (Vista Global)';
     $sucursalFiltroExport = $sucursalActiva ? ['sucursal_id' => $sucursalActiva->id] : [];
+    $parametrosSedeActiva = $sucursalActiva
+        ? ['sucursal_id' => $sucursalActiva->id]
+        : ['sucursal_id' => 'all'];
 
     $ingresosEstimados = (float) ($metricas['ingresos_estimados'] ?? 0);
     $ventasConfirmadas = (float) ($metricas['ventas_confirmadas'] ?? 0);
@@ -135,16 +138,32 @@
             <span class="font-label-md text-on-surface font-semibold text-xs uppercase tracking-wider">Acciones Operativas en {{ $etiquetaSede }}:</span>
         </div>
         <div class="flex flex-wrap items-center gap-space-xs text-xs font-label-md">
-            <a href="{{ route('admin.inventario', $sucursalFiltroExport) }}" class="bg-primary-container hover:bg-primary text-white px-3.5 py-2 rounded-lg flex items-center gap-1.5 shadow-2xs transition">
+            <a
+                id="btn-gestionar-inventario-sede"
+                href="{{ route('admin.inventario', $parametrosSedeActiva) }}"
+                data-base-url="{{ route('admin.inventario') }}"
+                data-sucursal-id="{{ $sucursalActiva?->id ?? 'all' }}"
+                class="bg-primary-container hover:bg-primary text-white px-3.5 py-2 rounded-lg flex items-center gap-1.5 shadow-2xs transition cursor-pointer"
+            >
                 <span class="material-symbols-outlined text-[16px]">inventory_2</span>
                 <span>Gestionar Inventario de Sede</span>
             </a>
-            @if ($usuario && $usuario->tieneRol('administrador', 'almacen', 'encargado'))
-                <a href="{{ route('almacen.ajustes') }}" class="bg-white hover:bg-surface-container text-on-surface border border-purple-200/80 px-3.5 py-2 rounded-lg flex items-center gap-1.5 transition">
+            @if ($usuario && $usuario->tieneRol('administrador', 'almacen', 'encargado', 'compras', 'ventas'))
+                <a
+                    id="btn-ajustes-sede"
+                    href="{{ route('almacen.ajustes', $parametrosSedeActiva) }}"
+                    data-base-url="{{ route('almacen.ajustes') }}"
+                    class="bg-white hover:bg-surface-container text-on-surface border border-purple-200/80 px-3.5 py-2 rounded-lg flex items-center gap-1.5 transition cursor-pointer"
+                >
                     <span class="material-symbols-outlined text-[16px]">tune</span>
                     <span>Ajustes &amp; Recepciones</span>
                 </a>
-                <a href="{{ route('almacen.transferencias') }}" class="bg-white hover:bg-surface-container text-on-surface border border-purple-200/80 px-3.5 py-2 rounded-lg flex items-center gap-1.5 transition">
+                <a
+                    id="btn-transferencias-sede"
+                    href="{{ route('almacen.transferencias', $parametrosSedeActiva) }}"
+                    data-base-url="{{ route('almacen.transferencias') }}"
+                    class="bg-white hover:bg-surface-container text-on-surface border border-purple-200/80 px-3.5 py-2 rounded-lg flex items-center gap-1.5 transition cursor-pointer"
+                >
                     <span class="material-symbols-outlined text-[16px]">swap_horiz</span>
                     <span>Transferencias entre Sedes</span>
                 </a>
@@ -327,5 +346,39 @@
             </table>
         </div>
     </section>
+
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const btnInventario = document.getElementById('btn-gestionar-inventario-sede');
+                const btnAjustes = document.getElementById('btn-ajustes-sede');
+                const btnTransferencias = document.getElementById('btn-transferencias-sede');
+                const kpiSelect = document.getElementById('kpi-branch-select');
+                const headerSelect = document.getElementById('branch-select');
+
+                function actualizarEnlacesSede(sucursalValor) {
+                    const param = sucursalValor || 'all';
+                    [btnInventario, btnAjustes, btnTransferencias].forEach(function (enlace) {
+                        if (!enlace || !enlace.dataset.baseUrl) {
+                            return;
+                        }
+                        enlace.href = enlace.dataset.baseUrl + '?sucursal_id=' + encodeURIComponent(param);
+                    });
+                }
+
+                if (kpiSelect) {
+                    kpiSelect.addEventListener('change', function () {
+                        actualizarEnlacesSede(kpiSelect.value);
+                    });
+                }
+
+                if (headerSelect) {
+                    headerSelect.addEventListener('change', function () {
+                        actualizarEnlacesSede(headerSelect.value);
+                    });
+                }
+            });
+        </script>
+    @endpush
 
 </x-layouts.admin>

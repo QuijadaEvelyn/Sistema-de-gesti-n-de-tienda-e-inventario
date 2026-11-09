@@ -223,6 +223,12 @@ class LoginController extends Controller
             return redirect()->route('public.home');
         }
 
+        // Si el empleado no es Administrador (ej. Almacén, Ventas, Compras), limpiar cualquier url.intended
+        // que apunte al Dashboard Financiero (/admin) para redirigirlo directamente a su panel operativo de sede.
+        if (! $user->esAdmin()) {
+            $request->session()->forget('url.intended');
+        }
+
         if ($request->expectsJson()) {
             return response()->json([
                 'status' => 'success',
@@ -237,7 +243,9 @@ class LoginController extends Controller
             ]);
         }
 
-        return redirect()->intended($redirectUrl);
+        return $user->esAdmin()
+            ? redirect()->intended($redirectUrl)
+            : redirect()->to($redirectUrl);
     }
 
     /**
@@ -279,13 +287,28 @@ class LoginController extends Controller
 
     /**
      * Determina la ruta de destino inicial según el rol del usuario autenticado:
-     * - Si el usuario tiene rol cliente: Tienda pública / (public.home).
-     * - Si el usuario tiene rol administrador, encargado, ventas, almacen o compras: Panel /admin.
+     * - Administrador: Dashboard Financiero General (/admin).
+     * - Almacén / Encargado: Panel Operativo de Sede / Inventario (/almacen).
+     * - Ventas: Panel Operativo de Ventas, Pedidos y Devoluciones (/ventas).
+     * - Compras: Panel Operativo de Compras y Proveedores (/compras).
+     * - Cliente: Tienda pública / (public.home).
      */
     protected function determinarRedireccionPorRol(Usuario $user): string
     {
-        if ($user->tieneRol('administrador', 'encargado', 'ventas', 'almacen', 'compras')) {
+        if ($user->esAdmin()) {
             return route('admin.dashboard');
+        }
+
+        if ($user->tieneRol('almacen', 'encargado')) {
+            return route('almacen.dashboard');
+        }
+
+        if ($user->esVentas()) {
+            return route('ventas.dashboard');
+        }
+
+        if ($user->esCompras()) {
+            return route('compras.dashboard');
         }
 
         return route('public.home');

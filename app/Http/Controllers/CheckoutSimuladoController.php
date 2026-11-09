@@ -20,11 +20,13 @@ use App\Models\Pago;
 use App\Models\Pedido;
 use App\Models\PiezaUnica;
 use App\Models\Producto;
+use App\Models\Promocion;
 use App\Models\ReservaStock;
 use App\Models\Sucursal;
 use App\Models\VarianteSku;
 use App\Services\DevolucionService;
 use App\Services\PreventaService;
+use App\Services\PromocionDescuentoService;
 use App\Services\ReservaService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -32,9 +34,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 use RuntimeException;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class CheckoutSimuladoController extends Controller
 {
@@ -276,6 +281,39 @@ class CheckoutSimuladoController extends Controller
     }
 
     /**
+     * Obtiene la promoción activa o preventa programada asociada a un producto (si existe).
+     */
+    public static function obtenerPromocionDeProducto(?Producto $producto): ?Promocion
+    {
+        if ($producto === null || ! Schema::hasTable('promociones') || ! Schema::hasColumn('promociones', 'producto_id')) {
+            return null;
+        }
+
+        $promociones = $producto->relationLoaded('promociones')
+            ? $producto->promociones
+            : Promocion::where('producto_id', $producto->id)->where('activa', true)->get();
+
+        /** @var Promocion|null $promo */
+        $promo = $promociones->first(fn (Promocion $p): bool => in_array($p->faseActual(), ['preventa_exclusiva', 'abierta_publico', 'programada'], true));
+
+        return $promo;
+    }
+
+    /**
+     * Obtiene el registro de PiezaUnica asociado a una variante SKU (si se trata de un ejemplar único 1/1).
+     */
+    public static function obtenerPiezaUnicaDeVariante(int $varianteSkuId): ?PiezaUnica
+    {
+        if (! Schema::hasTable('piezas_unicas') || ! Schema::hasTable('existencias')) {
+            return null;
+        }
+
+        return PiezaUnica::with('existencia.sucursal')
+            ->whereHas('existencia', fn ($q) => $q->where('variante_sku_id', $varianteSkuId))
+            ->first();
+    }
+
+    /**
      * Agrega una pieza al carrito de adquisiciones:
      * 1. Libera reservas expiradas previamente.
      * 2. Valida cupo estricto de preventa (si aplica) y stock disponible en bóveda.
@@ -302,6 +340,72 @@ class CheckoutSimuladoController extends Controller
         $carrito = session('carrito_archivum', []);
         $cantidadActualEnCarrito = (int) ($carrito[$varianteId] ?? 0);
 
+        // 0. Validar Fase de Preventa Exclusiva para Clientes Frecuentes (5+ compras) vs Apertura al Público General
+        if ($producto) {
+            $promoProducto = self::obtenerPromocionDeProducto($producto);
+            $usuarioActual = $request->user();
+            $clienteActual = $usuarioActual && Schema::hasTable('clientes')
+                ? Cliente::with(['pedidos', 'clienteFrecuente'])->where('usuario_id', $usuarioActual->id)->first()
+                : null;
+
+            if ($promoProducto !== null) {
+                $fasePromo = $promoProducto->faseActual();
+
+                if ($fasePromo === 'programada') {
+                    $fechaInicioStr = $promoProducto->fechaInicioPreventa()->format('d/m/Y H:i');
+                    $mensajeProgramada = "Lanzamiento Programado: La preventa de «{$nombrePieza}» aún no ha iniciado (inicia el {$fechaInicioStr}).";
+
+                    if ($request->expectsJson()) {
+                        return response()->json([
+                            'status' => 'error',
+                            'message' => $mensajeProgramada,
+                        ], 422);
+                    }
+
+                    return back()
+                        ->with('error', $mensajeProgramada)
+                        ->withErrors(['stock' => $mensajeProgramada]);
+                }
+
+                if ($fasePromo === 'preventa_exclusiva' && ! $promoProducto->puedeAdquirir($usuarioActual, $clienteActual)) {
+                    $comprasActuales = $clienteActual?->totalComprasRealizadas() ?? 0;
+                    $fechaAperturaStr = $promoProducto->fechaAperturaPublica()->format('d/m/Y H:i');
+                    $mensajePreventaExclusiva = "Fase de Preventa Exclusiva VIP: «{$nombrePieza}» se encuentra en acceso anticipado exclusivo para Clientes Frecuentes (mínimo 5 compras completadas; compras actuales: {$comprasActuales}). La promoción se desbloqueará para el público general el {$fechaAperturaStr}.";
+
+                    if ($request->expectsJson()) {
+                        return response()->json([
+                            'status' => 'error',
+                            'message' => $mensajePreventaExclusiva,
+                        ], 422);
+                    }
+
+                    return back()
+                        ->with('error', $mensajePreventaExclusiva)
+                        ->withErrors(['stock' => $mensajePreventaExclusiva]);
+                }
+            } elseif ($producto->preventa_exclusiva_hasta instanceof Carbon && now()->lt($producto->preventa_exclusiva_hasta)) {
+                $esAutorizado = ($usuarioActual && method_exists($usuarioActual, 'esAdmin') && $usuarioActual->esAdmin())
+                    || ($clienteActual !== null && $clienteActual->esClienteFrecuente());
+
+                if (! $esAutorizado) {
+                    $comprasActuales = $clienteActual?->totalComprasRealizadas() ?? 0;
+                    $fechaAperturaStr = $producto->preventa_exclusiva_hasta->format('d/m/Y H:i');
+                    $mensajePreventaExclusiva = "Fase de Preventa Exclusiva VIP: «{$nombrePieza}» se encuentra en acceso anticipado exclusivo para Clientes Frecuentes (mínimo 5 compras completadas; compras actuales: {$comprasActuales}). Se abrirá al público general el {$fechaAperturaStr}.";
+
+                    if ($request->expectsJson()) {
+                        return response()->json([
+                            'status' => 'error',
+                            'message' => $mensajePreventaExclusiva,
+                        ], 422);
+                    }
+
+                    return back()
+                        ->with('error', $mensajePreventaExclusiva)
+                        ->withErrors(['stock' => $mensajePreventaExclusiva]);
+                }
+            }
+        }
+
         // 1. Control estricto en Preventas: bloquear sobreventa si se supera el lote autorizado por Compras
         if ($producto && self::esPiezaPreventa($producto, $variante)) {
             try {
@@ -322,11 +426,60 @@ class CheckoutSimuladoController extends Controller
             }
         }
 
-        // 2. Validar stock disponible en bóveda
-        // Como cada reserva activa ya descontó de `existencias`, la suma actual en `existencias`
-        // representa las unidades libres adicionales que aún quedan en bóveda.
+        // 2. Validar exclusividad de Pieza Única (1/1) y bloqueo de concurrencia (5 min)
+        $piezaUnica = self::obtenerPiezaUnicaDeVariante($varianteId);
         $stockLibreEnBoveda = (int) $variante->existencias->sum('cantidad');
 
+        if ($piezaUnica !== null) {
+            if ($piezaUnica->estado === 'reservada') {
+                $mensajeBloqueo = "Bloqueo de concurrencia: La pieza única «{$nombrePieza}» (Serie: {$piezaUnica->numero_serie}) se encuentra reservada temporalmente en bóveda por otro cliente (bloqueo activo de 5 minutos) y no está disponible en bóveda.";
+
+                if ($request->expectsJson()) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => $mensajeBloqueo,
+                    ], 422);
+                }
+
+                return back()
+                    ->with('error', $mensajeBloqueo)
+                    ->withErrors(['stock' => $mensajeBloqueo]);
+            }
+
+            if ($piezaUnica->estado === 'vendida' || $stockLibreEnBoveda <= 0) {
+                $mensajeVendida = "Operación bloqueada: La pieza única «{$nombrePieza}» (Serie: {$piezaUnica->numero_serie}) se encuentra AGOTADO y no se encuentra disponible en bóveda.";
+
+                if ($request->expectsJson()) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => $mensajeVendida,
+                    ], 422);
+                }
+
+                return back()
+                    ->with('error', $mensajeVendida)
+                    ->withErrors(['stock' => $mensajeVendida]);
+            }
+
+            if (($cantidadActualEnCarrito + $cantidad) > 1 && $stockLibreEnBoveda <= 1) {
+                $mensajeUnica = "Exclusividad de Pieza Única: El ejemplar «{$nombrePieza}» (Serie: {$piezaUnica->numero_serie}) es una edición única (1/1) y no permite adquirir múltiples unidades.";
+
+                if ($request->expectsJson()) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => $mensajeUnica,
+                    ], 422);
+                }
+
+                return back()
+                    ->with('error', $mensajeUnica)
+                    ->withErrors(['stock' => $mensajeUnica]);
+            }
+        }
+
+        // 3. Validar stock disponible en bóveda para inventario general / híbrido
+        // Como cada reserva activa ya descontó de `existencias`, la suma actual en `existencias`
+        // representa las unidades libres adicionales que aún quedan en bóveda.
         if ($stockLibreEnBoveda <= 0) {
             $mensajeAgotado = $producto && self::esPiezaPreventa($producto, $variante)
                 ? "Sobreventa bloqueada: El lote autorizado de preventa para «{$nombrePieza}» se encuentra AGOTADO y no se encuentra disponible en bóveda."
@@ -777,6 +930,11 @@ class CheckoutSimuladoController extends Controller
                             'estado' => 'confirmada',
                             'expira_en' => null,
                         ]);
+
+                        PiezaUnica::where('existencia_id', $reserva->existencia_id)
+                            ->whereIn('estado', ['reservada', 'disponible'])
+                            ->update(['estado' => 'vendida']);
+
                         $porCubrir -= (int) $reserva->cantidad;
                     }
                 }
@@ -796,6 +954,10 @@ class CheckoutSimuladoController extends Controller
                         $descuentoSucursal = min((int) $existencia->cantidad, $porCubrir);
                         $existencia->decrement('cantidad', $descuentoSucursal);
                         $porCubrir -= $descuentoSucursal;
+
+                        PiezaUnica::where('existencia_id', $existencia->id)
+                            ->whereIn('estado', ['reservada', 'disponible'])
+                            ->update(['estado' => 'vendida']);
                     }
                 }
             }
@@ -876,6 +1038,11 @@ class CheckoutSimuladoController extends Controller
 
             return $pedido;
         });
+
+        // Evaluar si con esta compra el cliente alcanzó las 5 compras para convertirse en Cliente Frecuente VIP
+        if ($pedido->cliente) {
+            app(PromocionDescuentoService::class)->sincronizarMembresiaPorCompras($pedido->cliente);
+        }
 
         // 7. Limpiar el carrito y las referencias de reserva temporal en la sesión del cliente
         session()->forget(['carrito_archivum', 'carrito_reservas_ids', 'carrito_expira_en']);
@@ -974,19 +1141,21 @@ class CheckoutSimuladoController extends Controller
     }
 
     /**
-     * Panel del cliente: historial de adquisiciones y seguimiento interactivo de envíos.
+     * Panel del cliente: historial de adquisiciones, seguimiento interactivo de envíos
+     * y notificaciones de Preventas Exclusivas para Clientes Frecuentes (5+ compras).
      */
     public function misPedidos(): View
     {
         $pedidos = collect();
+        $clienteActual = null;
+
+        if (auth()->check() && Schema::hasTable('clientes')) {
+            $clienteActual = Cliente::with(['pedidos', 'clienteFrecuente'])->where('usuario_id', auth()->id())->first();
+        }
 
         if (Schema::hasTable('pedidos')) {
             $idsSesion = session('pedidos_recientes', []);
-            $clienteId = null;
-
-            if (auth()->check()) {
-                $clienteId = Cliente::where('usuario_id', auth()->id())->value('id');
-            }
+            $clienteId = $clienteActual?->id;
 
             if ($clienteId || ! empty($idsSesion)) {
                 $pedidos = Pedido::with([
@@ -1009,10 +1178,45 @@ class CheckoutSimuladoController extends Controller
             }
         }
 
+        $esClienteFrecuente = $clienteActual?->esClienteFrecuente() ?? false;
+        $totalComprasCliente = $clienteActual?->totalComprasRealizadas() ?? 0;
+        $comprasRestantesFrecuente = $clienteActual
+            ? $clienteActual->comprasRestantesParaFrecuente()
+            : Cliente::COMPRAS_MINIMAS_FRECUENTE;
+
+        if ($clienteActual !== null && $esClienteFrecuente) {
+            app(PromocionDescuentoService::class)->sincronizarMembresiaPorCompras($clienteActual);
+        }
+
+        $promocionesPreventa = collect();
+        if (Schema::hasTable('promociones')) {
+            $queryPromos = Promocion::query()->where('activa', true);
+            if (Schema::hasColumn('promociones', 'producto_id')) {
+                $queryPromos->with([
+                    'producto.catalogo',
+                    'producto.libro',
+                    'producto.disco',
+                    'producto.coleccionable',
+                    'producto.variantesSku.existencias',
+                ]);
+            }
+            $promocionesPreventa = $queryPromos
+                ->orderByDesc('es_preventa_exclusiva')
+                ->orderBy('inicia_en')
+                ->get()
+                ->filter(fn (Promocion $p): bool => in_array($p->faseActual(), ['preventa_exclusiva', 'abierta_publico', 'programada'], true))
+                ->values();
+        }
+
         return view('public.mis-pedidos', [
             'pedidos' => $pedidos,
             'etapasRastreo' => self::ETAPAS_RASTREO,
             'motivosDevolucion' => Devolucion::MOTIVOS_CATALOGO,
+            'clienteActual' => $clienteActual,
+            'esClienteFrecuente' => $esClienteFrecuente,
+            'totalComprasCliente' => $totalComprasCliente,
+            'comprasRestantesFrecuente' => $comprasRestantesFrecuente,
+            'promocionesPreventa' => $promocionesPreventa,
         ]);
     }
 
@@ -1028,7 +1232,7 @@ class CheckoutSimuladoController extends Controller
             'motivo' => ['required', 'string', 'max:255'],
             'comentarios_cliente' => ['nullable', 'string', 'max:2000'],
             'evidencias' => ['nullable', 'array', 'max:5'],
-            'evidencias.*' => ['file', 'image', 'max:5120'],
+            'evidencias.*' => ['file', 'mimes:jpg,jpeg,png,webp,gif,pdf', 'max:5120'],
             'evidencia_urls' => ['nullable', 'array', 'max:5'],
             'evidencia_urls.*' => ['nullable', 'string', 'max:500'],
         ]);
@@ -1065,6 +1269,21 @@ class CheckoutSimuladoController extends Controller
             'status',
             "Solicitud de devolución y garantía registrada con folio {$devolucion->folio_devolucion} (Estado: Pendiente de revisión)."
         );
+    }
+
+    /**
+     * Sirve los archivos públicos almacenados en `storage/app/public` (como las fotografías
+     * de evidencia de devoluciones) garantizando su visualización sin errores 404.
+     */
+    public function servirArchivoPublico(string $path): BinaryFileResponse|StreamedResponse
+    {
+        $rutaLimpia = ltrim(str_replace(['..', '\\'], ['', '/'], $path), '/');
+
+        if (! Storage::disk('public')->exists($rutaLimpia)) {
+            abort(404);
+        }
+
+        return Storage::disk('public')->response($rutaLimpia);
     }
 
     /**

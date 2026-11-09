@@ -9,13 +9,21 @@
     $esVentas = $authUser?->hasRole('ventas') ?? false;
     $esAlmacen = $authUser?->hasRole('almacen', 'encargado') ?? false;
     $esCompras = $authUser?->hasRole('compras') ?? false;
+
+    $rutaInicioRol = match (true) {
+        $esAdmin => route('admin.dashboard'),
+        $esAlmacen => route('almacen.dashboard'),
+        $esVentas => route('ventas.dashboard'),
+        $esCompras => route('compras.dashboard'),
+        default => route('public.home'),
+    };
 @endphp
 
 <aside class="fixed left-0 top-0 h-full w-72 bg-surface-container-lowest z-50 flex flex-col justify-between border-r border-purple-200/70 shadow-xs">
     <div class="flex flex-col overflow-y-auto no-scrollbar">
 
         <!-- Cabecera del Sidebar con Logotipo de Archivo -->
-        <a href="{{ route('admin.dashboard') }}" class="h-16 px-space-lg flex items-center gap-space-sm border-b border-purple-100 hover:bg-surface-container-low transition shrink-0">
+        <a href="{{ $rutaInicioRol }}" class="h-16 px-space-lg flex items-center gap-space-sm border-b border-purple-100 hover:bg-surface-container-low transition shrink-0">
             <div class="w-9 h-9 rounded-xl bg-primary-container flex items-center justify-center text-white shrink-0 shadow-2xs">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
                     <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
@@ -37,26 +45,32 @@
 
             <nav class="flex flex-col gap-space-xs" aria-label="Menú administrativo por rol">
 
-                {{-- 1. DASHBOARD GENERAL O PANEL DE SEDE --}}
-                @if ($esAdmin || $esAlmacen || $esVentas || $esCompras)
+                {{-- 1. DASHBOARD FINANCIERO GENERAL (Exclusivo Administrador) O PANEL OPERATIVO DE SEDE (Empleados) --}}
+                @if ($esAdmin)
                     <a href="{{ route('admin.dashboard') }}"
-                       class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg transition-colors {{ $activeRoute === 'dashboard' || request()->routeIs('admin.dashboard', 'almacen.dashboard') ? 'bg-primary-container text-white font-label-md shadow-xs' : 'font-body-md text-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface' }}">
+                       class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg transition-colors {{ $activeRoute === 'dashboard' || request()->routeIs('admin.dashboard') ? 'bg-primary-container text-white font-label-md shadow-xs' : 'font-body-md text-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface' }}">
                         <span class="material-symbols-outlined text-[20px]">dashboard</span>
-                        <span>{{ $esAdmin ? 'Dashboard General' : 'Panel Operativo de Sede' }}</span>
+                        <span>Dashboard General</span>
+                    </a>
+
+                    {{-- 1.B REPORTES FINANCIEROS Y EXPORTACIÓN DE DATOS (CSV Y PDF): Exclusivo Administrador --}}
+                    <a href="{{ route('admin.reportes') }}"
+                       class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg transition-colors {{ $activeRoute === 'reportes' || request()->routeIs('admin.reportes*') ? 'bg-primary-container text-white font-label-md shadow-xs' : 'font-body-md text-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface' }}">
+                        <span class="material-symbols-outlined text-[20px]">analytics</span>
+                        <span>Reportes &amp; Exportación</span>
+                    </a>
+                @elseif ($esAlmacen || $esVentas || $esCompras)
+                    <a href="{{ $rutaInicioRol }}"
+                       class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg transition-colors {{ request()->routeIs('almacen.dashboard', 'ventas.dashboard', 'compras.dashboard') ? 'bg-primary-container text-white font-label-md shadow-xs' : 'font-body-md text-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface' }}">
+                        <span class="material-symbols-outlined text-[20px]">storefront</span>
+                        <span>Panel Operativo de Sede</span>
                     </a>
                 @endif
 
-                {{-- 1.B REPORTES Y EXPORTACIÓN DE DATOS (CSV Y PDF): Personal Operativo y Administrador --}}
-                <a href="{{ route('admin.reportes') }}"
-                   class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg transition-colors {{ $activeRoute === 'reportes' || request()->routeIs('admin.reportes*') ? 'bg-primary-container text-white font-label-md shadow-xs' : 'font-body-md text-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface' }}">
-                    <span class="material-symbols-outlined text-[20px]">analytics</span>
-                    <span>Reportes &amp; Exportación</span>
-                </a>
-
-                {{-- 2. INVENTARIO UNIFICADO: Administrador, Almacén y Compras --}}
-                @if ($esAdmin || $esAlmacen || $esCompras)
+                {{-- 2. INVENTARIO UNIFICADO: Personal Operativo y Administrador --}}
+                @if ($esAdmin || $esAlmacen || $esCompras || $esVentas)
                     <a href="{{ route('admin.inventario') }}"
-                       class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg transition-colors {{ $activeRoute === 'inventario' || request()->routeIs('admin.inventario') ? 'bg-primary-container text-white font-label-md shadow-xs' : 'font-body-md text-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface' }}">
+                       class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg transition-colors {{ $activeRoute === 'inventario' || request()->routeIs('admin.inventario', 'almacen.dashboard') ? 'bg-primary-container text-white font-label-md shadow-xs' : 'font-body-md text-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface' }}">
                         <span class="material-symbols-outlined text-[20px]">inventory_2</span>
                         <span>Inventario Unificado</span>
                     </a>

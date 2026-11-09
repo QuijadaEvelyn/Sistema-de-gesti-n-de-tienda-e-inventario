@@ -393,7 +393,7 @@ class AuthControllersTest extends TestCase
         $this->get('/compras')->assertRedirect(route('public.home'))->assertSessionHas('warning');
         $this->get('/mi-cuenta')->assertStatus(200);
 
-        // 2. Ventas puede acceder a /admin y /ventas pero no a /compras ni /almacen
+        // 2. Ventas accede a su panel operativo (/ventas), pero tiene bloqueado el Dashboard Financiero (/admin) con 403
         $ventas = Usuario::create([
             'nombre' => 'Ventas User',
             'email' => 'ventas@test.com',
@@ -403,11 +403,11 @@ class AuthControllersTest extends TestCase
         $ventas->asignarRol('ventas');
 
         $this->actingAs($ventas);
-        $this->get('/admin')->assertStatus(200);
+        $this->get('/admin')->assertStatus(403);
         $this->get('/ventas')->assertStatus(200);
         $this->get('/compras')->assertStatus(403);
 
-        // 3. Compras puede acceder a /admin y /compras pero no a /ventas
+        // 3. Compras accede a su panel operativo (/compras), pero tiene bloqueado el Dashboard Financiero (/admin) con 403
         $compras = Usuario::create([
             'nombre' => 'Compras User',
             'email' => 'compras@test.com',
@@ -417,11 +417,11 @@ class AuthControllersTest extends TestCase
         $compras->asignarRol('compras');
 
         $this->actingAs($compras);
-        $this->get('/admin')->assertStatus(200);
+        $this->get('/admin')->assertStatus(403);
         $this->get('/compras')->assertStatus(200);
         $this->get('/ventas')->assertStatus(403);
 
-        // 4. Administrador tiene acceso total
+        // 4. Administrador tiene acceso total incluyendo el Dashboard Financiero General (/admin)
         $admin = Usuario::create([
             'nombre' => 'Super Admin',
             'email' => 'superadmin@test.com',
@@ -758,9 +758,13 @@ class AuthControllersTest extends TestCase
 
     public function test_login_para_empleados_ventas_almacen_compras_redirige_a_admin(): void
     {
-        $rolesStaff = ['ventas', 'almacen', 'compras'];
+        $rutasPorRolStaff = [
+            'ventas' => route('ventas.dashboard'),
+            'almacen' => route('almacen.dashboard'),
+            'compras' => route('compras.dashboard'),
+        ];
 
-        foreach ($rolesStaff as $rol) {
+        foreach ($rutasPorRolStaff as $rol => $rutaOperativaEsperada) {
             $empleado = Usuario::create([
                 'nombre' => "Empleado {$rol}",
                 'email' => "{$rol}@archivum.com",
@@ -774,7 +778,7 @@ class AuthControllersTest extends TestCase
                 'password' => 'password123',
             ]);
 
-            $response->assertRedirect(route('admin.dashboard'));
+            $response->assertRedirect($rutaOperativaEsperada);
             $this->post('/logout');
         }
     }

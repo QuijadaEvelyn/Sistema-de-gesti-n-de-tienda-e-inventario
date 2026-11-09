@@ -86,6 +86,181 @@
         </a>
     </section>
 
+    <!-- Módulo de Promociones Exclusivas con Preventa Anticipada (Clientes Frecuentes >= 5 Compras) & Contador Regresivo -->
+    @php
+        $listaPromociones = $promocionesDestacadas ?? collect();
+        $clienteVipActivo = (bool) ($esClienteFrecuente ?? false);
+        $comprasRealizadasCount = (int) ($totalComprasCliente ?? 0);
+        $comprasFaltantesCount = (int) ($comprasRestantesFrecuente ?? 5);
+    @endphp
+    @if ($listaPromociones->isNotEmpty())
+        <section id="promociones-exclusivas" class="mb-14" aria-label="Promociones Exclusivas y Preventa Anticipada">
+            <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 mb-6">
+                <div>
+                    <div class="flex flex-wrap items-center gap-2 mb-2">
+                        <span class="promo-shimmer-badge inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-purple-700 via-fuchsia-600 to-amber-500 text-white text-[11px] font-label-code font-bold uppercase tracking-wider shadow-sm">
+                            <span class="material-symbols-outlined text-[14px]">workspace_premium</span>
+                            <span>Preventa Activa &middot; Edición Especial</span>
+                        </span>
+                        @if ($clienteVipActivo)
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 border border-amber-300 text-amber-900 text-[11px] font-label-code font-bold uppercase">
+                                <span class="material-symbols-outlined text-[14px] text-amber-600">verified</span>
+                                <span>Cliente Frecuente VIP ({{ $comprasRealizadasCount }} compras) &middot; Acceso Anticipado Desbloqueado</span>
+                            </span>
+                        @else
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-100 border border-purple-300 text-purple-900 text-[11px] font-label-code font-semibold uppercase">
+                                <span class="material-symbols-outlined text-[14px] text-primary">stars</span>
+                                <span>Fidelidad ARCHIVUM: {{ $comprasRealizadasCount }}/5 compras (faltan {{ $comprasFaltantesCount }} para Preventa Anticipada VIP)</span>
+                            </span>
+                        @endif
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-on-surface font-quicksand">
+                        Promociones Exclusivas &amp; Lanzamientos en Preventa
+                    </h2>
+                    <p class="text-xs text-on-surface-variant mt-1 max-w-3xl">
+                        Los <strong>Clientes Frecuentes (5+ compras)</strong> reciben acceso anticipado en la <em>Fase de Preventa Exclusiva</em> para apartar piezas antes del lanzamiento oficial. En la <em>Fase de Apertura</em>, la promoción se desbloquea para todo el público general.
+                    </p>
+                </div>
+
+                @auth
+                    <a href="{{ route('cliente.mis-pedidos') }}" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-purple-950 text-purple-100 hover:bg-primary text-xs font-label-md font-bold uppercase tracking-wider transition self-start lg:self-end shadow-xs">
+                        <span class="material-symbols-outlined text-[16px] text-amber-300">notifications_active</span>
+                        <span>Ver Mi Panel de Preventas VIP</span>
+                    </a>
+                @endauth
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                @foreach ($listaPromociones as $promo)
+                    @php
+                        /** @var \App\Models\Promocion $promo */
+                        $fasePromo = $promo->faseActual();
+                        $esExclusivaActiva = $fasePromo === 'preventa_exclusiva';
+                        $esAbiertaPublico = $fasePromo === 'abierta_publico';
+                        $puedeComprarPromo = $promo->puedeAdquirir(auth()->user(), $clienteActual ?? null);
+                        $prodPromo = $promo->producto;
+                        $variantePromo = $prodPromo?->variantesSku?->first();
+                        $stockPromo = $variantePromo ? (int) $variantePromo->existencias->sum('cantidad') : 0;
+                        $precioOriginalPromo = (float) ($variantePromo?->precio ?? $prodPromo?->precio ?? 0);
+                        $precioConDescuentoPromo = $promo->calcularPrecioPromocional($precioOriginalPromo);
+                        $etiquetaDescuento = $promo->tipo_descuento === 'porcentaje'
+                            ? '-' . number_format((float) $promo->valor, 0) . '% OFF'
+                            : '-$' . number_format((float) $promo->valor, 0) . ' MXN';
+                        $countdownTargetMs = $promo->timestampObjetivoCountdownMs();
+                    @endphp
+
+                    <article
+                        data-promo-card="true"
+                        data-promo-phase="{{ $fasePromo }}"
+                        class="promo-card-animated rounded-2xl bg-gradient-to-br from-purple-950 via-indigo-950 to-slate-950 text-white p-6 border-2 {{ $esExclusivaActiva ? 'border-amber-400/80' : 'border-purple-400/70' }} flex flex-col justify-between shadow-xl"
+                    >
+                        <div class="relative z-10 space-y-4">
+                            <!-- Cabecera de Insignias Animadas -->
+                            <div class="flex flex-wrap items-center justify-between gap-2">
+                                <span class="promo-shimmer-badge inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-label-code font-bold uppercase tracking-wider {{ $esExclusivaActiva ? 'bg-amber-400 text-slate-950' : 'bg-purple-500 text-white' }}">
+                                    <span class="material-symbols-outlined text-[13px]">{{ $esExclusivaActiva ? 'lock_open_right' : 'bolt' }}</span>
+                                    <span>{{ $promo->badge_etiqueta ?? ($esExclusivaActiva ? 'PREVENTA ACTIVA · VIP' : 'EDICIÓN ESPECIAL') }}</span>
+                                </span>
+
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-lg bg-emerald-500/20 border border-emerald-400/50 text-emerald-300 font-tabular-data text-xs font-extrabold">
+                                    {{ $etiquetaDescuento }}
+                                </span>
+                            </div>
+
+                            <!-- Fase de Preventa vs Fase de Apertura -->
+                            <div class="flex items-center justify-between text-[10px] font-label-code uppercase tracking-wider px-3 py-1.5 rounded-xl {{ $esExclusivaActiva ? 'bg-amber-500/15 border border-amber-400/40 text-amber-200' : 'bg-emerald-500/15 border border-emerald-400/40 text-emerald-200' }}">
+                                <span class="font-bold">{{ $promo->etiquetaFase() }}</span>
+                                <span>{{ $stockPromo > 0 ? $stockPromo . ' disp.' : 'Cupo limitado' }}</span>
+                            </div>
+
+                            <!-- Título y Descripción -->
+                            <div>
+                                <h3 class="text-lg font-bold font-quicksand text-white leading-snug">
+                                    {{ $promo->nombre }}
+                                </h3>
+                                <p class="text-xs text-purple-200/90 mt-1.5 leading-relaxed">
+                                    {{ $promo->descripcion }}
+                                </p>
+                            </div>
+
+                            <!-- Reloj Contador Regresivo en Tiempo Real (Countdown) -->
+                            <div
+                                class="p-3.5 rounded-xl bg-black/40 border border-purple-500/30 space-y-2"
+                                data-promo-countdown="{{ $countdownTargetMs }}"
+                            >
+                                <div class="flex items-center justify-between text-[10px] font-label-code uppercase tracking-wider text-purple-200">
+                                    <span class="inline-flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-[13px] text-amber-300 animate-spin">schedule</span>
+                                        <span>{{ $promo->etiquetaCountdown() }}</span>
+                                    </span>
+                                    <span class="text-amber-300 font-bold">TIEMPO REAL</span>
+                                </div>
+                                <div class="grid grid-cols-4 gap-2 text-center font-tabular-data">
+                                    <div class="bg-purple-900/60 border border-purple-500/40 rounded-lg py-1.5 px-1">
+                                        <span data-cd-days class="block text-base sm:text-lg font-extrabold text-white">02</span>
+                                        <span class="block text-[9px] font-label-code uppercase text-purple-300">Días</span>
+                                    </div>
+                                    <div class="bg-purple-900/60 border border-purple-500/40 rounded-lg py-1.5 px-1">
+                                        <span data-cd-hours class="block text-base sm:text-lg font-extrabold text-white">11</span>
+                                        <span class="block text-[9px] font-label-code uppercase text-purple-300">Horas</span>
+                                    </div>
+                                    <div class="bg-purple-900/60 border border-purple-500/40 rounded-lg py-1.5 px-1">
+                                        <span data-cd-minutes class="block text-base sm:text-lg font-extrabold text-white">45</span>
+                                        <span class="block text-[9px] font-label-code uppercase text-purple-300">Min</span>
+                                    </div>
+                                    <div class="bg-purple-900/60 border border-amber-400/50 rounded-lg py-1.5 px-1">
+                                        <span data-cd-seconds class="block text-base sm:text-lg font-extrabold text-amber-300">30</span>
+                                        <span class="block text-[9px] font-label-code uppercase text-amber-200">Seg</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pie de Tarjeta: Precio Preferencial y Acción según Fase / Nivel de Cliente -->
+                        <div class="relative z-10 pt-4 mt-5 border-t border-purple-700/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div>
+                                @if ($precioOriginalPromo > 0)
+                                    <span class="text-[11px] font-tabular-data text-purple-300 line-through block">
+                                        Antes: ${{ number_format($precioOriginalPromo, 2) }} MXN
+                                    </span>
+                                    <span class="text-lg font-extrabold font-tabular-data text-amber-300">
+                                        ${{ number_format($precioConDescuentoPromo, 2) }} <span class="text-xs font-normal text-purple-200">MXN</span>
+                                    </span>
+                                @else
+                                    <span class="text-xs font-label-code uppercase text-amber-300 font-bold">
+                                        Bonificación: {{ $etiquetaDescuento }}
+                                    </span>
+                                @endif
+                            </div>
+
+                            @if ($variantePromo && $stockPromo > 0 && $puedeComprarPromo)
+                                <form method="POST" action="{{ route('carrito.agregar') }}">
+                                    @csrf
+                                    <input type="hidden" name="variante_sku_id" value="{{ $variantePromo->id }}" />
+                                    <input type="hidden" name="cantidad" value="1" />
+                                    <button
+                                        type="submit"
+                                        class="w-full sm:w-auto px-4 py-2.5 rounded-xl {{ $esExclusivaActiva ? 'bg-amber-400 hover:bg-amber-300 text-slate-950' : 'bg-purple-500 hover:bg-purple-400 text-white' }} text-xs font-label-md font-extrabold uppercase tracking-wider flex items-center justify-center gap-1.5 transition shadow-md cursor-pointer"
+                                    >
+                                        <span class="material-symbols-outlined text-[16px]">shopping_bag</span>
+                                        <span>{{ $esExclusivaActiva ? 'Apartar en Preventa VIP' : 'Adquirir en Apertura' }}</span>
+                                    </button>
+                                </form>
+                            @elseif ($esExclusivaActiva && ! $puedeComprarPromo)
+                                <div class="text-right">
+                                    <span class="inline-flex items-center gap-1 px-3 py-2 rounded-xl bg-purple-900/80 border border-amber-400/40 text-amber-200 text-[10px] font-label-code font-bold uppercase">
+                                        <span class="material-symbols-outlined text-[14px]">lock</span>
+                                        <span>Exclusivo 5+ Compras (Abre {{ $promo->fechaAperturaPublica()->format('d/m') }})</span>
+                                    </span>
+                                </div>
+                            @endif
+                        </div>
+                    </article>
+                @endforeach
+            </div>
+        </section>
+    @endif
+
     <!-- Vitrina Interactiva: Carrusel 3D con Swiper.js (Efecto Coverflow) -->
     <section class="mb-14" aria-label="Vitrina Curatorial en 3D">
         <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-4">
@@ -232,6 +407,35 @@
     @push('scripts')
         <script>
             document.addEventListener('DOMContentLoaded', function () {
+                // Inicializar contadores regresivos en tiempo real para Promociones y Preventas
+                const countdownNodes = document.querySelectorAll('[data-promo-countdown]');
+                if (countdownNodes.length > 0) {
+                    const actualizarContadoresPromo = () => {
+                        const ahoraMs = Date.now();
+                        countdownNodes.forEach((nodo) => {
+                            const metaMs = parseInt(nodo.getAttribute('data-promo-countdown') || '0', 10);
+                            const diffSeg = Math.max(0, Math.floor((metaMs - ahoraMs) / 1000));
+                            const dias = Math.floor(diffSeg / 86400);
+                            const horas = Math.floor((diffSeg % 86400) / 3600);
+                            const minutos = Math.floor((diffSeg % 3600) / 60);
+                            const segundos = diffSeg % 60;
+
+                            const elDias = nodo.querySelector('[data-cd-days]');
+                            const elHoras = nodo.querySelector('[data-cd-hours]');
+                            const elMin = nodo.querySelector('[data-cd-minutes]');
+                            const elSeg = nodo.querySelector('[data-cd-seconds]');
+
+                            if (elDias) elDias.textContent = String(dias).padStart(2, '0');
+                            if (elHoras) elHoras.textContent = String(horas).padStart(2, '0');
+                            if (elMin) elMin.textContent = String(minutos).padStart(2, '0');
+                            if (elSeg) elSeg.textContent = String(segundos).padStart(2, '0');
+                        });
+                    };
+
+                    actualizarContadoresPromo();
+                    setInterval(actualizarContadoresPromo, 1000);
+                }
+
                 const carouselElement = document.querySelector('.product3DCarousel');
                 if (!carouselElement || typeof Swiper === 'undefined') {
                     return;

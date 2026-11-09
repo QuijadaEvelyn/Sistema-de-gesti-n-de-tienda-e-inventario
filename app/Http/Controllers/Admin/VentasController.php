@@ -9,14 +9,18 @@ use App\Models\Bitacora;
 use App\Models\Devolucion;
 use App\Models\Pago;
 use App\Models\Pedido;
+use App\Models\Producto;
 use App\Models\Promocion;
 use App\Models\Sucursal;
 use App\Services\DevolucionService;
+use App\Services\PromocionDescuentoService;
 use App\Services\SucursalContextoService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use RuntimeException;
@@ -251,9 +255,69 @@ class VentasController extends Controller
      */
     public function promociones(): View
     {
+        $query = Promocion::query();
+        if (Schema::hasColumn('promociones', 'producto_id')) {
+            $query->with('producto');
+        }
+
         return view('admin.ventas.index', [
             'seccion' => 'promociones',
-            'registros' => Promocion::query()->orderByDesc('activa')->orderByDesc('inicia_en')->paginate(20),
+            'registros' => $query->orderByDesc('activa')->orderByDesc('inicia_en')->paginate(20),
+            'productosCatalogo' => Schema::hasTable('productos')
+                ? Producto::where('activo', true)->orderBy('nombre')->get()
+                : collect(),
         ]);
+    }
+
+    /**
+     * Programa una nueva promoción o lanzamiento con fase de preventa exclusiva para clientes frecuentes.
+     */
+    public function storePromocion(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'nombre' => ['required', 'string', 'max:180'],
+            'descripcion' => ['nullable', 'string', 'max:1500'],
+            'producto_id' => ['nullable', 'integer', 'exists:productos,id'],
+            'tipo_descuento' => ['required', Rule::in(['porcentaje', 'monto'])],
+            'valor' => ['required', 'numeric', 'min:0.01'],
+            'es_preventa_exclusiva' => ['nullable', 'boolean'],
+            'preventa_inicia_en' => ['required', 'date'],
+            'apertura_publica_en' => ['required', 'date', 'after_or_equal:preventa_inicia_en'],
+            'termina_en' => ['required', 'date', 'after_or_equal:apertura_publica_en'],
+            'badge_etiqueta' => ['nullable', 'string', 'max:120'],
+        ]);
+
+        $preventaInicia = Carbon::parse((string) $validated['preventa_inicia_en']);
+        $aperturaPublica = Carbon::parse((string) $validated['apertura_publica_en']);
+        $terminaEn = Carbon::parse((string) $validated['termina_en']);
+        $esPreventaExclusiva = $request->has('es_preventa_exclusiva')
+            ? $request->boolean('es_preventa_exclusiva')
+            : true;
+
+        $atributos = [
+            'nombre' => (string) $validated['nombre'],
+            'descripcion' => $validated['descripcion'] ?? null,
+            'tipo_descuento' => (string) $validated['tipo_descuento'],
+            'valor' => (float) $validated['valor'],
+            'inicia_en' => $preventaInicia->toDateString(),
+            'termina_en' => $terminaEn->toDateString(),
+            'activa' => true,
+        ];
+
+        if (Schema::hasColumn('promociones', 'producto_id')) {
+            $atributos['producto_id'] = isset($validated['producto_id']) ? (int) $validated['producto_id'] : null;
+            $atributos['es_preventa_exclusiva'] = $esPreventaExclusiva;
+            $atributos['preventa_inicia_en'] = $preventaInicia;
+            $atributos['apertura_publica_en'] = $aperturaPublica;
+            $atributos['badge_etiqueta'] = $validated['badge_etiqueta'] ?? ($esPreventaExclusiva ? 'PREVENTA ACTIVA · ACCESO ANTICIPADO VIP' : 'EDICIÓN ESPECIAL');
+        }
+
+        $promocion = Promocion::create($atributos);
+        $notificados = app(PromocionDescuentoService::class)->notificarPromocionAClientesFrecuentes($promocion);
+
+        return back()->with(
+            'status',
+            "Promoción «{$promocion->nombre}» programada exitosamente. Clientes frecuentes (5+ compras) notificados: {$notificados}."
+        );
     }
 }

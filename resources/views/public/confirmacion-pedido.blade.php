@@ -205,6 +205,31 @@
                                 &mdash; <em>"{{ $dev->comentarios_cliente }}"</em>
                             @endif
                         </p>
+                        @php
+                            $evidenciasConfirmacion = $dev->obtenerEvidenciasNormalizadas();
+                        @endphp
+                        @if (! empty($evidenciasConfirmacion))
+                            <div class="pt-1 space-y-1.5">
+                                <span class="block text-[10px] font-label-code uppercase text-secondary font-bold">
+                                    Evidencia Fotográfica Adjunta ({{ count($evidenciasConfirmacion) }})
+                                </span>
+                                <div class="flex flex-wrap gap-2.5">
+                                    @foreach ($evidenciasConfirmacion as $ev)
+                                        @php
+                                            $urlEvConf = ! empty($ev['ruta']) ? asset('storage/' . $ev['ruta']) : $ev['url'];
+                                        @endphp
+                                        <a href="{{ $urlEvConf }}" target="_blank" rel="noopener"
+                                           class="group relative w-20 h-20 rounded-xl overflow-hidden border border-purple-200 bg-white shadow-2xs block"
+                                           title="Ver fotografía de evidencia: {{ $ev['nombre'] }}">
+                                            <img src="{{ $urlEvConf }}"
+                                                 alt="Evidencia: {{ $ev['nombre'] }}"
+                                                 loading="lazy"
+                                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200" />
+                                        </a>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
                         @if ($dev->guia_retorno)
                             <div class="p-3 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-900">
                                 <div class="font-label-code font-bold">GUÍA DE RETORNO EMITIDA: {{ $dev->guia_retorno }}</div>

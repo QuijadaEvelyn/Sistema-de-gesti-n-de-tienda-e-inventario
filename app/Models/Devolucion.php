@@ -162,4 +162,63 @@ class Devolucion extends Model
 
         return self::MOTIVOS_CATALOGO[$motivo] ?? $motivo;
     }
+
+    /**
+     * Accesor de compatibilidad para `$devolucion->evidencia` (retorna la ruta relativa
+     * en storage/app/public de la primera fotografía de evidencia adjunta).
+     */
+    public function getEvidenciaAttribute(): ?string
+    {
+        $lista = $this->obtenerEvidenciasNormalizadas();
+
+        return $lista[0]['ruta'] ?? null;
+    }
+
+    /**
+     * Normaliza el arreglo de evidencias fotográficas asegurando que cada elemento
+     * cuente con su ruta relativa limpia y su URL pública generada mediante `asset('storage/' . $ruta)`.
+     *
+     * @return list<array{nombre: string, ruta: string, url: string, mime: string}>
+     */
+    public function obtenerEvidenciasNormalizadas(): array
+    {
+        $crudas = is_array($this->evidencias) ? $this->evidencias : [];
+        $normalizadas = [];
+
+        foreach ($crudas as $indice => $ev) {
+            if (is_array($ev)) {
+                $rutaRaw = (string) ($ev['ruta'] ?? $ev['url'] ?? '');
+                $nombre = (string) ($ev['nombre'] ?? basename($rutaRaw) ?: ('Evidencia #'.($indice + 1)));
+                $mime = (string) ($ev['mime'] ?? 'image/jpeg');
+            } else {
+                $rutaRaw = (string) $ev;
+                $nombre = basename($rutaRaw) ?: ('Evidencia #'.($indice + 1));
+                $mime = 'image/jpeg';
+            }
+
+            $rutaRaw = trim(str_replace('\\', '/', $rutaRaw));
+            if ($rutaRaw === '') {
+                continue;
+            }
+
+            if (str_starts_with($rutaRaw, 'http://') || str_starts_with($rutaRaw, 'https://')) {
+                $urlPublica = $rutaRaw;
+                $rutaRelativa = ltrim((string) parse_url($rutaRaw, PHP_URL_PATH), '/');
+                $rutaRelativa = preg_replace('#^storage/#', '', $rutaRelativa) ?: $rutaRaw;
+            } else {
+                $rutaRelativa = ltrim($rutaRaw, '/');
+                $rutaRelativa = (string) preg_replace('#^(public/|storage/)#', '', $rutaRelativa);
+                $urlPublica = asset('storage/'.$rutaRelativa);
+            }
+
+            $normalizadas[] = [
+                'nombre' => $nombre,
+                'ruta' => $rutaRelativa,
+                'url' => $urlPublica,
+                'mime' => $mime,
+            ];
+        }
+
+        return $normalizadas;
+    }
 }

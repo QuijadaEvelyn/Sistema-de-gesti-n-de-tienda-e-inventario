@@ -264,6 +264,16 @@ class ReservaService
             $existencia->cantidad -= $cantidad;
             $existencia->save();
 
+            $piezaUnica = PiezaUnica::query()
+                ->where('existencia_id', $existencia->id)
+                ->where('estado', 'disponible')
+                ->lockForUpdate()
+                ->first();
+
+            if ($piezaUnica) {
+                $piezaUnica->update(['estado' => 'reservada']);
+            }
+
             return ReservaStock::create([
                 'existencia_id' => $existenciaId,
                 'carrito_id' => $carritoId,
@@ -286,6 +296,15 @@ class ReservaService
             'expira_en' => null,
         ]);
 
+        $piezaUnica = PiezaUnica::query()
+            ->where('existencia_id', $reserva->existencia_id)
+            ->where('estado', 'reservada')
+            ->first();
+
+        if ($piezaUnica) {
+            $piezaUnica->update(['estado' => 'vendida']);
+        }
+
         return $reserva->fresh();
     }
 
@@ -305,6 +324,16 @@ class ReservaService
             if ($existencia) {
                 $existencia->cantidad += $reserva->cantidad;
                 $existencia->save();
+
+                $piezaUnica = PiezaUnica::query()
+                    ->where('existencia_id', $existencia->id)
+                    ->where('estado', 'reservada')
+                    ->lockForUpdate()
+                    ->first();
+
+                if ($piezaUnica) {
+                    $piezaUnica->update(['estado' => 'disponible']);
+                }
             }
 
             $reserva->update(['estado' => 'liberada']);

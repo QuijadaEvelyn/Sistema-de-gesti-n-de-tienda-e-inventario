@@ -86,18 +86,25 @@ class DevolucionService
             $evidenciasGuardadas = [];
             foreach ($archivosEvidencia as $archivo) {
                 if ($archivo instanceof UploadedFile) {
-                    $ruta = $archivo->store('devoluciones', 'public');
+                    $ruta = (string) $archivo->store('devoluciones', 'public');
+                    $rutaLimpia = ltrim(str_replace('\\', '/', $ruta), '/');
                     $evidenciasGuardadas[] = [
                         'nombre' => $archivo->getClientOriginalName(),
-                        'ruta' => $ruta,
-                        'url' => '/storage/'.ltrim((string) $ruta, '/'),
-                        'mime' => $archivo->getClientMimeType(),
+                        'ruta' => $rutaLimpia,
+                        'url' => asset('storage/'.$rutaLimpia),
+                        'mime' => $archivo->getClientMimeType() ?: 'image/jpeg',
                     ];
                 } elseif (is_string($archivo) && trim($archivo) !== '') {
+                    $rutaLimpia = ltrim(str_replace('\\', '/', trim($archivo)), '/');
+                    $rutaLimpia = (string) preg_replace('#^(public/|storage/)#', '', $rutaLimpia);
+                    $urlPublica = (str_starts_with($archivo, 'http://') || str_starts_with($archivo, 'https://'))
+                        ? trim($archivo)
+                        : asset('storage/'.$rutaLimpia);
+
                     $evidenciasGuardadas[] = [
-                        'nombre' => basename($archivo),
-                        'ruta' => $archivo,
-                        'url' => $archivo,
+                        'nombre' => basename($rutaLimpia),
+                        'ruta' => $rutaLimpia,
+                        'url' => $urlPublica,
                         'mime' => 'image/jpeg',
                     ];
                 } elseif (is_array($archivo) && ! empty($archivo['url'])) {

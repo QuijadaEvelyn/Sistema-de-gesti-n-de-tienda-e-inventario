@@ -13,6 +13,12 @@ class Cliente extends Model
 {
     use HasFactory, SoftDeletes;
 
+    /**
+     * Número mínimo de compras completadas para obtener el nivel de Cliente Frecuente VIP
+     * con acceso anticipado a Preventas Exclusivas.
+     */
+    public const COMPRAS_MINIMAS_FRECUENTE = 5;
+
     protected $table = 'clientes';
 
     /**
@@ -82,5 +88,44 @@ class Cliente extends Model
     public function devoluciones(): HasMany
     {
         return $this->hasMany(Devolucion::class, 'cliente_id');
+    }
+
+    /**
+     * Cuenta el total de compras válidas realizadas por el cliente (excluyendo cancelados).
+     */
+    public function totalComprasRealizadas(): int
+    {
+        if ($this->relationLoaded('pedidos')) {
+            return $this->pedidos->where('estatus', '!=', 'cancelado')->count();
+        }
+
+        return (int) $this->pedidos()
+            ->where('estatus', '!=', 'cancelado')
+            ->count();
+    }
+
+    /**
+     * Calcula cuántas compras le faltan al cliente para alcanzar el nivel de Cliente Frecuente (5 compras).
+     */
+    public function comprasRestantesParaFrecuente(): int
+    {
+        return max(0, self::COMPRAS_MINIMAS_FRECUENTE - $this->totalComprasRealizadas());
+    }
+
+    /**
+     * Determina si el cliente califica como Cliente Frecuente VIP (5 o más compras realizadas
+     * o membresía activa registrada en `clientes_frecuentes`).
+     */
+    public function esClienteFrecuente(): bool
+    {
+        if ($this->totalComprasRealizadas() >= self::COMPRAS_MINIMAS_FRECUENTE) {
+            return true;
+        }
+
+        if ($this->relationLoaded('clienteFrecuente')) {
+            return $this->clienteFrecuente !== null;
+        }
+
+        return $this->clienteFrecuente()->exists();
     }
 }

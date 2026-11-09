@@ -2,6 +2,10 @@
     <div class="space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
+                <span class="inline-flex items-center gap-1.5 text-[10px] font-label-code uppercase tracking-widest text-primary font-bold mb-1">
+                    <span class="material-symbols-outlined text-[14px]">warehouse</span>
+                    <span>Panel Operativo de Sede &middot; Gestión de Almacén e Inventario</span>
+                </span>
                 <h1 class="text-2xl font-bold text-on-surface font-quicksand">
                     Inventario Unificado por Sucursal
                     @if (! empty($sucursalActiva))
@@ -13,22 +17,28 @@
                 </p>
             </div>
             <div class="flex flex-wrap gap-2">
-                <a href="{{ route('admin.reportes.csv', array_filter(['sucursal_id' => $sucursalActiva?->id ?? request('sucursal_id')])) }}" class="px-4 py-2 rounded-xl border border-purple-200 bg-white hover:bg-purple-50 text-primary text-xs font-label-md flex items-center gap-1.5 transition">
-                    <span class="material-symbols-outlined text-[16px]">table_view</span>
-                    <span>Exportar CSV (.csv)</span>
-                </a>
-                <a href="{{ route('admin.reportes.pdf', array_filter(['sucursal_id' => $sucursalActiva?->id ?? request('sucursal_id')])) }}" class="px-4 py-2 rounded-xl border border-purple-200 bg-white hover:bg-purple-50 text-primary text-xs font-label-md flex items-center gap-1.5 transition">
-                    <span class="material-symbols-outlined text-[16px]">picture_as_pdf</span>
-                    <span>Exportar PDF (.pdf)</span>
-                </a>
+                @if (auth()->user()?->esAdmin())
+                    <a href="{{ route('admin.reportes.csv', array_filter(['sucursal_id' => $sucursalActiva?->id ?? request('sucursal_id')])) }}" class="px-4 py-2 rounded-xl border border-purple-200 bg-white hover:bg-purple-50 text-primary text-xs font-label-md flex items-center gap-1.5 transition">
+                        <span class="material-symbols-outlined text-[16px]">table_view</span>
+                        <span>Exportar CSV (.csv)</span>
+                    </a>
+                    <a href="{{ route('admin.reportes.pdf', array_filter(['sucursal_id' => $sucursalActiva?->id ?? request('sucursal_id')])) }}" class="px-4 py-2 rounded-xl border border-purple-200 bg-white hover:bg-purple-50 text-primary text-xs font-label-md flex items-center gap-1.5 transition">
+                        <span class="material-symbols-outlined text-[16px]">picture_as_pdf</span>
+                        <span>Exportar PDF (.pdf)</span>
+                    </a>
+                @endif
                 @if ($puedeAjustar)
-                    <a href="{{ route('almacen.ajustes') }}" class="px-4 py-2 rounded-xl bg-primary-container hover:bg-primary text-white text-xs font-label-md flex items-center gap-1.5 transition">
+                    <a href="{{ route('almacen.ajustes', array_filter(['sucursal_id' => $sucursalActiva?->id ?? request('sucursal_id')])) }}" class="px-4 py-2 rounded-xl bg-primary-container hover:bg-primary text-white text-xs font-label-md flex items-center gap-1.5 transition">
                         <span class="material-symbols-outlined text-[16px]">tune</span>
                         <span>Ajustes &amp; Recepciones</span>
                     </a>
-                    <a href="{{ route('almacen.transferencias') }}" class="px-4 py-2 rounded-xl border border-purple-200 bg-white hover:bg-purple-50 text-primary text-xs font-label-md flex items-center gap-1.5 transition">
+                    <a href="{{ route('almacen.transferencias', array_filter(['sucursal_id' => $sucursalActiva?->id ?? request('sucursal_id')])) }}" class="px-4 py-2 rounded-xl border border-purple-200 bg-white hover:bg-purple-50 text-primary text-xs font-label-md flex items-center gap-1.5 transition">
                         <span class="material-symbols-outlined text-[16px]">swap_horiz</span>
                         <span>Transferencias</span>
+                    </a>
+                    <a href="{{ route('almacen.envios', array_filter(['sucursal_id' => $sucursalActiva?->id ?? request('sucursal_id')])) }}" class="px-4 py-2 rounded-xl border border-purple-200 bg-white hover:bg-purple-50 text-primary text-xs font-label-md flex items-center gap-1.5 transition">
+                        <span class="material-symbols-outlined text-[16px]">local_shipping</span>
+                        <span>Envíos &amp; Despacho</span>
                     </a>
                 @endif
             </div>
@@ -57,23 +67,59 @@
                     <tr>
                         <th class="py-3 px-4">SKU</th>
                         <th class="py-3 px-4">Producto / Variante</th>
+                        <th class="py-3 px-4">Régimen de Inventario</th>
                         <th class="py-3 px-4">Sucursal</th>
                         <th class="py-3 px-4 text-right">Existencia</th>
                         <th class="py-3 px-4 text-right">Stock Mínimo</th>
+                        <th class="py-3 px-4 text-right">Acciones en Sede</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-purple-100">
                     @forelse ($existencias as $item)
+                        @php
+                            $piezaUnicaRow = $item->piezasUnicas?->first();
+                        @endphp
                         <tr class="hover:bg-surface-container-low/50">
                             <td class="py-3 px-4 font-label-code font-bold text-primary">{{ $item->varianteSku?->sku ?? 'N/A' }}</td>
                             <td class="py-3 px-4">{{ $item->varianteSku?->producto?->nombre ?? $item->varianteSku?->descripcion ?? 'Sin descripción' }}</td>
+                            <td class="py-3 px-4">
+                                @if ($piezaUnicaRow)
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-purple-100 text-primary border border-purple-200 text-[10px] font-label-code font-bold uppercase">
+                                        PIEZA ÚNICA 1/1 &middot; {{ $piezaUnicaRow->numero_serie }}
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-label-code font-semibold uppercase">
+                                        STOCK MASIVO &middot; TIRAJE MÚLTIPLE
+                                    </span>
+                                @endif
+                            </td>
                             <td class="py-3 px-4">{{ $item->sucursal?->nombre ?? 'General' }}</td>
                             <td class="py-3 px-4 text-right font-tabular-data font-bold {{ $item->cantidad <= $item->stock_minimo ? 'text-error' : 'text-emerald-700' }}">{{ $item->cantidad }}</td>
                             <td class="py-3 px-4 text-right font-tabular-data text-outline">{{ $item->stock_minimo }}</td>
+                            <td class="py-3 px-4 text-right">
+                                <div class="inline-flex items-center justify-end gap-1.5">
+                                    <a
+                                        href="{{ route('almacen.ajustes', ['sucursal_id' => $item->sucursal_id]) }}"
+                                        class="px-2.5 py-1 rounded-lg bg-purple-50 hover:bg-purple-100 text-primary border border-purple-200 text-[11px] font-label-code font-semibold transition inline-flex items-center gap-1"
+                                        title="Ajustar o recepcionar stock en {{ $item->sucursal?->nombre }}"
+                                    >
+                                        <span class="material-symbols-outlined text-[14px]">tune</span>
+                                        <span>Ajustar</span>
+                                    </a>
+                                    <a
+                                        href="{{ route('almacen.transferencias', ['sucursal_id' => $item->sucursal_id]) }}"
+                                        class="px-2.5 py-1 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface-variant border border-purple-200/70 text-[11px] font-label-code font-semibold transition inline-flex items-center gap-1"
+                                        title="Transferir stock desde {{ $item->sucursal?->nombre }}"
+                                    >
+                                        <span class="material-symbols-outlined text-[14px]">swap_horiz</span>
+                                        <span>Transferir</span>
+                                    </a>
+                                </div>
+                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="py-8 text-center text-outline text-sm">No se encontraron registros de inventario con los criterios seleccionados.</td>
+                            <td colspan="7" class="py-8 text-center text-outline text-sm">No se encontraron registros de inventario con los criterios seleccionados.</td>
                         </tr>
                     @endforelse
                 </tbody>

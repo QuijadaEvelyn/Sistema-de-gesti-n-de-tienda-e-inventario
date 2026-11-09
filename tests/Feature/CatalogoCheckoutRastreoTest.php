@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\Http\Controllers\CheckoutSimuladoController;
+use App\Models\Cliente;
 use App\Models\Pedido;
+use App\Models\PiezaUnica;
 use App\Models\Producto;
+use App\Models\Sucursal;
 use App\Models\Usuario;
 use Database\Seeders\CatalogoProductoSeeder;
 use Database\Seeders\UsuarioSeeder;
@@ -395,5 +399,273 @@ class CatalogoCheckoutRastreoTest extends TestCase
         $response->assertSee('showcase-reserve-form', false);
         $response->assertSee('Kind of Blue (Mono 1st Press 6-Eye)');
         $response->assertSee('The Dark Side of the Moon (1st Japan Black Triangle CD)');
+    }
+
+    public function test_pieza_unica_bloquea_concurrencia_entre_dos_clientes_y_libera_tras_5_minutos_o_consolida_al_pagar(): void
+    {
+        $clienteA = Usuario::whereHas('roles', fn ($q) => $q->where('nombre', 'cliente'))->firstOrFail();
+
+        // 1. Verificar semillas diferenciadas de Piezas Únicas 1/1 por sucursal (Inventario Híbrido)
+        $piezaBellasArtes = PiezaUnica::with('existencia.sucursal', 'existencia.varianteSku')
+            ->where('numero_serie', 'ARC-LIB-1949-003')
+            ->firstOrFail();
+        $this->assertSame('Sucursal Central Bellas Artes', $piezaBellasArtes->existencia->sucursal->nombre);
+        $this->assertSame('LIB-1949-LOS', $piezaBellasArtes->existencia->varianteSku->sku);
+        $this->assertSame('disponible', $piezaBellasArtes->estado);
+
+        $piezaCoyoacan = PiezaUnica::with('existencia.sucursal', 'existencia.varianteSku')
+            ->where('numero_serie', 'ARC-LIB-1955-002')
+            ->firstOrFail();
+        $this->assertSame('Sucursal Coyoacán', $piezaCoyoacan->existencia->sucursal->nombre);
+        $this->assertSame('LIB-1955-FCE', $piezaCoyoacan->existencia->varianteSku->sku);
+        $this->assertSame('disponible', $piezaCoyoacan->estado);
+
+        $piezaAlmacen = PiezaUnica::with('existencia.sucursal', 'existencia.varianteSku')
+            ->where('numero_serie', 'ARC-LIB-1967-001')
+            ->firstOrFail();
+        $this->assertSame('Almacén General', $piezaAlmacen->existencia->sucursal->nombre);
+        $this->assertSame('LIB-1967-SUD', $piezaAlmacen->existencia->varianteSku->sku);
+        $this->assertSame('disponible', $piezaAlmacen->estado);
+
+        $varianteUnica = $piezaBellasArtes->existencia->varianteSku;
+        $this->assertSame(1, (int) $varianteUnica->existencias()->sum('cantidad'));
+
+        // Verificar que la tarjeta pública muestra el borde morado intenso (border-purple-600), el distintivo Pieza Única · Edición Coleccionable y su número de serie
+        $this->get(route('public.libros'))
+            ->assertStatus(200)
+            ->assertSee('border-purple-600', false)
+            ->assertSee('Pieza Única · Edición Coleccionable')
+            ->assertSee('PIEZA ÚNICA 1/1')
+            ->assertSee('ARC-LIB-1949-003');
+
+        // 2. Cliente A añade la Pieza Única al carrito -> se bloquea inmediatamente por 5 minutos
+        $this->actingAs($clienteA)
+            ->from(route('public.libros'))
+            ->post(route('carrito.agregar'), [
+                'variante_sku_id' => $varianteUnica->id,
+                'cantidad' => 1,
+            ])
+            ->assertRedirect(route('public.libros'))
+            ->assertSessionHasNoErrors();
+
+        $piezaBellasArtes->refresh();
+        $this->assertSame('reservada', $piezaBellasArtes->estado);
+        $this->assertSame(0, (int) $varianteUnica->existencias()->sum('cantidad'));
+
+        // El catálogo público ahora muestra la pieza como RESERVADA EN BÓVEDA (5 MIN)
+        $this->get(route('public.libros'))
+            ->assertStatus(200)
+            ->assertSee('RESERVADA EN BÓVEDA (5 MIN)');
+
+        // 3. Concurrencia: Otro cliente intenta adquirir la misma Pieza Única mientras está bloqueada -> 422 / Error
+        $this->postJson(route('carrito.agregar'), [
+            'variante_sku_id' => $varianteUnica->id,
+            'cantidad' => 1,
+        ])
+            ->assertStatus(422)
+            ->assertJsonFragment(['status' => 'error']);
+
+        // 4. Expiración del temporizador de 5 minutos sin pago -> libera bloqueo automáticamente
+        $this->travel(6)->minutes();
+
+        $this->get(route('public.libros'))
+            ->assertStatus(200);
+
+        $piezaBellasArtes->refresh();
+        $this->assertSame('disponible', $piezaBellasArtes->estado);
+        $this->assertSame(1, (int) $varianteUnica->existencias()->sum('cantidad'));
+
+        // 5. Ahora otro cliente puede reservar la Pieza Única y consolidar la compra pagando dentro de los 5 minutos
+        $this->actingAs($clienteA)
+            ->post(route('carrito.agregar'), [
+                'variante_sku_id' => $varianteUnica->id,
+                'cantidad' => 1,
+            ])
+            ->assertRedirect();
+
+        $piezaBellasArtes->refresh();
+        $this->assertSame('reservada', $piezaBellasArtes->estado);
+
+        $this->actingAs($clienteA)
+            ->post(route('checkout.pagar'), [
+                'nombre_completo' => 'Coleccionista Archivum',
+                'email' => $clienteA->email,
+                'telefono' => '5551112233',
+                'calle' => 'Av. Juárez 1',
+                'colonia' => 'Centro Histórico',
+                'ciudad' => 'Ciudad de México',
+                'estado' => 'CDMX',
+                'codigo_postal' => '06050',
+                'nombre_titular' => 'Coleccionista Archivum',
+                'numero_tarjeta' => '4111222233334444',
+                'expiracion' => '12/29',
+                'cvv' => '999',
+            ])
+            ->assertRedirect();
+
+        $piezaBellasArtes->refresh();
+        $this->assertSame('vendida', $piezaBellasArtes->estado);
+        $this->assertSame(0, (int) $varianteUnica->existencias()->sum('cantidad'));
+    }
+
+    public function test_inventario_hibrido_permite_compra_multiple_en_stock_masivo_y_filtra_catalogo_diferenciado_por_sucursal(): void
+    {
+        $cliente = Usuario::whereHas('roles', fn ($q) => $q->where('nombre', 'cliente'))->firstOrFail();
+
+        $bellasArtes = Sucursal::where('nombre', 'like', '%Bellas Artes%')->firstOrFail();
+        $coyoacan = Sucursal::where('nombre', 'like', '%Coyoacán%')->firstOrFail();
+        $almacen = Sucursal::where('nombre', 'like', '%Almacén General%')->firstOrFail();
+
+        // 1. Variabilidad por sucursal: cada sede tiene libros, discos y coleccionables propios sin repetir inventario
+        $resBellasArtes = $this->get(route('public.libros', ['sucursal_id' => $bellasArtes->id]));
+        $resBellasArtes->assertOk()
+            ->assertSee('El Aleph (Ejemplar Dedicado por el Autor)')
+            ->assertSee('El Laberinto de la Soledad')
+            ->assertDontSee('Pedro Páramo (Edición Príncipe FCE)')
+            ->assertDontSee('Aura (Edición Conmemorativa Biblioteca Era Coyoacán)')
+            ->assertDontSee('Cien Años de Soledad')
+            ->assertDontSee('Rayuela (Tiraje Clásico Editorial Sudamericana)');
+
+        $resCoyoacan = $this->get(route('public.libros', ['sucursal_id' => $coyoacan->id]));
+        $resCoyoacan->assertOk()
+            ->assertSee('Pedro Páramo (Edición Príncipe FCE)')
+            ->assertSee('Aura (Edición Conmemorativa Biblioteca Era Coyoacán)')
+            ->assertDontSee('El Aleph (Ejemplar Dedicado por el Autor)')
+            ->assertDontSee('El Laberinto de la Soledad')
+            ->assertDontSee('Cien Años de Soledad');
+
+        $resAlmacen = $this->get(route('public.libros', ['sucursal_id' => $almacen->id]));
+        $resAlmacen->assertOk()
+            ->assertSee('Cien Años de Soledad')
+            ->assertSee('Rayuela (Tiraje Clásico Editorial Sudamericana)')
+            ->assertDontSee('El Aleph (Ejemplar Dedicado por el Autor)')
+            ->assertDontSee('Pedro Páramo (Edición Príncipe FCE)');
+
+        // 2. Stock Masivo (> 1): permite compra de varias unidades sin bloquear de forma exclusiva el producto
+        $productoMasivo = Producto::with('variantesSku.existencias')
+            ->where('nombre', 'Aura (Edición Conmemorativa Biblioteca Era Coyoacán)')
+            ->firstOrFail();
+        $varianteMasiva = $productoMasivo->variantesSku->firstOrFail();
+
+        $this->assertSame(9, (int) $varianteMasiva->existencias()->sum('cantidad'));
+        $this->assertNull(CheckoutSimuladoController::obtenerPiezaUnicaDeVariante($varianteMasiva->id));
+
+        // Cliente A reserva 3 unidades de golpe
+        $this->actingAs($cliente)
+            ->from(route('public.libros', ['sucursal_id' => $coyoacan->id]))
+            ->post(route('carrito.agregar'), [
+                'variante_sku_id' => $varianteMasiva->id,
+                'cantidad' => 3,
+            ])
+            ->assertRedirect()
+            ->assertSessionHasNoErrors();
+
+        // Quedan 6 unidades libres en bóveda y el producto NO se bloquea de forma exclusiva
+        $this->assertSame(6, (int) $varianteMasiva->existencias()->sum('cantidad'));
+
+        // Otro cliente puede adquirir simultáneamente 2 unidades adicionales vía JSON sin bloqueo de concurrencia
+        $this->postJson(route('carrito.agregar'), [
+            'variante_sku_id' => $varianteMasiva->id,
+            'cantidad' => 2,
+        ])
+            ->assertOk()
+            ->assertJsonFragment(['status' => 'success']);
+
+        $this->assertSame(4, (int) $varianteMasiva->existencias()->sum('cantidad'));
+    }
+
+    public function test_promociones_exclusivas_preventa_clientes_frecuentes_5_compras_apertura_publica_y_countdown_animado(): void
+    {
+        $usuarioFrecuente = Usuario::where('email', 'elena.ramirez@gmail.com')->firstOrFail();
+        $usuarioRegular = Usuario::where('email', 'javier.morales@hotmail.com')->firstOrFail();
+
+        $clienteFrecuente = Cliente::where('usuario_id', $usuarioFrecuente->id)->firstOrFail();
+        $clienteRegular = Cliente::where('usuario_id', $usuarioRegular->id)->firstOrFail();
+
+        // 1. Verificar regla de Cliente Frecuente (>= 5 compras) vs Cliente Común (< 5 compras)
+        $this->assertGreaterThanOrEqual(5, $clienteFrecuente->totalComprasRealizadas());
+        $this->assertTrue($clienteFrecuente->esClienteFrecuente());
+
+        $this->assertLessThan(5, $clienteRegular->totalComprasRealizadas());
+        $this->assertFalse($clienteRegular->esClienteFrecuente());
+
+        // 2. Verificar que la página principal y el panel del cliente renderizan las tarjetas animadas y el contador regresivo
+        $this->actingAs($usuarioFrecuente)
+            ->get(route('public.home'))
+            ->assertOk()
+            ->assertSee('promo-card-animated', false)
+            ->assertSee('promo-shimmer-badge', false)
+            ->assertSee('data-promo-countdown', false)
+            ->assertSee('Preventa Activa')
+            ->assertSee('Cliente Frecuente VIP');
+
+        $this->actingAs($usuarioFrecuente)
+            ->get(route('cliente.mis-pedidos'))
+            ->assertOk()
+            ->assertSee('Tienes Acceso Anticipado a las Preventas Exclusivas de Bóveda')
+            ->assertSee('data-promo-countdown', false);
+
+        // 3. Obtener pieza en Fase de Preventa Exclusiva VIP ("Programa Inaugural Palacio de Bellas Artes (1934)")
+        $productoPreventaVip = Producto::with(['variantesSku', 'promociones'])
+            ->where('nombre', 'Programa Inaugural Palacio de Bellas Artes (1934)')
+            ->firstOrFail();
+        $varianteVip = $productoPreventaVip->variantesSku->firstOrFail();
+        $promoVip = CheckoutSimuladoController::obtenerPromocionDeProducto($productoPreventaVip);
+
+        $this->assertNotNull($promoVip);
+        $this->assertSame('preventa_exclusiva', $promoVip->faseActual());
+
+        // 4. Cliente común (< 5 compras) intenta adquirir en Fase de Preventa Exclusiva -> Bloqueado (422)
+        $this->actingAs($usuarioRegular)
+            ->postJson(route('carrito.agregar'), [
+                'variante_sku_id' => $varianteVip->id,
+                'cantidad' => 1,
+            ])
+            ->assertStatus(422)
+            ->assertJsonFragment(['status' => 'error']);
+
+        // 5. Cliente Frecuente (>= 5 compras) aparta la pieza durante la Fase de Preventa Exclusiva -> Permitido
+        $this->actingAs($usuarioFrecuente)
+            ->postJson(route('carrito.agregar'), [
+                'variante_sku_id' => $varianteVip->id,
+                'cantidad' => 1,
+            ])
+            ->assertOk()
+            ->assertJsonFragment(['status' => 'success']);
+
+        // 6. Fase de Apertura (Público General): llega el día de la apertura oficial y se desbloquea para clientes comunes
+        $this->travel(3)->days();
+
+        $promoVip->refresh();
+        $this->assertSame('abierta_publico', $promoVip->faseActual());
+
+        $this->actingAs($usuarioRegular)
+            ->postJson(route('carrito.agregar'), [
+                'variante_sku_id' => $varianteVip->id,
+                'cantidad' => 1,
+            ])
+            ->assertOk()
+            ->assertJsonFragment(['status' => 'success']);
+
+        // 7. Personal de Ventas puede programar una nueva promoción con preventa anticipada desde el panel
+        $usuarioVentas = Usuario::where('email', 'ventas1@archivum.com')->firstOrFail();
+        $this->actingAs($usuarioVentas)
+            ->post(route('ventas.promociones.store'), [
+                'nombre' => 'Lanzamiento Especial Invierno: Códice Coyoacán',
+                'descripcion' => 'Preventa anticipada para clientes con 5+ compras.',
+                'producto_id' => $productoPreventaVip->id,
+                'tipo_descuento' => 'porcentaje',
+                'valor' => 20,
+                'es_preventa_exclusiva' => 1,
+                'preventa_inicia_en' => now()->toDateString(),
+                'apertura_publica_en' => now()->addDays(4)->toDateString(),
+                'termina_en' => now()->addDays(12)->toDateString(),
+            ])
+            ->assertRedirect();
+
+        $this->assertDatabaseHas('promociones', [
+            'nombre' => 'Lanzamiento Especial Invierno: Códice Coyoacán',
+            'tipo_descuento' => 'porcentaje',
+        ]);
     }
 }

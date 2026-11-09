@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Models\Cliente;
 use App\Models\ClienteFrecuente;
 use App\Models\ClientePromocion;
 use App\Models\Promocion;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use RuntimeException;
 
 class PromocionDescuentoService
@@ -125,5 +127,84 @@ class PromocionDescuentoService
             })
             ->wherePivotNull('usada_en')
             ->get();
+    }
+
+    /**
+     * Evalúa si un cliente ha alcanzado las 5 compras mínimas y, en caso afirmativo,
+     * activa su membresía de Cliente Frecuente y le asigna notificación/acceso anticipado
+     * a todas las promociones y preventas vigentes.
+     */
+    public function sincronizarMembresiaPorCompras(Cliente $cliente): ?ClienteFrecuente
+    {
+        if (! Schema::hasTable('clientes_frecuentes')) {
+            return null;
+        }
+
+        $totalCompras = $cliente->totalComprasRealizadas();
+
+        if ($totalCompras < Cliente::COMPRAS_MINIMAS_FRECUENTE && ! $cliente->clienteFrecuente()->exists()) {
+            return null;
+        }
+
+        $clienteFrecuente = ClienteFrecuente::updateOrCreate(
+            ['cliente_id' => $cliente->id],
+            [
+                'desde' => $cliente->clienteFrecuente?->desde ?? Carbon::today(),
+                'puntos' => max((int) ($cliente->clienteFrecuente?->puntos ?? 0), $totalCompras * 100),
+            ]
+        );
+
+        if (Schema::hasTable('promociones') && Schema::hasTable('cliente_promocion')) {
+            $promocionesVigentes = Promocion::where('activa', true)->get();
+            foreach ($promocionesVigentes as $promo) {
+                if (in_array($promo->faseActual(), ['preventa_exclusiva', 'abierta_publico', 'programada'], true)) {
+                    ClientePromocion::firstOrCreate(
+                        [
+                            'cliente_frecuente_id' => (int) $clienteFrecuente->cliente_id,
+                            'promocion_id' => $promo->id,
+                        ],
+                        [
+                            'recibida_en' => Carbon::now(),
+                        ]
+                    );
+                }
+            }
+        }
+
+        return $clienteFrecuente;
+    }
+
+    /**
+     * Asigna y notifica una promoción o preventa exclusiva a todos los clientes frecuentes
+     * que cuenten con 5 o más compras completadas.
+     */
+    public function notificarPromocionAClientesFrecuentes(Promocion $promocion): int
+    {
+        if (! Schema::hasTable('clientes') || ! Schema::hasTable('clientes_frecuentes') || ! Schema::hasTable('cliente_promocion')) {
+            return 0;
+        }
+
+        $notificados = 0;
+        $clientes = Cliente::with(['pedidos', 'clienteFrecuente'])->get();
+
+        foreach ($clientes as $cliente) {
+            if ($cliente->esClienteFrecuente()) {
+                $frecuente = $this->sincronizarMembresiaPorCompras($cliente);
+                if ($frecuente !== null) {
+                    ClientePromocion::firstOrCreate(
+                        [
+                            'cliente_frecuente_id' => (int) $frecuente->cliente_id,
+                            'promocion_id' => $promocion->id,
+                        ],
+                        [
+                            'recibida_en' => Carbon::now(),
+                        ]
+                    );
+                    $notificados++;
+                }
+            }
+        }
+
+        return $notificados;
     }
 }

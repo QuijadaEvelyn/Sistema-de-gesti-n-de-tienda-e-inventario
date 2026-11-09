@@ -28,6 +28,124 @@
         </div>
     @endif
 
+    <!-- Notificación y Acceso Anticipado a Preventas Exclusivas (Clientes Frecuentes >= 5 Compras) -->
+    @php
+        $esFrecuenteVip = (bool) ($esClienteFrecuente ?? false);
+        $totalCompras = (int) ($totalComprasCliente ?? 0);
+        $faltanCompras = (int) ($comprasRestantesFrecuente ?? 5);
+        $listaPromocionesVip = $promocionesPreventa ?? collect();
+    @endphp
+    <section id="panel-preventas-vip" class="mb-8 rounded-2xl overflow-hidden border-2 {{ $esFrecuenteVip ? 'border-amber-400 bg-gradient-to-r from-purple-950 via-indigo-950 to-slate-950 text-white' : 'border-purple-200 bg-surface-container-low text-on-surface' }} p-6 shadow-md">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 pb-5 border-b {{ $esFrecuenteVip ? 'border-purple-800/70' : 'border-purple-200/80' }}">
+            <div class="space-y-1.5">
+                <div class="flex flex-wrap items-center gap-2">
+                    @if ($esFrecuenteVip)
+                        <span class="promo-shimmer-badge inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400 text-slate-950 text-[11px] font-label-code font-extrabold uppercase tracking-wider">
+                            <span class="material-symbols-outlined text-[14px]">workspace_premium</span>
+                            <span>Notificación VIP &middot; Cliente Frecuente ({{ $totalCompras }} Compras)</span>
+                        </span>
+                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-400/50 text-emerald-300 text-[10px] font-label-code font-bold uppercase">
+                            Acceso Anticipado Activo
+                        </span>
+                    @else
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-100 border border-purple-300 text-primary text-[11px] font-label-code font-bold uppercase">
+                            <span class="material-symbols-outlined text-[14px]">loyalty</span>
+                            <span>Progreso Cliente Frecuente: {{ $totalCompras }} de 5 Compras</span>
+                        </span>
+                    @endif
+                </div>
+
+                @if ($esFrecuenteVip)
+                    <h2 class="text-xl sm:text-2xl font-bold font-quicksand text-white">
+                        Tienes Acceso Anticipado a las Preventas Exclusivas de Bóveda
+                    </h2>
+                    <p class="text-xs text-purple-200">
+                        Por haber superado las <strong>5 adquisiciones certificadas</strong>, puedes apartar y asegurar piezas de edición especial durante la <em>Fase de Preventa Exclusiva</em> antes de su apertura al público general.
+                    </p>
+                @else
+                    <h2 class="text-lg sm:text-xl font-bold font-quicksand text-on-surface">
+                        Completa {{ $faltanCompras }} {{ $faltanCompras === 1 ? 'compra más' : 'compras más' }} para desbloquear Preventas Anticipadas VIP
+                    </h2>
+                    <p class="text-xs text-on-surface-variant">
+                        Al alcanzar <strong>5 compras</strong> en ARCHIVUM, recibirás acceso anticipado días antes del lanzamiento oficial. Las promociones en <em>Fase de Apertura</em> ya están disponibles para ti.
+                    </p>
+                @endif
+            </div>
+
+            <div class="flex items-center gap-3">
+                <div class="px-4 py-3 rounded-xl {{ $esFrecuenteVip ? 'bg-purple-900/60 border border-amber-400/40 text-amber-300' : 'bg-white border border-purple-200 text-primary' }} text-center">
+                    <span class="block text-[10px] font-label-code uppercase">Compras Completadas</span>
+                    <span class="font-tabular-data text-xl font-extrabold">{{ $totalCompras }} / 5</span>
+                </div>
+            </div>
+        </div>
+
+        @if ($listaPromocionesVip->isNotEmpty())
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-5">
+                @foreach ($listaPromocionesVip as $promoItem)
+                    @php
+                        /** @var \App\Models\Promocion $promoItem */
+                        $faseItem = $promoItem->faseActual();
+                        $esPreventaVipItem = $faseItem === 'preventa_exclusiva';
+                        $puedeAdquirirItem = $promoItem->puedeAdquirir(auth()->user(), $clienteActual ?? null);
+                        $prodItem = $promoItem->producto;
+                        $varItem = $prodItem?->variantesSku?->first();
+                        $stockItem = $varItem ? (int) $varItem->existencias->sum('cantidad') : 0;
+                        $precioBaseItem = (float) ($varItem?->precio ?? $prodItem?->precio ?? 0);
+                        $precioPromoItem = $promoItem->calcularPrecioPromocional($precioBaseItem);
+                        $targetMsItem = $promoItem->timestampObjetivoCountdownMs();
+                    @endphp
+                    <div
+                        class="promo-card-animated rounded-xl p-4 {{ $esFrecuenteVip ? 'bg-purple-900/50 border border-purple-500/40 text-white' : 'bg-white border border-purple-200 text-on-surface' }} flex flex-col justify-between gap-3"
+                        data-promo-countdown="{{ $targetMsItem }}"
+                    >
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between gap-2">
+                                <span class="promo-shimmer-badge px-2.5 py-0.5 rounded-full text-[10px] font-label-code font-bold uppercase {{ $esPreventaVipItem ? 'bg-amber-400 text-slate-950' : 'bg-emerald-600 text-white' }}">
+                                    {{ $esPreventaVipItem ? 'Preventa Exclusiva VIP' : 'Fase de Apertura Pública' }}
+                                </span>
+                                <span class="font-tabular-data text-xs font-extrabold {{ $esFrecuenteVip ? 'text-amber-300' : 'text-primary' }}">
+                                    {{ $promoItem->tipo_descuento === 'porcentaje' ? '-' . number_format((float) $promoItem->valor, 0) . '%' : '-$' . number_format((float) $promoItem->valor, 0) }}
+                                </span>
+                            </div>
+                            <h3 class="font-bold text-sm font-quicksand leading-snug">{{ $promoItem->nombre }}</h3>
+                            <p class="text-[11px] {{ $esFrecuenteVip ? 'text-purple-200' : 'text-on-surface-variant' }}">
+                                {{ $promoItem->etiquetaCountdown() }}
+                                <span class="font-tabular-data font-bold {{ $esFrecuenteVip ? 'text-amber-300' : 'text-primary' }}">
+                                    <span data-cd-days>02</span>d : <span data-cd-hours>11</span>h : <span data-cd-minutes>45</span>m : <span data-cd-seconds>30</span>s
+                                </span>
+                            </p>
+                        </div>
+
+                        <div class="pt-3 border-t {{ $esFrecuenteVip ? 'border-purple-700/60' : 'border-purple-100' }} flex items-center justify-between gap-2">
+                            <div>
+                                @if ($precioBaseItem > 0)
+                                    <span class="text-[10px] line-through opacity-75 block">${{ number_format($precioBaseItem, 2) }}</span>
+                                    <span class="font-tabular-data font-bold text-sm {{ $esFrecuenteVip ? 'text-amber-300' : 'text-on-surface' }}">${{ number_format($precioPromoItem, 2) }} MXN</span>
+                                @endif
+                            </div>
+
+                            @if ($varItem && $stockItem > 0 && $puedeAdquirirItem)
+                                <form method="POST" action="{{ route('carrito.agregar') }}">
+                                    @csrf
+                                    <input type="hidden" name="variante_sku_id" value="{{ $varItem->id }}" />
+                                    <input type="hidden" name="cantidad" value="1" />
+                                    <button type="submit" class="px-3 py-1.5 rounded-lg {{ $esPreventaVipItem ? 'bg-amber-400 hover:bg-amber-300 text-slate-950' : 'bg-primary-container hover:bg-primary text-white' }} text-[11px] font-label-md font-extrabold uppercase tracking-wider transition cursor-pointer">
+                                        Apartar Pieza
+                                    </button>
+                                </form>
+                            @else
+                                <span class="text-[10px] font-label-code uppercase px-2.5 py-1 rounded bg-purple-100 text-purple-900 font-bold">
+                                    Requiere 5+ Compras
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @endif
+    </section>
+
     <div class="space-y-6">
         @forelse ($pedidos as $pedido)
             @php
@@ -119,6 +237,31 @@
                                             &mdash; <em>"{{ $dev->comentarios_cliente }}"</em>
                                         @endif
                                     </p>
+                                    @php
+                                        $evidenciasCliente = $dev->obtenerEvidenciasNormalizadas();
+                                    @endphp
+                                    @if (! empty($evidenciasCliente))
+                                        <div class="pt-1 space-y-1.5">
+                                            <span class="block text-[10px] font-label-code uppercase text-secondary font-bold">
+                                                Evidencia Fotográfica Adjunta ({{ count($evidenciasCliente) }})
+                                            </span>
+                                            <div class="flex flex-wrap gap-2.5">
+                                                @foreach ($evidenciasCliente as $ev)
+                                                    @php
+                                                        $urlEvCliente = ! empty($ev['ruta']) ? asset('storage/' . $ev['ruta']) : $ev['url'];
+                                                    @endphp
+                                                    <a href="{{ $urlEvCliente }}" target="_blank" rel="noopener"
+                                                       class="group relative w-20 h-20 rounded-xl overflow-hidden border border-purple-200 bg-purple-50/40 shadow-2xs block"
+                                                       title="Ver fotografía de evidencia: {{ $ev['nombre'] }}">
+                                                        <img src="{{ $urlEvCliente }}"
+                                                             alt="Evidencia: {{ $ev['nombre'] }}"
+                                                             loading="lazy"
+                                                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200" />
+                                                    </a>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    @endif
                                     @if ($dev->guia_retorno)
                                         <div class="p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-900">
                                             <div class="font-label-code font-bold">GUÍA DE RETORNO AUTORIZADA: {{ $dev->guia_retorno }}</div>
@@ -224,5 +367,41 @@
             </div>
         @endforelse
     </div>
+
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const countdownNodes = document.querySelectorAll('[data-promo-countdown]');
+                if (countdownNodes.length === 0) {
+                    return;
+                }
+
+                const actualizarContadores = () => {
+                    const ahoraMs = Date.now();
+                    countdownNodes.forEach((nodo) => {
+                        const metaMs = parseInt(nodo.getAttribute('data-promo-countdown') || '0', 10);
+                        const diffSeg = Math.max(0, Math.floor((metaMs - ahoraMs) / 1000));
+                        const dias = Math.floor(diffSeg / 86400);
+                        const horas = Math.floor((diffSeg % 86400) / 3600);
+                        const minutos = Math.floor((diffSeg % 3600) / 60);
+                        const segundos = diffSeg % 60;
+
+                        const elDias = nodo.querySelector('[data-cd-days]');
+                        const elHoras = nodo.querySelector('[data-cd-hours]');
+                        const elMin = nodo.querySelector('[data-cd-minutes]');
+                        const elSeg = nodo.querySelector('[data-cd-seconds]');
+
+                        if (elDias) elDias.textContent = String(dias).padStart(2, '0');
+                        if (elHoras) elHoras.textContent = String(horas).padStart(2, '0');
+                        if (elMin) elMin.textContent = String(minutos).padStart(2, '0');
+                        if (elSeg) elSeg.textContent = String(segundos).padStart(2, '0');
+                    });
+                };
+
+                actualizarContadores();
+                setInterval(actualizarContadores, 1000);
+            });
+        </script>
+    @endpush
 
 </x-layouts.public>

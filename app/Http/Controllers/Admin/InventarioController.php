@@ -36,7 +36,7 @@ class InventarioController extends Controller
             ->when($sucursalId !== null, fn (Builder $q) => $q->where('sucursal_id', $sucursalId));
 
         $existencias = (clone $baseQuery)
-            ->with(['varianteSku.producto', 'sucursal'])
+            ->with(['varianteSku.producto', 'sucursal', 'piezasUnicas'])
             ->when($request->boolean('bajo_stock'), fn (Builder $q) => $q->whereColumn('cantidad', '<=', 'stock_minimo'))
             ->when($request->filled('buscar'), function (Builder $q) use ($request): void {
                 $termino = '%'.$request->string('buscar')->trim().'%';

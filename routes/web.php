@@ -48,6 +48,9 @@ Route::middleware('reservas.liberar')->group(function (): void {
     Route::get('/checkout/confirmacion/{pedido}', [CheckoutSimuladoController::class, 'confirmacion'])->name('checkout.confirmacion');
     Route::post('/checkout/pedidos/{pedido}/simular-envio', [CheckoutSimuladoController::class, 'simularAvanceEnvio'])->name('checkout.simular-envio');
     Route::post('/checkout/pedidos/{pedido}/devoluciones', [CheckoutSimuladoController::class, 'solicitarDevolucion'])->name('cliente.devoluciones.store');
+    Route::get('/storage/{path}', [CheckoutSimuladoController::class, 'servirArchivoPublico'])
+        ->where('path', '.*')
+        ->name('storage.public.fallback');
 });
 
 // =========================================================================
@@ -100,17 +103,19 @@ Route::middleware('auth')->group(function (): void {
 Route::prefix('admin')
     ->middleware(['auth', 'rol:administrador,encargado,ventas,almacen,compras'])
     ->group(function (): void {
-        // Dashboard General y Estado de Terminal Operativa
-        Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
+        // Dashboard Financiero General y Reportes Monetarios: Acceso EXCLUSIVO para el rol Administrador
+        Route::middleware('rol:administrador')->group(function (): void {
+            Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
+            Route::get('/reportes', [ReporteController::class, 'index'])->name('admin.reportes');
+            Route::get('/reportes/exportar/csv', [ReporteController::class, 'exportarCsv'])->name('admin.reportes.csv');
+            Route::get('/reportes/exportar/pdf', [ReporteController::class, 'exportarPdf'])->name('admin.reportes.pdf');
+        });
+
+        // Estado Técnico de Terminal Operativa
         Route::get('/terminal', [DashboardController::class, 'terminal'])->name('admin.terminal');
 
-        // Módulo de Reportes Calculados y Exportación Oficial de Datos (CSV y PDF)
-        Route::get('/reportes', [ReporteController::class, 'index'])->name('admin.reportes');
-        Route::get('/reportes/exportar/csv', [ReporteController::class, 'exportarCsv'])->name('admin.reportes.csv');
-        Route::get('/reportes/exportar/pdf', [ReporteController::class, 'exportarPdf'])->name('admin.reportes.pdf');
-
-        // Inventario Unificado y Submódulos de Almacén (accesibles para Administrador, Encargado, Almacén y Compras)
-        Route::middleware('rol:administrador,encargado,almacen,compras')->group(function (): void {
+        // Inventario Unificado y Submódulos de Almacén (accesibles para todo el personal operativo del panel)
+        Route::middleware('rol:administrador,encargado,ventas,almacen,compras')->group(function (): void {
             Route::get('/inventario', [InventarioController::class, 'index'])->name('admin.inventario');
             Route::get('/ajustes', [InventarioController::class, 'movimientos'])->name('admin.ajustes');
             Route::get('/recepciones', [InventarioController::class, 'movimientos'])->name('admin.recepciones');
@@ -175,6 +180,7 @@ Route::prefix('ventas')
         Route::patch('/pedidos/{pedido}/estatus', [VentasController::class, 'actualizarEstatus'])->name('ventas.pedidos.estatus');
         Route::get('/pagos', [VentasController::class, 'pagos'])->name('ventas.pagos');
         Route::get('/promociones', [VentasController::class, 'promociones'])->name('ventas.promociones');
+        Route::post('/promociones', [VentasController::class, 'storePromocion'])->name('ventas.promociones.store');
     });
 
 // Gestión de Devoluciones y Garantías por Defectos (Administración, Ventas y Almacén)
@@ -188,7 +194,7 @@ Route::prefix('ventas')
 
 // Rol 3: ALMACÉN (Preparación y entrega de pedidos, ajustes de inventario, transferencias y recepciones)
 Route::prefix('almacen')
-    ->middleware(['auth', 'rol:almacen,encargado,administrador', 'sucursal.acceso'])
+    ->middleware(['auth', 'rol:almacen,encargado,administrador,compras,ventas', 'sucursal.acceso'])
     ->group(function (): void {
         Route::get('/', [InventarioController::class, 'index'])->name('almacen.dashboard');
         Route::get('/envios', [InventarioController::class, 'envios'])->name('almacen.envios');

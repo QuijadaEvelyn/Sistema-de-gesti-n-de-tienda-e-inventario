@@ -175,16 +175,22 @@ class DashboardFiltradoSucursalTest extends TestCase
         $responseGlobal->assertSee('SKU-COYOACAN-1925');
         $responseGlobal->assertSee('SKU-BELLAS-1540');
 
-        // Un empleado no administrador (ej. ventas) no accede a datos globales aunque envíe sucursal_id=all
+        // Un empleado no administrador (ej. ventas o almacén) tiene bloqueado el acceso directo al Dashboard Financiero (/admin) con 403
         $vendedor = $this->crearUsuarioConRol('ventas');
-        $responseVendedor = $this->actingAs($vendedor)
+        $this->actingAs($vendedor)
             ->withSession([SucursalContextoService::SESSION_SUCURSAL_KEY => $coyoacan->id])
-            ->get(route('admin.dashboard', ['sucursal_id' => 'all']));
+            ->get(route('admin.dashboard', ['sucursal_id' => 'all']))
+            ->assertForbidden();
 
-        $responseVendedor->assertOk();
-        $responseVendedor->assertSee('SEDE: Sucursal Coyoacán');
-        $responseVendedor->assertSee('SKU-COYOACAN-1925');
-        $responseVendedor->assertDontSee('SKU-BELLAS-1540');
+        // En cambio, el empleado opera directamente en su panel de inventario/sede filtrado estrictamente por Coyoacán
+        $responseOperativo = $this->actingAs($vendedor)
+            ->withSession([SucursalContextoService::SESSION_SUCURSAL_KEY => $coyoacan->id])
+            ->get(route('admin.inventario', ['sucursal_id' => 'all']));
+
+        $responseOperativo->assertOk();
+        $responseOperativo->assertSee('Sucursal Coyoacán');
+        $responseOperativo->assertSee('SKU-COYOACAN-1925');
+        $responseOperativo->assertDontSee('SKU-BELLAS-1540');
     }
 
     public function test_filtros_de_temporalidad_integrados_con_sucursal_seleccionada(): void
@@ -247,22 +253,19 @@ class DashboardFiltradoSucursalTest extends TestCase
         $coyoacan = $escenario['coyoacan'];
         $skuBellasArtes = $escenario['skuBellasArtes'];
 
-        // 1. Panel Operativo de Sede (/admin) y (/almacen)
-        $resDashboard = $this->actingAs($almacenista)->get(route('admin.dashboard'));
-        $resDashboard->assertOk();
-        $resDashboard->assertSee('Panel Operativo de Sede');
-        $resDashboard->assertSee(route('admin.reportes'), false);
-        $resDashboard->assertSee(route('admin.inventario'), false);
-        $resDashboard->assertSee(route('almacen.ajustes'), false);
-        $resDashboard->assertSee(route('almacen.transferencias'), false);
-        $resDashboard->assertSee(route('almacen.envios'), false);
+        // 1. El rol Almacén tiene bloqueado el Dashboard Financiero General (/admin) y Reportes Monetarios (/admin/reportes) con 403
+        $this->actingAs($almacenista)->get(route('admin.dashboard'))->assertForbidden();
+        $this->actingAs($almacenista)->get(route('admin.reportes'))->assertForbidden();
 
-        $this->actingAs($almacenista)->get(route('almacen.dashboard'))->assertOk();
-
-        // 2. Reportes & Exportación (/admin/reportes)
-        $resReportes = $this->actingAs($almacenista)->get(route('admin.reportes'));
-        $resReportes->assertOk();
-        $resReportes->assertSee('Reportes & Exportación');
+        // 2. El rol Almacén accede directamente a su Panel Operativo de Sede (/almacen) con enlaces a sus submódulos
+        $resOperativo = $this->actingAs($almacenista)->get(route('almacen.dashboard'));
+        $resOperativo->assertOk();
+        $resOperativo->assertSee('Panel Operativo de Sede');
+        $resOperativo->assertDontSee(route('admin.reportes'), false);
+        $resOperativo->assertSee(route('admin.inventario'), false);
+        $resOperativo->assertSee(route('almacen.ajustes'), false);
+        $resOperativo->assertSee(route('almacen.transferencias'), false);
+        $resOperativo->assertSee(route('almacen.envios'), false);
 
         // 3. Inventario Unificado (/admin/inventario)
         $resInventario = $this->actingAs($almacenista)->get(route('admin.inventario'));
@@ -307,5 +310,51 @@ class DashboardFiltradoSucursalTest extends TestCase
         $resEnvios = $this->actingAs($almacenista)->get(route('almacen.envios'));
         $resEnvios->assertOk();
         $resEnvios->assertSee('Envíos y Despacho de Pedidos');
+    }
+
+    public function test_boton_gestionar_inventario_de_sede_enlaza_con_sucursal_activa_y_permite_acceso_a_roles_operativos(): void
+    {
+        $escenario = $this->sembrarEscenarioMultisucursal();
+        $bellasArtes = $escenario['bellasArtes'];
+        $coyoacan = $escenario['coyoacan'];
+
+        $admin = $this->crearUsuarioConRol('administrador');
+
+        // 1. En el dashboard con Sucursal Central Bellas Artes seleccionada, el botón incluye el parámetro sucursal_id
+        $urlEsperadaBellasArtes = route('admin.inventario', ['sucursal_id' => $bellasArtes->id]);
+
+        $resDashboard = $this->actingAs($admin)->get(route('admin.dashboard', [
+            'sucursal_id' => $bellasArtes->id,
+        ]));
+
+        $resDashboard->assertOk()
+            ->assertSee('id="btn-gestionar-inventario-sede"', false)
+            ->assertSee($urlEsperadaBellasArtes, false)
+            ->assertSee('Gestionar Inventario de Sede');
+
+        // 2. Al seguir la ruta del botón, el panel de inventario abre directamente filtrado por Sucursal Central Bellas Artes
+        $resInventarioBellasArtes = $this->actingAs($admin)->get($urlEsperadaBellasArtes);
+        $resInventarioBellasArtes->assertOk()
+            ->assertSee('Sucursal Central Bellas Artes')
+            ->assertSee('SKU-BELLAS-1540')
+            ->assertDontSee('SKU-COYOACAN-1925');
+
+        // 3. Al cambiar a Sucursal Coyoacán, el botón enlaza y filtra exclusivamente los registros de Coyoacán
+        $urlEsperadaCoyoacan = route('admin.inventario', ['sucursal_id' => $coyoacan->id]);
+        $resInventarioCoyoacan = $this->actingAs($admin)->get($urlEsperadaCoyoacan);
+        $resInventarioCoyoacan->assertOk()
+            ->assertSee('Sucursal Coyoacán')
+            ->assertSee('SKU-COYOACAN-1925')
+            ->assertDontSee('SKU-BELLAS-1540');
+
+        // 4. Validación de permisos (Middleware): todos los roles operativos (almacen, ventas, compras, encargado) acceden sin bloqueo 403
+        foreach (['almacen', 'ventas', 'compras', 'encargado'] as $rolOperativo) {
+            $operador = $this->crearUsuarioConRol($rolOperativo);
+            $this->actingAs($operador)
+                ->get(route('admin.inventario', ['sucursal_id' => $bellasArtes->id]))
+                ->assertOk()
+                ->assertSee('Sucursal Central Bellas Artes')
+                ->assertSee('SKU-BELLAS-1540');
+        }
     }
 }

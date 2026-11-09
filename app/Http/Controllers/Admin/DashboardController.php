@@ -43,6 +43,11 @@ class DashboardController extends Controller
         /** @var Usuario|null $usuario */
         $usuario = $request->user()?->loadMissing('roles');
 
+        // Protección estricta en controlador: El Dashboard Financiero General es exclusivo para el rol Administrador
+        if (! $usuario || ! $usuario->esAdmin()) {
+            abort(403, 'Acceso denegado: El Dashboard Financiero General es exclusivo para el rol de Administrador.');
+        }
+
         $sucursales = $contextoService->obtenerSucursalesActivas();
         $sucursalActiva = $contextoService->resolverSucursalAdmin($request, $usuario);
         $sucursalId = $sucursalActiva?->id;
@@ -194,6 +199,28 @@ class DashboardController extends Controller
 
         if ($redirectTo !== '' && str_starts_with($redirectTo, '/')) {
             return redirect($redirectTo)->with('status', "Contexto sincronizado: {$nombreSede}");
+        }
+
+        // Si la URL anterior (Referer) contenía un parámetro ?sucursal_id=... o ?sucursal=...,
+        // actualizarlo con el nuevo identificador para evitar que la query string sobrescriba la sesión.
+        $referer = (string) $request->headers->get('referer', '');
+        if ($referer !== '') {
+            $partesUrl = parse_url($referer);
+            $path = $partesUrl['path'] ?? '';
+
+            if ($path !== '' && str_starts_with($path, '/')) {
+                $queryParams = [];
+                if (! empty($partesUrl['query'])) {
+                    parse_str($partesUrl['query'], $queryParams);
+                }
+
+                unset($queryParams['sucursal']);
+                $queryParams['sucursal_id'] = $sucursal ? $sucursal->id : 'all';
+
+                $destinoSincronizado = $path.'?'.http_build_query($queryParams);
+
+                return redirect($destinoSincronizado)->with('status', "Contexto sincronizado: {$nombreSede}");
+            }
         }
 
         return back()->with('status', "Contexto sincronizado: {$nombreSede}");

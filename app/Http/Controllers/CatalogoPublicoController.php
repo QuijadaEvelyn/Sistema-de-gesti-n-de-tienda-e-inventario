@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Models\Cliente;
 use App\Models\Producto;
+use App\Models\Promocion;
 use App\Services\SucursalContextoService;
 use Database\Seeders\CatalogoProductoSeeder;
 use Illuminate\Database\Eloquent\Builder;
@@ -52,15 +54,25 @@ class CatalogoPublicoController extends Controller
     ];
 
     /**
-     * Página principal de la tienda pública (Catálogo General y Galería).
+     * Página principal de la tienda pública (Catálogo General, Galería y Promociones Exclusivas).
      */
     public function home(Request $request): View
     {
         $productos = $this->consultarProductos($request);
+        $promocionesDestacadas = $this->consultarPromocionesDestacadas();
+
+        $clienteActual = auth()->check() && Schema::hasTable('clientes')
+            ? Cliente::with(['pedidos', 'clienteFrecuente'])->where('usuario_id', auth()->id())->first()
+            : null;
 
         return view('public.index', [
             'productos' => $productos,
             'categoriaActiva' => 'inicio',
+            'promocionesDestacadas' => $promocionesDestacadas,
+            'clienteActual' => $clienteActual,
+            'esClienteFrecuente' => $clienteActual?->esClienteFrecuente() ?? false,
+            'totalComprasCliente' => $clienteActual?->totalComprasRealizadas() ?? 0,
+            'comprasRestantesFrecuente' => $clienteActual ? $clienteActual->comprasRestantesParaFrecuente() : Cliente::COMPRAS_MINIMAS_FRECUENTE,
         ]);
     }
 
@@ -147,19 +159,32 @@ class CatalogoPublicoController extends Controller
         $sucursalActiva = app(SucursalContextoService::class)->resolverSucursalPublica($request);
         $sucursalId = $sucursalActiva?->id;
 
+        $relaciones = [
+            'catalogo',
+            'libro',
+            'disco',
+            'coleccionable',
+            'variantesSku.existencias' => function ($q) use ($sucursalId): void {
+                $q->with(['piezasUnicas', 'sucursal']);
+                if ($sucursalId !== null) {
+                    $q->where('sucursal_id', $sucursalId);
+                }
+            },
+        ];
+
+        if (Schema::hasTable('promociones') && Schema::hasColumn('promociones', 'producto_id')) {
+            $relaciones['promociones'] = fn ($q) => $q->where('activa', true);
+        }
+
         $query = Producto::query()
-            ->with([
-                'catalogo',
-                'libro',
-                'disco',
-                'coleccionable',
-                'variantesSku.existencias' => function ($q) use ($sucursalId): void {
-                    if ($sucursalId !== null) {
-                        $q->where('sucursal_id', $sucursalId);
-                    }
-                },
-            ])
+            ->with($relaciones)
             ->where('activo', true);
+
+        if ($sucursalId !== null) {
+            $query->whereHas('variantesSku.existencias', function (Builder $q) use ($sucursalId): void {
+                $q->where('sucursal_id', $sucursalId);
+            });
+        }
 
         if ($categoria === 'libros') {
             $query->whereHas('catalogo', fn (Builder $q) => $q->where('tipo', 'libro'));
@@ -196,5 +221,39 @@ class CatalogoPublicoController extends Controller
         }
 
         return $query->get();
+    }
+
+    /**
+     * Obtiene las promociones activas y preventas programadas para la vitrina principal.
+     *
+     * @return Collection<int, Promocion>
+     */
+    protected function consultarPromocionesDestacadas(): Collection
+    {
+        if (! Schema::hasTable('promociones')) {
+            return collect();
+        }
+
+        if (! app()->runningUnitTests() && Promocion::count() === 0 && Producto::count() > 0) {
+            app(CatalogoProductoSeeder::class)->run();
+        }
+
+        $query = Promocion::query()->where('activa', true);
+
+        if (Schema::hasColumn('promociones', 'producto_id')) {
+            $query->with([
+                'producto.catalogo',
+                'producto.libro',
+                'producto.disco',
+                'producto.coleccionable',
+                'producto.variantesSku.existencias',
+            ]);
+        }
+
+        return $query->orderByDesc('es_preventa_exclusiva')
+            ->orderBy('inicia_en')
+            ->get()
+            ->filter(fn (Promocion $p): bool => in_array($p->faseActual(), ['preventa_exclusiva', 'abierta_publico', 'programada'], true))
+            ->values();
     }
 }

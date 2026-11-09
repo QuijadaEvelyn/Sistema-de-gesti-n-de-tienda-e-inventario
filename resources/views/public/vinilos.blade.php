@@ -24,6 +24,10 @@
             $graduacionCorta = $partesGrad[0] ?? 'MINT (M)';
             $stockTotal = $variante ? (int) $variante->existencias->sum('cantidad') : 0;
             $paleta = $paletasGalleta[$idx % count($paletasGalleta)];
+            $piezaUnicaDisco = $variante
+                ? \App\Http\Controllers\CheckoutSimuladoController::obtenerPiezaUnicaDeVariante((int) $variante->id)
+                : null;
+            $esPiezaUnicaDisco = $piezaUnicaDisco !== null;
 
             $discosShowcase[] = [
                 'index' => $idx,
@@ -43,7 +47,9 @@
                 'precio' => (float) $prod->precio,
                 'precio_formateado' => '$'.number_format((float) $prod->precio, 0),
                 'stock' => $stockTotal,
-                'agotado' => $stockTotal <= 0,
+                'agotado' => $stockTotal <= 0 || ($esPiezaUnicaDisco && in_array($piezaUnicaDisco->estado, ['reservada', 'vendida'], true)),
+                'es_pieza_unica' => $esPiezaUnicaDisco,
+                'numero_serie' => $piezaUnicaDisco?->numero_serie,
                 'matriz_lado_b' => 'MATRIZ #' . strtoupper(substr(md5($sku), 0, 6)) . '-1A · SELLO PERICIAL ARCHIVUM',
                 'paleta' => $paleta,
             ];
@@ -320,11 +326,15 @@
                         @foreach ($discosShowcase as $idx => $disco)
                             <button
                                 type="button"
-                                class="disc-selector-pill px-3 py-1.5 rounded-full text-[11px] font-label-code transition flex items-center gap-1.5 cursor-pointer {{ $idx === 0 ? 'bg-white text-slate-950 font-bold shadow-sm' : 'bg-white/10 text-purple-200 hover:bg-white/20' }}"
+                                class="disc-selector-pill px-3 py-1.5 rounded-full text-[11px] font-label-code transition flex items-center gap-1.5 cursor-pointer {{ $disco['es_pieza_unica'] ? 'border-2 border-purple-600 shadow-sm shadow-purple-600/30' : 'border border-white/15' }} {{ $idx === 0 ? 'bg-white text-slate-950 font-bold' : 'bg-white/10 text-purple-200 hover:bg-white/20' }}"
                                 data-select-disc="{{ $idx }}"
+                                data-unique-piece="{{ $disco['es_pieza_unica'] ? '1' : '0' }}"
                             >
                                 <span class="material-symbols-outlined text-[14px]">{{ $disco['formato'] === 'CD' ? 'disc_full' : 'album' }}</span>
                                 <span class="max-w-[130px] truncate">{{ $disco['nombre'] }}</span>
+                                @if ($disco['es_pieza_unica'])
+                                    <span class="px-1.5 py-0.5 rounded bg-purple-600 text-white text-[9px] font-bold uppercase">1/1</span>
+                                @endif
                             </button>
                         @endforeach
                     </div>
@@ -333,7 +343,10 @@
 
                 <!-- COLUMNA DERECHA (5 cols): Ficha Curatorial Dinámica & Botón Directo de Reserva -->
                 <div class="lg:col-span-5">
-                    <div class="rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 p-6 sm:p-7 space-y-5 shadow-xl">
+                    <div
+                        id="showcase-curatorial-card"
+                        class="rounded-2xl bg-white/10 backdrop-blur-md {{ $discoInicial['es_pieza_unica'] ? 'border-2 border-purple-600 ring-2 ring-purple-600/30 shadow-purple-600/25' : 'border border-white/15' }} p-6 sm:p-7 space-y-5 shadow-xl transition-all"
+                    >
 
                         <!-- Cabecera de Ficha: SKU, Graduación Goldmine y Disponibilidad en Tiempo Real -->
                         <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
@@ -341,7 +354,15 @@
                                 SKU: #{{ $discoInicial['sku'] }}
                             </span>
 
-                            <div class="flex items-center gap-2">
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span
+                                    id="card-unique-badge"
+                                    class="{{ $discoInicial['es_pieza_unica'] ? 'inline-flex' : 'hidden' }} items-center gap-1 px-2.5 py-0.5 rounded bg-purple-600 border border-purple-400 text-white text-[10px] font-label-code font-bold uppercase shadow-xs"
+                                >
+                                    <span class="material-symbols-outlined text-[12px]">diamond</span>
+                                    <span>Pieza Única · Edición Coleccionable</span>
+                                </span>
+
                                 <span id="card-graduacion" class="px-2.5 py-0.5 rounded bg-amber-400/20 border border-amber-300/40 text-amber-200 text-[11px] font-label-code font-bold uppercase">
                                     {{ $discoInicial['graduacion'] }}
                                 </span>
@@ -600,10 +621,12 @@
                         });
 
                         pills.forEach(function (pill, idx) {
+                            const esUnica = pill.dataset.uniquePiece === '1';
+                            const bordeClase = esUnica ? 'border-2 border-purple-600 shadow-sm shadow-purple-600/30' : 'border border-white/15';
                             if (idx === activeIndex) {
-                                pill.className = 'disc-selector-pill px-3 py-1.5 rounded-full text-[11px] font-label-code transition flex items-center gap-1.5 cursor-pointer bg-white text-slate-950 font-bold shadow-sm';
+                                pill.className = 'disc-selector-pill px-3 py-1.5 rounded-full text-[11px] font-label-code transition flex items-center gap-1.5 cursor-pointer bg-white text-slate-950 font-bold ' + bordeClase;
                             } else {
-                                pill.className = 'disc-selector-pill px-3 py-1.5 rounded-full text-[11px] font-label-code transition flex items-center gap-1.5 cursor-pointer bg-white/10 text-purple-200 hover:bg-white/20';
+                                pill.className = 'disc-selector-pill px-3 py-1.5 rounded-full text-[11px] font-label-code transition flex items-center gap-1.5 cursor-pointer bg-white/10 text-purple-200 hover:bg-white/20 ' + bordeClase;
                             }
                         });
                     }
@@ -611,6 +634,20 @@
                     function updateCuratorialCard() {
                         const disco = discos[activeIndex];
                         if (!disco) return;
+
+                        const curatorialCard = document.getElementById('showcase-curatorial-card');
+                        const uniqueBadge = document.getElementById('card-unique-badge');
+
+                        if (curatorialCard) {
+                            curatorialCard.className = disco.es_pieza_unica
+                                ? 'rounded-2xl bg-white/10 backdrop-blur-md border-2 border-purple-600 ring-2 ring-purple-600/30 shadow-purple-600/25 p-6 sm:p-7 space-y-5 shadow-xl transition-all'
+                                : 'rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 p-6 sm:p-7 space-y-5 shadow-xl transition-all';
+                        }
+
+                        if (uniqueBadge) {
+                            uniqueBadge.classList.toggle('inline-flex', Boolean(disco.es_pieza_unica));
+                            uniqueBadge.classList.toggle('hidden', !disco.es_pieza_unica);
+                        }
 
                         if (ambientGlow && disco.paleta && disco.paleta.accent) {
                             ambientGlow.style.background = 'radial-gradient(circle, ' + disco.paleta.accent + ' 0%, transparent 70%)';
