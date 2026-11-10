@@ -33,6 +33,7 @@ class Coleccionable extends Model
         'producto_id',
         'marca',
         'serie',
+        'categoria',
         'material',
         'edicion_limitada',
     ];

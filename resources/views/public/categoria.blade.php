@@ -17,7 +17,7 @@
     </section>
 
     <!-- Barra de Filtros, Búsqueda en Categoría y Selector de Orden -->
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between pb-6 border-b border-purple-200/80 gap-4 mb-8">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between pb-6 border-b border-purple-200/80 gap-4 mb-6">
         <div>
             <h2 class="text-xl sm:text-2xl font-bold tracking-tight text-on-surface font-quicksand">
                 {{ $meta['subtitulo'] }}
@@ -28,6 +28,9 @@
         </div>
 
         <form method="GET" class="flex items-center flex-wrap gap-3 text-xs font-label-md">
+            @if (! empty($filtroTipo) && request()->filled($filtroTipo))
+                <input type="hidden" name="{{ $filtroTipo }}" value="{{ request($filtroTipo) }}" />
+            @endif
             <input
                 type="search"
                 name="q"
@@ -42,6 +45,63 @@
             </select>
         </form>
     </div>
+
+    @if (! empty($filtros) && ! empty($filtroTipo))
+        <!-- Barra de Filtros Específicos e Interactivos -->
+        <div class="mb-8 p-4 sm:p-5 rounded-2xl bg-white/80 dark:bg-[#1a1226]/80 backdrop-blur-md border border-purple-200/80 dark:border-purple-500/30 shadow-xs space-y-3">
+            <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[18px] text-primary">filter_list</span>
+                    <span class="text-xs font-label-code font-bold uppercase tracking-wider text-on-surface">
+                        @if ($categoriaSlug === 'libros')
+                            Clasificación por Géneros Literarios:
+                        @else
+                            Menú de Colecciones &amp; Categorías:
+                        @endif
+                    </span>
+                </div>
+                @if (($filtroActivo ?? 'todos') !== 'todos')
+                    <a href="{{ request()->fullUrlWithQuery([$filtroTipo => null]) }}" class="text-[11px] font-label-code text-primary hover:underline flex items-center gap-1 font-semibold">
+                        <span class="material-symbols-outlined text-[14px]">close</span>
+                        <span>Limpiar Filtro</span>
+                    </a>
+                @endif
+            </div>
+
+            <!-- Píldoras de Filtro Clickeables -->
+            <div class="flex items-center flex-wrap gap-2 pt-1">
+                @foreach ($filtros as $clave => $etiqueta)
+                    @php
+                        $estaActivo = ($filtroActivo ?? 'todos') === $clave;
+                        $urlFiltro = $clave === 'todos'
+                            ? request()->fullUrlWithQuery([$filtroTipo => null])
+                            : request()->fullUrlWithQuery([$filtroTipo => $clave]);
+
+                        $iconoFiltro = match ($clave) {
+                            'novela' => 'menu_book',
+                            'ensayo' => 'history_edu',
+                            'poesia' => 'draw',
+                            'historia' => 'account_balance',
+                            'ciencia' => 'psychology',
+                            'figuras' => 'smart_toy',
+                            'juguetes' => 'toys',
+                            'numismatica' => 'monetization_on',
+                            'historicos' => 'museum',
+                            'videojuegos' => 'sports_esports',
+                            default => 'view_list',
+                        };
+                    @endphp
+                    <a
+                        href="{{ $urlFiltro }}"
+                        class="px-3.5 py-1.5 rounded-xl text-xs font-label-md font-semibold transition flex items-center gap-1.5 {{ $estaActivo ? 'bg-primary-container text-white shadow-xs border border-purple-400/50' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant hover:text-on-surface border border-purple-200/60 dark:border-purple-500/30' }}"
+                    >
+                        <span class="material-symbols-outlined text-[15px]">{{ $iconoFiltro }}</span>
+                        <span>{{ $etiqueta }}</span>
+                    </a>
+                @endforeach
+            </div>
+        </div>
+    @endif
 
     <!-- Cuadrícula Exclusiva de la Categoría -->
     @if ($productos->isNotEmpty())

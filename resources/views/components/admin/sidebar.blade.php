@@ -19,11 +19,11 @@
     };
 @endphp
 
-<aside class="fixed left-0 top-0 h-full w-72 bg-surface-container-lowest z-50 flex flex-col justify-between border-r border-purple-200/70 shadow-xs">
+<aside class="fixed left-0 top-0 h-full w-72 bg-surface-container-lowest dark:bg-[#140d20] z-50 flex flex-col justify-between border-r border-purple-200/70 dark:border-purple-500/30 shadow-xs">
     <div class="flex flex-col overflow-y-auto no-scrollbar">
 
         <!-- Cabecera del Sidebar con Logotipo de Archivo -->
-        <a href="{{ $rutaInicioRol }}" class="h-16 px-space-lg flex items-center gap-space-sm border-b border-purple-100 hover:bg-surface-container-low transition shrink-0">
+        <a href="{{ $rutaInicioRol }}" class="h-16 px-space-lg flex items-center gap-space-sm border-b border-purple-100 dark:border-purple-500/30 hover:bg-surface-container-low dark:hover:bg-[#1b132a] transition shrink-0">
             <div class="w-9 h-9 rounded-xl bg-primary-container flex items-center justify-center text-white shrink-0 shadow-2xs">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
                     <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>

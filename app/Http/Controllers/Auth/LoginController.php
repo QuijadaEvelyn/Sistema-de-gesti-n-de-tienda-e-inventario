@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\CheckoutSimuladoController;
 use App\Http\Controllers\Controller;
 use App\Models\Bitacora;
 use App\Models\Producto;
@@ -186,6 +187,9 @@ class LoginController extends Controller
         RateLimiter::clear($throttleKey);
         $request->session()->regenerate();
 
+        // 5. Vincular y sincronizar carrito de sesión y reservas activas al cliente autenticado
+        CheckoutSimuladoController::sincronizarCarritoTrasLogin($user);
+
         Bitacora::create([
             'usuario_id' => $user->id,
             'accion' => 'LOGIN_EXITOSO',
@@ -200,10 +204,18 @@ class LoginController extends Controller
         ]);
 
         $redirectUrl = $this->determinarRedireccionPorRol($user);
+        $intended = $request->input('intended') ?? session('url.intended');
 
-        // Si el usuario tiene rol cliente: Redirigir a la tienda pública / (public.home)
-        // y olvidar cualquier url.intended previa (por ejemplo, si intentó ingresar a /admin)
+        // Si el usuario tiene rol cliente: Si tiene intención hacia checkout o artículos en carrito, dirigirlo a la pasarela; de lo contrario a la tienda pública
         if ($user->esCliente() && ! $user->tieneRol('administrador', 'encargado', 'ventas', 'almacen', 'compras')) {
+            if (is_string($intended) && Str::contains($intended, ['/checkout', 'checkout'])) {
+                $redirectUrl = route('checkout.index');
+            } elseif (! empty(session('carrito_archivum', [])) && $request->filled('intended')) {
+                $redirectUrl = route('checkout.index');
+            } else {
+                $redirectUrl = route('public.home');
+            }
+
             $request->session()->forget('url.intended');
 
             if ($request->expectsJson()) {
@@ -220,7 +232,7 @@ class LoginController extends Controller
                 ]);
             }
 
-            return redirect()->route('public.home');
+            return redirect()->to($redirectUrl);
         }
 
         // Si el empleado no es Administrador (ej. Almacén, Ventas, Compras), limpiar cualquier url.intended

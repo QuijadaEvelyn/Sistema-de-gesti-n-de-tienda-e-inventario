@@ -345,11 +345,11 @@
 
             <!-- Modal Lightbox para Ampliar Fotografía de Evidencia en Panel Administrativo -->
             <div id="modal-evidencia-archivum"
-                 class="fixed inset-0 z-50 hidden items-center justify-center bg-black/75 backdrop-blur-xs p-4"
+                 class="fixed inset-0 z-50 hidden items-center justify-center bg-black/75 dark:bg-[#07040d]/90 backdrop-blur-sm p-4"
                  onclick="cerrarModalEvidenciaArchivum(event)">
-                <div class="relative max-w-3xl w-full bg-white rounded-2xl border border-purple-200 shadow-2xl overflow-hidden"
+                <div class="relative max-w-3xl w-full bg-white dark:bg-[#171024] rounded-2xl border border-purple-200 dark:border-purple-500/30 shadow-2xl overflow-hidden"
                      onclick="event.stopPropagation()">
-                    <div class="px-5 py-3.5 bg-surface-container-low border-b border-purple-100 flex items-center justify-between">
+                    <div class="px-5 py-3.5 bg-surface-container-low dark:bg-[#1b132a] border-b border-purple-100 dark:border-purple-500/30 flex items-center justify-between">
                         <div class="flex items-center gap-2">
                             <span class="material-symbols-outlined text-primary text-[20px]">photo_camera</span>
                             <span id="modal-evidencia-titulo" class="font-label-code text-xs font-bold text-on-surface uppercase">Evidencia Fotográfica</span>
@@ -360,7 +360,7 @@
                                 Abrir archivo original &nearr;
                             </a>
                             <button type="button" onclick="cerrarModalEvidenciaArchivum()"
-                                    class="w-8 h-8 rounded-lg bg-purple-100 hover:bg-purple-200 text-primary flex items-center justify-center font-bold cursor-pointer">
+                                    class="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/60 hover:bg-purple-200 dark:hover:bg-purple-800 text-primary flex items-center justify-center font-bold cursor-pointer">
                                 &times;
                             </button>
                         </div>

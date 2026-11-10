@@ -26,25 +26,25 @@ class CatalogoPublicoController extends Controller
      */
     public const CATEGORIAS = [
         'libros' => [
-            'titulo' => 'Libros Raros & Incunables',
-            'subtitulo' => 'Fondo Bibliográfico Antiguo y Primeras Ediciones',
+            'titulo' => 'Libros',
+            'subtitulo' => 'Fondo Bibliográfico Clasificado por Géneros Literarios',
             'badge' => 'CATÁLOGO BIBLIOGRÁFICO · LIBROS',
             'icono' => 'auto_stories',
-            'descripcion' => 'Primeras ediciones hispanoamericanas, ejemplares dedicados por el autor y encuadernaciones históricas con dictamen pericial.',
+            'descripcion' => 'Primeras ediciones, narrativa, ensayo, poesía, historia y tratados científicos peritados para coleccionistas.',
         ],
         'vinilos' => [
-            'titulo' => 'Discos & Vinilos Históricos',
-            'subtitulo' => 'Prensados Originales 180g, Matrices Mono y Sellos de Época',
-            'badge' => 'CATÁLOGO FONOGRÁFICO · VINILOS',
+            'titulo' => 'Discos',
+            'subtitulo' => 'Fonoteca Histórica · Vinilos LP 180g & Discos Compactos (CD)',
+            'badge' => 'CATÁLOGO FONOGRÁFICO · DISCOS',
             'icono' => 'album',
-            'descripcion' => 'Ediciones príncipe de jazz, rock clásico y vanguardia latinoamericana graduadas bajo estándar internacional Goldmine.',
+            'descripcion' => 'Prensados analógicos originales en vinilo de 180g y ediciones maestras en CD clasificadas con alta fidelidad.',
         ],
         'memorabilia' => [
-            'titulo' => 'Memorabilia & Archivo',
-            'subtitulo' => 'Manuscritos, Correspondencia Diplomática y Obra Gráfica',
-            'badge' => 'ARCHIVO DOCUMENTAL · MEMORABILIA',
+            'titulo' => 'Coleccionables',
+            'subtitulo' => 'Figuras Pop/Anime, Juguetes, Numismática, Videojuegos & Archivo Histórico',
+            'badge' => 'ARCHIVO PATRIMONIAL · COLECCIONABLES',
             'icono' => 'history_edu',
-            'descripcion' => 'Documentos autógrafos, partituras manuscritas y fotografías de época en plata sobre gelatina con Certificado de Autenticidad (COA) notariado.',
+            'descripcion' => 'Figuras de culto, juguetes manufacturados, monedas y billetes, memorabilia gamer y piezas históricas notariadas.',
         ],
         'adquisiciones' => [
             'titulo' => 'Adquisiciones Selectas',
@@ -79,47 +79,80 @@ class CatalogoPublicoController extends Controller
     }
 
     /**
-     * Sección: Libros Raros & Incunables (filtra exclusivamente libros).
+     * Sección: Libros (clasificación por Géneros Literarios: novela, ensayo, poesía, historia, ciencia, etc.).
      */
     public function libros(Request $request): View
     {
         $productos = $this->consultarProductos($request, 'libros');
+
+        $generosDisponibles = [
+            'todos' => 'Todos los Géneros',
+            'novela' => 'Novela',
+            'ensayo' => 'Ensayo',
+            'poesia' => 'Poesía',
+            'historia' => 'Historia',
+            'ciencia' => 'Ciencia',
+        ];
 
         return view('public.categoria', [
             'categoriaSlug' => 'libros',
             'meta' => self::CATEGORIAS['libros'],
             'productos' => $productos,
             'categoriaActiva' => 'libros',
+            'filtroTipo' => 'genero',
+            'filtros' => $generosDisponibles,
+            'filtroActivo' => $request->string('genero')->lower()->toString() ?: 'todos',
         ]);
     }
 
     /**
-     * Sección: Discos & Vinilos Históricos (filtra exclusivamente discos/vinilos y renderiza el 3D Disc Showcase).
+     * Sección: Discos (filtro interactivo para separar entre Vinilos y CDs, con Disc Showcase 3D).
      */
     public function vinilos(Request $request): View
     {
         $productos = $this->consultarProductos($request, 'vinilos');
+
+        $formatosDisponibles = [
+            'todos' => 'Todos los Discos',
+            'vinilo' => 'Vinilos LP 180g',
+            'cd' => 'Discos Compactos (CD)',
+        ];
 
         return view('public.vinilos', [
             'categoriaSlug' => 'vinilos',
             'meta' => self::CATEGORIAS['vinilos'],
             'productos' => $productos,
             'categoriaActiva' => 'vinilos',
+            'filtroTipo' => 'formato',
+            'filtros' => $formatosDisponibles,
+            'filtroActivo' => $request->string('formato')->lower()->toString() ?: 'todos',
         ]);
     }
 
     /**
-     * Sección: Memorabilia & Archivo (filtra exclusivamente coleccionables/memorabilia).
+     * Sección: Coleccionables (filtro por categorías: figuras pop/anime, juguetes, numismática, históricos, videojuegos).
      */
     public function memorabilia(Request $request): View
     {
         $productos = $this->consultarProductos($request, 'memorabilia');
+
+        $subcategoriasDisponibles = [
+            'todos' => 'Todos los Coleccionables',
+            'figuras' => 'Figuras coleccionables (cultura pop y anime)',
+            'juguetes' => 'Juguetes y objetos manufacturados',
+            'numismatica' => 'Monedas y billetes',
+            'historicos' => 'Objetos culturales e históricos',
+            'videojuegos' => 'Coleccionables de videojuegos',
+        ];
 
         return view('public.categoria', [
             'categoriaSlug' => 'memorabilia',
             'meta' => self::CATEGORIAS['memorabilia'],
             'productos' => $productos,
             'categoriaActiva' => 'memorabilia',
+            'filtroTipo' => 'categoria',
+            'filtros' => $subcategoriasDisponibles,
+            'filtroActivo' => $request->string('categoria')->lower()->toString() ?: 'todos',
         ]);
     }
 
@@ -213,10 +246,31 @@ class CatalogoPublicoController extends Controller
 
         if ($categoria === 'libros') {
             $query->whereHas('catalogo', fn (Builder $q) => $q->where('tipo', 'libro'));
+
+            if ($request->filled('genero') && $request->string('genero')->lower()->toString() !== 'todos') {
+                $generoFiltro = $request->string('genero')->lower()->toString();
+                $query->whereHas('libro', function (Builder $l) use ($generoFiltro): void {
+                    $l->where('genero', $generoFiltro);
+                });
+            }
         } elseif ($categoria === 'vinilos') {
             $query->whereHas('catalogo', fn (Builder $q) => $q->where('tipo', 'disco'));
+
+            if ($request->filled('formato') && $request->string('formato')->lower()->toString() !== 'todos') {
+                $formatoFiltro = $request->string('formato')->lower()->toString() === 'cd' ? 'CD' : 'vinilo';
+                $query->whereHas('disco', function (Builder $d) use ($formatoFiltro): void {
+                    $d->where('formato', $formatoFiltro);
+                });
+            }
         } elseif ($categoria === 'memorabilia') {
             $query->whereHas('catalogo', fn (Builder $q) => $q->where('tipo', 'coleccionable'));
+
+            if ($request->filled('categoria') && $request->string('categoria')->lower()->toString() !== 'todos') {
+                $catFiltro = $request->string('categoria')->lower()->toString();
+                $query->whereHas('coleccionable', function (Builder $c) use ($catFiltro): void {
+                    $c->where('categoria', $catFiltro);
+                });
+            }
         } elseif ($categoria === 'adquisiciones') {
             $query->where(function (Builder $q): void {
                 $q->where('precio', '>=', 18000)

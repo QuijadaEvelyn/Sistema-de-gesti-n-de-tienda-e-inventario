@@ -4,19 +4,19 @@
     $tabInicial = (request()->routeIs('register') || request('tab') === 'register') ? 'register' : 'login';
 @endphp
 
-<!-- Overlay Translúcido de Acceso Lateral -->
-<div id="login-drawer-overlay" class="fixed inset-0 bg-purple-950/50 backdrop-blur-xs z-50 transition-opacity duration-300 {{ $abrirPorDefecto ? 'opacity-100' : 'opacity-0 pointer-events-none' }}" aria-hidden="true"></div>
+<!-- Overlay Translúcido de Acceso Lateral (Atmósfera de Bóveda Nocturna) -->
+<div id="login-drawer-overlay" class="fixed inset-0 bg-[#07040d]/85 backdrop-blur-sm z-50 transition-opacity duration-300 {{ $abrirPorDefecto ? 'opacity-100' : 'opacity-0 pointer-events-none' }}" aria-hidden="true"></div>
 
 <!-- Cajón Desplegable de Autenticación al 50% de Ancho (Login Slide-Over Drawer) -->
 <aside
     id="login-drawer"
-    class="fixed top-0 right-0 h-full w-full md:w-1/2 bg-surface-container-lowest border-l border-purple-200/80 z-50 shadow-2xl flex flex-col justify-between transform {{ $abrirPorDefecto ? 'translate-x-0' : 'translate-x-full' }} transition-transform duration-300 ease-out"
+    class="fixed top-0 right-0 h-full w-full md:w-1/2 bg-surface-container-lowest dark:bg-[#171024] border-l border-purple-200/80 dark:border-purple-500/30 z-50 shadow-2xl flex flex-col justify-between transform {{ $abrirPorDefecto ? 'translate-x-0' : 'translate-x-full' }} transition-transform duration-300 ease-out"
     role="dialog"
     aria-modal="true"
     aria-labelledby="login-drawer-title"
 >
     <!-- Encabezado del Slide-Over tipo Bóveda -->
-    <div class="p-6 sm:p-8 border-b border-purple-200/70 bg-surface-container-low/50">
+    <div class="p-6 sm:p-8 border-b border-purple-200/70 dark:border-purple-500/30 bg-surface-container-low/50 dark:bg-[#1b132a]">
         <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <div class="w-11 h-11 rounded-xl bg-primary-container text-white flex items-center justify-center shadow-sm border border-purple-300/40">
@@ -34,7 +34,7 @@
             <button
                 type="button"
                 id="close-login-drawer-btn"
-                class="p-2 rounded-xl text-outline hover:text-on-surface hover:bg-surface-container transition focus:outline-none"
+                class="p-2 rounded-xl text-outline hover:text-on-surface hover:bg-surface-container dark:hover:bg-[#221834] transition focus:outline-none"
                 aria-label="Cerrar panel de acceso"
             >
                 <span class="material-symbols-outlined text-[22px]">close</span>
@@ -42,7 +42,7 @@
         </div>
 
         <!-- Selector de Pestañas: Iniciar Sesión / Crear Cuenta -->
-        <div class="mt-5 grid grid-cols-2 gap-2 p-1 rounded-xl bg-surface-container border border-purple-200/60">
+        <div class="mt-5 grid grid-cols-2 gap-2 p-1 rounded-xl bg-surface-container dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30">
             <button
                 type="button"
                 id="tab-login-btn"
@@ -85,6 +85,22 @@
                 </ul>
             </div>
 
+            <!-- Banner Informativo de Acceso para Pasarela Notariada -->
+            <div
+                id="checkout-auth-banner"
+                class="{{ (request('intended') === 'checkout' || request('login') === '1' || session('url.intended') === route('checkout.index')) ? '' : 'hidden' }} p-4 rounded-xl bg-primary/10 border border-primary/30 flex items-start gap-3 text-xs text-on-surface"
+            >
+                <div class="w-8 h-8 rounded-lg bg-primary-container text-white flex items-center justify-center shrink-0 mt-0.5">
+                    <span class="material-symbols-outlined text-[18px]">verified_user</span>
+                </div>
+                <div class="space-y-0.5">
+                    <p class="font-bold font-quicksand text-primary text-sm">Identificación para Pasarela Notariada</p>
+                    <p class="text-on-surface-variant text-[11px] leading-relaxed">
+                        Inicia sesión o crea tu cuenta para formalizar la adquisición. <strong>Tus piezas en custodia y reserva temporal se mantienen intactas.</strong>
+                    </p>
+                </div>
+            </div>
+
             <!-- Panel 1: Formulario de Inicio de Sesión -->
             <div id="drawer-panel-login" class="space-y-5">
                 <div class="space-y-1">
@@ -96,6 +112,7 @@
 
                 <form id="drawer-login-form" method="POST" action="{{ route('login') }}" class="space-y-4">
                     @csrf
+                    <input type="hidden" name="intended" id="drawer-login-intended" value="{{ request('intended') ?? session('url.intended') }}" />
 
                     <div class="space-y-1.5">
                         <label for="drawer-login-email" class="block text-xs font-semibold uppercase tracking-wider text-on-surface font-label-code">
@@ -110,7 +127,7 @@
                                 value="{{ old('email') }}"
                                 required
                                 autocomplete="email"
-                                class="w-full pl-10 pr-4 py-3 rounded-xl border border-purple-200/90 bg-white text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm font-quicksand"
+                                class="w-full pl-10 pr-4 py-3 rounded-xl border border-purple-200/90 dark:border-purple-500/40 bg-white dark:bg-[#140d20] text-on-surface dark:text-stone-100 placeholder:text-outline/70 dark:placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary focus:dark:bg-[#1a1228] focus:dark:border-purple-400 text-sm font-quicksand"
                                 placeholder="coleccionista@archivum.com"
                             />
                         </div>
@@ -133,15 +150,15 @@
                                 name="password"
                                 required
                                 autocomplete="current-password"
-                                class="w-full pl-10 pr-4 py-3 rounded-xl border border-purple-200/90 bg-white text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm font-quicksand"
+                                class="w-full pl-10 pr-4 py-3 rounded-xl border border-purple-200/90 dark:border-purple-500/40 bg-white dark:bg-[#140d20] text-on-surface dark:text-stone-100 placeholder:text-outline/70 dark:placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary focus:dark:bg-[#1a1228] focus:dark:border-purple-400 text-sm font-quicksand"
                                 placeholder="••••••••"
                             />
                         </div>
                     </div>
 
                     <div class="flex items-center justify-between pt-1">
-                        <label class="flex items-center gap-2 cursor-pointer text-xs font-label-md text-on-surface-variant">
-                            <input type="checkbox" name="remember" value="1" class="rounded border-purple-300 text-primary focus:ring-primary" />
+                        <label class="flex items-center gap-2 cursor-pointer text-xs font-label-md text-on-surface-variant dark:text-stone-300">
+                            <input type="checkbox" name="remember" value="1" class="rounded border-purple-300 dark:border-purple-500 text-primary focus:ring-primary dark:bg-[#140d20]" />
                             <span>Mantener sesión activa en este dispositivo</span>
                         </label>
                     </div>
@@ -157,13 +174,13 @@
                 </form>
 
                 <!-- Tarjeta Informativa de Roles -->
-                <div class="p-4 rounded-xl bg-surface-container-low border border-purple-200/60 space-y-2 text-xs text-on-surface-variant">
+                <div class="p-4 rounded-xl bg-surface-container-low dark:bg-[#1b132a] border border-purple-200/60 dark:border-purple-500/30 space-y-2 text-xs text-on-surface-variant dark:text-stone-300">
                     <div class="flex items-center gap-2 text-primary font-bold font-label-code uppercase tracking-wider">
                         <span class="material-symbols-outlined text-[16px]">verified_user</span>
                         <span>Redirección Inteligente por Rol</span>
                     </div>
                     <p class="leading-relaxed">
-                        Los <strong>clientes</strong> continúan en la galería pública con su carrito activo. El <strong>personal autorizado</strong> (Administración, Ventas, Almacén y Compras) ingresa directamente a su terminal operativa.
+                        Los <strong class="text-on-surface dark:text-white">clientes</strong> continúan en la galería pública con su carrito activo. El <strong class="text-on-surface dark:text-white">personal autorizado</strong> (Administración, Ventas, Almacén y Compras) ingresa directamente a su terminal operativa.
                     </p>
                 </div>
             </div>
@@ -172,13 +189,14 @@
             <div id="drawer-panel-register" class="hidden space-y-5">
                 <div class="space-y-1">
                     <h3 class="text-xl font-bold font-quicksand text-on-surface">Registro de Coleccionista</h3>
-                    <p class="text-xs text-on-surface-variant font-label-md">
+                    <p class="text-xs text-on-surface-variant dark:text-stone-300 font-label-md">
                         Crea tu cuenta personal de cliente para apartar piezas únicas y gestionar tus envíos certificados.
                     </p>
                 </div>
 
                 <form id="drawer-register-form" method="POST" action="{{ route('register') }}" class="space-y-4">
                     @csrf
+                    <input type="hidden" name="intended" id="drawer-register-intended" value="{{ request('intended') ?? session('url.intended') }}" />
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div class="space-y-1">
@@ -189,7 +207,7 @@
                                 name="nombre"
                                 value="{{ old('nombre') }}"
                                 required
-                                class="w-full px-3.5 py-2.5 rounded-xl border border-purple-200/90 bg-white text-on-surface focus:outline-none focus:ring-2 focus:ring-primary text-sm font-quicksand"
+                                class="w-full px-3.5 py-2.5 rounded-xl border border-purple-200/90 dark:border-purple-500/40 bg-white dark:bg-[#140d20] text-on-surface dark:text-stone-100 placeholder:text-outline/70 dark:placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-primary focus:dark:bg-[#1a1228] focus:dark:border-purple-400 text-sm font-quicksand"
                                 placeholder="Ej. Elena"
                             />
                         </div>
@@ -201,7 +219,7 @@
                                 name="apellidos"
                                 value="{{ old('apellidos') }}"
                                 required
-                                class="w-full px-3.5 py-2.5 rounded-xl border border-purple-200/90 bg-white text-on-surface focus:outline-none focus:ring-2 focus:ring-primary text-sm font-quicksand"
+                                class="w-full px-3.5 py-2.5 rounded-xl border border-purple-200/90 dark:border-purple-500/40 bg-white dark:bg-[#140d20] text-on-surface dark:text-stone-100 placeholder:text-outline/70 dark:placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-primary focus:dark:bg-[#1a1228] focus:dark:border-purple-400 text-sm font-quicksand"
                                 placeholder="Ej. Ramírez"
                             />
                         </div>
@@ -216,7 +234,7 @@
                                 name="email"
                                 value="{{ old('email') }}"
                                 required
-                                class="w-full px-3.5 py-2.5 rounded-xl border border-purple-200/90 bg-white text-on-surface focus:outline-none focus:ring-2 focus:ring-primary text-sm font-quicksand"
+                                class="w-full px-3.5 py-2.5 rounded-xl border border-purple-200/90 dark:border-purple-500/40 bg-white dark:bg-[#140d20] text-on-surface dark:text-stone-100 placeholder:text-outline/70 dark:placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-primary focus:dark:bg-[#1a1228] focus:dark:border-purple-400 text-sm font-quicksand"
                                 placeholder="correo@ejemplo.com"
                             />
                         </div>
@@ -227,7 +245,7 @@
                                 type="tel"
                                 name="telefono"
                                 value="{{ old('telefono') }}"
-                                class="w-full px-3.5 py-2.5 rounded-xl border border-purple-200/90 bg-white text-on-surface focus:outline-none focus:ring-2 focus:ring-primary text-sm font-quicksand"
+                                class="w-full px-3.5 py-2.5 rounded-xl border border-purple-200/90 dark:border-purple-500/40 bg-white dark:bg-[#140d20] text-on-surface dark:text-stone-100 placeholder:text-outline/70 dark:placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-primary focus:dark:bg-[#1a1228] focus:dark:border-purple-400 text-sm font-quicksand"
                                 placeholder="5512345678"
                             />
                         </div>
@@ -241,7 +259,7 @@
                                 type="password"
                                 name="password"
                                 required
-                                class="w-full px-3.5 py-2.5 rounded-xl border border-purple-200/90 bg-white text-on-surface focus:outline-none focus:ring-2 focus:ring-primary text-sm font-quicksand"
+                                class="w-full px-3.5 py-2.5 rounded-xl border border-purple-200/90 dark:border-purple-500/40 bg-white dark:bg-[#140d20] text-on-surface dark:text-stone-100 placeholder:text-outline/70 dark:placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-primary focus:dark:bg-[#1a1228] focus:dark:border-purple-400 text-sm font-quicksand"
                                 placeholder="••••••••"
                             />
                         </div>
@@ -252,7 +270,7 @@
                                 type="password"
                                 name="password_confirmation"
                                 required
-                                class="w-full px-3.5 py-2.5 rounded-xl border border-purple-200/90 bg-white text-on-surface focus:outline-none focus:ring-2 focus:ring-primary text-sm font-quicksand"
+                                class="w-full px-3.5 py-2.5 rounded-xl border border-purple-200/90 dark:border-purple-500/40 bg-white dark:bg-[#140d20] text-on-surface dark:text-stone-100 placeholder:text-outline/70 dark:placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-primary focus:dark:bg-[#1a1228] focus:dark:border-purple-400 text-sm font-quicksand"
                                 placeholder="••••••••"
                             />
                         </div>
@@ -273,7 +291,7 @@
     </div>
 
         <!-- Pie del Cajón de Autenticación -->
-    <div class="p-6 border-t border-purple-200/70 bg-surface-container-lowest flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-outline font-label-code">
+    <div class="p-6 border-t border-purple-200/70 dark:border-purple-500/30 bg-surface-container-lowest dark:bg-[#140d20] flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-outline dark:text-stone-400 font-label-code">
         <div class="flex items-center gap-1.5">
             <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
             <span>Protocolo SSL / TLS 1.3 · Sesión Protegida</span>
@@ -350,7 +368,22 @@
         }
 
         // Exponer globalmente para cualquier disparador en la página
-        window.openLoginDrawer = function (tab) {
+        window.openLoginDrawer = function (tab, intended) {
+            if (intended) {
+                const loginIntended = document.getElementById('drawer-login-intended');
+                if (loginIntended) {
+                    loginIntended.value = intended;
+                }
+                const regIntended = document.getElementById('drawer-register-intended');
+                if (regIntended) {
+                    regIntended.value = intended;
+                }
+                const banner = document.getElementById('checkout-auth-banner');
+                if (banner) {
+                    banner.classList.remove('hidden');
+                }
+                sessionStorage.setItem('intended_after_auth', intended);
+            }
             toggleLoginDrawer(true, tab || 'login');
         };
 
@@ -422,6 +455,12 @@
                     const data = await response.json();
 
                     if (response.ok && data.status === 'success') {
+                        const intendedAfterAuth = sessionStorage.getItem('intended_after_auth');
+                        if (intendedAfterAuth) {
+                            sessionStorage.removeItem('intended_after_auth');
+                            window.location.href = intendedAfterAuth;
+                            return;
+                        }
                         window.location.href = data.redirect || '{{ route('public.home') }}';
                         return;
                     }

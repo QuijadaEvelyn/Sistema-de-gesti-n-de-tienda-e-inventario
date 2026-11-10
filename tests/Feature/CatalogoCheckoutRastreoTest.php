@@ -6,11 +6,13 @@ namespace Tests\Feature;
 
 use App\Http\Controllers\CheckoutSimuladoController;
 use App\Models\Cliente;
+use App\Models\Existencia;
 use App\Models\Pedido;
 use App\Models\PiezaUnica;
 use App\Models\Producto;
 use App\Models\Sucursal;
 use App\Models\Usuario;
+use App\Models\VarianteSku;
 use Database\Seeders\CatalogoProductoSeeder;
 use Database\Seeders\UsuarioSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -77,6 +79,84 @@ class CatalogoCheckoutRastreoTest extends TestCase
         $responseAdquisiciones = $this->get(route('public.adquisiciones'));
         $responseAdquisiciones->assertStatus(200);
         $responseAdquisiciones->assertSee('Adquisiciones Selectas');
+
+        // Verificación de que el selector de sucursales no se muestra en la vista pública
+        $responseHome = $this->get(route('public.home'));
+        $responseHome->assertStatus(200)
+            ->assertDontSee('id="public-branch-select"', false)
+            ->assertDontSee('name="sucursal_id"', false)
+            ->assertSee('Libros')
+            ->assertSee('Discos')
+            ->assertSee('Coleccionables');
+    }
+
+    public function test_filtros_interactivos_por_categoria_libros_discos_y_coleccionables(): void
+    {
+        // 1. Libros: Filtro interactivo por Géneros Literarios (novela, ensayo, poesía, historia, ciencia)
+        $resNovelas = $this->get(route('public.libros', ['genero' => 'novela']));
+        $resNovelas->assertStatus(200)
+            ->assertSee('Cien Años de Soledad')
+            ->assertSee('Pedro Páramo')
+            ->assertDontSee('El Laberinto de la Soledad');
+
+        $resEnsayos = $this->get(route('public.libros', ['genero' => 'ensayo']));
+        $resEnsayos->assertStatus(200)
+            ->assertSee('El Laberinto de la Soledad')
+            ->assertDontSee('Cien Años de Soledad');
+
+        $resPoesia = $this->get(route('public.libros', ['genero' => 'poesia']));
+        $resPoesia->assertStatus(200)
+            ->assertSee('Piedra de Sol')
+            ->assertDontSee('Cien Años de Soledad');
+
+        $resHistoria = $this->get(route('public.libros', ['genero' => 'historia']));
+        $resHistoria->assertStatus(200)
+            ->assertSee('Visión de los Vencidos')
+            ->assertDontSee('Cien Años de Soledad');
+
+        $resCiencia = $this->get(route('public.libros', ['genero' => 'ciencia']));
+        $resCiencia->assertStatus(200)
+            ->assertSee('La Estructura de las Revoluciones Científicas')
+            ->assertDontSee('Cien Años de Soledad');
+
+        // 2. Discos: Filtro interactivo para separar entre Vinilos y CDs
+        $resVinilos = $this->get(route('public.vinilos', ['formato' => 'vinilo']));
+        $resVinilos->assertStatus(200)
+            ->assertSee('Kind of Blue (Mono 1st Press 6-Eye)')
+            ->assertDontSee('The Dark Side of the Moon (1st Japan Black Triangle CD)');
+
+        $resCds = $this->get(route('public.vinilos', ['formato' => 'cd']));
+        $resCds->assertStatus(200)
+            ->assertSee('The Dark Side of the Moon (1st Japan Black Triangle CD)')
+            ->assertDontSee('Kind of Blue (Mono 1st Press 6-Eye)');
+
+        // 3. Coleccionables: Filtro por categorías detalladas
+        $resFiguras = $this->get(route('public.memorabilia', ['categoria' => 'figuras']));
+        $resFiguras->assertStatus(200)
+            ->assertSee('Estatua Evangelion')
+            ->assertDontSee('Carta Manuscrita Bellas Artes (1928)');
+
+        $resJuguetes = $this->get(route('public.memorabilia', ['categoria' => 'juguetes']));
+        $resJuguetes->assertStatus(200)
+            ->assertSee('Robot Mecánico de Hojalata')
+            ->assertDontSee('Carta Manuscrita Bellas Artes (1928)');
+
+        $resNumismatica = $this->get(route('public.memorabilia', ['categoria' => 'numismatica']));
+        $resNumismatica->assertStatus(200)
+            ->assertSee('Medalla Conmemorativa del Centenario (1910)')
+            ->assertSee('Billete Revolucionario 10 Pesos')
+            ->assertDontSee('Carta Manuscrita Bellas Artes (1928)');
+
+        $resHistoricos = $this->get(route('public.memorabilia', ['categoria' => 'historicos']));
+        $resHistoricos->assertStatus(200)
+            ->assertSee('Carta Manuscrita Bellas Artes (1928)')
+            ->assertDontSee('Estatua Evangelion');
+
+        $resVideojuegos = $this->get(route('public.memorabilia', ['categoria' => 'videojuegos']));
+        $resVideojuegos->assertStatus(200)
+            ->assertSee('Consola Nintendo Game &amp; Watch', false)
+            ->assertSee('Cartucho The Legend of Zelda')
+            ->assertDontSee('Carta Manuscrita Bellas Artes (1928)');
     }
 
     public function test_checkout_vacio_y_cajon_de_boveda_tienen_centrado_vertical_en_pantalla(): void
@@ -387,16 +467,24 @@ class CatalogoCheckoutRastreoTest extends TestCase
         $this->assertStringContainsString('Sobreventa bloqueada', (string) session('error'));
     }
 
-    public function test_pagina_principal_renderiza_carrusel_3d_swiper_con_fichas_curatoriales(): void
+    public function test_pagina_principal_renderiza_vitrina_desplazamiento_horizontal_nativo_sin_flechas_ni_indicadores(): void
     {
         $response = $this->get(route('public.home'));
 
         $response->assertStatus(200);
-        $response->assertSee('swiper product3DCarousel', false);
-        $response->assertSee('swiper-wrapper', false);
-        $response->assertSee('swiper-slide', false);
-        $response->assertSee("new Swiper('.product3DCarousel'", false);
-        $response->assertSee("effect: 'coverflow'", false);
+        // Contenedor nativo con scroll horizontal y scroll-snap
+        $response->assertSee('id="vitrina-scroll-horizontal"', false);
+        $response->assertSee('vitrina-scroll-container', false);
+        $response->assertSee('overflow-x-auto', false);
+        $response->assertSee('scroll-snap-type: x mandatory', false);
+        $response->assertSee('scroll-snap-align: start', false);
+
+        // Eliminación completa de flechas laterales y burbujas de paginación
+        $response->assertDontSee('swiper-button-prev', false);
+        $response->assertDontSee('swiper-button-next', false);
+        $response->assertDontSee('swiper-pagination', false);
+
+        // Fichas curatoriales presentes
         $response->assertSee('Cien Años de Soledad');
         $response->assertSee('Kind of Blue');
         $response->assertSee('Carta Manuscrita Bellas Artes');
@@ -691,11 +779,12 @@ class CatalogoCheckoutRastreoTest extends TestCase
     {
         $response = $this->get(route('public.home'));
 
-        // En la página de Inicio la pestaña superior está presente, pero el bloque institucional no se duplica abajo y el botón del carrito no dice "Checkout ("
+        // En la página de Inicio la pestaña superior está presente, pero el bloque institucional no se duplica abajo, las tarjetas repetidas de salas fueron removidas y el botón del carrito no dice "Checkout ("
         $response->assertOk()
             ->assertSee('id="nav-tab-nosotros"', false)
             ->assertSee(route('public.nosotros'), false)
             ->assertDontSee('id="conoce-mas-de-nosotros"', false)
+            ->assertDontSee('Explorar Sala &rarr;', false)
             ->assertDontSee('Checkout (');
 
         // Al hacer clic en la pestaña superior "Conoce más de nosotros" se renderiza su vista dedicada con resumen y lluvia animada
@@ -718,5 +807,241 @@ class CatalogoCheckoutRastreoTest extends TestCase
             ->assertSee('dark:text-white', false)
             ->assertSee('dark:text-slate-100', false)
             ->assertSee('dark:text-amber-50', false);
+    }
+
+    public function test_modo_oscuro_modales_cajones_y_overlays_usan_superficies_nocturnas_sin_tonos_grises(): void
+    {
+        $appCss = file_get_contents(resource_path('css/app.css'));
+
+        // 1. Verificar que no exista el valor grisáceo erróneo #b9b9b9 en app.css
+        $this->assertStringNotContainsString('#b9b9b9', $appCss);
+
+        // 2. Comprobar que surface-container-lowest en .dark sea una superficie nocturna de bóveda (#140d20)
+        $this->assertStringContainsString('--color-surface-container-lowest: #140d20;', $appCss);
+
+        // 3. Comprobar que existan reglas de fondo y backdrop oscuro para drawers y overlays
+        $this->assertStringContainsString('.dark #login-drawer', $appCss);
+        $this->assertStringContainsString('.dark #cart-drawer', $appCss);
+        $this->assertStringContainsString('.dark #login-drawer-overlay', $appCss);
+        $this->assertStringContainsString('rgba(7, 4, 13, 0.88)', $appCss);
+
+        // 4. Comprobar que en la vista pública se renderizan los cajones con clases nocturnas y backdrops de alto contraste
+        $response = $this->get(route('public.home'));
+        $response->assertOk()
+            ->assertSee('id="login-drawer-overlay"', false)
+            ->assertSee('bg-[#07040d]/85', false)
+            ->assertSee('id="login-drawer"', false)
+            ->assertSee('dark:bg-[#171024]', false)
+            ->assertSee('id="cart-drawer"', false);
+    }
+
+    public function test_tarjetas_de_producto_limpias_con_modal_interactivo_curatorial(): void
+    {
+        $response = $this->get(route('public.home'));
+
+        $response->assertOk()
+            // 1. Tarjetas limpias: miniatura con disponibilidad, nombre, subtítulo, botón de detalles, precio y reserva
+            ->assertSee('data-product-details', false)
+            ->assertSee('en bóveda')
+            ->assertSee('Precio Tasado:')
+            ->assertSee('Reservar')
+            ->assertSee('Ver detalles &rarr;', false)
+            // 2. Modal global curatorial presente para animación fade-in & zoom-in
+            ->assertSee('id="product-curatorial-modal"', false)
+            ->assertSee('id="product-modal-backdrop"', false)
+            ->assertSee('id="product-modal-dialog"', false)
+            ->assertSee('abrirModalDetalleProducto', false)
+            ->assertSee('cerrarModalDetalleProducto', false);
+    }
+
+    public function test_cajon_de_boveda_renderiza_selector_de_cantidades_y_disponibilidad(): void
+    {
+        $variante = VarianteSku::whereHas('producto.catalogo', fn ($q) => $q->where('tipo', 'libro'))
+            ->whereDoesntHave('existencias.piezasUnicas')
+            ->firstOrFail();
+
+        $this->post(route('carrito.agregar'), [
+            'variante_sku_id' => $variante->id,
+            'cantidad' => 1,
+        ]);
+
+        $response = $this->get(route('public.home'));
+        $response->assertOk()
+            ->assertSee('class="cart-qty-select', false)
+            ->assertSee('data-update-url', false)
+            ->assertSee('Cantidad:')
+            ->assertSee('id="cart-drawer-subtotal"', false)
+            ->assertSee('id="cart-drawer-total"', false);
+    }
+
+    public function test_carrito_permite_actualizar_cantidad_dinamicamente_con_recalculo_de_subtotal_y_stock(): void
+    {
+        $variante = VarianteSku::with('producto')
+            ->whereHas('producto.catalogo', fn ($q) => $q->where('tipo', 'libro'))
+            ->whereDoesntHave('existencias.piezasUnicas')
+            ->firstOrFail();
+        $precioUnitario = (float) ($variante->precio ?? $variante->producto->precio);
+
+        // 1. Agregar inicialmente 1 unidad
+        $this->post(route('carrito.agregar'), [
+            'variante_sku_id' => $variante->id,
+            'cantidad' => 1,
+        ]);
+
+        $stockInicial = (int) Existencia::where('variante_sku_id', $variante->id)->sum('cantidad');
+
+        // 2. Actualizar vía PATCH a 2 unidades
+        $responsePatch = $this->patchJson(route('carrito.actualizar', $variante->id), [
+            'cantidad' => 2,
+        ]);
+
+        $responsePatch->assertOk()
+            ->assertJsonPath('status', 'success')
+            ->assertJsonPath('carrito.cantidad_total', 2);
+
+        $this->assertEquals($precioUnitario * 2, (float) $responsePatch->json('carrito.subtotal'));
+        $this->assertEquals($precioUnitario * 2, (float) $responsePatch->json('carrito.total'));
+
+        // Verificar que el stock en bóveda disminuyó en 1 unidad adicional
+        $this->assertSame($stockInicial - 1, (int) Existencia::where('variante_sku_id', $variante->id)->sum('cantidad'));
+
+        // 3. Reducir vía PATCH a 1 unidad
+        $responseReduce = $this->patchJson(route('carrito.actualizar', $variante->id), [
+            'cantidad' => 1,
+        ]);
+
+        $responseReduce->assertOk()
+            ->assertJsonPath('status', 'success')
+            ->assertJsonPath('carrito.cantidad_total', 1);
+
+        $this->assertEquals($precioUnitario, (float) $responseReduce->json('carrito.subtotal'));
+        $this->assertEquals($precioUnitario, (float) $responseReduce->json('carrito.total'));
+
+        // Verificar que el stock en bóveda se restauró
+        $this->assertSame($stockInicial, (int) Existencia::where('variante_sku_id', $variante->id)->sum('cantidad'));
+    }
+
+    public function test_pieza_unica_bloquea_seleccion_de_multiples_unidades(): void
+    {
+        $piezaUnica = PiezaUnica::with('existencia.varianteSku.producto')->firstOrFail();
+        $variante = $piezaUnica->existencia->varianteSku;
+
+        $this->post(route('carrito.agregar'), [
+            'variante_sku_id' => $variante->id,
+            'cantidad' => 1,
+        ]);
+
+        $response = $this->patchJson(route('carrito.actualizar', $variante->id), [
+            'cantidad' => 2,
+        ]);
+
+        $response->assertStatus(422)
+            ->assertJsonPath('status', 'error');
+
+        $this->assertStringContainsString('Pieza', (string) $response->json('message'));
+        $this->assertStringContainsString('1/1', (string) $response->json('message'));
+    }
+
+    public function test_invitado_con_items_al_acceder_a_checkout_es_redirigido_a_autenticacion_protegiendo_lote(): void
+    {
+        $variante = VarianteSku::firstOrFail();
+
+        // 1. Invitado agrega producto a la bóveda
+        $this->post(route('carrito.agregar'), [
+            'variante_sku_id' => $variante->id,
+            'cantidad' => 1,
+        ]);
+
+        $this->assertNotEmpty(session('carrito_archivum'));
+
+        // 2. Al intentar acceder a /checkout sin sesión, es interceptado y dirigido a autenticación
+        $responseCheckout = $this->get(route('checkout.index'));
+        $responseCheckout->assertRedirect(route('public.home', ['login' => '1', 'intended' => 'checkout']));
+        $this->assertSame(route('checkout.index'), session('url.intended'));
+
+        // 3. El carrito y el temporizador en sesión se mantienen intactos
+        $this->assertNotEmpty(session('carrito_archivum'));
+        $this->assertArrayHasKey($variante->id, session('carrito_archivum'));
+        $this->assertNotEmpty(session('carrito_reservas_ids'));
+    }
+
+    public function test_login_redirige_a_checkout_y_conserva_carrito_tras_autenticacion(): void
+    {
+        $cliente = Usuario::whereHas('roles', fn ($q) => $q->where('nombre', 'cliente'))->firstOrFail();
+        $variante = VarianteSku::firstOrFail();
+
+        // 1. Invitado reserva un artículo
+        $this->post(route('carrito.agregar'), [
+            'variante_sku_id' => $variante->id,
+            'cantidad' => 1,
+        ]);
+
+        // 2. Inicia sesión vía JSON con intended = checkout
+        $responseLogin = $this->postJson(route('login'), [
+            'email' => $cliente->email,
+            'password' => 'Password123!',
+            'intended' => route('checkout.index'),
+        ]);
+
+        $responseLogin->assertOk()
+            ->assertJsonPath('status', 'success')
+            ->assertJsonPath('redirect', route('checkout.index'));
+
+        $this->assertAuthenticatedAs($cliente);
+
+        // 3. Accede inmediatamente a la pasarela notariada con sus piezas intactas
+        $responseCheckout = $this->get(route('checkout.index'));
+        $responseCheckout->assertOk()
+            ->assertSee($variante->producto->nombre)
+            ->assertSee('Formalización de Adquisición');
+    }
+
+    public function test_registro_redirige_a_checkout_y_conserva_carrito_tras_crear_cuenta(): void
+    {
+        $variante = VarianteSku::firstOrFail();
+
+        // 1. Invitado reserva un artículo
+        $this->post(route('carrito.agregar'), [
+            'variante_sku_id' => $variante->id,
+            'cantidad' => 1,
+        ]);
+
+        // 2. Se registra como nuevo cliente con intended = checkout
+        $responseRegister = $this->postJson(route('register'), [
+            'nombre' => 'Aura',
+            'apellidos' => 'Fuentes Silva',
+            'email' => 'aura.fuentes@archivum.test',
+            'password' => 'Password123!',
+            'password_confirmation' => 'Password123!',
+            'intended' => route('checkout.index'),
+        ]);
+
+        $responseRegister->assertCreated()
+            ->assertJsonPath('status', 'success')
+            ->assertJsonPath('redirect', route('checkout.index'));
+
+        $nuevoUsuario = Usuario::where('email', 'aura.fuentes@archivum.test')->firstOrFail();
+        $this->assertAuthenticatedAs($nuevoUsuario);
+
+        // 3. Accede a checkout con sus piezas reservadas
+        $responseCheckout = $this->get(route('checkout.index'));
+        $responseCheckout->assertOk()
+            ->assertSee($variante->producto->nombre);
+    }
+
+    public function test_cajon_de_boveda_muestra_control_de_acceso_segun_sesion(): void
+    {
+        // 1. Como invitado, se renderiza el botón de validación de acceso
+        $resGuest = $this->get(route('public.home'));
+        $resGuest->assertOk()
+            ->assertSee('id="btn-proceder-pasarela-guest"', false)
+            ->assertSee('Proceder a Pasarela Notariada');
+
+        // 2. Como usuario autenticado, se renderiza el enlace directo
+        $cliente = Usuario::whereHas('roles', fn ($q) => $q->where('nombre', 'cliente'))->firstOrFail();
+        $resAuth = $this->actingAs($cliente)->get(route('public.home'));
+        $resAuth->assertOk()
+            ->assertDontSee('id="btn-proceder-pasarela-guest"', false)
+            ->assertSee(route('checkout.index'));
     }
 }

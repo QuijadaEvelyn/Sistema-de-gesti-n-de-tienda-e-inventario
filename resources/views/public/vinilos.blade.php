@@ -452,7 +452,7 @@
     <!-- =========================================================================
          CUADRÍCULA Y FILTROS DEL CATÁLOGO DE DISCOS & VINILOS
          ========================================================================= -->
-    <div id="acervo-vinilos-grid" class="flex flex-col md:flex-row md:items-center md:justify-between pb-6 border-b border-purple-200/80 gap-4 mb-8">
+    <div id="acervo-vinilos-grid" class="flex flex-col md:flex-row md:items-center md:justify-between pb-6 border-b border-purple-200/80 gap-4 mb-6">
         <div>
             <h2 class="text-xl sm:text-2xl font-bold tracking-tight text-on-surface font-quicksand">
                 {{ $meta['subtitulo'] ?? 'Prensados Originales 180g, Matrices Mono y Discos Compactos de Época' }}
@@ -463,6 +463,9 @@
         </div>
 
         <form method="GET" action="{{ route('public.vinilos') }}" class="flex items-center flex-wrap gap-3 text-xs font-label-md">
+            @if (request()->filled('formato'))
+                <input type="hidden" name="formato" value="{{ request('formato') }}" />
+            @endif
             <input
                 type="search"
                 name="q"
@@ -476,6 +479,48 @@
                 <option value="precio_asc" @selected(request('orden') === 'precio_asc')>Precio: Menor a Mayor</option>
             </select>
         </form>
+    </div>
+
+    <!-- Filtro Interactivo de Formato Fonográfico (Vinilos vs CDs) -->
+    <div class="mb-8 p-4 sm:p-5 rounded-2xl bg-white/80 dark:bg-[#1a1226]/80 backdrop-blur-md border border-purple-200/80 dark:border-purple-500/30 shadow-xs space-y-3">
+        <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-[18px] text-primary">filter_list</span>
+                <span class="text-xs font-label-code font-bold uppercase tracking-wider text-on-surface">
+                    Formato de Reproducción Fonográfica:
+                </span>
+            </div>
+            @if (($filtroActivo ?? 'todos') !== 'todos')
+                <a href="{{ request()->fullUrlWithQuery(['formato' => null]) }}" class="text-[11px] font-label-code text-primary hover:underline flex items-center gap-1 font-semibold">
+                    <span class="material-symbols-outlined text-[14px]">close</span>
+                    <span>Ver Todos los Formatos</span>
+                </a>
+            @endif
+        </div>
+
+        <div class="flex items-center flex-wrap gap-2 pt-1">
+            <a
+                href="{{ request()->fullUrlWithQuery(['formato' => null]) }}"
+                class="px-4 py-2 rounded-xl text-xs font-label-md font-semibold transition flex items-center gap-2 {{ ($filtroActivo ?? 'todos') === 'todos' ? 'bg-primary-container text-white shadow-xs border border-purple-400/50' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant hover:text-on-surface border border-purple-200/60 dark:border-purple-500/30' }}"
+            >
+                <span class="material-symbols-outlined text-[16px]">library_music</span>
+                <span>Todos los Discos ({{ $meta['titulo'] ?? 'Discos' }})</span>
+            </a>
+            <a
+                href="{{ request()->fullUrlWithQuery(['formato' => 'vinilo']) }}"
+                class="px-4 py-2 rounded-xl text-xs font-label-md font-semibold transition flex items-center gap-2 {{ ($filtroActivo ?? 'todos') === 'vinilo' ? 'bg-primary-container text-white shadow-xs border border-purple-400/50' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant hover:text-on-surface border border-purple-200/60 dark:border-purple-500/30' }}"
+            >
+                <span class="material-symbols-outlined text-[16px]">album</span>
+                <span>Vinilos LP 180g</span>
+            </a>
+            <a
+                href="{{ request()->fullUrlWithQuery(['formato' => 'cd']) }}"
+                class="px-4 py-2 rounded-xl text-xs font-label-md font-semibold transition flex items-center gap-2 {{ ($filtroActivo ?? 'todos') === 'cd' ? 'bg-primary-container text-white shadow-xs border border-purple-400/50' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant hover:text-on-surface border border-purple-200/60 dark:border-purple-500/30' }}"
+            >
+                <span class="material-symbols-outlined text-[16px]">album</span>
+                <span>Discos Compactos (CD)</span>
+            </a>
+        </div>
     </div>
 
     @if ($coleccionDiscos->isNotEmpty())

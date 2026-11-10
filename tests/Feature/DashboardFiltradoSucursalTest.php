@@ -138,11 +138,10 @@ class DashboardFiltradoSucursalTest extends TestCase
         $responsePublico->assertRedirect(route('public.home'));
         $this->assertSame($coyoacan->id, session(SucursalContextoService::SESSION_SUCURSAL_KEY));
 
-        // 2. La vista pública refleja la sucursal seleccionada en el selector
+        // 2. La vista pública mantiene el contexto de sesión sin exponer el selector al cliente final
         $vistaPublica = $this->get(route('public.home'));
         $vistaPublica->assertOk();
-        $vistaPublica->assertSee('public-branch-select', false);
-        $vistaPublica->assertSee('Sucursal Coyoacán');
+        $this->assertSame($coyoacan->id, session(SucursalContextoService::SESSION_SUCURSAL_KEY));
     }
 
     public function test_dashboard_filtra_estrictamente_stock_transacciones_y_movimientos_por_sucursal_coyoacan(): void

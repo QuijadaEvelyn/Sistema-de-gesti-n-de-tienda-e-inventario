@@ -48,32 +48,8 @@
                 </form>
             </div>
 
-            <!-- Controles Utilitarios: Sucursal, Tema, Acceso y Carrito -->
+            <!-- Controles Utilitarios: Tema, Acceso y Carrito (Selector de sucursales exclusivo para panel interno) -->
             <div class="flex items-center gap-3 shrink-0">
-
-                <!-- Selector de Sucursal Activa en Vista Pública -->
-                <form method="POST" action="{{ route('sucursal.cambiar') }}" class="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container border border-purple-200/80 text-xs font-label-md text-secondary font-medium">
-                    @csrf
-                    <span class="material-symbols-outlined text-[16px] text-primary">storefront</span>
-                    <label for="public-branch-select" class="sr-only">Seleccionar sucursal de consulta</label>
-                    <select
-                        id="public-branch-select"
-                        name="sucursal_id"
-                        onchange="this.form.submit()"
-                        class="bg-transparent text-xs font-label-md text-secondary font-semibold focus:outline-none cursor-pointer pr-1"
-                    >
-                        <option value="all" @selected($sucursalPublicaActiva === null)>Todas las Sedes ({{ $sucursalesPublicas->count() ?: 3 }})</option>
-                        @forelse ($sucursalesPublicas as $sucItem)
-                            <option value="{{ $sucItem->id }}" @selected($sucursalPublicaActiva?->id === $sucItem->id)>
-                                {{ $sucItem->nombre }}
-                            </option>
-                        @empty
-                            <option value="central">{{ $activeBranch }}</option>
-                            <option value="coyoacan">Sucursal Coyoacán</option>
-                            <option value="almacen">Almacén General</option>
-                        @endforelse
-                    </select>
-                </form>
 
                 <!-- Botón de Alternancia de Tema Claro/Oscuro -->
                 <button type="button" id="theme-toggle-btn" class="p-2.5 rounded-xl border border-purple-200/80 bg-white hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition focus:outline-none shadow-2xs" title="Alternar Modo Claro/Oscuro" aria-label="Cambiar tema visual">
@@ -217,17 +193,17 @@
                 <a href="{{ route('public.libros') }}"
                    class="pb-0.5 border-b-2 transition flex items-center gap-1 {{ request()->routeIs('public.libros') ? 'text-primary font-bold border-primary' : 'text-on-surface-variant hover:text-primary border-transparent hover:border-primary' }}">
                     <span class="material-symbols-outlined text-[15px]">auto_stories</span>
-                    <span>Libros Raros &amp; Incunables</span>
+                    <span>Libros</span>
                 </a>
                 <a href="{{ route('public.vinilos') }}"
-                   class="pb-0.5 border-b-2 transition flex items-center gap-1 {{ request()->routeIs('public.vinilos') ? 'text-primary font-bold border-primary' : 'text-on-surface-variant hover:text-primary border-transparent hover:border-primary' }}">
+                   class="pb-0.5 border-b-2 transition flex items-center gap-1 {{ (request()->routeIs('public.vinilos') || request()->routeIs('public.discos')) ? 'text-primary font-bold border-primary' : 'text-on-surface-variant hover:text-primary border-transparent hover:border-primary' }}">
                     <span class="material-symbols-outlined text-[15px]">album</span>
-                    <span>Discos &amp; Vinilos Históricos</span>
+                    <span>Discos</span>
                 </a>
                 <a href="{{ route('public.memorabilia') }}"
-                   class="pb-0.5 border-b-2 transition flex items-center gap-1 {{ request()->routeIs('public.memorabilia') ? 'text-primary font-bold border-primary' : 'text-on-surface-variant hover:text-primary border-transparent hover:border-primary' }}">
+                   class="pb-0.5 border-b-2 transition flex items-center gap-1 {{ (request()->routeIs('public.memorabilia') || request()->routeIs('public.coleccionables')) ? 'text-primary font-bold border-primary' : 'text-on-surface-variant hover:text-primary border-transparent hover:border-primary' }}">
                     <span class="material-symbols-outlined text-[15px]">history_edu</span>
-                    <span>Memorabilia &amp; Archivo</span>
+                    <span>Coleccionables</span>
                 </a>
                 <a href="{{ route('public.adquisiciones') }}"
                    class="pb-0.5 border-b-2 transition flex items-center gap-1 {{ request()->routeIs('public.adquisiciones') ? 'text-primary font-bold border-primary' : 'text-primary hover:text-primary-hover font-bold border-transparent hover:border-primary' }}">

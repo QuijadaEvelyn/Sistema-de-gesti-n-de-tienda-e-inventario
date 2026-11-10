@@ -32,7 +32,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('reservas.liberar')->group(function (): void {
     Route::get('/', [CatalogoPublicoController::class, 'home'])->name('public.home');
     Route::get('/catalogo/libros', [CatalogoPublicoController::class, 'libros'])->name('public.libros');
+    Route::get('/catalogo/discos', [CatalogoPublicoController::class, 'vinilos'])->name('public.discos');
     Route::get('/catalogo/vinilos', [CatalogoPublicoController::class, 'vinilos'])->name('public.vinilos');
+    Route::get('/catalogo/coleccionables', [CatalogoPublicoController::class, 'memorabilia'])->name('public.coleccionables');
     Route::get('/catalogo/memorabilia', [CatalogoPublicoController::class, 'memorabilia'])->name('public.memorabilia');
     Route::get('/catalogo/adquisiciones-selectas', [CatalogoPublicoController::class, 'adquisiciones'])->name('public.adquisiciones');
     Route::get('/conoce-mas-de-nosotros', [CatalogoPublicoController::class, 'nosotros'])->name('public.nosotros');
@@ -42,6 +44,7 @@ Route::middleware('reservas.liberar')->group(function (): void {
 
     // Gestión de Carrito, Expiración de Reserva (5 min), Pasarela de Pago Simulada y Seguimiento de Paquete
     Route::post('/carrito/agregar', [CheckoutSimuladoController::class, 'agregar'])->name('carrito.agregar');
+    Route::match(['patch', 'post'], '/carrito/actualizar/{varianteSkuId}', [CheckoutSimuladoController::class, 'actualizarCantidad'])->name('carrito.actualizar');
     Route::delete('/carrito/remover/{varianteSkuId}', [CheckoutSimuladoController::class, 'remover'])->name('carrito.remover');
     Route::post('/carrito/expirar', [CheckoutSimuladoController::class, 'expirarReservas'])->name('carrito.expirar');
     Route::get('/checkout', [CheckoutSimuladoController::class, 'checkout'])->name('checkout.index');

@@ -68,6 +68,9 @@
         <x-public.login-drawer />
     @endguest
 
+    <!-- Modal Curatorial de Ficha Técnica y Detalles de Producto -->
+    <x-public.product-modal />
+
     <!-- Scripts Esenciales de Interacción Pública (Cart Drawer & Modo Claro/Oscuro) -->
     <script>
         if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {

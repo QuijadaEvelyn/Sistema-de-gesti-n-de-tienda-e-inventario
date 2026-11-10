@@ -33,6 +33,7 @@ class Libro extends Model
         'producto_id',
         'isbn',
         'autor',
+        'genero',
         'editorial',
         'anio_publicacion',
         'paginas',

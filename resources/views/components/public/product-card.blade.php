@@ -10,11 +10,6 @@
     $graduacionRaw = $variante?->descripcion ?? 'MINT (M)';
     $partesGraduacion = array_map('trim', explode('·', $graduacionRaw));
     $graduacionCorta = $partesGraduacion[0] ?? 'MINT (M)';
-    $etiquetaSuperior = $partesGraduacion[1] ?? match ($tipo) {
-        'libro' => 'PRIMERA EDICIÓN',
-        'disco' => 'VINILO LP 180G',
-        default => 'MEMORABILIA COA',
-    };
 
     $badgeType = str_contains($graduacionCorta, 'COA')
         ? 'coa'
@@ -43,9 +38,6 @@
     $stockTotal = $variante ? (int) $variante->existencias->sum('cantidad') : 0;
     $estaReservadaTemporalmente = $piezaUnica !== null && $piezaUnica->estado === 'reservada';
     $estaAgotado = $stockTotal <= 0 || ($piezaUnica !== null && in_array($piezaUnica->estado, ['reservada', 'vendida'], true));
-    $esPreventa = \App\Http\Controllers\CheckoutSimuladoController::esPiezaPreventa($producto, $variante);
-    $promoProducto = \App\Http\Controllers\CheckoutSimuladoController::obtenerPromocionDeProducto($producto);
-    $fasePromoProducto = $promoProducto?->faseActual();
     $maxUnidadesCompra = $piezaUnica !== null ? 1 : max(1, min(10, $stockTotal));
 
     $clasesTarjeta = $esPiezaUnica
@@ -55,28 +47,74 @@
     $clasesMiniatura = $esPiezaUnica
         ? 'bg-purple-50/60 border-2 border-purple-600/80 ring-1 ring-purple-500/30 group-hover:bg-purple-100/60'
         : 'bg-surface-container-low border border-purple-200/60 group-hover:bg-purple-50';
+
+    $datosModal = [
+        'id' => $producto->id,
+        'nombre' => $producto->nombre,
+        'subtitulo' => $subtituloCuratorial,
+        'descripcion' => $producto->descripcion,
+        'precio' => number_format((float) $producto->precio, 0),
+        'tipo' => $tipo,
+        'icono' => $iconoCategoria,
+        'sku' => $sku,
+        'graduacion' => $graduacionCorta,
+        'badgeType' => $badgeType,
+        'stock' => $stockTotal,
+        'sede' => $sedeCustodia ? str_replace('Sucursal ', '', $sedeCustodia) : null,
+        'esPiezaUnica' => $esPiezaUnica,
+        'numeroSerie' => $piezaUnica?->numero_serie,
+        'estaAgotado' => $estaAgotado,
+        'estaReservada' => $estaReservadaTemporalmente,
+        'varianteSkuId' => $variante?->id,
+        'actionUrl' => route('carrito.agregar'),
+        'especificaciones' => match ($tipo) {
+            'libro' => [
+                'Autor' => $producto->libro?->autor ?? 'Autor Histórico',
+                'Editorial' => $producto->libro?->editorial ?? 'Edición Histórica',
+                'Año de Publicación' => (string) ($producto->libro?->anio_publicacion ?? 'N/D'),
+                'Género Literario' => ucfirst($producto->libro?->genero ?? 'General'),
+                'Páginas' => $producto->libro?->paginas ? $producto->libro->paginas . ' págs.' : 'Edición íntegra peritada',
+                'Encuadernación' => $producto->libro?->tapa ?? 'Tapa dura artesanal',
+                'ISBN' => $producto->libro?->isbn ?? 'Custodia Patrimonial',
+            ],
+            'disco' => [
+                'Artista / Intérprete' => $producto->disco?->artista ?? 'Intérprete Histórico',
+                'Sello Discográfico' => $producto->disco?->sello ?? 'Prensado Original',
+                'Año de Lanzamiento' => (string) ($producto->disco?->anio_lanzamiento ?? 'N/D'),
+                'Formato' => $producto->disco?->formato === 'cd' ? 'Disco Compacto (CD Audiofilia)' : 'Vinilo LP 180g (Prensado Analógico)',
+                'Velocidad' => $producto->disco?->rpm ? $producto->disco->rpm . ' RPM' : '33 ⅓ RPM',
+                'Pistas' => $producto->disco?->numero_pistas ? $producto->disco->numero_pistas . ' pistas' : 'Álbum Completo',
+                'Código Matriz' => $producto->disco?->codigo_matriz ?? 'Autenticación notarial',
+            ],
+            default => [
+                'Marca / Fabricante' => $producto->coleccionable?->marca ?? 'Archivo Histórico',
+                'Material de Confección' => $producto->coleccionable?->material ?? 'Material Auténtico',
+                'Categoría' => ucfirst($producto->coleccionable?->categoria ?? 'Memorabilia'),
+                'Año / Datación' => (string) ($producto->coleccionable?->anio_fabricacion ?? 'Época Clásica'),
+                'Certificación COA' => $producto->coleccionable?->certificado_autenticidad ?? 'Certificado de Autenticidad Notariado',
+                'Edición Limitada' => $producto->coleccionable?->edicion_limitada ? 'Sí · Serie Numerada' : 'Colección Especial',
+            ],
+        },
+    ];
 @endphp
 
 <article
     data-unique-piece="{{ $esPiezaUnica ? 'true' : 'false' }}"
+    data-product-details="{{ json_encode($datosModal, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) }}"
     class="{{ $clasesTarjeta }} rounded-2xl p-5 flex flex-col justify-between transition-all duration-200 group relative"
 >
     <div>
-        <div class="w-full aspect-square rounded-xl {{ $clasesMiniatura }} flex items-center justify-center relative overflow-hidden mb-4 transition-colors">
+        <!-- Imagen / Miniatura con Indicador de Disponibilidad Limpio -->
+        <div
+            onclick="abrirModalDetalleProducto(this)"
+            class="w-full aspect-square rounded-xl {{ $clasesMiniatura }} flex items-center justify-center relative overflow-hidden mb-4 transition-colors cursor-pointer group-hover:shadow-inner"
+            title="Haz clic para ver la ficha curatorial de {{ $producto->nombre }}"
+        >
             @if ($esPiezaUnica)
-                <span class="absolute top-2.5 left-2.5 bg-purple-600 text-white border border-purple-400/60 text-[10px] font-label-sm font-bold uppercase px-2.5 py-0.5 rounded-md shadow-sm shadow-purple-900/30 inline-flex items-center gap-1">
+                <span class="absolute top-2.5 left-2.5 bg-purple-600 text-white border border-purple-400/60 text-[10px] font-label-sm font-bold uppercase px-2.5 py-0.5 rounded-md shadow-sm inline-flex items-center gap-1">
                     <span class="material-symbols-outlined text-[12px]">diamond</span>
-                    <span>{{ $esPreventa ? 'PREVENTA · PIEZA ÚNICA' : ($piezaUnica ? 'PIEZA ÚNICA 1/1' : 'EDICIÓN COLECCIONABLE') }}</span>
-                </span>
-            @else
-                <span class="absolute top-2.5 left-2.5 bg-primary-container text-white text-[10px] font-label-sm font-semibold uppercase px-2.5 py-0.5 rounded shadow-2xs">
-                    {{ $esPreventa ? 'PREVENTA · '.$etiquetaSuperior : 'STOCK MASIVO · '.$etiquetaSuperior }}
-                </span>
-            @endif
-
-            @if ($sedeCustodia)
-                <span class="absolute top-2.5 right-2.5 bg-purple-950/85 text-purple-100 text-[9px] font-label-code uppercase px-2 py-0.5 rounded">
-                    {{ str_replace('Sucursal ', '', $sedeCustodia) }}
+                    <span>PIEZA ÚNICA 1/1</span>
+                    <span class="sr-only">Pieza Única · Edición Coleccionable {{ $piezaUnica?->numero_serie }}</span>
                 </span>
             @endif
 
@@ -89,63 +127,41 @@
                     AGOTADO
                 </span>
             @else
-                <span class="absolute bottom-2.5 right-2.5 bg-white/90 text-emerald-700 border border-emerald-200 text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full">
+                <span class="absolute bottom-2.5 right-2.5 bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">
                     {{ $stockTotal }} en bóveda
                 </span>
             @endif
+
             <span class="material-symbols-outlined {{ $esPiezaUnica ? 'text-purple-600 group-hover:scale-105' : 'text-purple-300 group-hover:text-primary' }} transition-all text-[64px]">{{ $iconoCategoria }}</span>
         </div>
 
-        <div class="space-y-1.5">
-            <div class="flex items-center justify-between gap-2">
-                <span class="font-label-code text-[11px] text-outline truncate">SKU: #{{ $sku }}</span>
-                <x-ui.badge-grading :type="$badgeType" :text="$graduacionCorta" />
-            </div>
-
-            @if ($esPiezaUnica)
-                <div class="flex flex-wrap items-center justify-between gap-1.5 text-[10px] font-label-code text-white bg-purple-600 border border-purple-700 px-2.5 py-1 rounded-lg shadow-2xs">
-                    <span class="inline-flex items-center gap-1 font-bold uppercase tracking-wider">
-                        <span class="material-symbols-outlined text-[13px]">verified</span>
-                        <span>{{ $piezaUnica ? 'Pieza Única · Edición Coleccionable' : 'Edición Coleccionable Limitada' }}</span>
-                    </span>
-                    @if ($piezaUnica)
-                        <span class="font-bold bg-purple-800/90 text-purple-100 px-1.5 py-0.5 rounded text-[9px]">
-                            SERIE: {{ $piezaUnica->numero_serie }}
-                        </span>
-                    @endif
-                </div>
-            @else
-                <div class="flex flex-wrap items-center gap-1.5 text-[10px] font-label-code text-emerald-800 bg-emerald-50/80 border border-emerald-200/70 px-2 py-0.5 rounded-md">
-                    <span class="font-bold">STOCK MASIVO</span>
-                    <span class="text-emerald-700">&middot; Compra múltiple habilitada</span>
-                </div>
-            @endif
-
-            @if ($promoProducto)
-                <div class="promo-shimmer-badge flex items-center justify-between gap-1.5 text-[10px] font-label-code px-2.5 py-1 rounded-lg {{ $fasePromoProducto === 'preventa_exclusiva' ? 'bg-amber-400 text-slate-950 font-extrabold' : 'bg-purple-700 text-white font-bold' }}">
-                    <span class="inline-flex items-center gap-1 uppercase">
-                        <span class="material-symbols-outlined text-[13px]">workspace_premium</span>
-                        <span>{{ $fasePromoProducto === 'preventa_exclusiva' ? 'Preventa Activa VIP (5+ Compras)' : 'Edición Especial · Apertura Pública' }}</span>
-                    </span>
-                    <span class="font-tabular-data font-extrabold">
-                        {{ $promoProducto->tipo_descuento === 'porcentaje' ? '-' . number_format((float) $promoProducto->valor, 0) . '%' : '-$' . number_format((float) $promoProducto->valor, 0) }}
-                    </span>
-                </div>
-            @endif
-
-            <h3 class="font-bold text-on-surface text-base group-hover:text-primary transition font-quicksand leading-snug">
+        <!-- Información Limpia: Nombre, Subtítulo y Enlace Sutil a Ficha Curatorial -->
+        <div class="space-y-1">
+            <h3
+                onclick="abrirModalDetalleProducto(this)"
+                class="font-bold text-on-surface text-base group-hover:text-primary transition font-quicksand leading-snug cursor-pointer line-clamp-2"
+                title="Haz clic para ver detalles de {{ $producto->nombre }}"
+            >
                 {{ $producto->nombre }}
             </h3>
-            <p class="font-title-editorial text-xs text-on-surface-variant italic">
+            <p class="font-title-editorial text-xs text-on-surface-variant italic truncate">
                 {{ $subtituloCuratorial }}
             </p>
-            <p class="text-xs text-secondary line-clamp-3 pt-1 font-normal leading-relaxed">
-                {{ $producto->descripcion }}
-            </p>
+
+            <button
+                type="button"
+                onclick="abrirModalDetalleProducto(this)"
+                class="pt-1.5 inline-flex items-center gap-1 text-[11px] font-label-code text-primary dark:text-purple-300 hover:underline font-semibold cursor-pointer group-hover:translate-x-0.5 transition-transform"
+                title="Abrir ficha curatorial y especificaciones técnicas"
+            >
+                <span class="material-symbols-outlined text-[14px]">info</span>
+                <span>Ver detalles &rarr;</span>
+            </button>
         </div>
     </div>
 
-    <div class="pt-4 mt-4 border-t border-purple-100 flex items-center justify-between gap-2">
+    <!-- Pie: Precio Tasado y Botón/Contador de Reserva -->
+    <div class="pt-4 mt-4 border-t border-purple-100 dark:border-purple-500/20 flex items-center justify-between gap-2">
         <div>
             <span class="text-[10px] uppercase font-label-code text-outline block">Precio Tasado:</span>
             <span class="font-tabular-data font-bold text-on-surface text-base">
@@ -162,7 +178,7 @@
                     <select
                         name="cantidad"
                         aria-label="Cantidad de unidades a adquirir"
-                        class="px-2 py-2 rounded-xl border border-purple-200 bg-surface-container-lowest text-xs font-tabular-data font-bold text-on-surface focus:outline-none focus:border-primary"
+                        class="px-2 py-2 rounded-xl border border-purple-200 dark:border-purple-500/40 bg-surface-container-lowest dark:bg-[#140d20] text-xs font-tabular-data font-bold text-on-surface focus:outline-none focus:border-primary"
                     >
                         @for ($u = 1; $u <= $maxUnidadesCompra; $u++)
                             <option value="{{ $u }}">{{ $u }} u.</option>
@@ -185,7 +201,7 @@
                 type="button"
                 disabled
                 aria-disabled="true"
-                class="px-3.5 py-2.5 rounded-xl bg-slate-200 text-slate-500 border border-slate-300 text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 opacity-50 cursor-not-allowed pointer-events-none select-none"
+                class="px-3.5 py-2.5 rounded-xl bg-slate-200 text-slate-500 dark:bg-slate-800 dark:text-slate-400 border border-slate-300 dark:border-slate-700 text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 opacity-50 cursor-not-allowed pointer-events-none select-none"
                 title="{{ $estaReservadaTemporalmente ? 'Pieza única reservada temporalmente por otro coleccionista (5 min)' : 'Pieza agotada en bóveda' }}"
             >
                 <span class="material-symbols-outlined text-[18px]">{{ $estaReservadaTemporalmente ? 'lock_clock' : 'block' }}</span>

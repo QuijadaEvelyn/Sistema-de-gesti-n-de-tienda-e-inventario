@@ -23,6 +23,7 @@ use App\Models\Producto;
 use App\Models\Promocion;
 use App\Models\ReservaStock;
 use App\Models\Sucursal;
+use App\Models\Usuario;
 use App\Models\VarianteSku;
 use App\Services\DevolucionService;
 use App\Services\PreventaService;
@@ -139,7 +140,7 @@ class CheckoutSimuladoController extends Controller
     /**
      * Obtiene el estado actual del carrito (combinando sesión, reservas activas y temporizador de 5 minutos).
      *
-     * @return array{items: list<array{variante_sku_id: int, sku: string, nombre: string, subtitulo: string, graduacion: string, tipo: string, es_preventa: bool, limite_preventa: int|null, precio: float, cantidad: int, subtotal: float}>, subtotal: float, total: float, cantidad_total: int, expira_en_iso: string|null, expira_en_ms: int, segundos_restantes: int, tiempo_formateado: string}
+     * @return array{items: list<array{variante_sku_id: int, sku: string, nombre: string, subtitulo: string, graduacion: string, tipo: string, es_preventa: bool, limite_preventa: int|null, precio: float, cantidad: int, subtotal: float, stock_libre: int, disponibles_adicionales: int, es_pieza_unica: bool, max_disponible: int}>, subtotal: float, total: float, cantidad_total: int, expira_en_iso: string|null, expira_en_ms: int, segundos_restantes: int, tiempo_formateado: string}
      */
     public static function obtenerEstadoCarrito(): array
     {
@@ -190,7 +191,7 @@ class CheckoutSimuladoController extends Controller
             ];
         }
 
-        $variantes = VarianteSku::with(['producto.catalogo', 'producto.libro', 'producto.disco', 'producto.coleccionable'])
+        $variantes = VarianteSku::with(['producto.catalogo', 'producto.libro', 'producto.disco', 'producto.coleccionable', 'existencias'])
             ->whereIn('id', array_keys($mapaCantidades))
             ->get()
             ->keyBy('id');
@@ -218,6 +219,14 @@ class CheckoutSimuladoController extends Controller
                 ?? 'Acervo Certificado ARCHIVUM';
 
             $esPreventa = self::esPiezaPreventa($producto, $variante);
+            $piezaUnica = self::obtenerPiezaUnicaDeVariante((int) $variante->id);
+            $esPiezaUnica = $piezaUnica !== null || (bool) ($producto->coleccionable?->edicion_limitada ?? false);
+            $stockLibre = (int) $variante->existencias->sum('cantidad');
+            $maxPosible = (int) $cantidad + $stockLibre;
+            if ($esPreventa && $producto->limite_preventa) {
+                $maxPosible = min($maxPosible, (int) $producto->limite_preventa);
+            }
+            $maxDisponible = $esPiezaUnica ? 1 : max((int) $cantidad, min(20, $maxPosible));
 
             $items[] = [
                 'variante_sku_id' => (int) $variante->id,
@@ -231,6 +240,10 @@ class CheckoutSimuladoController extends Controller
                 'precio' => $precio,
                 'cantidad' => (int) $cantidad,
                 'subtotal' => $lineaSubtotal,
+                'stock_libre' => $stockLibre,
+                'disponibles_adicionales' => $stockLibre,
+                'es_pieza_unica' => $esPiezaUnica,
+                'max_disponible' => $maxDisponible,
             ];
         }
 
@@ -595,6 +608,210 @@ class CheckoutSimuladoController extends Controller
     }
 
     /**
+     * Actualiza la cantidad de unidades seleccionadas de un artículo en el carrito,
+     * recalculando y ajustando de forma transaccional el stock en `existencias` y en `reservas_stock`.
+     */
+    public function actualizarCantidad(Request $request, int $varianteSkuId): JsonResponse|RedirectResponse
+    {
+        self::liberarReservasExpiradas();
+
+        $validated = $request->validate([
+            'cantidad' => ['required', 'integer', 'min:1', 'max:20'],
+        ]);
+
+        $nuevaCantidad = (int) $validated['cantidad'];
+
+        /** @var array<int, int> $carrito */
+        $carrito = session('carrito_archivum', []);
+
+        if (! isset($carrito[$varianteSkuId])) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'El artículo no se encuentra en tu Bóveda de Adquisición.',
+                ], 404);
+            }
+
+            return back()->with('error', 'El artículo no se encuentra en el carrito.');
+        }
+
+        $cantidadActual = (int) $carrito[$varianteSkuId];
+
+        if ($nuevaCantidad === $cantidadActual) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Cantidad sin cambios.',
+                    'carrito' => self::obtenerEstadoCarrito(),
+                ]);
+            }
+
+            return back();
+        }
+
+        $variante = VarianteSku::with(['producto.variantesSku', 'existencias'])->findOrFail($varianteSkuId);
+        $producto = $variante->producto;
+        $nombrePieza = $producto?->nombre ?? 'Pieza seleccionada';
+
+        // Validar exclusividad de Pieza Única (1/1)
+        $piezaUnica = self::obtenerPiezaUnicaDeVariante($varianteSkuId);
+        if ($piezaUnica !== null && $nuevaCantidad > 1) {
+            $mensajeUnica = "Exclusividad de Pieza Única: El ejemplar «{$nombrePieza}» (Serie: {$piezaUnica->numero_serie}) es una edición única (1/1) y no permite seleccionar múltiples unidades.";
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $mensajeUnica,
+                ], 422);
+            }
+
+            return back()->with('error', $mensajeUnica);
+        }
+
+        $diferencia = $nuevaCantidad - $cantidadActual;
+        /** @var list<int> $idsReservasSesion */
+        $idsReservasSesion = array_values(array_map('intval', (array) session('carrito_reservas_ids', [])));
+        $expiraEn = is_string(session('carrito_expira_en'))
+            ? Carbon::parse((string) session('carrito_expira_en'))
+            : now()->addMinutes(self::MINUTOS_EXPIRACION_RESERVA);
+
+        if ($diferencia > 0) {
+            // Validar cupo de preventa si aplica
+            if ($producto && self::esPiezaPreventa($producto, $variante)) {
+                try {
+                    app(PreventaService::class)->validarCupoPreventa($producto->id, $nuevaCantidad);
+                } catch (RuntimeException $e) {
+                    if ($request->expectsJson()) {
+                        return response()->json([
+                            'status' => 'error',
+                            'message' => $e->getMessage(),
+                        ], 422);
+                    }
+
+                    return back()->with('error', $e->getMessage());
+                }
+            }
+
+            $stockLibreEnBoveda = (int) $variante->existencias->sum('cantidad');
+            if ($stockLibreEnBoveda < $diferencia) {
+                $mensajeInsuficiente = "No hay suficientes ejemplares de «{$nombrePieza}» disponibles en bóveda (disponibles adicionales: {$stockLibreEnBoveda}).";
+                if ($request->expectsJson()) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => $mensajeInsuficiente,
+                    ], 422);
+                }
+
+                return back()->with('error', $mensajeInsuficiente);
+            }
+
+            DB::transaction(function () use ($varianteSkuId, $diferencia, $expiraEn, &$idsReservasSesion): void {
+                $carritoBd = $this->obtenerOCrearCarritoBaseDatos();
+                $porDescontar = $diferencia;
+
+                $existencias = Existencia::where('variante_sku_id', $varianteSkuId)
+                    ->where('cantidad', '>', 0)
+                    ->orderByDesc('cantidad')
+                    ->lockForUpdate()
+                    ->get();
+
+                $totalBloqueado = (int) $existencias->sum('cantidad');
+                if ($totalBloqueado < $diferencia) {
+                    throw new RuntimeException('No hay suficiente stock en bóveda para incrementar la cantidad.');
+                }
+
+                foreach ($existencias as $existencia) {
+                    if ($porDescontar <= 0) {
+                        break;
+                    }
+
+                    $descuentoSucursal = min((int) $existencia->cantidad, $porDescontar);
+                    $existencia->decrement('cantidad', $descuentoSucursal);
+                    $porDescontar -= $descuentoSucursal;
+
+                    $reserva = ReservaStock::create([
+                        'existencia_id' => $existencia->id,
+                        'pedido_id' => null,
+                        'carrito_id' => $carritoBd?->id,
+                        'cantidad' => $descuentoSucursal,
+                        'expira_en' => $expiraEn,
+                        'estado' => 'activa',
+                    ]);
+
+                    $idsReservasSesion[] = (int) $reserva->id;
+                }
+            });
+        } else {
+            // Liberar unidades de vuelta a existencias
+            $unidadesALiberar = abs($diferencia);
+
+            DB::transaction(function () use ($varianteSkuId, $unidadesALiberar, &$idsReservasSesion): void {
+                $carritoBd = $this->obtenerOCrearCarritoBaseDatos();
+                $porLiberar = $unidadesALiberar;
+
+                $reservasActivas = ReservaStock::with('existencia')
+                    ->where('estado', 'activa')
+                    ->whereHas('existencia', fn ($q) => $q->where('variante_sku_id', $varianteSkuId))
+                    ->where(function ($q) use ($idsReservasSesion, $carritoBd): void {
+                        if (! empty($idsReservasSesion)) {
+                            $q->whereIn('id', $idsReservasSesion);
+                        }
+                        if ($carritoBd) {
+                            $q->orWhere('carrito_id', $carritoBd->id);
+                        }
+                    })
+                    ->orderByDesc('id')
+                    ->lockForUpdate()
+                    ->get();
+
+                $idsRemover = [];
+
+                foreach ($reservasActivas as $reserva) {
+                    if ($porLiberar <= 0) {
+                        break;
+                    }
+
+                    $liberarDeEsta = min((int) $reserva->cantidad, $porLiberar);
+                    $existencia = Existencia::lockForUpdate()->find($reserva->existencia_id);
+                    if ($existencia) {
+                        $existencia->increment('cantidad', $liberarDeEsta);
+                    }
+
+                    if ($liberarDeEsta >= (int) $reserva->cantidad) {
+                        $reserva->update(['estado' => 'liberada']);
+                        $idsRemover[] = (int) $reserva->id;
+                    } else {
+                        $reserva->decrement('cantidad', $liberarDeEsta);
+                    }
+
+                    $porLiberar -= $liberarDeEsta;
+                }
+
+                if (! empty($idsRemover)) {
+                    $idsReservasSesion = array_values(array_diff($idsReservasSesion, $idsRemover));
+                }
+            });
+        }
+
+        $carrito[$varianteSkuId] = $nuevaCantidad;
+        session([
+            'carrito_archivum' => $carrito,
+            'carrito_reservas_ids' => array_values(array_unique($idsReservasSesion)),
+        ]);
+
+        $this->sincronizarCarritoBaseDatos($carrito);
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => "Cantidad de «{$nombrePieza}» actualizada a {$nuevaCantidad} unidades.",
+                'carrito' => self::obtenerEstadoCarrito(),
+            ]);
+        }
+
+        return back()->with('status', "Cantidad de «{$nombrePieza}» actualizada a {$nuevaCantidad}.");
+    }
+
+    /**
      * Elimina un artículo del carrito de adquisiciones y libera de inmediato
      * su stock reservado de vuelta a la tabla `existencias`.
      */
@@ -737,10 +954,26 @@ class CheckoutSimuladoController extends Controller
 
     /**
      * Muestra la pantalla de Checkout y Pasarela de Pago Simulada.
+     * Si el cliente tiene artículos en custodia pero no ha iniciado sesión,
+     * se intercepta el acceso y se redirige a autenticación para proteger el lote.
      */
-    public function checkout(): View
+    public function checkout(): View|RedirectResponse
     {
         $estadoCarrito = self::obtenerEstadoCarrito();
+
+        if (! auth()->check()) {
+            if (! empty($estadoCarrito['items'])) {
+                session(['url.intended' => route('checkout.index')]);
+
+                return redirect()->route('public.home', ['login' => '1', 'intended' => 'checkout'])
+                    ->with('warning', 'Identificación requerida: Inicia sesión o crea tu cuenta para formalizar la adquisición notariada de tus piezas reservadas.');
+            }
+
+            return view('public.checkout', [
+                'carrito' => $estadoCarrito,
+                'usuario' => null,
+            ]);
+        }
 
         return view('public.checkout', [
             'carrito' => $estadoCarrito,
@@ -755,6 +988,13 @@ class CheckoutSimuladoController extends Controller
      */
     public function procesarPago(Request $request): RedirectResponse
     {
+        if (! auth()->check()) {
+            session(['url.intended' => route('checkout.index')]);
+
+            return redirect()->route('public.home', ['login' => '1', 'intended' => 'checkout'])
+                ->with('warning', 'Debes iniciar sesión para procesar la adquisición.');
+        }
+
         $teniaItemsEnSesion = ! empty(session('carrito_archivum', []));
         $estadoCarrito = self::obtenerEstadoCarrito();
 
@@ -1323,6 +1563,66 @@ class CheckoutSimuladoController extends Controller
                 'variante_sku_id' => (int) $varianteSkuId,
                 'cantidad' => (int) $cantidad,
             ]);
+        }
+    }
+
+    /**
+     * Vincula el carrito en sesión y sus reservas activas al perfil de Cliente
+     * y su carrito en base de datos al momento de iniciar sesión o registrarse.
+     */
+    public static function sincronizarCarritoTrasLogin(Usuario $user): void
+    {
+        if (! $user->esCliente() || ! Schema::hasTable('clientes') || ! Schema::hasTable('carritos')) {
+            return;
+        }
+
+        $cliente = Cliente::where('usuario_id', $user->id)->first();
+        if (! $cliente) {
+            $cliente = Cliente::create([
+                'usuario_id' => $user->id,
+                'nombre' => $user->nombre,
+                'apellidos' => 'Coleccionista',
+                'email' => $user->email,
+            ]);
+        }
+
+        $carritoBd = Carrito::firstOrCreate(['cliente_id' => $cliente->id]);
+
+        /** @var array<int, int> $carritoSesion */
+        $carritoSesion = session('carrito_archivum', []);
+
+        /** @var list<int> $idsReservasSesion */
+        $idsReservasSesion = array_values(array_map('intval', (array) session('carrito_reservas_ids', [])));
+
+        // 1. Si hay reservas activas en la sesión del invitado, asociarlas al carrito_id en BD
+        if (! empty($idsReservasSesion) && Schema::hasTable('reservas_stock')) {
+            ReservaStock::whereIn('id', $idsReservasSesion)
+                ->where('estado', 'activa')
+                ->whereNull('carrito_id')
+                ->update(['carrito_id' => $carritoBd->id]);
+        }
+
+        // 2. Si la sesión tiene artículos, persistirlos en `carrito_items`
+        if (! empty($carritoSesion) && Schema::hasTable('carrito_items')) {
+            CarritoItem::where('carrito_id', $carritoBd->id)->delete();
+
+            foreach ($carritoSesion as $varianteSkuId => $cantidad) {
+                CarritoItem::create([
+                    'carrito_id' => $carritoBd->id,
+                    'variante_sku_id' => (int) $varianteSkuId,
+                    'cantidad' => (int) $cantidad,
+                ]);
+            }
+        } elseif (empty($carritoSesion) && Schema::hasTable('carrito_items')) {
+            // Si la sesión no tenía nada pero la BD sí, cargar desde la BD a la sesión
+            $itemsBd = CarritoItem::where('carrito_id', $carritoBd->id)->get();
+            if ($itemsBd->isNotEmpty()) {
+                $nuevoMapa = [];
+                foreach ($itemsBd as $itemBd) {
+                    $nuevoMapa[(int) $itemBd->variante_sku_id] = (int) $itemBd->cantidad;
+                }
+                session(['carrito_archivum' => $nuevoMapa]);
+            }
         }
     }
 }

@@ -181,17 +181,17 @@
     .dark {
         color-scheme: dark;
 
-        /* Superficies Nocturnas de Bóveda */
+        /* Superficies Nocturnas de Bóveda (Sin tonos grisáceos traslúcidos; amatista y obsidiana puros) */
         --color-background: #0f0a17;
         --color-surface: #171024;
         --color-surface-dim: #120c1c;
         --color-surface-bright: #281c3d;
-        --color-surface-container-lowest: #b9b9b9;
-        --color-surface-container-low: #221834;
-        --color-surface-container: #291d3f;
-        --color-surface-container-high: #34254f;
-        --color-surface-container-highest: #70687f;
-        --color-surface-variant: #372752;
+        --color-surface-container-lowest: #140d20;
+        --color-surface-container-low: #1b132a;
+        --color-surface-container: #221834;
+        --color-surface-container-high: #2a1e3f;
+        --color-surface-container-highest: #33254d;
+        --color-surface-variant: #2d1f44;
 
         /* Tipografía Clara de Alto Contraste (Blanco Puro, Hueso / Stone-100 y Beige Cálido / Amber-50) */
         --color-on-surface: #f5f5f4;
@@ -228,19 +228,69 @@
 .dark .bg-white\/85,
 .dark .bg-white\/80 {
     background-color: #1b132a;
-    color: #0f021b;
+    color: #f5f5f4;
     border-color: rgba(168, 85, 247, 0.30);
 }
 
 .dark article.bg-white {
     background-color: #1d152e;
-    color: #4d0c4c;
+    color: #f5f5f4;
     border-color: rgba(168, 85, 247, 0.34);
 }
 
 .dark article[data-unique-piece="true"].bg-white {
     background-color: #211636;
     border-color: #a855f7;
+}
+
+/* Modales, Cajones Flotantes (Drawers) y Capas de Superposición (Overlays) en Modo Oscuro */
+.dark #login-drawer,
+.dark #cart-drawer,
+.dark #product-modal-dialog,
+.dark aside[role="dialog"],
+.dark div[role="dialog"],
+.dark .modal-card {
+    background-color: #171024 !important;
+    border-color: rgba(168, 85, 247, 0.35) !important;
+    color: #f5f5f4 !important;
+}
+
+.dark #login-drawer-overlay,
+.dark #drawer-overlay,
+.dark #product-modal-backdrop,
+.dark #modal-evidencia-archivum,
+.dark .modal-backdrop {
+    background-color: rgba(7, 4, 13, 0.88) !important;
+    backdrop-filter: blur(4px) !important;
+}
+
+.dark #login-drawer .bg-surface-container-lowest,
+.dark #login-drawer .bg-surface-container-low,
+.dark #login-drawer .bg-surface-container,
+.dark #cart-drawer .bg-surface-container-lowest,
+.dark #cart-drawer .bg-surface-container-low,
+.dark #cart-drawer .bg-surface-container {
+    background-color: #1b132a !important;
+    border-color: rgba(168, 85, 247, 0.30) !important;
+    color: #f5f5f4 !important;
+}
+
+.dark #login-drawer .bg-surface-container-low\/50,
+.dark #cart-drawer .bg-surface-container-low\/50 {
+    background-color: rgba(27, 19, 42, 0.80) !important;
+}
+
+.dark #login-drawer input,
+.dark #login-drawer select,
+.dark #login-drawer textarea {
+    background-color: #140d20 !important;
+    color: #f5f5f4 !important;
+    border-color: rgba(168, 85, 247, 0.38) !important;
+}
+
+.dark #login-drawer input:focus {
+    background-color: #1a1228 !important;
+    border-color: #c084fc !important;
 }
 
 /* Preservar contraste en botones de acción sobre banners oscuros */
@@ -497,19 +547,22 @@
 .dark #conoce-mas-de-nosotros .font-title-editorial,
 .dark #conoce-mas-de-nosotros p.font-title-editorial,
 .dark #conoce-mas-de-nosotros blockquote {
-    color: #fef3c7 !important; /* beige claro suave (#e6dfd5 / text-amber-50) */
+    color: #fef3c7 !important;
+    /* beige claro suave (#e6dfd5 / text-amber-50) */
 }
 
 .dark #conoce-mas-de-nosotros p,
 .dark #conoce-mas-de-nosotros .text-on-surface-variant,
 .dark #conoce-mas-de-nosotros .text-on-surface,
 .dark #conoce-mas-de-nosotros .text-secondary {
-    color: #f4f0ea !important; /* blanco hueso (#f4f0ea / text-slate-100) */
+    color: #f4f0ea !important;
+    /* blanco hueso (#f4f0ea / text-slate-100) */
 }
 
 .dark #conoce-mas-de-nosotros strong,
 .dark #conoce-mas-de-nosotros b {
-    color: #ffffff !important; /* blanco puro */
+    color: #ffffff !important;
+    /* blanco puro */
     font-weight: 700;
 }
 
@@ -524,7 +577,8 @@
 .dark #conoce-mas-de-nosotros .text-gray-800,
 .dark #conoce-mas-de-nosotros .text-slate-700,
 .dark #conoce-mas-de-nosotros .text-slate-800 {
-    color: #fef3c7 !important; /* Reemplazo de tonos oscuros/morados por beige claro de alto contraste */
+    color: #fef3c7 !important;
+    /* Reemplazo de tonos oscuros/morados por beige claro de alto contraste */
 }
 
 .dark #conoce-mas-de-nosotros .text-outline {
@@ -598,92 +652,80 @@
     scrollbar-width: none;
 }
 
-/* Carrusel 3D Curatorial con Swiper.js (Efecto Coverflow) */
+/* ==========================================================================
+   VITRINA CURATORIAL — DESPLAZAMIENTO HORIZONTAL NATIVO & SCROLL-SNAP
+   Sin flechas auxiliares ni indicadores de paginación; fluido, inmersivo e imantado
+   ========================================================================== */
+.vitrina-scroll-container {
+    display: flex;
+    align-items: stretch;
+    gap: 1.5rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-top: 0.5rem;
+    padding-bottom: 1.25rem;
+    cursor: grab;
+    user-select: none;
+}
+
+.vitrina-scroll-container:active {
+    cursor: grabbing;
+}
+
+.vitrina-scroll-container::-webkit-scrollbar {
+    display: none;
+}
+
+.vitrina-scroll-card {
+    scroll-snap-align: start;
+    scroll-snap-stop: normal;
+    flex-shrink: 0;
+    width: 300px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+@media (min-width: 640px) {
+    .vitrina-scroll-card {
+        width: 320px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .vitrina-scroll-card {
+        width: 340px;
+    }
+}
+
+.vitrina-scroll-card:hover {
+    transform: translateY(-4px);
+}
+
+/* Compatibilidad por si se referencia .product3DCarousel y ocultación definitiva de auxiliares */
 .product3DCarousel {
     width: 100%;
-    padding-top: 28px;
-    padding-bottom: 58px;
-    overflow: hidden;
-    perspective: 1200px;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scroll-snap-type: x mandatory !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
 }
 
-.product3DCarousel .swiper-wrapper {
-    align-items: stretch;
+.product3DCarousel::-webkit-scrollbar {
+    display: none !important;
 }
 
-.product3DCarousel .swiper-slide {
-    background-position: center;
-    background-size: cover;
-    width: 310px;
-    height: auto;
-    display: flex;
-    border-radius: 1rem;
-    transition: transform 0.35s ease, box-shadow 0.35s ease;
-}
-
-.product3DCarousel .swiper-slide>* {
-    width: 100%;
-}
-
-.product3DCarousel .swiper-slide-active {
-    z-index: 10;
-}
-
-.product3DCarousel .swiper-3d .swiper-slide-shadow-left,
-.product3DCarousel .swiper-3d .swiper-slide-shadow-right {
-    border-radius: 1rem;
-    background-image: linear-gradient(to left, rgba(59, 7, 100, 0.22), rgba(0, 0, 0, 0));
-}
-
-.dark .product3DCarousel .swiper-3d .swiper-slide-shadow-left,
-.dark .product3DCarousel .swiper-3d .swiper-slide-shadow-right {
-    background-image: linear-gradient(to left, rgba(9, 4, 18, 0.55), rgba(0, 0, 0, 0));
-}
-
-.product3DCarousel .swiper-pagination-bullet {
-    width: 9px;
-    height: 9px;
-    background-color: var(--color-outline);
-    opacity: 0.45;
-    transition: all 0.25s ease;
-}
-
-.product3DCarousel .swiper-pagination-bullet-active {
-    width: 26px;
-    border-radius: 9999px;
-    background-color: var(--color-primary-container);
-    opacity: 1;
-}
-
+.swiper-button-prev,
+.swiper-button-next,
+.swiper-pagination,
 .product3DCarousel .swiper-button-prev,
-.product3DCarousel .swiper-button-next {
-    width: 42px;
-    height: 42px;
-    border-radius: 9999px;
-    background-color: rgba(255, 255, 255, 0.92);
-    border: 1px solid rgba(196, 181, 253, 0.8);
-    color: var(--color-primary);
-    box-shadow: 0 4px 14px rgba(99, 14, 212, 0.14);
-    transition: all 0.2s ease;
-}
-
-.product3DCarousel .swiper-button-prev:hover,
-.product3DCarousel .swiper-button-next:hover {
-    background-color: var(--color-primary-container);
-    color: #ffffff;
-}
-
-.dark .product3DCarousel .swiper-button-prev,
-.dark .product3DCarousel .swiper-button-next {
-    background-color: rgba(35, 25, 50, 0.92);
-    border-color: rgba(139, 92, 246, 0.4);
-    color: #e9ddff;
-}
-
-.product3DCarousel .swiper-button-prev::after,
-.product3DCarousel .swiper-button-next::after {
-    font-size: 16px;
-    font-weight: 700;
+.product3DCarousel .swiper-button-next,
+.product3DCarousel .swiper-pagination {
+    display: none !important;
 }
 
 /* ==========================================================================

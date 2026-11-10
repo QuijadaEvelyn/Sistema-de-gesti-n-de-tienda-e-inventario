@@ -47,6 +47,9 @@
         <x-public.login-drawer />
     @endguest
 
+    <!-- Modal Curatorial de Ficha Técnica y Detalles de Producto -->
+    <x-public.product-modal />
+
     <!-- Scripts Esenciales de Interacción Pública (Cart Drawer & Modo Claro/Oscuro) -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {

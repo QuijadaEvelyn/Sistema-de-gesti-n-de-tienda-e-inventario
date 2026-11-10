@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\CheckoutSimuladoController;
 use App\Http\Controllers\Controller;
 use App\Models\Bitacora;
 use App\Models\Carrito;
@@ -113,9 +114,21 @@ class RegisterController extends Controller
             return $usuario;
         });
 
-        // 6. Inicio de sesión automático, regeneración de sesión y limpieza de intended
+        // 6. Inicio de sesión automático, sincronización de carrito persistente y regeneración de sesión
         Auth::login($usuario);
         $request->session()->regenerate();
+
+        CheckoutSimuladoController::sincronizarCarritoTrasLogin($usuario);
+
+        $intended = $request->input('intended') ?? session('url.intended');
+        $redirectUrl = route('public.home');
+
+        if (is_string($intended) && Str::contains($intended, ['/checkout', 'checkout'])) {
+            $redirectUrl = route('checkout.index');
+        } elseif (! empty(session('carrito_archivum', [])) && $request->filled('intended')) {
+            $redirectUrl = route('checkout.index');
+        }
+
         $request->session()->forget('url.intended');
 
         if ($request->expectsJson()) {
@@ -128,10 +141,10 @@ class RegisterController extends Controller
                     'email' => $usuario->email,
                     'roles' => ['cliente'],
                 ],
-                'redirect' => route('public.home'),
+                'redirect' => $redirectUrl,
             ], 201);
         }
 
-        return redirect()->route('public.home')->with('status', '¡Registro completado con éxito! Bienvenido a ARCHIVUM.');
+        return redirect()->to($redirectUrl)->with('status', '¡Registro completado con éxito! Bienvenido a ARCHIVUM.');
     }
 }
