@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Cliente;
+use App\Models\PiezaUnica;
 use App\Models\Producto;
 use App\Models\Promocion;
+use App\Models\Sucursal;
 use App\Services\SucursalContextoService;
 use Database\Seeders\CatalogoProductoSeeder;
 use Illuminate\Database\Eloquent\Builder;
@@ -133,6 +135,29 @@ class CatalogoPublicoController extends Controller
             'meta' => self::CATEGORIAS['adquisiciones'],
             'productos' => $productos,
             'categoriaActiva' => 'adquisiciones',
+        ]);
+    }
+
+    /**
+     * Vista institucional dedicada: "Conoce más de nosotros" con resumen de la plataforma
+     * y animación de lluvia de elementos temáticos (libros, vinilos y coleccionables).
+     */
+    public function nosotros(): View
+    {
+        $sucursales = Schema::hasTable('sucursales')
+            ? Sucursal::query()->where('activa', true)->orderBy('id')->get()
+            : collect();
+
+        $metricasAcervo = [
+            'total_productos' => Schema::hasTable('productos') ? Producto::where('activo', true)->count() : 20,
+            'total_piezas_unicas' => Schema::hasTable('piezas_unicas') ? PiezaUnica::count() : 10,
+            'total_sedes' => $sucursales->count() ?: 3,
+        ];
+
+        return view('public.nosotros', [
+            'categoriaActiva' => 'nosotros',
+            'sucursales' => $sucursales,
+            'metricasAcervo' => $metricasAcervo,
         ]);
     }
 

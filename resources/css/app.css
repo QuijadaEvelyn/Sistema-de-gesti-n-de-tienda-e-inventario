@@ -1,5 +1,7 @@
 @import 'tailwindcss';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source '../views/**/*.blade.php';
@@ -175,24 +177,415 @@
         min-height: 100vh;
     }
 
-    /* Redefinición de variables cuando la clase .dark está activa */
+    /* Redefinición de variables de alto contraste curatorial cuando la clase .dark está activa */
     .dark {
-        --color-background: #120d18;
-        --color-surface: #1a1324;
-        --color-surface-container-lowest: #1d1528;
-        --color-surface-container-low: #21182e;
-        --color-surface-container: #231932;
-        --color-surface-container-high: #2d213f;
-        --color-on-surface: #463861;
-        --color-on-surface-variant: #967bcb;
-        --color-outline: #44395e;
+        color-scheme: dark;
+
+        /* Superficies Nocturnas de Bóveda */
+        --color-background: #0f0a17;
+        --color-surface: #171024;
+        --color-surface-dim: #120c1c;
+        --color-surface-bright: #281c3d;
+        --color-surface-container-lowest: #b9b9b9;
+        --color-surface-container-low: #221834;
+        --color-surface-container: #291d3f;
+        --color-surface-container-high: #34254f;
+        --color-surface-container-highest: #70687f;
+        --color-surface-variant: #372752;
+
+        /* Tipografía Clara de Alto Contraste (Blanco Puro, Hueso / Stone-100 y Beige Cálido / Amber-50) */
+        --color-on-surface: #f5f5f4;
+        --color-on-surface-variant: #fef3c7;
+        --color-secondary: #e7e5e4;
+        --color-outline: #d6d3d1;
+        --color-outline-variant: #5b487a;
+
+        /* Acentos Amatista Luminosos sobre Fondo Oscuro */
+        --color-primary: #d8b4fe;
+        --color-primary-hover: #f3e8ff;
+        --color-primary-container: #7c3aed;
+        --color-on-primary: #ffffff;
+        --color-on-primary-container: #faf5ff;
+
+        /* Estados de Error Legibles en Modo Oscuro */
+        --color-error: #fca5a5;
+        --color-error-container: #450a0a;
+        --color-on-error: #ffffff;
+        --color-on-error-container: #fecaca;
     }
 }
 
-/* Adaptación de tarjetas blancas en modo oscuro sin conflictos visuales */
+/* ==========================================================================
+   SISTEMA GLOBAL DE ALTO CONTRASTE Y PALETA CLARA EN MODO OSCURO (.dark)
+   Garantiza legibilidad en tarjetas, tablas, modales, cajones, formularios y títulos
+   ========================================================================== */
+
+/* Adaptación de contenedores, tarjetas, modales y cabeceras blancas en modo oscuro */
+.dark .bg-white,
+.dark .bg-white\/95,
+.dark .bg-white\/92,
+.dark .bg-white\/90,
+.dark .bg-white\/85,
+.dark .bg-white\/80 {
+    background-color: #1b132a;
+    color: #0f021b;
+    border-color: rgba(168, 85, 247, 0.30);
+}
+
 .dark article.bg-white {
-    background-color: #1d1528;
-    border-color: rgba(139, 92, 246, 0.28);
+    background-color: #1d152e;
+    color: #4d0c4c;
+    border-color: rgba(168, 85, 247, 0.34);
+}
+
+.dark article[data-unique-piece="true"].bg-white {
+    background-color: #211636;
+    border-color: #a855f7;
+}
+
+/* Preservar contraste en botones de acción sobre banners oscuros */
+.dark section.bg-gradient-to-r a.bg-white,
+.dark section.bg-gradient-to-br a.bg-white {
+    background-color: #f5f5f4;
+    color: #2e1065;
+}
+
+/* Corrección de tipografías oscuras o grises tenues a tonos blanco, hueso (stone-100) y beige claro (amber-50) */
+.dark h1,
+.dark h2,
+.dark h3,
+.dark h4,
+.dark h5,
+.dark h6 {
+    color: #fafaf9;
+}
+
+.dark .text-on-surface {
+    color: #f5f5f4;
+}
+
+.dark .text-on-surface-variant {
+    color: #fef3c7;
+}
+
+.dark .text-secondary {
+    color: #e7e5e4;
+}
+
+.dark .text-outline {
+    color: #d6d3d1;
+}
+
+.dark .text-slate-900,
+.dark .text-slate-800,
+.dark .text-slate-700,
+.dark .text-gray-900,
+.dark .text-gray-800,
+.dark .text-gray-700,
+.dark .text-stone-900,
+.dark .text-stone-800,
+.dark .text-stone-700 {
+    color: #f5f5f4;
+}
+
+.dark .text-slate-600,
+.dark .text-slate-500,
+.dark .text-slate-400,
+.dark .text-gray-600,
+.dark .text-gray-500,
+.dark .text-gray-400,
+.dark .text-stone-600,
+.dark .text-stone-500 {
+    color: #e7e5e4;
+}
+
+.dark .text-purple-950,
+.dark .text-purple-900,
+.dark .text-purple-800,
+.dark .text-purple-700,
+.dark .text-indigo-950,
+.dark .text-indigo-900,
+.dark .text-indigo-800,
+.dark .text-indigo-700 {
+    color: #e9d5ff;
+}
+
+.dark .text-emerald-950,
+.dark .text-emerald-900,
+.dark .text-emerald-800,
+.dark .text-emerald-700 {
+    color: #a7f3d0;
+}
+
+.dark .text-amber-950,
+.dark .text-amber-900,
+.dark .text-amber-800,
+.dark .text-amber-700 {
+    color: #fde68a;
+}
+
+.dark .text-rose-950,
+.dark .text-rose-900,
+.dark .text-rose-800,
+.dark .text-rose-700,
+.dark .text-red-900,
+.dark .text-red-800,
+.dark .text-red-700 {
+    color: #fecdd3;
+}
+
+/* Mantener texto oscuro cuando el fondo es un badge amarillo/ámbar sólido brillante */
+.dark .bg-amber-400.text-slate-950,
+.dark .bg-amber-400 .text-slate-950,
+.dark .bg-amber-300.text-slate-950 {
+    color: #0f172a;
+}
+
+/* Fondos pastel claros convertidos a superficies translúcidas nocturnas con texto hueso/claro */
+.dark .bg-purple-50,
+.dark .bg-purple-50\/80,
+.dark .bg-purple-50\/70,
+.dark .bg-purple-50\/60,
+.dark .bg-purple-50\/50,
+.dark .bg-purple-50\/40,
+.dark .bg-purple-50\/30,
+.dark .bg-purple-100,
+.dark .bg-purple-100\/95,
+.dark .bg-purple-100\/80,
+.dark .bg-purple-100\/60 {
+    background-color: rgba(124, 58, 237, 0.20);
+    color: #f5f5f4;
+    border-color: rgba(192, 132, 252, 0.35);
+}
+
+.dark .bg-indigo-50,
+.dark .bg-indigo-100 {
+    background-color: rgba(79, 70, 229, 0.22);
+    color: #e0e7ff;
+    border-color: rgba(129, 140, 248, 0.35);
+}
+
+.dark .bg-emerald-50,
+.dark .bg-emerald-50\/80,
+.dark .bg-emerald-100 {
+    background-color: rgba(16, 185, 129, 0.18);
+    color: #d1fae5;
+    border-color: rgba(52, 211, 153, 0.35);
+}
+
+.dark .bg-amber-50,
+.dark .bg-amber-50\/80,
+.dark .bg-amber-50\/70,
+.dark .bg-amber-100 {
+    background-color: rgba(245, 158, 11, 0.18);
+    color: #fef3c7;
+    border-color: rgba(251, 191, 36, 0.38);
+}
+
+.dark .bg-rose-50,
+.dark .bg-rose-100,
+.dark .bg-red-50,
+.dark .bg-red-100 {
+    background-color: rgba(244, 63, 94, 0.18);
+    color: #ffe4e6;
+    border-color: rgba(251, 113, 133, 0.35);
+}
+
+.dark .bg-slate-50,
+.dark .bg-slate-100,
+.dark .bg-slate-200,
+.dark .bg-gray-50,
+.dark .bg-gray-100 {
+    background-color: #261b3a;
+    color: #f5f5f4;
+    border-color: rgba(168, 85, 247, 0.28);
+}
+
+/* Bordes y divisores sutiles en modo oscuro */
+.dark .border-purple-50,
+.dark .border-purple-100,
+.dark .border-purple-200,
+.dark .border-purple-200\/90,
+.dark .border-purple-200\/80,
+.dark .border-purple-200\/70,
+.dark .border-purple-200\/60,
+.dark .border-purple-200\/50,
+.dark .border-purple-300,
+.dark .border-slate-200,
+.dark .border-slate-300,
+.dark .border-gray-200 {
+    border-color: rgba(168, 85, 247, 0.28);
+}
+
+.dark .divide-purple-100> :not(:last-child),
+.dark .divide-purple-200> :not(:last-child),
+.dark .divide-slate-100> :not(:last-child),
+.dark .divide-gray-100> :not(:last-child) {
+    border-color: rgba(168, 85, 247, 0.22);
+}
+
+/* Tablas administrativas y de catálogo en modo oscuro */
+.dark table {
+    color: #f5f5f4;
+}
+
+.dark thead,
+.dark thead tr,
+.dark th {
+    background-color: #241937;
+    color: #fef3c7;
+    border-color: rgba(168, 85, 247, 0.30);
+}
+
+.dark tbody tr {
+    border-color: rgba(168, 85, 247, 0.18);
+}
+
+.dark tbody tr:hover {
+    background-color: rgba(139, 92, 246, 0.14);
+}
+
+.dark td {
+    color: #f5f5f4;
+}
+
+/* Campos de formulario, buscadores y selectores en modo oscuro */
+.dark input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+.dark select,
+.dark textarea {
+    background-color: #160f24;
+    color: #f5f5f4;
+    border-color: rgba(168, 85, 247, 0.38);
+}
+
+.dark select#public-branch-select {
+    background-color: transparent;
+    color: #fef3c7;
+}
+
+.dark select option {
+    background-color: #1b132a;
+    color: #f5f5f4;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+    color: #c4b5fd;
+    opacity: 0.75;
+}
+
+/* ==========================================================================
+   SECCIÓN "CONOCE MÁS DE NOSOTROS" — ALTO CONTRASTE CURATORIAL EN MODO OSCURO
+   Blanco puro (#ffffff), blanco hueso (#f4f0ea) y beige suave (#fef3c7 / #e6dfd5)
+   ========================================================================== */
+.dark #conoce-mas-de-nosotros,
+.dark .archivum-rain-section {
+    background-image: linear-gradient(to bottom, #1b132a, #23163a, #160f24) !important;
+    border-color: rgba(168, 85, 247, 0.35) !important;
+    color: #f4f0ea;
+}
+
+.dark #conoce-mas-de-nosotros h1,
+.dark #conoce-mas-de-nosotros h2,
+.dark #conoce-mas-de-nosotros h3,
+.dark #conoce-mas-de-nosotros h4,
+.dark #conoce-mas-de-nosotros h5,
+.dark #conoce-mas-de-nosotros h6 {
+    color: #ffffff !important;
+}
+
+.dark #conoce-mas-de-nosotros .font-title-editorial,
+.dark #conoce-mas-de-nosotros p.font-title-editorial,
+.dark #conoce-mas-de-nosotros blockquote {
+    color: #fef3c7 !important; /* beige claro suave (#e6dfd5 / text-amber-50) */
+}
+
+.dark #conoce-mas-de-nosotros p,
+.dark #conoce-mas-de-nosotros .text-on-surface-variant,
+.dark #conoce-mas-de-nosotros .text-on-surface,
+.dark #conoce-mas-de-nosotros .text-secondary {
+    color: #f4f0ea !important; /* blanco hueso (#f4f0ea / text-slate-100) */
+}
+
+.dark #conoce-mas-de-nosotros strong,
+.dark #conoce-mas-de-nosotros b {
+    color: #ffffff !important; /* blanco puro */
+    font-weight: 700;
+}
+
+.dark #conoce-mas-de-nosotros .text-primary,
+.dark #conoce-mas-de-nosotros .text-purple-700,
+.dark #conoce-mas-de-nosotros .text-purple-800,
+.dark #conoce-mas-de-nosotros .text-purple-900,
+.dark #conoce-mas-de-nosotros .text-purple-950,
+.dark #conoce-mas-de-nosotros .text-indigo-700,
+.dark #conoce-mas-de-nosotros .text-indigo-800,
+.dark #conoce-mas-de-nosotros .text-gray-700,
+.dark #conoce-mas-de-nosotros .text-gray-800,
+.dark #conoce-mas-de-nosotros .text-slate-700,
+.dark #conoce-mas-de-nosotros .text-slate-800 {
+    color: #fef3c7 !important; /* Reemplazo de tonos oscuros/morados por beige claro de alto contraste */
+}
+
+.dark #conoce-mas-de-nosotros .text-outline {
+    color: #e6dfd5 !important;
+}
+
+/* Tarjetas y vitrinas dentro de la sección Conoce más de nosotros */
+.dark #conoce-mas-de-nosotros .bg-white\/95,
+.dark #conoce-mas-de-nosotros .bg-white {
+    background-color: #1e1430 !important;
+    border-color: rgba(168, 85, 247, 0.35) !important;
+}
+
+.dark #conoce-mas-de-nosotros .bg-surface-container-low\/90,
+.dark #conoce-mas-de-nosotros .bg-surface-container-low {
+    background-color: #271a3f !important;
+    border-color: rgba(168, 85, 247, 0.35) !important;
+}
+
+.dark #conoce-mas-de-nosotros .bg-purple-100\/95,
+.dark #conoce-mas-de-nosotros .bg-purple-100,
+.dark #conoce-mas-de-nosotros .bg-purple-50\/70,
+.dark #conoce-mas-de-nosotros .bg-purple-50 {
+    background-color: rgba(124, 58, 237, 0.28) !important;
+    border-color: rgba(192, 132, 252, 0.40) !important;
+    color: #fef3c7 !important;
+}
+
+.dark #conoce-mas-de-nosotros .bg-amber-100,
+.dark #conoce-mas-de-nosotros .bg-amber-50\/70 {
+    background-color: rgba(245, 158, 11, 0.24) !important;
+    border-color: rgba(251, 191, 36, 0.40) !important;
+    color: #fef3c7 !important;
+}
+
+.dark #conoce-mas-de-nosotros .bg-indigo-100 {
+    background-color: rgba(79, 70, 229, 0.28) !important;
+    border-color: rgba(129, 140, 248, 0.40) !important;
+    color: #e0e7ff !important;
+}
+
+.dark #conoce-mas-de-nosotros a.bg-white\/95 {
+    background-color: #281b44 !important;
+    border-color: rgba(168, 85, 247, 0.45) !important;
+    color: #fef3c7 !important;
+}
+
+.dark #conoce-mas-de-nosotros a.bg-gradient-to-r {
+    color: #ffffff !important;
+}
+
+.dark #archivum-thematic-rain .text-purple-700 {
+    color: #d8b4fe !important;
+}
+
+.dark #archivum-thematic-rain .text-indigo-700 {
+    color: #a5b4fc !important;
+}
+
+.dark #archivum-thematic-rain .text-amber-600 {
+    color: #fcd34d !important;
 }
 
 /* Ocultar barra de desplazamiento manteniendo funcionalidad */
@@ -300,6 +693,7 @@
     from {
         transform: rotate(0deg);
     }
+
     to {
         transform: rotate(360deg);
     }
@@ -363,8 +757,7 @@
 .vinyl-surface {
     background-color: #0b0910;
     background-image:
-        conic-gradient(
-            from 25deg at 50% 50%,
+        conic-gradient(from 25deg at 50% 50%,
             rgba(255, 255, 255, 0) 0deg,
             rgba(255, 255, 255, 0.14) 28deg,
             rgba(168, 85, 247, 0.08) 44deg,
@@ -373,15 +766,12 @@
             rgba(255, 255, 255, 0.15) 208deg,
             rgba(217, 119, 6, 0.06) 224deg,
             rgba(255, 255, 255, 0) 255deg,
-            rgba(255, 255, 255, 0) 360deg
-        ),
-        repeating-radial-gradient(
-            circle at 50% 50%,
+            rgba(255, 255, 255, 0) 360deg),
+        repeating-radial-gradient(circle at 50% 50%,
             #0c0a12 0px,
             #0c0a12 2px,
             #1a1625 2.5px,
-            #09070d 4px
-        );
+            #09070d 4px);
     box-shadow:
         0 28px 60px -12px rgba(0, 0, 0, 0.78),
         inset 0 0 0 3px rgba(255, 255, 255, 0.09),
@@ -392,8 +782,7 @@
 .cd-surface {
     background-color: #d4d8e2;
     background-image:
-        conic-gradient(
-            from 0deg at 50% 50%,
+        conic-gradient(from 0deg at 50% 50%,
             rgba(226, 232, 240, 0.9) 0deg,
             rgba(165, 243, 252, 0.75) 35deg,
             rgba(232, 121, 249, 0.68) 65deg,
@@ -403,15 +792,12 @@
             rgba(110, 231, 183, 0.65) 225deg,
             rgba(253, 224, 71, 0.55) 255deg,
             rgba(248, 250, 252, 0.95) 305deg,
-            rgba(226, 232, 240, 0.9) 360deg
-        ),
-        repeating-radial-gradient(
-            circle at 50% 50%,
+            rgba(226, 232, 240, 0.9) 360deg),
+        repeating-radial-gradient(circle at 50% 50%,
             rgba(255, 255, 255, 0.25) 0px,
             rgba(255, 255, 255, 0.25) 1.5px,
             rgba(148, 163, 184, 0.35) 2.5px,
-            rgba(255, 255, 255, 0.15) 3.5px
-        );
+            rgba(255, 255, 255, 0.15) 3.5px);
     box-shadow:
         0 28px 60px -12px rgba(0, 0, 0, 0.75),
         inset 0 0 0 3px rgba(255, 255, 255, 0.7),
@@ -425,6 +811,7 @@
     0% {
         transform: translateX(-140%) skewX(-22deg);
     }
+
     55%,
     100% {
         transform: translateX(240%) skewX(-22deg);
@@ -432,22 +819,26 @@
 }
 
 @keyframes promoFloatSubtle {
+
     0%,
     100% {
         transform: translateY(0px);
     }
+
     50% {
         transform: translateY(-4px);
     }
 }
 
 @keyframes promoBorderPulse {
+
     0%,
     100% {
         box-shadow:
             0 12px 32px -8px rgba(124, 58, 237, 0.28),
             0 0 0 1px rgba(168, 85, 247, 0.45);
     }
+
     50% {
         box-shadow:
             0 18px 42px -6px rgba(147, 51, 234, 0.44),
@@ -473,12 +864,10 @@
     left: 0;
     width: 48%;
     height: 100%;
-    background: linear-gradient(
-        90deg,
-        rgba(255, 255, 255, 0) 0%,
-        rgba(255, 255, 255, 0.14) 50%,
-        rgba(255, 255, 255, 0) 100%
-    );
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.14) 50%,
+            rgba(255, 255, 255, 0) 100%);
     pointer-events: none;
     animation: promoShimmerSweep 5.2s ease-in-out infinite;
 }
@@ -496,12 +885,89 @@
     left: 0;
     width: 55%;
     height: 100%;
-    background: linear-gradient(
-        90deg,
-        rgba(255, 255, 255, 0) 0%,
-        rgba(255, 255, 255, 0.38) 50%,
-        rgba(255, 255, 255, 0) 100%
-    );
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.38) 50%,
+            rgba(255, 255, 255, 0) 100%);
     pointer-events: none;
     animation: promoShimmerSweep 3.4s ease-in-out infinite;
+}
+
+/* ==========================================================================
+   SECCIÓN "CONOCE MÁS DE NOSOTROS" — LLUVIA DE ELEMENTOS TEMÁTICOS
+   (Libros Raros, Discos de Vinilo 180g y Piezas Coleccionables Flotantes)
+   ========================================================================== */
+@keyframes archivumRainFall {
+    0% {
+        transform: translate3d(0, -45px, 0) rotate(0deg);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: var(--rain-opacity, 0.36);
+    }
+
+    50% {
+        transform: translate3d(var(--rain-drift, 28px), 420px, 0) rotate(180deg);
+        opacity: var(--rain-opacity, 0.36);
+    }
+
+    90% {
+        opacity: var(--rain-opacity, 0.36);
+    }
+
+    100% {
+        transform: translate3d(calc(var(--rain-drift, 28px) * -0.7), 860px, 0) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+@keyframes archivumRainSway {
+
+    0%,
+    100% {
+        margin-left: 0px;
+    }
+
+    50% {
+        margin-left: var(--rain-sway, 16px);
+    }
+}
+
+.archivum-rain-section {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.archivum-rain-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 1;
+    user-select: none;
+}
+
+.archivum-rain-particle {
+    position: absolute;
+    top: -40px;
+    will-change: transform, opacity;
+    animation:
+        archivumRainFall var(--rain-duration, 13s) linear infinite,
+        archivumRainSway var(--rain-sway-duration, 4.5s) ease-in-out infinite;
+    animation-delay: var(--rain-delay, 0s);
+    opacity: var(--rain-opacity, 0.32);
+    filter: drop-shadow(0 4px 8px rgba(99, 14, 212, 0.12));
+}
+
+.dark .archivum-rain-particle {
+    filter: drop-shadow(0 4px 10px rgba(216, 180, 254, 0.18));
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .archivum-rain-particle {
+        animation: none;
+        opacity: 0.15;
+    }
 }

@@ -1,45 +1,71 @@
 <x-layouts.public title="ARCHIVUM · Pasarela de Pago Notariada (Modo Simulación)">
 
-    <div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-purple-200/80 pb-5">
-        <div>
-            <div class="flex flex-wrap items-center gap-2 mb-2">
-                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-label-code uppercase tracking-wider">
-                    <span class="material-symbols-outlined text-[14px]">verified_user</span>
-                    <span>Pasarela de Prueba / Simulación Activa</span>
-                </span>
-                @if (! empty($carrito['items']))
+    @if (empty($carrito['items']))
+        <!-- Vista de Bóveda / Checkout Vacía con Centrado Vertical Completo -->
+        <div class="min-h-[70vh] flex flex-col justify-center items-center py-6">
+            <div class="w-full max-w-xl bg-white rounded-3xl border border-purple-200/80 p-8 sm:p-12 text-center shadow-lg space-y-5 my-auto">
+                <div class="w-20 h-20 rounded-3xl bg-surface-container mx-auto flex items-center justify-center text-outline shadow-2xs border border-purple-200/60">
+                    <span class="material-symbols-outlined text-[42px] text-primary">shopping_bag</span>
+                </div>
+                
+                <div class="space-y-2">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-label-code uppercase tracking-wider">
+                        <span class="material-symbols-outlined text-[14px]">lock</span>
+                        <span>Bóveda de Adquisición</span>
+                    </span>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-on-surface font-quicksand">Tu Bóveda de Adquisición está vacía</h1>
+                    <p class="text-sm text-on-surface-variant max-w-md mx-auto leading-relaxed">
+                        Explora nuestras secciones de Libros Raros, Vinilos Históricos o Memorabilia y pulsa el botón de carrito para reservar una pieza.
+                    </p>
+                </div>
+
+                <div class="flex flex-wrap justify-center gap-3 pt-2">
+                    <a href="{{ route('public.libros') }}" class="px-5 py-2.5 rounded-xl bg-primary-container hover:bg-primary text-white text-xs font-label-md font-bold uppercase tracking-wider transition shadow-2xs flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-[16px]">auto_stories</span>
+                        <span>Ver Libros Raros</span>
+                    </a>
+                    <a href="{{ route('public.vinilos') }}" class="px-5 py-2.5 rounded-xl border border-purple-200 bg-white hover:bg-purple-50 text-primary text-xs font-label-md font-bold uppercase tracking-wider transition shadow-2xs flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-[16px]">album</span>
+                        <span>Ver Vinilos Históricos</span>
+                    </a>
+                    <a href="{{ route('public.memorabilia') }}" class="px-5 py-2.5 rounded-xl border border-purple-200 bg-white hover:bg-purple-50 text-primary text-xs font-label-md font-bold uppercase tracking-wider transition shadow-2xs flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-[16px]">history_edu</span>
+                        <span>Ver Memorabilia</span>
+                    </a>
+                </div>
+
+                <div class="pt-4 border-t border-purple-100 flex items-center justify-center">
+                    <a href="{{ route('public.home') }}" class="text-xs font-label-md text-primary hover:underline inline-flex items-center gap-1 font-semibold">
+                        <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+                        <span>Volver al Catálogo General</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    @else
+        <div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-purple-200/80 pb-5">
+            <div>
+                <div class="flex flex-wrap items-center gap-2 mb-2">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-label-code uppercase tracking-wider">
+                        <span class="material-symbols-outlined text-[14px]">verified_user</span>
+                        <span>Pasarela de Prueba / Simulación Activa</span>
+                    </span>
                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 border border-amber-300 text-amber-900 text-xs font-label-code font-bold uppercase tracking-wider">
                         <span class="material-symbols-outlined text-[14px] text-amber-700 animate-pulse">timer</span>
                         <span>Reserva Expira en:</span>
                         <span id="checkout-reservation-timer" class="font-tabular-data">{{ $carrito['tiempo_formateado'] ?? '05:00 min' }}</span>
                     </span>
-                @endif
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-bold text-on-surface font-quicksand">Checkout &amp; Formalización de Adquisición</h1>
+                <p class="text-xs text-on-surface-variant mt-1">
+                    En modo simulación puedes ingresar cualquier número de tarjeta de crédito para completar la compra y probar el rastreo de envío.
+                </p>
             </div>
-            <h1 class="text-2xl sm:text-3xl font-bold text-on-surface font-quicksand">Checkout &amp; Formalización de Adquisición</h1>
-            <p class="text-xs text-on-surface-variant mt-1">
-                En modo simulación puedes ingresar cualquier número de tarjeta de crédito para completar la compra y probar el rastreo de envío.
-            </p>
+            <a href="{{ route('public.home') }}" class="text-xs font-label-md text-primary hover:underline flex items-center gap-1">
+                <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+                <span>Seguir Explorando el Catálogo</span>
+            </a>
         </div>
-        <a href="{{ route('public.home') }}" class="text-xs font-label-md text-primary hover:underline flex items-center gap-1">
-            <span class="material-symbols-outlined text-[16px]">arrow_back</span>
-            <span>Seguir Explorando el Catálogo</span>
-        </a>
-    </div>
-
-    @if (empty($carrito['items']))
-        <div class="bg-white rounded-2xl border border-purple-200/80 p-12 text-center space-y-4">
-            <span class="material-symbols-outlined text-[48px] text-outline">shopping_bag</span>
-            <h2 class="text-xl font-bold text-on-surface font-quicksand">Tu Bóveda de Adquisición está vacía</h2>
-            <p class="text-sm text-on-surface-variant max-w-md mx-auto">
-                Agrega al menos una pieza desde cualquiera de nuestras salas curatoriales para proceder a la pasarela de pago simulada.
-            </p>
-            <div class="flex flex-wrap justify-center gap-3 pt-2">
-                <a href="{{ route('public.libros') }}" class="px-5 py-2.5 rounded-xl bg-primary-container text-white text-xs font-bold uppercase tracking-wider">Ver Libros Raros</a>
-                <a href="{{ route('public.vinilos') }}" class="px-5 py-2.5 rounded-xl border border-purple-200 bg-white text-primary text-xs font-bold uppercase tracking-wider">Ver Vinilos Históricos</a>
-                <a href="{{ route('public.memorabilia') }}" class="px-5 py-2.5 rounded-xl border border-purple-200 bg-white text-primary text-xs font-bold uppercase tracking-wider">Ver Memorabilia</a>
-            </div>
-        </div>
-    @else
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
             <!-- Formulario de Entrega y Pasarela de Tarjeta Simulada -->

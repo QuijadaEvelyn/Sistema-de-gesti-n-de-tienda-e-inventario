@@ -234,12 +234,14 @@
                     <span class="material-symbols-outlined text-[15px]">auto_awesome</span>
                     <span>Adquisiciones Selectas</span>
                 </a>
-            </div>
-            <div class="hidden sm:flex items-center gap-4 text-xs font-normal normal-case text-on-surface-variant">
-                <a href="{{ route('checkout.index') }}" class="flex items-center gap-1 text-primary hover:underline font-semibold">
-                    <span class="material-symbols-outlined text-[15px]">shopping_cart_checkout</span>
-                    <span>Checkout ({{ $contadorCarrito }})</span>
+                <a href="{{ route('public.nosotros') }}"
+                   id="nav-tab-nosotros"
+                   class="pb-0.5 border-b-2 transition flex items-center gap-1 {{ request()->routeIs('public.nosotros') ? 'text-primary font-bold border-primary' : 'text-on-surface-variant hover:text-primary border-transparent hover:border-primary' }}">
+                    <span class="material-symbols-outlined text-[15px]">museum</span>
+                    <span>Conoce más de nosotros</span>
                 </a>
+            </div>
+            <div class="hidden sm:flex items-center text-xs font-normal normal-case text-on-surface-variant">
                 <span class="flex items-center gap-1 text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 text-[11px] font-label-code">
                     <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                     Bóveda Abierta

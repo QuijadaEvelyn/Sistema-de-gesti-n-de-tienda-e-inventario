@@ -35,6 +35,7 @@ Route::middleware('reservas.liberar')->group(function (): void {
     Route::get('/catalogo/vinilos', [CatalogoPublicoController::class, 'vinilos'])->name('public.vinilos');
     Route::get('/catalogo/memorabilia', [CatalogoPublicoController::class, 'memorabilia'])->name('public.memorabilia');
     Route::get('/catalogo/adquisiciones-selectas', [CatalogoPublicoController::class, 'adquisiciones'])->name('public.adquisiciones');
+    Route::get('/conoce-mas-de-nosotros', [CatalogoPublicoController::class, 'nosotros'])->name('public.nosotros');
 
     // Selector global síncrono de Sucursal Activa y Temporalidad (Público y Panel de Gestión)
     Route::post('/contexto/sucursal', [DashboardController::class, 'cambiarContexto'])->name('sucursal.cambiar');

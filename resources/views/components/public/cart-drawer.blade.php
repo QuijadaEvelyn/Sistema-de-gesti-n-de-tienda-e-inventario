@@ -48,8 +48,8 @@
         </div>
     </div>
 
-    <!-- Lista Desplazable de Artículos Reservados -->
-    <div class="flex-1 overflow-y-auto p-space-lg space-y-4 no-scrollbar">
+    <!-- Lista Desplazable de Artículos Reservados con Centrado Vertical en Estado Vacío -->
+    <div class="flex-1 overflow-y-auto p-space-lg {{ ! $tieneItemsActivos ? 'flex flex-col justify-center items-center my-auto min-h-[320px]' : 'space-y-4' }} no-scrollbar">
         @forelse ($carritoDrawer['items'] as $item)
             @php
                 $iconoItem = match ($item['tipo']) {
@@ -85,14 +85,16 @@
                 </form>
             </div>
         @empty
-            <div class="py-12 text-center space-y-3">
-                <div class="w-14 h-14 rounded-2xl bg-surface-container mx-auto flex items-center justify-center text-outline">
-                    <span class="material-symbols-outlined text-[30px]">shopping_bag</span>
+            <div class="w-full my-auto py-8 text-center space-y-4 flex flex-col items-center justify-center">
+                <div class="w-16 h-16 rounded-2xl bg-surface-container mx-auto flex items-center justify-center text-outline shadow-2xs">
+                    <span class="material-symbols-outlined text-[32px] text-primary">shopping_bag</span>
                 </div>
-                <p class="text-sm font-bold text-on-surface font-quicksand">Tu Bóveda de Adquisición está vacía</p>
-                <p class="text-xs text-on-surface-variant max-w-xs mx-auto">
-                    Explora nuestras secciones de Libros Raros, Vinilos Históricos o Memorabilia y pulsa «Reservar» para apartar temporalmente una pieza por 5 minutos.
-                </p>
+                <div class="space-y-1.5 max-w-xs mx-auto">
+                    <p class="text-sm font-bold text-on-surface font-quicksand">Tu Bóveda de Adquisición está vacía</p>
+                    <p class="text-xs text-on-surface-variant leading-relaxed">
+                        Explora nuestras secciones de Libros Raros, Vinilos Históricos o Memorabilia y pulsa el botón de carrito para reservar una pieza.
+                    </p>
+                </div>
             </div>
         @endforelse
     </div>

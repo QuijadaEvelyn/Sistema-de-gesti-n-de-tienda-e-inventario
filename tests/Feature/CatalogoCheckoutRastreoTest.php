@@ -79,6 +79,24 @@ class CatalogoCheckoutRastreoTest extends TestCase
         $responseAdquisiciones->assertSee('Adquisiciones Selectas');
     }
 
+    public function test_checkout_vacio_y_cajon_de_boveda_tienen_centrado_vertical_en_pantalla(): void
+    {
+        // 1. Vista de Checkout vacía tiene contenedor con min-h-[70vh] y centrado vertical flexbox
+        $responseCheckout = $this->get(route('checkout.index'));
+        $responseCheckout->assertStatus(200)
+            ->assertSee('min-h-[70vh]', false)
+            ->assertSee('flex flex-col justify-center items-center', false)
+            ->assertSee('Tu Bóveda de Adquisición está vacía')
+            ->assertSee('Volver al Catálogo General');
+
+        // 2. El cajón de Bóveda (Cart Drawer) incluye clases de centrado vertical para su estado vacío
+        $responseHome = $this->get(route('public.home'));
+        $responseHome->assertStatus(200)
+            ->assertSee('id="cart-drawer"', false)
+            ->assertSee('Tu Bóveda de Adquisición está vacía')
+            ->assertSee('flex flex-col justify-center items-center', false);
+    }
+
     public function test_flujo_completo_de_carrito_y_checkout_simulado_con_cualquier_tarjeta(): void
     {
         $cliente = Usuario::whereHas('roles', fn ($q) => $q->where('nombre', 'cliente'))->firstOrFail();
@@ -667,5 +685,38 @@ class CatalogoCheckoutRastreoTest extends TestCase
             'nombre' => 'Lanzamiento Especial Invierno: Códice Coyoacán',
             'tipo_descuento' => 'porcentaje',
         ]);
+    }
+
+    public function test_landing_page_renderiza_seccion_conoce_mas_de_nosotros_con_resumen_institucional_y_lluvia_de_elementos_tematicos(): void
+    {
+        $response = $this->get(route('public.home'));
+
+        // En la página de Inicio la pestaña superior está presente, pero el bloque institucional no se duplica abajo y el botón del carrito no dice "Checkout ("
+        $response->assertOk()
+            ->assertSee('id="nav-tab-nosotros"', false)
+            ->assertSee(route('public.nosotros'), false)
+            ->assertDontSee('id="conoce-mas-de-nosotros"', false)
+            ->assertDontSee('Checkout (');
+
+        // Al hacer clic en la pestaña superior "Conoce más de nosotros" se renderiza su vista dedicada con resumen y lluvia animada
+        $responseNosotros = $this->get(route('public.nosotros'));
+
+        $responseNosotros->assertOk()
+            ->assertSee('id="nav-tab-nosotros"', false)
+            ->assertSee('id="conoce-mas-de-nosotros"', false)
+            ->assertSee('Conoce más de nosotros')
+            ->assertSee('Arquitectura de Resguardo &amp; Comercio Híbrido', false)
+            ->assertSee('Sucursal Central Bellas Artes')
+            ->assertSee('Sucursal Coyoacán')
+            ->assertSee('Almacén General')
+            ->assertSee('archivum-rain-section', false)
+            ->assertSee('archivum-rain-layer', false)
+            ->assertSee('archivum-rain-particle', false)
+            ->assertSee('data-rain-item="libro"', false)
+            ->assertSee('data-rain-item="vinilo"', false)
+            ->assertSee('data-rain-item="coleccionable"', false)
+            ->assertSee('dark:text-white', false)
+            ->assertSee('dark:text-slate-100', false)
+            ->assertSee('dark:text-amber-50', false);
     }
 }
