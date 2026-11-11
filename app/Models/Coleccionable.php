@@ -36,6 +36,7 @@ class Coleccionable extends Model
         'categoria',
         'material',
         'edicion_limitada',
+        'imagen',
     ];
 
     /**
@@ -56,5 +57,13 @@ class Coleccionable extends Model
     public function producto(): BelongsTo
     {
         return $this->belongsTo(Producto::class, 'producto_id', 'id');
+    }
+
+    /**
+     * Accesor para la imagen del coleccionable con fallback a imágenes conocidas.
+     */
+    public function getImagenAttribute(?string $value): ?string
+    {
+        return $value ?? Producto::IMAGENES_CONOCIDAS[$this->producto?->nombre ?? ''] ?? null;
     }
 }

@@ -244,6 +244,7 @@ class CheckoutSimuladoController extends Controller
                 'disponibles_adicionales' => $stockLibre,
                 'es_pieza_unica' => $esPiezaUnica,
                 'max_disponible' => $maxDisponible,
+                'imagen' => $producto->imagen,
             ];
         }
 

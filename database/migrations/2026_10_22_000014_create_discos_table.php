@@ -15,6 +15,7 @@ return new class extends Migration
             $t->string('genero', 80)->nullable();
             $t->enum('formato', ['CD', 'vinilo', 'cassette', 'digital'])->default('CD');
             $t->unsignedSmallInteger('anio_lanzamiento')->nullable();
+            $t->string('imagen')->nullable();
         });
     }
 

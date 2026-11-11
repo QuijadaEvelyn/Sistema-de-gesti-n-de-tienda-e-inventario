@@ -27,6 +27,11 @@
         default => ($producto->coleccionable?->marca ?? 'Archivo Histórico').' · '.($producto->coleccionable?->material ?? 'Pieza Autenticada'),
     };
 
+    $imagenRuta = $producto->imagen
+        ?? $producto->disco?->imagen
+        ?? $producto->libro?->imagen
+        ?? $producto->coleccionable?->imagen;
+
     $piezaUnica = $variante
         ? \App\Http\Controllers\CheckoutSimuladoController::obtenerPiezaUnicaDeVariante((int) $variante->id)
         : null;
@@ -63,6 +68,7 @@
         'sede' => $sedeCustodia ? str_replace('Sucursal ', '', $sedeCustodia) : null,
         'esPiezaUnica' => $esPiezaUnica,
         'numeroSerie' => $piezaUnica?->numero_serie,
+        'imagen' => !empty($imagenRuta) ? asset('/' . $imagenRuta) : null,
         'estaAgotado' => $estaAgotado,
         'estaReservada' => $estaReservadaTemporalmente,
         'varianteSkuId' => $variante?->id,
@@ -111,7 +117,7 @@
             title="Haz clic para ver la ficha curatorial de {{ $producto->nombre }}"
         >
             @if ($esPiezaUnica)
-                <span class="absolute top-2.5 left-2.5 bg-purple-600 text-white border border-purple-400/60 text-[10px] font-label-sm font-bold uppercase px-2.5 py-0.5 rounded-md shadow-sm inline-flex items-center gap-1">
+                <span class="absolute top-2.5 left-2.5 z-10 bg-purple-600 text-white border border-purple-400/60 text-[10px] font-label-sm font-bold uppercase px-2.5 py-0.5 rounded-md shadow-sm inline-flex items-center gap-1">
                     <span class="material-symbols-outlined text-[12px]">diamond</span>
                     <span>PIEZA ÚNICA 1/1</span>
                     <span class="sr-only">Pieza Única · Edición Coleccionable {{ $piezaUnica?->numero_serie }}</span>
@@ -119,20 +125,24 @@
             @endif
 
             @if ($estaReservadaTemporalmente)
-                <span class="absolute bottom-2.5 right-2.5 bg-amber-600 text-white border border-amber-700 text-[10px] font-label-code font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-xs">
+                <span class="absolute bottom-2.5 right-2.5 z-10 bg-amber-600 text-white border border-amber-700 text-[10px] font-label-code font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-xs">
                     RESERVADA EN BÓVEDA (5 MIN)
                 </span>
             @elseif ($estaAgotado)
-                <span class="absolute bottom-2.5 right-2.5 bg-red-600 text-white border border-red-700 text-[10px] font-label-code font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-xs">
+                <span class="absolute bottom-2.5 right-2.5 z-10 bg-red-600 text-white border border-red-700 text-[10px] font-label-code font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-xs">
                     AGOTADO
                 </span>
             @else
-                <span class="absolute bottom-2.5 right-2.5 bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">
+                <span class="absolute bottom-2.5 right-2.5 z-10 bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">
                     {{ $stockTotal }} en bóveda
                 </span>
             @endif
 
-            <span class="material-symbols-outlined {{ $esPiezaUnica ? 'text-purple-600 group-hover:scale-105' : 'text-purple-300 group-hover:text-primary' }} transition-all text-[64px]">{{ $iconoCategoria }}</span>
+            @if (!empty($imagenRuta))
+                <img src="{{ asset('/' . $imagenRuta) }}" alt="{{ $producto->nombre }}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+            @else
+                <span class="material-symbols-outlined {{ $esPiezaUnica ? 'text-purple-600 group-hover:scale-105' : 'text-purple-300 group-hover:text-primary' }} transition-all text-[64px]">{{ $iconoCategoria }}</span>
+            @endif
         </div>
 
         <!-- Información Limpia: Nombre, Subtítulo y Enlace Sutil a Ficha Curatorial -->

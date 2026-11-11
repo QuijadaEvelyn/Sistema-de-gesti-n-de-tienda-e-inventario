@@ -212,6 +212,18 @@ class CatalogoPublicoController extends Controller
         // Si estamos en entorno web interactivo y aún no se han sembrado los productos, poblar automáticamente
         if (! app()->runningUnitTests() && Producto::count() === 0) {
             app(CatalogoProductoSeeder::class)->run();
+        } elseif (Schema::hasTable('discos') && Schema::hasColumn('discos', 'imagen')) {
+            // Asegurar que los vinilos existentes tengan su imagen asignada en la base de datos
+            static $imagenesSincronizadas = false;
+            if (! $imagenesSincronizadas) {
+                $imagenesSincronizadas = true;
+                foreach (Producto::IMAGENES_CONOCIDAS as $nombreProd => $rutaImg) {
+                    $prodExistente = Producto::where('nombre', $nombreProd)->first();
+                    if ($prodExistente && $prodExistente->disco && empty($prodExistente->disco->getRawOriginal('imagen'))) {
+                        $prodExistente->disco->update(['imagen' => $rutaImg]);
+                    }
+                }
+            }
         }
 
         $sucursalActiva = app(SucursalContextoService::class)->resolverSucursalPublica($request);

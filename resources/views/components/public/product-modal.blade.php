@@ -49,7 +49,8 @@
         <div class="p-6 sm:p-8 overflow-y-auto space-y-6 flex-1 no-scrollbar">
             <!-- Bloque Principal: Icono/Miniatura, Insignias y Títulos -->
             <div class="flex flex-col sm:flex-row gap-5 items-start">
-                <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/70 dark:border-purple-500/30 flex items-center justify-center shrink-0 shadow-inner">
+                <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/70 dark:border-purple-500/30 flex items-center justify-center shrink-0 shadow-inner overflow-hidden">
+                    <img id="modal-product-img" src="" alt="" class="w-full h-full object-cover hidden">
                     <span id="modal-product-hero-icon" class="material-symbols-outlined text-primary text-[52px]">auto_stories</span>
                 </div>
                 <div class="space-y-1.5 flex-1 min-w-0">
@@ -143,6 +144,20 @@
                 document.getElementById('modal-product-price').textContent = '$' + item.precio;
                 document.getElementById('modal-product-sku').textContent = 'SKU: #' + item.sku;
                 document.getElementById('modal-product-grading').textContent = item.graduacion;
+                
+                // Imagen o Icono Curatorial
+                const modalImg = document.getElementById('modal-product-img');
+                const modalHeroIcon = document.getElementById('modal-product-hero-icon');
+                if (item.imagen && modalImg && modalHeroIcon) {
+                    modalImg.src = item.imagen;
+                    modalImg.alt = item.nombre;
+                    modalImg.classList.remove('hidden');
+                    modalHeroIcon.classList.add('hidden');
+                } else if (modalImg && modalHeroIcon) {
+                    modalImg.classList.add('hidden');
+                    modalHeroIcon.classList.remove('hidden');
+                }
+
                 document.getElementById('modal-product-hero-icon').textContent = item.icono;
                 document.getElementById('modal-product-category-icon').textContent = item.icono;
                 document.getElementById('modal-product-category-badge').textContent = 'CATÁLOGO · ' + (item.tipo || 'PIEZA').toUpperCase();

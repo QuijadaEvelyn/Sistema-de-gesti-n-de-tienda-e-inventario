@@ -37,6 +37,7 @@ class Libro extends Model
         'editorial',
         'anio_publicacion',
         'paginas',
+        'imagen',
     ];
 
     /**

@@ -16,6 +16,23 @@ class Producto extends Model
     protected $table = 'productos';
 
     /**
+     * Catálogo referencial de imágenes predeterminadas para vinilos y coleccionables.
+     */
+    public const IMAGENES_CONOCIDAS = [
+        'Las Cabras Montañesas - Góticos (2 LP)' => 'images/coleccionables/las-cabras-montañeras.jpg',
+        'Los Yaki – Los Grandes Años Del Rock' => 'images/coleccionables/Los-Yaki.jpg',
+        'Caifanes – Caifanes (LP, Edición Original Venezuela)' => 'images/coleccionables/Caifanes.jpg',
+        'Mägo de Oz - La Ciudad de los Árboles (Lp Vinyl)' => 'images/coleccionables/Mago-de-oz-La-ciudad.jpg',
+        'Mägo de Oz - Alicia En El Pais Del Metalverso (Lp Vinyl)' => 'images/coleccionables/Mago-de-oz-Alicia.jpg',
+        'Los Grandes Románticos de la Balada (3CDs)' => 'images/coleccionables/Los-Grandes-Romanticos.jpg',
+        'La Arrolladora Banda El Limón - Las Bandas Románticas' => 'images/coleccionables/Cd-la-arrolladora.jpg',
+        'Juan Gabriel & Rocío Dúrcal - Juntos Otra Vez (2CD)' => 'images/coleccionables/Juan-Gabriel.jpg',
+        'La Sonora Santanera - Tesoros de Colección Vol. 3 (3 Discos)' => 'images/coleccionables/3-cds-La-Sonora.jpg',
+        'Los Mejores Huapangos | CD Música' => 'images/coleccionables/Huapangos.jpg',
+        'Taylor Swift - Midnights (Korea Edition)' => 'images/coleccionables/TAYLO.jpg',
+    ];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
@@ -29,6 +46,7 @@ class Producto extends Model
         'es_preventa',
         'limite_preventa',
         'preventa_exclusiva_hasta',
+        'imagen',
     ];
 
     /**
@@ -93,5 +111,18 @@ class Producto extends Model
     public function promociones(): HasMany
     {
         return $this->hasMany(Promocion::class, 'producto_id');
+    }
+
+    /**
+     * Accesor para obtener la ruta de la imagen del producto (directa, de su relación o fallback curatorial).
+     */
+    public function getImagenAttribute(): ?string
+    {
+        return $this->attributes['imagen']
+            ?? $this->disco?->imagen
+            ?? $this->libro?->imagen
+            ?? $this->coleccionable?->imagen
+            ?? self::IMAGENES_CONOCIDAS[$this->nombre]
+            ?? null;
     }
 }

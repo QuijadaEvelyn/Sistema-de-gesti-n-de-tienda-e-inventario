@@ -22,6 +22,7 @@ class Catalogo extends Model
         'tipo',
         'descripcion',
         'activo',
+        'imagen',
     ];
 
     /**

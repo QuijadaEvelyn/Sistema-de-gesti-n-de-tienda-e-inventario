@@ -14,6 +14,7 @@ return new class extends Migration
             $t->string('serie')->nullable();
             $t->string('material', 80)->nullable();
             $t->boolean('edicion_limitada')->default(false);
+            $t->string('imagen')->nullable();
         });
     }
 

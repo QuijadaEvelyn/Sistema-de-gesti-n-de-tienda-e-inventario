@@ -23,6 +23,7 @@ class PiezaUnica extends Model
         'certificado',
         'notas',
         'estado',
+        'imagen',
     ];
 
     /**

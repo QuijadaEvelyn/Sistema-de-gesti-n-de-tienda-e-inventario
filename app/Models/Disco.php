@@ -36,6 +36,7 @@ class Disco extends Model
         'genero',
         'formato',
         'anio_lanzamiento',
+        'imagen',
     ];
 
     /**
@@ -56,5 +57,13 @@ class Disco extends Model
     public function producto(): BelongsTo
     {
         return $this->belongsTo(Producto::class, 'producto_id', 'id');
+    }
+
+    /**
+     * Accesor para la imagen del disco con fallback a la lista curatorial conocida.
+     */
+    public function getImagenAttribute(?string $value): ?string
+    {
+        return $value ?? Producto::IMAGENES_CONOCIDAS[$this->producto?->nombre ?? ''] ?? null;
     }
 }

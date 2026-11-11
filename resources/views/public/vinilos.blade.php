@@ -52,6 +52,7 @@
                 'numero_serie' => $piezaUnicaDisco?->numero_serie,
                 'matriz_lado_b' => 'MATRIZ #' . strtoupper(substr(md5($sku), 0, 6)) . '-1A · SELLO PERICIAL ARCHIVUM',
                 'paleta' => $paleta,
+                'imagen' => $prod->imagen ?? $prod->disco?->imagen,
             ];
         }
     @endphp
@@ -141,6 +142,9 @@
                                 tabindex="0"
                                 aria-label="Seleccionar {{ $disco['nombre'] }}"
                             >
+                                @if (!empty($disco['imagen']))
+                                    <img src="{{ asset('/' . $disco['imagen']) }}" alt="{{ $disco['nombre'] }}" class="w-full h-full object-cover">
+                                @endif
                                 <!-- Capa de Inclinación 3D Interactiva al Pasar el Cursor (Tilt 3D) -->
                                 <div class="disc-3d-tilt w-full h-full">
                                     <!-- Capa de Volteo 3D (Flip Lado A / Lado B) -->
