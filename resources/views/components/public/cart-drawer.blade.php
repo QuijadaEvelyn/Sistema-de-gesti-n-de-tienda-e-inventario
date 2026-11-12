@@ -287,10 +287,16 @@
                             piecesCountEl.textContent = `${carrito.cantidad_total} ${carrito.cantidad_total === 1 ? 'pieza en custodia' : 'piezas en custodia temporal'}`;
                         }
 
-                        // 4. Actualizar Contador Global del Carrito en Cabecera
+                        // 4. Actualizar Contador Global del Carrito en Cabecera (ocultar si es 0)
                         const cartCounterBadge = document.getElementById('cart-counter-badge');
                         if (cartCounterBadge) {
-                            cartCounterBadge.textContent = carrito.cantidad_total;
+                            const cantidadNum = parseInt(carrito.cantidad_total || 0, 10);
+                            cartCounterBadge.textContent = cantidadNum;
+                            if (cantidadNum > 0) {
+                                cartCounterBadge.classList.remove('hidden');
+                            } else {
+                                cartCounterBadge.classList.add('hidden');
+                            }
                         }
 
                         // 5. Actualizar totales en vista de Checkout si está presente

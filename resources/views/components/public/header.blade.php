@@ -5,7 +5,10 @@
 
 @php
     $estadoCarritoHeader = \App\Http\Controllers\CheckoutSimuladoController::obtenerEstadoCarrito();
-    $contadorCarrito = $estadoCarritoHeader['cantidad_total'] ?: ($cartCount ?? 0);
+    $contadorCarrito = (int) ($estadoCarritoHeader['cantidad_total'] ?? 0);
+    if ($contadorCarrito === 0 && isset($cartCount) && is_numeric($cartCount) && (int) $cartCount > 0) {
+        $contadorCarrito = (int) $cartCount;
+    }
     $contextoPublico = app(\App\Services\SucursalContextoService::class);
     $sucursalesPublicas = $contextoPublico->obtenerSucursalesActivas();
     $sucursalPublicaActiva = $contextoPublico->resolverSucursalPublica(request());
@@ -176,7 +179,10 @@
                 <!-- Disparador del Carrito Desplegable con Contador de Reserva -->
                 <button type="button" id="open-cart-btn" class="relative p-2.5 rounded-xl bg-primary-container hover:bg-primary text-white border border-purple-400/40 shadow-sm flex items-center justify-center transition focus:outline-none" aria-label="Abrir Carrito de Adquisiciones">
                     <span class="material-symbols-outlined text-[20px]">shopping_bag</span>
-                    <span id="cart-counter-badge" class="absolute -top-1.5 -right-1.5 w-5 h-5 bg-surface-container-high text-on-surface font-tabular-data font-bold text-xs rounded-full flex items-center justify-center shadow-xs border border-primary/40">
+                    <span
+                        id="cart-counter-badge"
+                        class="absolute -top-1.5 -right-1.5 w-5 h-5 bg-surface-container-high text-on-surface font-tabular-data font-bold text-xs rounded-full flex items-center justify-center shadow-xs border border-primary/40 {{ $contadorCarrito > 0 ? '' : 'hidden' }}"
+                    >
                         {{ $contadorCarrito }}
                     </span>
                 </button>

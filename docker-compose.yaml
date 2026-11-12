@@ -1,0 +1,67 @@
+services:
+  bd:
+    image: mariadb:11.2
+    container_name: archivum_db
+    restart: always
+    environment:
+      MARIADB_DATABASE: ${DB_DATABASE:-archivum_db}
+      MARIADB_USER: ${DB_USERNAME:-archivista}
+      MARIADB_PASSWORD: ${DB_PASSWORD:-secreto_seguro}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root_secreto}
+      MYSQL_DATABASE: ${DB_DATABASE:-archivum_db}
+      MYSQL_USER: ${DB_USERNAME:-archivista}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-secreto_seguro}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root_secreto}
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - archivum-net
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: archivum_app
+    restart: always
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+    environment:
+      - DB_CONNECTION=${DB_CONNECTION:-mysql}
+      - DB_HOST=bd
+      - DB_PORT=${DB_PORT:-3306}
+      - DB_DATABASE=${DB_DATABASE:-archivum_db}
+      - DB_USERNAME=${DB_USERNAME:-archivista}
+      - DB_PASSWORD=${DB_PASSWORD:-secreto_seguro}
+    depends_on:
+      bd:
+        condition: service_healthy
+    networks:
+      - archivum-net
+
+  frontend:
+    image: nginx:alpine
+    container_name: archivum_nginx
+    restart: always
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - archivum-net
+
+volumes:
+  db_data:
+
+networks:
+  archivum-net:
+    driver: bridge

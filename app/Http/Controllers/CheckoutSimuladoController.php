@@ -887,7 +887,9 @@ class CheckoutSimuladoController extends Controller
             ]);
         }
 
-        return back()->with('status', 'Pieza liberada de la Bóveda de Adquisición y stock restaurado en catálogo.');
+        return back()
+            ->with('status', 'Pieza liberada de la Bóveda de Adquisición y stock restaurado en catálogo.')
+            ->with('abrir_carrito', true);
     }
 
     /**

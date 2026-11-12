@@ -313,7 +313,7 @@ class CatalogoCheckoutRastreoTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Fotografía en Plata sobre Gelatina Firmada (1934)');
         $response->assertSee('AGOTADO');
-        $response->assertDontSee('0 en bóveda');
+        $this->assertDoesNotMatchRegularExpression('/>\s*0\s+en bóveda\s*</', $response->getContent());
         $response->assertSee('bg-red-600', false);
         $response->assertSee('cursor-not-allowed', false);
     }
@@ -1043,5 +1043,43 @@ class CatalogoCheckoutRastreoTest extends TestCase
         $resAuth->assertOk()
             ->assertDontSee('id="btn-proceder-pasarela-guest"', false)
             ->assertSee(route('checkout.index'));
+    }
+
+    public function test_contador_del_carrito_se_oculta_cuando_esta_vacio_y_refleja_piezas_reales(): void
+    {
+        // 1. En estado inicial vacío, el badge tiene la clase 'hidden' y no muestra un número falso
+        $responseVacio = $this->get(route('public.home'));
+        $responseVacio->assertOk();
+        $this->assertMatchesRegularExpression(
+            '/id="cart-counter-badge"[\s\S]*?class="[^"]*\bhidden\b[^"]*"/i',
+            $responseVacio->getContent()
+        );
+
+        // 2. Al agregar 2 piezas a la bóveda, el badge se vuelve visible con el valor real '2'
+        $variante = VarianteSku::firstOrFail();
+        $this->post(route('carrito.agregar'), [
+            'variante_sku_id' => $variante->id,
+            'cantidad' => 2,
+        ]);
+
+        $responseConPiezas = $this->get(route('public.home'));
+        $responseConPiezas->assertOk();
+        $this->assertDoesNotMatchRegularExpression(
+            '/id="cart-counter-badge"[\s\S]*?class="[^"]*\bhidden\b[^"]*"/i',
+            $responseConPiezas->getContent()
+        );
+        $this->assertMatchesRegularExpression(
+            '/<span[^>]*id="cart-counter-badge"[^>]*>\s*2\s*<\/span>/',
+            $responseConPiezas->getContent()
+        );
+
+        // 3. Al eliminar el artículo, el contador regresa a 0 y se vuelve a ocultar
+        $this->delete(route('carrito.remover', $variante->id));
+        $responseTrasRemover = $this->get(route('public.home'));
+        $responseTrasRemover->assertOk();
+        $this->assertMatchesRegularExpression(
+            '/id="cart-counter-badge"[\s\S]*?class="[^"]*\bhidden\b[^"]*"/i',
+            $responseTrasRemover->getContent()
+        );
     }
 }

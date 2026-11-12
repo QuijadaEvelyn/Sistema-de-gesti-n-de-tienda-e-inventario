@@ -28,7 +28,7 @@
 <body class="min-h-screen flex flex-col bg-background text-on-surface antialiased font-quicksand selection:bg-primary-container selection:text-white">
     
     <!-- Barra de Navegación Pública Global -->
-    <x-public.header :active-branch="$activeBranch ?? 'Sucursal Central Bellas Artes'" :cart-count="$cartCount ?? 3" />
+    <x-public.header :active-branch="$activeBranch ?? 'Sucursal Central Bellas Artes'" />
 
     <!-- Contenedor Principal Dinámico -->
     <main class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
