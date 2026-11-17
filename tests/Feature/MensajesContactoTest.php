@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
-use App\Models\Bitacora;
 use App\Models\MensajeContacto;
 use App\Models\Rol;
 use App\Models\Sucursal;
@@ -94,11 +93,11 @@ class MensajesContactoTest extends TestCase
         $this->get(route('admin.mensajes'))
             ->assertRedirect(route('login'));
 
-        // Cliente no autorizado recibe 403
+        // Cliente no autorizado es redirigido a la tienda pública con advertencia
         $cliente = $this->crearUsuarioConRol('cliente');
         $this->actingAs($cliente)
             ->get(route('admin.mensajes'))
-            ->assertForbidden();
+            ->assertRedirect(route('public.home'));
 
         // Almacén no tiene acceso a esta bandeja
         $almacen = $this->crearUsuarioConRol('almacen');
