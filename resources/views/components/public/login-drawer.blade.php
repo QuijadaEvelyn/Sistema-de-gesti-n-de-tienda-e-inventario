@@ -18,12 +18,10 @@
     <!-- Encabezado del Slide-Over tipo Bóveda -->
     <div class="p-6 sm:p-8 border-b border-purple-200/70 dark:border-purple-500/30 bg-surface-container-low/50 dark:bg-[#1b132a]">
         <div class="flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="w-11 h-11 rounded-xl bg-primary-container text-white flex items-center justify-center shadow-sm border border-purple-300/40">
-                    <span class="material-symbols-outlined text-[24px]">passkey</span>
-                </div>
+            <div class="flex items-center gap-3 group">
+                <x-ui.archivum-logo size="md" />
                 <div>
-                    <h2 id="login-drawer-title" class="font-headline-sm text-lg text-on-surface font-bold font-quicksand">
+                    <h2 id="login-drawer-title" class="font-headline-sm text-lg text-on-surface font-bold font-brand-serif tracking-[0.15em] uppercase">
                         Bóveda de Autenticación ARCHIVUM
                     </h2>
                     <span class="font-label-code text-secondary text-[11px] uppercase tracking-wider">

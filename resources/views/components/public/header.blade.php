@@ -21,16 +21,9 @@
 
             <!-- Logotipo y Monograma de Archivo -->
             <a href="{{ route('public.home') }}" class="flex items-center gap-3 shrink-0 group focus:outline-none" aria-label="Ir al inicio de Archivum">
-                <div class="w-11 h-11 rounded-xl bg-primary-container flex items-center justify-center text-white border border-purple-300/40 shadow-sm transition-transform group-hover:scale-105">
-                    <!-- Isotipo Geométrico con Salto y Giro Continuo -->
-                    <svg class="w-6 h-6 animate-bounce" style="animation-duration: 2s; animation: bounce 2s infinite, spin 8s linear infinite;" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
-                        <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-                        <polyline points="2 17 12 22 22 17"></polyline>
-                        <polyline points="2 12 12 17 22 12"></polyline>
-                    </svg>
-                </div>
+                <x-ui.archivum-logo size="md" />
                 <div class="flex flex-col">
-                    <span class="text-xl font-bold tracking-wider font-quicksand uppercase text-on-surface">Archivum</span>
+                    <span class="text-xl font-bold font-brand-serif tracking-[0.2em] uppercase text-on-surface transition-colors group-hover:text-primary">ARCHIVUM</span>
                     <span class="font-label-code text-primary uppercase tracking-widest text-[10px]">Bibliotheca &amp; Discos</span>
                 </div>
             </a>

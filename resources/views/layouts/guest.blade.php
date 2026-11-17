@@ -41,16 +41,10 @@
     
     <!-- Barra Superior de Navegación de Acceso -->
     <div class="max-w-6xl w-full mx-auto flex items-center justify-between">
-        <a href="{{ url('/') }}" class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-primary-container text-white flex items-center justify-center shadow-xs">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
-                    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-                    <polyline points="2 17 12 22 22 17"></polyline>
-                    <polyline points="2 12 12 17 22 12"></polyline>
-                </svg>
-            </div>
+        <a href="{{ url('/') }}" class="flex items-center gap-3 group">
+            <x-ui.archivum-logo size="sm" />
             <div class="flex flex-col">
-                <span class="text-lg font-bold tracking-wider font-quicksand uppercase text-on-surface">Archivum</span>
+                <span class="text-lg font-bold font-brand-serif tracking-[0.2em] uppercase text-on-surface transition-colors group-hover:text-primary">ARCHIVUM</span>
                 <span class="font-label-code text-primary uppercase tracking-widest text-[10px]">Autenticación de Bóveda</span>
             </div>
         </a>

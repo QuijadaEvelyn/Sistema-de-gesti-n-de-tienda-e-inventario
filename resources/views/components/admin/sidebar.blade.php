@@ -27,16 +27,10 @@
     <div class="flex flex-col overflow-y-auto no-scrollbar">
 
         <!-- Cabecera del Sidebar con Logotipo de Archivo -->
-        <a href="{{ $rutaInicioRol }}" class="h-16 px-space-lg flex items-center gap-space-sm border-b border-purple-100 dark:border-purple-500/30 hover:bg-surface-container-low dark:hover:bg-[#1b132a] transition shrink-0">
-            <div class="sidebar-logo-glossy w-9 h-9 flex items-center justify-center text-white shrink-0 shadow-2xs">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
-                    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-                    <polyline points="2 17 12 22 22 17"></polyline>
-                    <polyline points="2 12 12 17 22 12"></polyline>
-                </svg>
-            </div>
+        <a href="{{ $rutaInicioRol }}" class="h-16 px-space-lg flex items-center gap-space-sm border-b border-purple-100 dark:border-purple-500/30 hover:bg-surface-container-low dark:hover:bg-[#1b132a] transition shrink-0 group">
+            <x-ui.archivum-logo size="sm" />
             <div class="flex flex-col">
-                <span class="font-headline-sm text-base text-primary font-bold tracking-wide leading-none">ARCHIVUM</span>
+                <span class="font-brand-serif text-base text-primary dark:text-[#ccbeff] font-bold tracking-[0.2em] leading-none transition-colors group-hover:text-primary">ARCHIVUM</span>
                 <span class="font-label-code text-[10px] text-secondary uppercase tracking-widest mt-1">Archival &amp; Curated</span>
             </div>
         </a>

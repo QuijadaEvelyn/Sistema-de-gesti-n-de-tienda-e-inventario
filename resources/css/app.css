@@ -1414,7 +1414,8 @@
 }
 
 /* 3. Logo Icon Glass & Terminal Card Glass */
-.sidebar-logo-glossy {
+.sidebar-logo-glossy,
+.archivum-logo-glossy {
     position: relative;
     overflow: hidden;
     isolation: isolate;
@@ -1427,14 +1428,19 @@
                 inset 0 -1px 3px rgba(30, 10, 75, 0.4),
                 0 4px 12px rgba(124, 58, 237, 0.40);
     transition: transform 200ms ease, box-shadow 200ms ease, filter 200ms ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.sidebar-logo-glossy > * {
+.sidebar-logo-glossy > *,
+.archivum-logo-glossy > * {
     position: relative;
     z-index: 2;
 }
 
-.sidebar-logo-glossy::before {
+.sidebar-logo-glossy::before,
+.archivum-logo-glossy::before {
     content: "";
     position: absolute;
     top: 0;
@@ -1445,6 +1451,28 @@
     border-radius: 0 0 60% 60% / 0 0 35% 35%;
     pointer-events: none;
     z-index: 1;
+}
+
+.dark .sidebar-logo-glossy,
+.dark .archivum-logo-glossy {
+    background: linear-gradient(180deg, rgba(124, 58, 237, 0.90) 0%, rgba(59, 7, 100, 0.98) 100%);
+    border-color: rgba(255, 255, 255, 0.35);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.40),
+                0 4px 14px rgba(139, 92, 246, 0.45);
+}
+
+.dark .sidebar-logo-glossy::before,
+.dark .archivum-logo-glossy::before {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.03) 100%);
+}
+
+.sidebar-logo-glossy:hover,
+.archivum-logo-glossy:hover,
+.group:hover .sidebar-logo-glossy,
+.group:hover .archivum-logo-glossy {
+    transform: translateY(-1px) scale(1.02);
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.85),
+                0 6px 18px rgba(124, 58, 237, 0.50);
 }
 
 .sidebar-terminal-glossy {
@@ -1548,4 +1576,69 @@
         transform: none !important;
     }
 }
+
+/* ==========================================================================
+   ISOTIPO OFICIAL ARCHIVUM: DISCO DE VINILO & FUNDA DORADA INTERACTIVA
+   ========================================================================== */
+
+.font-brand-serif {
+    font-family: var(--font-newsreader), Georgia, serif;
+    letter-spacing: 0.22em;
+}
+
+.archivum-vinyl-wrapper {
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+    will-change: transform;
+}
+
+.archivum-vinyl-disc {
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform 0.55s ease-out;
+    will-change: transform;
+}
+
+/* Hover interactivo sobre el logotipo o enlace/botón contenedor con clase .group */
+.group:hover .archivum-vinyl-wrapper,
+.archivum-logo-glossy:hover .archivum-vinyl-wrapper,
+a:hover .archivum-vinyl-wrapper,
+button:hover .archivum-vinyl-wrapper {
+    transform: translate(-3px, -3.5px) scale(1.05);
+}
+
+.group:hover .archivum-vinyl-disc,
+.archivum-logo-glossy:hover .archivum-vinyl-disc,
+a:hover .archivum-vinyl-disc,
+button:hover .archivum-vinyl-disc {
+    animation: vinylSpin 3s linear infinite;
+}
+
+@keyframes vinylSpin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .archivum-vinyl-wrapper,
+    .archivum-vinyl-disc,
+    .group:hover .archivum-vinyl-wrapper,
+    .archivum-logo-glossy:hover .archivum-vinyl-wrapper,
+    a:hover .archivum-vinyl-wrapper,
+    button:hover .archivum-vinyl-wrapper,
+    .group:hover .archivum-vinyl-disc,
+    .archivum-logo-glossy:hover .archivum-vinyl-disc,
+    a:hover .archivum-vinyl-disc,
+    button:hover .archivum-vinyl-disc {
+        animation: none !important;
+        transform: none !important;
+        transition: none !important;
+    }
+}
+
 

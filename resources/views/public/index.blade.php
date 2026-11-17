@@ -37,13 +37,9 @@
             </div>
         </div>
 
-        <!-- Marca de Agua Geométrica de Bóveda -->
+        <!-- Marca de Agua Geométrica de Bóveda con Nuevo Isotipo ARCHIVUM -->
         <div class="absolute -right-12 -bottom-12 opacity-10 pointer-events-none">
-            <svg class="w-96 h-96 text-white" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-                <polyline points="2 17 12 22 22 17"></polyline>
-                <polyline points="2 12 12 17 22 12"></polyline>
-            </svg>
+            <x-ui.archivum-logo size="xl" svg-class="w-96 h-96" :isotype-only="true" />
         </div>
     </section>
 

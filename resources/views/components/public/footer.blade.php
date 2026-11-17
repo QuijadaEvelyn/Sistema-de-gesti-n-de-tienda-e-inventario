@@ -47,16 +47,10 @@
             
             <!-- Columna de Marca -->
             <div class="lg:col-span-2 space-y-4">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-primary-container text-white flex items-center justify-center">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
-                            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-                            <polyline points="2 17 12 22 22 17"></polyline>
-                            <polyline points="2 12 12 17 22 12"></polyline>
-                        </svg>
-                    </div>
+                <div class="flex items-center gap-3 group">
+                    <x-ui.archivum-logo size="sm" />
                     <div>
-                        <span class="text-lg font-bold tracking-wider uppercase font-quicksand text-on-surface">Archivum</span>
+                        <span class="text-lg font-bold font-brand-serif tracking-[0.2em] uppercase text-on-surface transition-colors group-hover:text-primary">ARCHIVUM</span>
                         <p class="text-[10px] font-label-code text-primary uppercase tracking-widest">Sistemas de Conservación &amp; Curaduría</p>
                     </div>
                 </div>
