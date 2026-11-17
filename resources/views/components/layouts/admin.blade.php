@@ -50,30 +50,32 @@
 
         <!-- Lienzo de Contenido Operativo -->
         <main id="admin-main-canvas" class="w-full pt-20 px-space-lg py-space-lg bg-background flex-1 transition-all duration-300 ease-out">
-            @if (session('status'))
-                <div class="mb-6 flex items-center gap-3 p-4 bg-emerald-500/10 border border-emerald-500/30 text-emerald-900 rounded-xl shadow-xs" role="alert">
-                    <span class="material-symbols-outlined text-emerald-600 text-xl">check_circle</span>
-                    <p class="text-sm font-medium">{{ session('status') }}</p>
-                </div>
-            @endif
+            <div id="admin-main-content" class="admin-stage-transition w-full">
+                @if (session('status'))
+                    <div class="mb-6 flex items-center gap-3 p-4 bg-emerald-500/10 border border-emerald-500/30 text-emerald-900 rounded-xl shadow-xs" role="alert">
+                        <span class="material-symbols-outlined text-emerald-600 text-xl">check_circle</span>
+                        <p class="text-sm font-medium">{{ session('status') }}</p>
+                    </div>
+                @endif
 
-            @if (session('warning'))
-                <div class="mb-6 flex items-center gap-3 p-4 bg-amber-500/10 border border-amber-500/30 text-amber-900 rounded-xl shadow-xs" role="alert">
-                    <span class="material-symbols-outlined text-amber-600 text-xl">warning</span>
-                    <p class="text-sm font-medium">{{ session('warning') }}</p>
-                </div>
-            @endif
+                @if (session('warning'))
+                    <div class="mb-6 flex items-center gap-3 p-4 bg-amber-500/10 border border-amber-500/30 text-amber-900 rounded-xl shadow-xs" role="alert">
+                        <span class="material-symbols-outlined text-amber-600 text-xl">warning</span>
+                        <p class="text-sm font-medium">{{ session('warning') }}</p>
+                    </div>
+                @endif
 
-            @if ($errors->any())
-                <div class="mb-6 p-4 bg-rose-500/10 border border-rose-500/30 text-rose-900 rounded-xl shadow-xs space-y-1" role="alert">
-                    @foreach ($errors->all() as $error)
-                        <p class="text-sm font-medium">{{ $error }}</p>
-                    @endforeach
-                </div>
-            @endif
+                @if ($errors->any())
+                    <div class="mb-6 p-4 bg-rose-500/10 border border-rose-500/30 text-rose-900 rounded-xl shadow-xs space-y-1" role="alert">
+                        @foreach ($errors->all() as $error)
+                            <p class="text-sm font-medium">{{ $error }}</p>
+                        @endforeach
+                    </div>
+                @endif
 
-            {{ $slot ?? '' }}
-            @yield('content')
+                {{ $slot ?? '' }}
+                @yield('content')
+            </div>
         </main>
 
         <!-- Micro-Pie de Página Administrativo -->

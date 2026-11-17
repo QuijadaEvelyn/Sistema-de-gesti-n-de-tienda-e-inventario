@@ -203,7 +203,7 @@ class ModulosNuevosArchivumTest extends TestCase
 
         $this->assertDatabaseHas('bitacoras', [
             'accion' => 'MENSAJE_CONTACTO_RECIBIDO',
-            'tabla_afectada' => 'mensajes_contacto',
+            'tabla_afectada' => 'sucursales',
         ]);
     }
 

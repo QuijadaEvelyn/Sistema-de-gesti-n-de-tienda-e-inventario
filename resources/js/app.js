@@ -2,19 +2,22 @@ import './bootstrap';
 
 /**
  * ==========================================================================
- * SISTEMA DE ANIMACIONES E INTERACCIONES FLUIDAS BENTO / GLASS DASHBOARD
- * ARCHIVUM · Minimalista, Ultra-Ligero, Sin Dependencias Externas
+ * ARCHIVUM · MOTOR DE TRANSICIONES FLUIDAS SPA & BENTO GLASS DASHBOARD
+ * Arquitectura Ultraligera Vanilla JS sin dependencias pesadas
  * ==========================================================================
  */
 
 /**
- * Animador Numérico Progresivo (Count-Up) con Easing easeOutExpo
- * Duración: 850ms, respetando formatos de moneda ($), comas y decimales.
+ * Curva de aceleración easeOutExpo para conteo numérico progresivo fluido
  */
 function easeOutExpo(x) {
     return x === 1 ? 1 : 1 - Math.pow(2, -10 * x);
 }
 
+/**
+ * Animador numérico progresivo (Count-Up)
+ * Duración: 850ms, respetando prefijos ($), decimales y puntuación localizada.
+ */
 function animateCountUpElement(element) {
     if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         return;
@@ -63,20 +66,206 @@ export function initCountUps() {
 }
 
 /**
- * Transición Suave entre Vistas y Filtros (SPA-like Page Exit Transition)
- * Aplica opacidad y ligero desplazamiento antes de navegar en el área administrativa.
+ * Aplica animación de entrada escalonada (Staggered Bento Reveal)
+ * Desfase de 55ms por tarjeta/bloque (index * 55ms) con transición cubic-bezier.
  */
-export function initPageTransitions() {
+export function applyStaggerAnimations(container) {
+    if (!container) {
+        return;
+    }
+
     if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         return;
     }
 
-    const mainContainer = document.getElementById('admin-main-canvas') || document.querySelector('main');
-    if (!mainContainer) {
+    // Buscar elementos explícitos o bloques principales dentro del contenedor
+    let targets = Array.from(container.querySelectorAll('.admin-stagger-item, .bento-reveal'));
+
+    if (targets.length === 0) {
+        const directChildren = Array.from(container.children);
+        let blocks = [];
+
+        directChildren.forEach((child) => {
+            if (
+                child.classList.contains('space-y-6') ||
+                child.classList.contains('space-y-8') ||
+                child.classList.contains('space-y-4')
+            ) {
+                blocks.push(...Array.from(child.children));
+            } else {
+                blocks.push(child);
+            }
+        });
+
+        // Desplegar tarjetas hijas si el contenedor es una grilla (ej. métricas KPI)
+        const expandedBlocks = [];
+        blocks.forEach((el) => {
+            if (el.classList.contains('grid') && el.children.length > 0) {
+                expandedBlocks.push(...Array.from(el.children));
+            } else {
+                expandedBlocks.push(el);
+            }
+        });
+
+        targets = expandedBlocks.length > 0 ? expandedBlocks : blocks;
+    }
+
+    targets.forEach((el, index) => {
+        el.classList.add('admin-stagger-item');
+        el.style.setProperty('--stagger-delay', `${index * 55}ms`);
+    });
+}
+
+/**
+ * Actualiza inmediatamente el estado activo del Sidebar al hacer clic
+ */
+export function updateSidebarActiveState(targetUrl) {
+    try {
+        const parsedTarget = new URL(targetUrl, window.location.origin);
+        const navLinks = document.querySelectorAll('aside nav a[href]');
+
+        navLinks.forEach((link) => {
+            try {
+                const linkUrl = new URL(link.href, window.location.origin);
+                const isMatch = linkUrl.pathname === parsedTarget.pathname;
+
+                if (isMatch) {
+                    link.classList.add('sidebar-link-glossy-active', 'font-label-md', 'shadow-xs');
+                    link.classList.remove('sidebar-link-glossy-idle', 'font-body-md');
+                } else {
+                    link.classList.remove('sidebar-link-glossy-active', 'font-label-md', 'shadow-xs');
+                    link.classList.add('sidebar-link-glossy-idle', 'font-body-md');
+                }
+            } catch (err) {}
+        });
+    } catch (e) {}
+}
+
+/**
+ * Re-ejecuta scripts inline incluidos en las vistas cargadas asíncronamente
+ */
+export function executeInlineScripts(container) {
+    if (!container) {
         return;
     }
 
-    // Interceptar clics en enlaces dentro de aside nav y filtros de temporalidad
+    const scripts = container.querySelectorAll('script');
+    scripts.forEach((oldScript) => {
+        const newScript = document.createElement('script');
+        Array.from(oldScript.attributes).forEach((attr) => {
+            newScript.setAttribute(attr.name, attr.value);
+        });
+        newScript.textContent = oldScript.textContent;
+        oldScript.parentNode.replaceChild(newScript, oldScript);
+    });
+
+    // Disparar eventos para que los manejadores de eventos se re-vinculen
+    document.dispatchEvent(new Event('DOMContentLoaded'));
+    window.dispatchEvent(new CustomEvent('admin:page-loaded'));
+}
+
+/**
+ * Estado y control de navegación asíncrona SPA
+ */
+let isNavigating = false;
+
+export async function navigateToAdminUrl(url, isPopState = false) {
+    if (isNavigating) {
+        return;
+    }
+
+    const mainContent = document.getElementById('admin-main-content');
+    if (!mainContent) {
+        window.location.href = url;
+        return;
+    }
+
+    isNavigating = true;
+
+    // Fase 1: Salida animada de la sección actual e indicador inmediato en el Sidebar
+    updateSidebarActiveState(url);
+
+    const isReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!isReducedMotion) {
+        mainContent.classList.add('admin-stage-exit');
+    }
+
+    const exitAnimationPromise = isReducedMotion
+        ? Promise.resolve()
+        : new Promise((resolve) => setTimeout(resolve, 220));
+
+    try {
+        // Fase 2: Carga asíncrona y reemplazo fluido del DOM
+        const fetchPromise = fetch(url, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'text/html, application/xhtml+xml',
+            },
+        });
+
+        const [response] = await Promise.all([fetchPromise, exitAnimationPromise]);
+
+        if (!response.ok || response.redirected) {
+            window.location.href = response.url || url;
+            return;
+        }
+
+        const htmlText = await response.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlText, 'text/html');
+
+        const newMainContent = doc.getElementById('admin-main-content');
+        if (!newMainContent) {
+            window.location.href = url;
+            return;
+        }
+
+        // Actualizar título del documento
+        if (doc.title) {
+            document.title = doc.title;
+        }
+
+        // Actualizar URL en el historial del navegador si no es navegación popstate
+        if (!isPopState) {
+            window.history.pushState({ url }, '', url);
+        }
+
+        // Sincronizar el contenido del sidebar y sus contadores/insignias dinámicas
+        const newAside = doc.querySelector('aside');
+        const currentAside = document.querySelector('aside');
+        if (newAside && currentAside) {
+            const currentScroll = currentAside.scrollTop;
+            currentAside.innerHTML = newAside.innerHTML;
+            currentAside.scrollTop = currentScroll;
+        }
+
+        // Reemplazar el contenido principal de trabajo
+        mainContent.innerHTML = newMainContent.innerHTML;
+
+        // Fase 3: Entrada en cascada estilo Bento de la nueva sección
+        window.scrollTo({ top: 0, behavior: 'instant' });
+        mainContent.classList.remove('admin-stage-exit');
+
+        // Aplicar animación escalonada (staggered reveal)
+        applyStaggerAnimations(mainContent);
+
+        // Re-ejecutar contadores numéricos (countUp)
+        initCountUps();
+
+        // Re-ejecutar scripts inline de la vista cargada
+        executeInlineScripts(mainContent);
+    } catch (error) {
+        console.error('Error durante la navegación SPA:', error);
+        window.location.href = url;
+    } finally {
+        isNavigating = false;
+    }
+}
+
+/**
+ * Inicializador de interceptores de navegación SPA
+ */
+export function initAdminSpaNavigation() {
     document.addEventListener('click', (event) => {
         const link = event.target.closest('a');
         if (!link || !link.href) {
@@ -95,41 +284,55 @@ export function initPageTransitions() {
         }
 
         try {
-            const url = new URL(link.href, window.location.origin);
-            if (url.origin !== window.location.origin) {
+            const targetUrl = new URL(link.href, window.location.origin);
+
+            // Verificar que pertenezca al mismo origen
+            if (targetUrl.origin !== window.location.origin) {
                 return;
             }
 
-            // Solo aplicar transición para navegación dentro del panel administrativo
+            // Excluir expresamente descargas de archivos CSV, PDF o plantillas
+            const isDownloadOrExport =
+                targetUrl.pathname.includes('/exportar/') ||
+                targetUrl.pathname.includes('plantilla') ||
+                targetUrl.pathname.endsWith('.csv') ||
+                targetUrl.pathname.endsWith('.pdf') ||
+                targetUrl.pathname.endsWith('.zip');
+
+            if (isDownloadOrExport) {
+                return;
+            }
+
+            // Verificar si es una ruta administrativa interna o enlace de la barra lateral
             const adminPrefixes = ['/admin', '/almacen', '/ventas', '/compras'];
-            const esRutaAdmin = adminPrefixes.some((prefix) => url.pathname.startsWith(prefix));
+            const esRutaAdmin = adminPrefixes.some((prefix) => targetUrl.pathname.startsWith(prefix));
+            const estaEnSidebar = !!link.closest('aside');
 
-            if (esRutaAdmin && url.href !== window.location.href) {
+            if ((esRutaAdmin || estaEnSidebar) && targetUrl.href !== window.location.href) {
                 event.preventDefault();
-                mainContainer.style.transition = 'opacity 200ms ease, transform 200ms ease';
-                mainContainer.style.opacity = '0.4';
-                mainContainer.style.transform = 'translateY(4px)';
-
-                setTimeout(() => {
-                    window.location.href = link.href;
-                }, 130);
+                navigateToAdminUrl(targetUrl.href);
             }
         } catch (e) {}
     });
 
-    // Interceptar cambios en el selector de sucursales o períodos
-    const branchSelects = document.querySelectorAll('#kpi-branch-select, #branch-select');
-    branchSelects.forEach((select) => {
-        select.addEventListener('change', () => {
-            mainContainer.style.transition = 'opacity 200ms ease, transform 200ms ease';
-            mainContainer.style.opacity = '0.4';
-            mainContainer.style.transform = 'translateY(4px)';
-        });
+    // Soporte para los botones Atrás / Adelante del navegador
+    window.addEventListener('popstate', () => {
+        const currentUrl = window.location.href;
+        const adminPrefixes = ['/admin', '/almacen', '/ventas', '/compras'];
+        const esRutaAdmin = adminPrefixes.some((prefix) => window.location.pathname.startsWith(prefix));
+
+        if (esRutaAdmin) {
+            navigateToAdminUrl(currentUrl, true);
+        }
     });
 }
 
-// Inicialización automática al cargar el DOM
+// Inicialización automática al cargar el DOM inicial
 document.addEventListener('DOMContentLoaded', () => {
     initCountUps();
-    initPageTransitions();
+    const mainContent = document.getElementById('admin-main-content');
+    if (mainContent) {
+        applyStaggerAnimations(mainContent);
+    }
+    initAdminSpaNavigation();
 });

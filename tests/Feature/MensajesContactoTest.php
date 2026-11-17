@@ -118,11 +118,7 @@ class MensajesContactoTest extends TestCase
         $this->get(route('admin.mensajes'))
             ->assertRedirect(route('login'));
 
-<<<<<<< Updated upstream
         // Cliente no autorizado es redirigido a la tienda pública con advertencia
-=======
-        // Cliente no autorizado es redirigido a home con advertencia
->>>>>>> Stashed changes
         $cliente = $this->crearUsuarioConRol('cliente');
         $this->actingAs($cliente)
             ->get(route('admin.mensajes'))
