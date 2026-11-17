@@ -17,6 +17,10 @@
         $esCompras => route('compras.dashboard'),
         default => route('public.home'),
     };
+
+    $mensajesPendientesCount = \Illuminate\Support\Facades\Schema::hasTable('mensajes_contacto')
+        ? \App\Models\MensajeContacto::where('estatus', 'pendiente')->count()
+        : 0;
 @endphp
 
 <aside class="fixed left-0 top-0 h-full w-72 bg-surface-container-lowest dark:bg-[#140d20] z-50 flex flex-col justify-between border-r border-purple-200/70 dark:border-purple-500/30 shadow-xs">
@@ -111,6 +115,19 @@
                        class="flex items-center gap-space-sm px-space-md py-2.5 rounded-xl transition-all duration-200 active:scale-95 {{ $activeRoute === 'ventas' && ! request()->routeIs('ventas.devoluciones*', 'admin.devoluciones*', 'ventas.pagos*', 'ventas.promociones*') ? 'sidebar-link-glossy-active font-label-md shadow-xs' : 'sidebar-link-glossy-idle font-body-md text-sm' }}">
                         <span class="material-symbols-outlined text-[20px]">point_of_sale</span>
                         <span>Administración de Ventas</span>
+                    </a>
+
+                    <a href="{{ route('admin.mensajes') }}"
+                       class="flex items-center justify-between gap-space-sm px-space-md py-2.5 rounded-xl transition-all duration-200 active:scale-95 {{ $activeRoute === 'mensajes' || request()->routeIs('admin.mensajes*') ? 'sidebar-link-glossy-active font-label-md shadow-xs' : 'sidebar-link-glossy-idle font-body-md text-sm' }}">
+                        <div class="flex items-center gap-space-sm">
+                            <span class="material-symbols-outlined text-[20px]">mark_chat_unread</span>
+                            <span>Mensajes &amp; Consultas</span>
+                        </div>
+                        @if ($mensajesPendientesCount > 0)
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold font-tabular-data {{ $activeRoute === 'mensajes' || request()->routeIs('admin.mensajes*') ? 'bg-white text-primary' : 'bg-primary-container text-white' }} shadow-2xs">
+                                {{ $mensajesPendientesCount }}
+                            </span>
+                        @endif
                     </a>
 
                     <a href="{{ route('ventas.pagos') }}"

@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\ComprasController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EmpleadoController;
 use App\Http\Controllers\Admin\InventarioController;
+use App\Http\Controllers\Admin\MensajeContactoController;
 use App\Http\Controllers\Admin\ReporteController;
 use App\Http\Controllers\Admin\RolController;
 use App\Http\Controllers\Admin\SucursalController;
@@ -130,9 +131,11 @@ Route::prefix('admin')
             Route::get('/envios', [InventarioController::class, 'envios'])->name('admin.envios');
         });
 
-        // Administración de Ventas desde el prefijo /admin/ventas (Administrador y Ventas)
+        // Administración de Ventas y Bandeja de Mensajes (Administrador y Ventas)
         Route::middleware('rol:administrador,ventas')->group(function (): void {
             Route::get('/ventas', [VentasController::class, 'pedidos'])->name('admin.ventas');
+            Route::get('/mensajes', [MensajeContactoController::class, 'index'])->name('admin.mensajes');
+            Route::patch('/mensajes/{mensaje}/estatus', [MensajeContactoController::class, 'actualizarEstatus'])->name('admin.mensajes.estatus');
         });
 
         // Gestión de Devoluciones y Garantías (Administrador, Ventas y Almacén)

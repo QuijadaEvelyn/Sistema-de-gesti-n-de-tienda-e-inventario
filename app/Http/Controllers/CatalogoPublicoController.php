@@ -233,18 +233,31 @@ class CatalogoPublicoController extends Controller
             'mensaje.min' => 'El mensaje debe contener al menos 10 caracteres explicativos.',
         ]);
 
+        $mensajeContacto = MensajeContacto::create([
+            'nombre' => $validated['nombre'],
+            'email' => $validated['email'],
+            'telefono' => $validated['telefono'] ?? null,
+            'sucursal_id' => ! empty($validated['sucursal_id']) ? (int) $validated['sucursal_id'] : null,
+            'asunto' => $validated['asunto'],
+            'mensaje' => $validated['mensaje'],
+            'estatus' => 'pendiente',
+            'ip' => $request->ip() ?? '127.0.0.1',
+        ]);
+
         if (Schema::hasTable('bitacoras')) {
             Bitacora::create([
                 'usuario_id' => auth()->id(),
                 'accion' => 'MENSAJE_CONTACTO_RECIBIDO',
-                'tabla_afectada' => 'sucursales',
-                'registro_id' => ! empty($validated['sucursal_id']) ? (int) $validated['sucursal_id'] : null,
+                'tabla_afectada' => 'mensajes_contacto',
+                'registro_id' => $mensajeContacto->id,
                 'detalle' => [
+                    'mensaje_id' => $mensajeContacto->id,
                     'nombre' => $validated['nombre'],
                     'email' => $validated['email'],
                     'telefono' => $validated['telefono'] ?? null,
                     'asunto' => $validated['asunto'],
                     'mensaje' => $validated['mensaje'],
+                    'sucursal_id' => $mensajeContacto->sucursal_id,
                 ],
                 'ip' => $request->ip() ?? '127.0.0.1',
                 'created_at' => now(),

@@ -243,7 +243,7 @@
                     <div class="pt-2">
                         <button
                             type="submit"
-                            class="w-full py-3 rounded-xl bg-primary-container hover:bg-primary text-white text-xs font-bold font-label-md uppercase tracking-wider transition flex items-center justify-center gap-2 shadow-sm"
+                            class="btn-glass-purple w-full py-3.5 rounded-xl font-bold font-label-md uppercase tracking-wider text-xs flex items-center justify-center gap-2 shadow-md cursor-pointer"
                         >
                             <span class="material-symbols-outlined text-[18px]">mail</span>
                             <span>Enviar Mensaje a Curaduría</span>
