@@ -15,7 +15,7 @@
                 {{-- Botón Importar Catálogo CSV --}}
                 <a href="{{ route('compras.productos') }}"
                    id="btn-importar-csv"
-                   class="px-4 py-2.5 rounded-xl border border-purple-200 bg-white hover:bg-purple-50 text-secondary text-xs font-label-md flex items-center gap-2 transition shadow-2xs">
+                   class="btn-glass-surface px-4 py-2.5 rounded-xl text-secondary text-xs font-label-md flex items-center gap-2 shadow-xs">
                     <span class="material-symbols-outlined text-[18px]">upload_file</span>
                     <span>Importar Catálogo (CSV)</span>
                 </a>
@@ -23,7 +23,7 @@
                 {{-- Botón Exportar CSV --}}
                 <a href="{{ route('admin.reportes.csv', array_filter(['sucursal_id' => $sucursalSeleccionada, 'tipo_catalogo' => $categoriaSeleccionada])) }}"
                    id="btn-exportar-csv"
-                   class="px-4 py-2.5 rounded-xl border border-purple-200 bg-white hover:bg-purple-50 text-primary text-xs font-label-md flex items-center gap-2 transition shadow-2xs">
+                   class="btn-glass-surface px-4 py-2.5 rounded-xl text-primary text-xs font-label-md flex items-center gap-2 shadow-xs">
                     <span class="material-symbols-outlined text-[18px]">table_view</span>
                     <span>Exportar CSV (.csv)</span>
                 </a>
@@ -31,7 +31,7 @@
                 {{-- Botón Vista Previa Imprimible Oficial --}}
                 <a href="{{ route('admin.reportes.pdf', array_filter(['sucursal_id' => $sucursalSeleccionada, 'tipo_catalogo' => $categoriaSeleccionada, 'vista_previa' => 1])) }}"
                    target="_blank"
-                   class="px-4 py-2.5 rounded-xl border border-purple-200 bg-surface-container-low hover:bg-purple-50 text-on-surface-variant text-xs font-label-md flex items-center gap-2 transition">
+                   class="btn-glass-surface px-4 py-2.5 rounded-xl text-on-surface-variant text-xs font-label-md flex items-center gap-2 shadow-xs">
                     <span class="material-symbols-outlined text-[18px]">print</span>
                     <span>Hoja Oficial</span>
                 </a>
@@ -39,7 +39,7 @@
                 {{-- Botón Exportar PDF Oficial --}}
                 <a href="{{ route('admin.reportes.pdf', array_filter(['sucursal_id' => $sucursalSeleccionada, 'tipo_catalogo' => $categoriaSeleccionada])) }}"
                    id="btn-exportar-pdf"
-                   class="px-5 py-2.5 rounded-xl bg-primary-container hover:bg-primary text-white text-xs font-label-md flex items-center gap-2 transition shadow-xs">
+                   class="btn-glass-purple px-5 py-2.5 rounded-xl text-xs font-label-md flex items-center gap-2 shadow-md">
                     <span class="material-symbols-outlined text-[18px]">picture_as_pdf</span>
                     <span>Descargar PDF Oficial (.pdf)</span>
                 </a>
@@ -71,11 +71,11 @@
             </div>
 
             <div class="flex items-center gap-2">
-                <button type="submit" class="px-5 py-2 rounded-xl bg-primary text-white text-xs font-bold uppercase tracking-wider cursor-pointer">
+                <button type="submit" class="btn-glass-purple px-5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider cursor-pointer">
                     Aplicar Filtro
                 </button>
                 @if($sucursalSeleccionada !== null || $categoriaSeleccionada !== null)
-                    <a href="{{ route('admin.reportes') }}" class="px-4 py-2 rounded-xl border border-purple-200 text-xs font-label-code uppercase tracking-wider text-on-surface-variant hover:bg-purple-50">
+                    <a href="{{ route('admin.reportes') }}" class="btn-glass-surface px-4 py-2 rounded-xl text-xs font-label-code uppercase tracking-wider">
                         Limpiar
                     </a>
                 @endif

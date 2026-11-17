@@ -1013,3 +1013,492 @@
         opacity: 0.15;
     }
 }
+
+/* ==========================================================================
+   TARJETA DE MÉTRICA / PANEL INTERACTIVO CON ANIMACIÓN FLUID DASHBOARD
+   Soporte dinámico para Modo Claro y Oscuro con acentos luminosos y microinteracciones
+   ========================================================================== */
+.fluid-dashboard-card {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform, box-shadow;
+}
+
+.fluid-dashboard-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 32px -8px rgba(99, 14, 212, 0.14), 0 4px 12px -2px rgba(99, 14, 212, 0.08);
+}
+
+.dark .fluid-dashboard-card {
+    background-color: #171024;
+    border-color: rgba(92, 74, 120, 0.5);
+    color: #f4f0ea;
+}
+
+.dark .fluid-dashboard-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(168, 85, 247, 0.85);
+    box-shadow: 0 16px 36px -6px rgba(124, 58, 237, 0.40),
+                0 0 12px 1px rgba(168, 85, 247, 0.25);
+}
+
+/* Microinteracciones limpias para botones y controles internos */
+.micro-interactive-btn {
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+                background-color 0.2s ease,
+                box-shadow 0.2s ease,
+                filter 0.2s ease;
+}
+
+.micro-interactive-btn:hover {
+    filter: brightness(1.08);
+}
+
+.micro-interactive-btn:active {
+    transform: scale(0.96);
+}
+
+.micro-interactive-btn:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* ==========================================================================
+   SISTEMA DE ANIMACIONES E INTERACCIONES FLUIDAS ESTILO BENTO / GLASS DASHBOARD
+   ========================================================================== */
+
+@keyframes bentoReveal {
+    0% {
+        opacity: 0;
+        transform: translateY(14px) scale(0.99);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.bento-reveal {
+    animation: bentoReveal 480ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: var(--bento-delay, 0ms);
+    will-change: opacity, transform;
+}
+
+.bento-delay-0 { --bento-delay: 0ms; }
+.bento-delay-60 { --bento-delay: 60ms; }
+.bento-delay-120 { --bento-delay: 120ms; }
+.bento-delay-180 { --bento-delay: 180ms; }
+.bento-delay-240 { --bento-delay: 240ms; }
+.bento-delay-300 { --bento-delay: 300ms; }
+.bento-delay-340 { --bento-delay: 340ms; }
+.bento-delay-400 { --bento-delay: 400ms; }
+
+@media (prefers-reduced-motion: reduce) {
+    .bento-reveal {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
+
+/* Tarjetas Bento Glassmorphism con Microinteracciones whileHover */
+.bento-glass-card {
+    background-color: rgba(255, 255, 255, 0.90);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(227, 219, 245, 0.80);
+    transition: transform 300ms ease-out,
+                box-shadow 300ms ease-out,
+                border-color 300ms ease-out,
+                background-color 300ms ease-out;
+}
+
+.bento-glass-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(91, 59, 179, 0.40);
+    box-shadow: 0 12px 28px -8px rgba(91, 59, 179, 0.16);
+}
+
+.dark .bento-glass-card {
+    background-color: rgba(26, 22, 38, 0.90);
+    border-color: rgba(255, 255, 255, 0.10);
+    color: #f4f0ea;
+}
+
+.dark .bento-glass-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(157, 123, 255, 0.50);
+    box-shadow: 0 12px 30px -8px rgba(139, 92, 246, 0.28);
+}
+
+/* ==========================================================================
+   GLOSSY GLASSMORPHISM BUTTONS (EFECTO CRISTAL VIDRIOSO PULIDO CON BISEL)
+   ========================================================================== */
+
+.btn-glass-purple,
+.btn-glass-surface {
+    position: relative;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    isolation: isolate;
+    transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 200ms cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 200ms ease,
+                filter 200ms ease,
+                background-color 200ms ease;
+    will-change: transform, box-shadow;
+}
+
+.btn-glass-purple > *,
+.btn-glass-surface > * {
+    position: relative;
+    z-index: 2;
+}
+
+/* Reflejo curvo superior de cristal pulido */
+.btn-glass-purple::before,
+.btn-glass-surface::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 48%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0.08) 100%);
+    border-radius: 0 0 60% 60% / 0 0 35% 35%;
+    pointer-events: none;
+    z-index: 1;
+    transition: opacity 200ms ease;
+}
+
+/* Botón Primario: Cristal Morado Curatorial */
+.btn-glass-purple {
+    background: linear-gradient(180deg, rgba(139, 92, 246, 0.90) 0%, rgba(76, 29, 149, 0.95) 100%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1.5px solid rgba(255, 255, 255, 0.55);
+    color: #ffffff !important;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.65),
+                inset 0 -2px 6px rgba(30, 10, 75, 0.45),
+                0 6px 18px -4px rgba(91, 59, 179, 0.45);
+}
+
+.dark .btn-glass-purple {
+    background: linear-gradient(180deg, rgba(147, 51, 234, 0.88) 0%, rgba(59, 7, 100, 0.96) 100%);
+    border: 1.5px solid rgba(255, 255, 255, 0.25);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.50),
+                inset 0 -2px 6px rgba(15, 5, 40, 0.65),
+                0 6px 20px -4px rgba(147, 51, 234, 0.50);
+}
+
+.btn-glass-purple:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.10);
+    border-color: rgba(255, 255, 255, 0.80);
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.85),
+                inset 0 -2px 6px rgba(30, 10, 75, 0.45),
+                0 10px 24px -4px rgba(91, 59, 179, 0.55);
+}
+
+.dark .btn-glass-purple:hover {
+    border-color: rgba(255, 255, 255, 0.45);
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.70),
+                inset 0 -2px 6px rgba(15, 5, 40, 0.65),
+                0 10px 26px -4px rgba(168, 85, 247, 0.60);
+}
+
+.btn-glass-purple:active {
+    transform: translateY(0) scale(0.97);
+    filter: brightness(0.95);
+    box-shadow: inset 0 2px 4px rgba(20, 5, 50, 0.50),
+                0 2px 8px rgba(91, 59, 179, 0.35);
+}
+
+/* Botón Secundario / Adaptativo: Vidrio Translúcido */
+.btn-glass-surface {
+    background: rgba(255, 255, 255, 0.68);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1.5px solid rgba(196, 181, 253, 0.70);
+    color: #2d1f5e;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.85),
+                inset 0 -1px 3px rgba(91, 59, 179, 0.12),
+                0 4px 14px rgba(91, 59, 179, 0.12);
+}
+
+.btn-glass-surface::before {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0.05) 100%);
+}
+
+.dark .btn-glass-surface {
+    background: rgba(35, 28, 56, 0.75);
+    border-color: rgba(196, 181, 253, 0.25);
+    color: #f4f0ea;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.25),
+                inset 0 -1px 3px rgba(0, 0, 0, 0.40),
+                0 4px 14px rgba(139, 92, 246, 0.20);
+}
+
+.dark .btn-glass-surface::before {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.02) 100%);
+}
+
+.btn-glass-surface:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+    border-color: rgba(139, 92, 246, 0.80);
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.95),
+                0 8px 20px rgba(91, 59, 179, 0.20);
+    color: #4c1d95;
+}
+
+.dark .btn-glass-surface:hover {
+    border-color: rgba(168, 85, 247, 0.65);
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.35),
+                0 8px 22px rgba(139, 92, 246, 0.35);
+    color: #ffffff;
+}
+
+.btn-glass-surface:active {
+    transform: translateY(0) scale(0.97);
+    filter: brightness(0.95);
+    box-shadow: inset 0 2px 4px rgba(91, 59, 179, 0.20),
+                0 2px 6px rgba(91, 59, 179, 0.10);
+}
+
+/* ==========================================================================
+   🏛️ SIDEBAR GLOSSY GLASSMORPHISM (ARCHIVUM CURATORIAL)
+   ========================================================================== */
+
+/* 1. Ítem Activo en Barra Lateral: Cápsula Vidriosa Morada */
+.sidebar-link-glossy-active {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    border-radius: 0.875rem; /* rounded-xl */
+    background: linear-gradient(180deg, rgba(139, 92, 246, 0.92) 0%, rgba(76, 29, 149, 0.96) 100%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1.5px solid rgba(255, 255, 255, 0.50);
+    color: #ffffff !important;
+    font-weight: 600;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.60),
+                inset 0 -2px 6px rgba(30, 10, 75, 0.45),
+                0 6px 18px -4px rgba(124, 58, 237, 0.50);
+    transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 200ms cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 200ms ease,
+                filter 200ms ease;
+    will-change: transform, box-shadow;
+}
+
+.sidebar-link-glossy-active > * {
+    position: relative;
+    z-index: 2;
+}
+
+.sidebar-link-glossy-active::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 48%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.40) 0%, rgba(255, 255, 255, 0.06) 100%);
+    border-radius: 0 0 60% 60% / 0 0 35% 35%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.dark .sidebar-link-glossy-active {
+    background: linear-gradient(180deg, rgba(147, 51, 234, 0.90) 0%, rgba(59, 7, 100, 0.96) 100%);
+    border: 1.5px solid rgba(255, 255, 255, 0.30);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.55),
+                inset 0 -2px 6px rgba(15, 5, 40, 0.65),
+                0 6px 20px -4px rgba(147, 51, 234, 0.55);
+}
+
+.sidebar-link-glossy-active:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.08);
+    border-color: rgba(255, 255, 255, 0.75);
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.80),
+                0 8px 22px -4px rgba(124, 58, 237, 0.60);
+}
+
+.dark .sidebar-link-glossy-active:hover {
+    border-color: rgba(255, 255, 255, 0.50);
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.70),
+                0 8px 24px -4px rgba(168, 85, 247, 0.65);
+}
+
+.sidebar-link-glossy-active:active {
+    transform: scale(0.97);
+}
+
+/* 2. Ítems Inactivos en Barra Lateral: Vidrio Translúcido en Hover / Active */
+.sidebar-link-glossy-idle {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    border-radius: 0.875rem;
+    border: 1.5px solid transparent;
+    color: #4a3d7c;
+    background: transparent;
+    transition: all 200ms cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform, background-color, border-color, box-shadow;
+}
+
+.sidebar-link-glossy-idle > * {
+    position: relative;
+    z-index: 2;
+}
+
+.dark .sidebar-link-glossy-idle {
+    color: #f4f0ea;
+}
+
+.sidebar-link-glossy-idle::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 48%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.40) 0%, rgba(255, 255, 255, 0.02) 100%);
+    border-radius: 0 0 60% 60% / 0 0 35% 35%;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1;
+    transition: opacity 200ms ease;
+}
+
+.dark .sidebar-link-glossy-idle::before {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0.01) 100%);
+}
+
+.sidebar-link-glossy-idle:hover {
+    background: rgba(139, 92, 246, 0.12);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-color: rgba(168, 85, 247, 0.45);
+    color: #24005b;
+    transform: translateX(2px);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.60),
+                0 4px 14px rgba(91, 59, 179, 0.14);
+}
+
+.sidebar-link-glossy-idle:hover::before {
+    opacity: 1;
+}
+
+.dark .sidebar-link-glossy-idle:hover {
+    background: rgba(42, 33, 69, 0.75);
+    border-color: rgba(168, 85, 247, 0.35);
+    color: #ffffff;
+    transform: translateX(2px);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.25),
+                0 4px 16px rgba(139, 92, 246, 0.24);
+}
+
+.sidebar-link-glossy-idle:active {
+    transform: scale(0.97);
+}
+
+/* 3. Logo Icon Glass & Terminal Card Glass */
+.sidebar-logo-glossy {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    border-radius: 0.75rem; /* rounded-xl */
+    background: linear-gradient(180deg, rgba(139, 92, 246, 0.95) 0%, rgba(76, 29, 149, 0.98) 100%);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1.5px solid rgba(255, 255, 255, 0.55);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.65),
+                inset 0 -1px 3px rgba(30, 10, 75, 0.4),
+                0 4px 12px rgba(124, 58, 237, 0.40);
+    transition: transform 200ms ease, box-shadow 200ms ease, filter 200ms ease;
+}
+
+.sidebar-logo-glossy > * {
+    position: relative;
+    z-index: 2;
+}
+
+.sidebar-logo-glossy::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.48) 0%, rgba(255, 255, 255, 0.08) 100%);
+    border-radius: 0 0 60% 60% / 0 0 35% 35%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.sidebar-terminal-glossy {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    border-radius: 0.75rem;
+    background: rgba(255, 255, 255, 0.70);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1.5px solid rgba(196, 181, 253, 0.70);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.80),
+                0 4px 14px rgba(91, 59, 179, 0.10);
+    transition: all 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sidebar-terminal-glossy > * {
+    position: relative;
+    z-index: 2;
+}
+
+.sidebar-terminal-glossy::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 48%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.50) 0%, rgba(255, 255, 255, 0.04) 100%);
+    border-radius: 0 0 60% 60% / 0 0 35% 35%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.dark .sidebar-terminal-glossy {
+    background: rgba(35, 28, 56, 0.75);
+    border-color: rgba(196, 181, 253, 0.25);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.20),
+                0 4px 14px rgba(139, 92, 246, 0.20);
+}
+
+.dark .sidebar-terminal-glossy::before {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0.02) 100%);
+}
+
+.sidebar-terminal-glossy:hover {
+    transform: translateY(-2px);
+    border-color: rgba(139, 92, 246, 0.85);
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.90),
+                0 6px 18px rgba(91, 59, 179, 0.20);
+}
+
+.dark .sidebar-terminal-glossy:hover {
+    border-color: rgba(168, 85, 247, 0.60);
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.30),
+                0 6px 20px rgba(139, 92, 246, 0.35);
+}

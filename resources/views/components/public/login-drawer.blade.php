@@ -47,7 +47,7 @@
                 type="button"
                 id="tab-login-btn"
                 data-drawer-tab="login"
-                class="py-2 px-4 rounded-lg text-xs font-bold uppercase tracking-wider font-quicksand transition bg-primary-container text-white shadow-2xs flex items-center justify-center gap-1.5"
+                class="btn-glass-purple py-2 px-4 rounded-lg text-xs font-bold uppercase tracking-wider font-quicksand flex items-center justify-center gap-1.5 shadow-2xs"
             >
                 <span class="material-symbols-outlined text-[16px]">login</span>
                 <span>Iniciar Sesión</span>
@@ -56,7 +56,7 @@
                 type="button"
                 id="tab-register-btn"
                 data-drawer-tab="register"
-                class="py-2 px-4 rounded-lg text-xs font-bold uppercase tracking-wider font-quicksand transition text-on-surface-variant hover:text-on-surface flex items-center justify-center gap-1.5"
+                class="btn-glass-surface py-2 px-4 rounded-lg text-xs font-bold uppercase tracking-wider font-quicksand flex items-center justify-center gap-1.5 shadow-2xs"
             >
                 <span class="material-symbols-outlined text-[16px]">person_add</span>
                 <span>Crear Cuenta</span>
@@ -166,7 +166,7 @@
                     <button
                         type="submit"
                         id="drawer-login-submit"
-                        class="w-full py-3.5 px-5 rounded-xl bg-primary-container hover:bg-primary text-white font-bold uppercase tracking-wider text-xs transition shadow-sm font-quicksand flex items-center justify-center gap-2"
+                        class="btn-glass-purple w-full py-3.5 px-5 rounded-xl font-bold uppercase tracking-wider text-xs shadow-md font-quicksand flex items-center justify-center gap-2"
                     >
                         <span class="material-symbols-outlined text-[18px]">lock_open</span>
                         <span id="drawer-login-submit-text">Entrar a la Bóveda</span>
@@ -279,7 +279,7 @@
                     <button
                         type="submit"
                         id="drawer-register-submit"
-                        class="w-full py-3.5 px-5 rounded-xl bg-primary-container hover:bg-primary text-white font-bold uppercase tracking-wider text-xs transition shadow-sm font-quicksand flex items-center justify-center gap-2"
+                        class="btn-glass-purple w-full py-3.5 px-5 rounded-xl font-bold uppercase tracking-wider text-xs shadow-md font-quicksand flex items-center justify-center gap-2"
                     >
                         <span class="material-symbols-outlined text-[18px]">how_to_reg</span>
                         <span id="drawer-register-submit-text">Crear mi Cuenta de Cliente</span>
@@ -328,17 +328,17 @@
             if (tab === 'register') {
                 panelLogin.classList.add('hidden');
                 panelRegister.classList.remove('hidden');
-                tabRegisterBtn.classList.add('bg-primary-container', 'text-white', 'shadow-2xs');
-                tabRegisterBtn.classList.remove('text-on-surface-variant');
-                tabLoginBtn.classList.remove('bg-primary-container', 'text-white', 'shadow-2xs');
-                tabLoginBtn.classList.add('text-on-surface-variant');
+                tabRegisterBtn.classList.add('btn-glass-purple');
+                tabRegisterBtn.classList.remove('btn-glass-surface');
+                tabLoginBtn.classList.remove('btn-glass-purple');
+                tabLoginBtn.classList.add('btn-glass-surface');
             } else {
                 panelRegister.classList.add('hidden');
                 panelLogin.classList.remove('hidden');
-                tabLoginBtn.classList.add('bg-primary-container', 'text-white', 'shadow-2xs');
-                tabLoginBtn.classList.remove('text-on-surface-variant');
-                tabRegisterBtn.classList.remove('bg-primary-container', 'text-white', 'shadow-2xs');
-                tabRegisterBtn.classList.add('text-on-surface-variant');
+                tabLoginBtn.classList.add('btn-glass-purple');
+                tabLoginBtn.classList.remove('btn-glass-surface');
+                tabRegisterBtn.classList.remove('btn-glass-purple');
+                tabRegisterBtn.classList.add('btn-glass-surface');
             }
         }
 

@@ -6,7 +6,7 @@
                 <h1 class="text-2xl font-bold text-on-surface font-quicksand">Altas de Productos &amp; Variantes SKU</h1>
                 <p class="text-xs text-on-surface-variant font-label-code uppercase tracking-wider mt-1">Gestión del catálogo maestro e importación masiva de inventario</p>
             </div>
-            <a href="{{ route('compras.productos.plantilla-csv') }}" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-purple-200/80 bg-white hover:bg-surface-container text-primary font-label-md text-xs font-bold transition shadow-2xs">
+            <a href="{{ route('compras.productos.plantilla-csv') }}" class="btn-glass-surface inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-label-md text-xs font-bold shadow-xs">
                 <span class="material-symbols-outlined text-[18px]">download</span>
                 <span>Descargar Plantilla CSV</span>
             </a>
@@ -65,7 +65,7 @@
                         <input type="number" step="0.01" min="0" name="precio" required placeholder="45000.00" class="w-full px-3 py-2 rounded-xl border border-purple-200 text-sm" />
                     </div>
                     <div class="flex items-end">
-                        <button type="submit" class="w-full py-2.5 rounded-xl bg-primary-container hover:bg-primary text-white text-xs font-bold uppercase tracking-wider transition">
+                        <button type="submit" class="btn-glass-purple w-full py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider shadow-sm">
                             Registrar Producto
                         </button>
                     </div>
@@ -109,7 +109,7 @@
                         <p class="truncate text-on-surface font-mono">sku, nombre, catalogo, precio, sucursal, cantidad</p>
                     </div>
 
-                    <button type="submit" class="w-full py-2.5 rounded-xl bg-secondary hover:bg-secondary-hover text-white text-xs font-bold uppercase tracking-wider transition flex items-center justify-center gap-2 shadow-xs">
+                    <button type="submit" class="btn-glass-purple w-full py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-md">
                         <span class="material-symbols-outlined text-[16px]">cloud_upload</span>
                         <span>Procesar e Importar CSV</span>
                     </button>
@@ -130,7 +130,7 @@
                         placeholder="Buscar por nombre..."
                         class="w-full px-3 py-1.5 rounded-xl border border-purple-200 text-xs bg-white"
                     />
-                    <button type="submit" class="px-3 py-1.5 rounded-xl bg-primary-container text-white text-xs font-bold">
+                    <button type="submit" class="btn-glass-purple px-3 py-1.5 rounded-xl text-xs font-bold">
                         Buscar
                     </button>
                     @if (request('buscar'))

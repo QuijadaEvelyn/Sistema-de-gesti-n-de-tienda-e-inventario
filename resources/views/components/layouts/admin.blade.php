@@ -1,9 +1,26 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="light">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <!-- Script de Inicialización Inmediata de Tema (Zero-FOUC Dark Mode) -->
+    <script>
+        (function() {
+            try {
+                const savedTheme = localStorage.getItem('theme');
+                const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                    document.documentElement.classList.add('dark');
+                    document.documentElement.classList.remove('light');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    document.documentElement.classList.add('light');
+                }
+            } catch (e) {}
+        })();
+    </script>
 
     <title>{{ $title ?? 'ARCHIVUM · Terminal Administrativa y de Catalogación' }}</title>
 
@@ -32,7 +49,7 @@
         <x-admin.header :user-name="$userName ?? null" :user-role="$userRole ?? null" />
 
         <!-- Lienzo de Contenido Operativo -->
-        <main class="w-full pt-20 px-space-lg py-space-lg bg-background flex-1">
+        <main id="admin-main-canvas" class="w-full pt-20 px-space-lg py-space-lg bg-background flex-1 transition-all duration-300 ease-out">
             @if (session('status'))
                 <div class="mb-6 flex items-center gap-3 p-4 bg-emerald-500/10 border border-emerald-500/30 text-emerald-900 rounded-xl shadow-xs" role="alert">
                     <span class="material-symbols-outlined text-emerald-600 text-xl">check_circle</span>
@@ -82,12 +99,48 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const adminThemeBtn = document.getElementById('admin-theme-toggle');
+
+            function syncAdminThemeUI(isDark) {
+                if (adminThemeBtn) {
+                    const icon = adminThemeBtn.querySelector('.material-symbols-outlined');
+                    if (icon) {
+                        icon.textContent = isDark ? 'dark_mode' : 'light_mode';
+                    }
+                    adminThemeBtn.setAttribute('aria-pressed', isDark ? 'true' : 'false');
+                    adminThemeBtn.setAttribute('title', isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro');
+                }
+            }
+
             if (adminThemeBtn) {
                 adminThemeBtn.addEventListener('click', () => {
                     const isDark = document.documentElement.classList.toggle('dark');
-                    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                    if (isDark) {
+                        document.documentElement.classList.remove('light');
+                        localStorage.setItem('theme', 'dark');
+                    } else {
+                        document.documentElement.classList.add('light');
+                        localStorage.setItem('theme', 'light');
+                    }
+                    syncAdminThemeUI(isDark);
                 });
             }
+
+            syncAdminThemeUI(document.documentElement.classList.contains('dark'));
+
+            // Sincronización en tiempo real al cambiar entre pestañas del navegador
+            window.addEventListener('storage', (event) => {
+                if (event.key === 'theme') {
+                    const isDark = event.newValue === 'dark';
+                    if (isDark) {
+                        document.documentElement.classList.add('dark');
+                        document.documentElement.classList.remove('light');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                        document.documentElement.classList.add('light');
+                    }
+                    syncAdminThemeUI(isDark);
+                }
+            });
         });
     </script>
 

@@ -1,9 +1,26 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="light">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <!-- Script de Inicialización Inmediata de Tema (Zero-FOUC Dark Mode) -->
+    <script>
+        (function() {
+            try {
+                const savedTheme = localStorage.getItem('theme');
+                const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                    document.documentElement.classList.add('dark');
+                    document.documentElement.classList.remove('light');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    document.documentElement.classList.add('light');
+                }
+            } catch (e) {}
+        })();
+    </script>
 
     <title>{{ $title ?? 'ARCHIVUM · Bibliotheca & Vinilos Históricos' }}</title>
     <meta name="description" content="{{ $description ?? 'Catálogo selecto de libros raros, primeras ediciones, discos de vinilo 180g y memorabilia con procedencia certificada.' }}">
@@ -73,11 +90,6 @@
 
     <!-- Scripts Esenciales de Interacción Pública (Cart Drawer & Modo Claro/Oscuro) -->
     <script>
-        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
         document.addEventListener('DOMContentLoaded', () => {
             const drawer = document.getElementById('cart-drawer');
             const overlay = document.getElementById('drawer-overlay');
@@ -105,12 +117,48 @@
 
             // Conmutador de Tema Claro / Oscuro
             const themeBtn = document.getElementById('theme-toggle-btn');
+
+            function syncPublicThemeUI(isDark) {
+                if (themeBtn) {
+                    const icon = themeBtn.querySelector('.material-symbols-outlined');
+                    if (icon) {
+                        icon.textContent = isDark ? 'dark_mode' : 'light_mode';
+                    }
+                    themeBtn.setAttribute('aria-pressed', isDark ? 'true' : 'false');
+                    themeBtn.setAttribute('title', isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro');
+                }
+            }
+
             if (themeBtn) {
                 themeBtn.addEventListener('click', () => {
                     const isDark = document.documentElement.classList.toggle('dark');
-                    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                    if (isDark) {
+                        document.documentElement.classList.remove('light');
+                        localStorage.setItem('theme', 'dark');
+                    } else {
+                        document.documentElement.classList.add('light');
+                        localStorage.setItem('theme', 'light');
+                    }
+                    syncPublicThemeUI(isDark);
                 });
             }
+
+            syncPublicThemeUI(document.documentElement.classList.contains('dark'));
+
+            // Sincronización en tiempo real al cambiar entre pestañas del navegador
+            window.addEventListener('storage', (event) => {
+                if (event.key === 'theme') {
+                    const isDark = event.newValue === 'dark';
+                    if (isDark) {
+                        document.documentElement.classList.add('dark');
+                        document.documentElement.classList.remove('light');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                        document.documentElement.classList.add('light');
+                    }
+                    syncPublicThemeUI(isDark);
+                }
+            });
         });
     </script>
 

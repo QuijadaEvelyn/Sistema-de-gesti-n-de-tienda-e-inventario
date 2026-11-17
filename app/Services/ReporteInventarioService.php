@@ -10,6 +10,8 @@ use App\Models\Pedido;
 use App\Models\PiezaUnica;
 use App\Models\ReservaStock;
 use App\Models\Sucursal;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Dompdf\Dompdf;
 use Illuminate\Support\Collection;
 
 class ReporteInventarioService
@@ -436,16 +438,16 @@ class ReporteInventarioService
     public function generarPdfOficial(array $datosReporte, ?string $htmlRenderizado = null): string
     {
         if ($htmlRenderizado !== null) {
-            if (class_exists(\Barryvdh\DomPDF\Facade\Pdf::class)) {
+            if (class_exists(Pdf::class)) {
                 /** @phpstan-ignore-next-line */
-                return \Barryvdh\DomPDF\Facade\Pdf::loadHTML($htmlRenderizado)
+                return Pdf::loadHTML($htmlRenderizado)
                     ->setPaper('letter', 'landscape')
                     ->output();
             }
 
-            if (class_exists(\Dompdf\Dompdf::class)) {
+            if (class_exists(Dompdf::class)) {
                 /** @phpstan-ignore-next-line */
-                $dompdf = new \Dompdf\Dompdf;
+                $dompdf = new Dompdf;
                 $dompdf->loadHtml($htmlRenderizado);
                 $dompdf->setPaper('letter', 'landscape');
                 $dompdf->render();
@@ -472,7 +474,7 @@ class ReporteInventarioService
         /** @var array<int, array<string, mixed>> $valoracionSucursales */
         $valoracionSucursales = $datos['valoracion_sucursales'] ?? [];
 
-        $chunks = $filas-> values()->chunk(18);
+        $chunks = $filas->values()->chunk(18);
         if ($chunks->isEmpty()) {
             $chunks = collect([collect()]);
         }

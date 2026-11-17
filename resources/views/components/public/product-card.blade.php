@@ -199,7 +199,7 @@
                 @endif
                 <button
                     type="submit"
-                    class="px-3.5 py-2.5 rounded-xl bg-primary-container hover:bg-primary text-white text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 transition shadow-2xs cursor-pointer"
+                    class="btn-glass-purple px-3.5 py-2.5 rounded-xl text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs cursor-pointer"
                     title="Reservar en Bóveda de Adquisición"
                 >
                     <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>

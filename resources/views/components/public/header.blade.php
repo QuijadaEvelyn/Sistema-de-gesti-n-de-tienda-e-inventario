@@ -55,7 +55,7 @@
             <div class="flex items-center gap-3 shrink-0">
 
                 <!-- Botón de Alternancia de Tema Claro/Oscuro -->
-                <button type="button" id="theme-toggle-btn" class="p-2.5 rounded-xl border border-purple-200/80 bg-white hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition focus:outline-none shadow-2xs" title="Alternar Modo Claro/Oscuro" aria-label="Cambiar tema visual">
+                <button type="button" id="theme-toggle-btn" class="btn-glass-surface p-2.5 rounded-xl text-on-surface-variant hover:text-on-surface shadow-xs focus:outline-none" title="Alternar Modo Claro/Oscuro" aria-label="Cambiar tema visual">
                     <span class="material-symbols-outlined text-[20px] text-primary">light_mode</span>
                 </button>
 
@@ -68,7 +68,7 @@
                             href="{{ route('login') }}"
                             id="open-login-drawer-btn"
                             data-open-login-drawer="login"
-                            class="p-2.5 px-3.5 rounded-xl border border-purple-200/80 bg-white hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition shadow-2xs flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-primary/40"
+                            class="btn-glass-surface p-2.5 px-3.5 rounded-xl text-on-surface-variant hover:text-on-surface shadow-xs flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-primary/40"
                             title="Iniciar Sesión o Registrarse en ARCHIVUM"
                         >
                             <span class="material-symbols-outlined text-[20px] text-secondary">person</span>
@@ -97,7 +97,7 @@
                             aria-haspopup="true"
                             aria-controls="dropdown-usuario"
                             aria-expanded="false"
-                            class="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-purple-200/80 bg-white hover:bg-surface-container text-on-surface transition shadow-2xs focus:outline-none focus:ring-2 focus:ring-primary/40"
+                            class="btn-glass-surface flex items-center gap-2 px-3 py-1.5 rounded-xl shadow-xs focus:outline-none focus:ring-2 focus:ring-primary/40"
                         >
                             {{-- Avatar con iniciales --}}
                             <span class="w-7 h-7 rounded-full bg-primary-container text-white text-xs font-bold flex items-center justify-center ring-1 ring-primary/30 select-none">
@@ -177,7 +177,7 @@
                 @endauth
 
                 <!-- Disparador del Carrito Desplegable con Contador de Reserva -->
-                <button type="button" id="open-cart-btn" class="relative p-2.5 rounded-xl bg-primary-container hover:bg-primary text-white border border-purple-400/40 shadow-sm flex items-center justify-center transition focus:outline-none" aria-label="Abrir Carrito de Adquisiciones">
+                <button type="button" id="open-cart-btn" class="btn-glass-purple relative p-2.5 rounded-xl shadow-xs flex items-center justify-center focus:outline-none" aria-label="Abrir Carrito de Adquisiciones">
                     <span class="material-symbols-outlined text-[20px]">shopping_bag</span>
                     <span
                         id="cart-counter-badge"

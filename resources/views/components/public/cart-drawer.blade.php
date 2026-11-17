@@ -158,7 +158,7 @@
         </div>
 
         @auth
-            <a href="{{ route('checkout.index') }}" class="w-full bg-primary-container hover:bg-primary text-white font-label-md py-3 rounded-xl flex items-center justify-center gap-2 shadow-sm transition">
+            <a href="{{ route('checkout.index') }}" class="btn-glass-purple w-full font-label-md py-3.5 rounded-xl flex items-center justify-center gap-2 shadow-md">
                 <span class="material-symbols-outlined text-[18px]">lock</span>
                 <span>Proceder a Pasarela Notariada</span>
             </a>
@@ -166,7 +166,7 @@
             <button
                 type="button"
                 id="btn-proceder-pasarela-guest"
-                class="w-full bg-primary-container hover:bg-primary text-white font-label-md py-3 rounded-xl flex items-center justify-center gap-2 shadow-sm transition cursor-pointer"
+                class="btn-glass-purple w-full font-label-md py-3.5 rounded-xl flex items-center justify-center gap-2 shadow-md cursor-pointer"
             >
                 <span class="material-symbols-outlined text-[18px]">lock</span>
                 <span>Proceder a Pasarela Notariada</span>

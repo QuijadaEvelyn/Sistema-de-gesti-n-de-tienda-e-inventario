@@ -96,6 +96,58 @@
             </div>
         </div>
 
+        <!-- Panel Interactivo de Métricas Curatorias (Fluid Dashboard) -->
+        <div class="relative z-10 mt-8 max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-5">
+            <x-ui.metric-card
+                title="Sedes Interconectadas"
+                :value="$metricas['total_sedes']"
+                unit="bóvedas"
+                subtitle="Red multicéntrica de resguardo y exhibición"
+                badge="Activas"
+                :badge-pulse="true"
+                badge-color="emerald"
+                icon="storefront"
+                icon-bg="bg-primary-container"
+                summary-left="Custodia física"
+                summary-right="100% Climatizado"
+                :action-url="route('public.contacto')"
+                action-text="Ver sedes"
+                action-icon="location_on"
+            />
+            <x-ui.metric-card
+                title="Acervo Certificado"
+                :value="$metricas['total_productos']"
+                unit="lotes"
+                subtitle="Libros raros, vinilos y coleccionables"
+                badge="En Catálogo"
+                :badge-pulse="true"
+                badge-color="purple"
+                icon="inventory_2"
+                icon-bg="bg-secondary-container text-on-secondary-container"
+                summary-left="Trazabilidad"
+                summary-right="Peritaje notariado"
+                :action-url="route('public.home') . '#catalogo'"
+                action-text="Explorar catálogo"
+                action-icon="explore"
+            />
+            <x-ui.metric-card
+                title="Piezas Únicas (1/1)"
+                :value="$metricas['total_piezas_unicas']"
+                unit="ejemplares"
+                subtitle="Protección estricta contra sobreventa"
+                badge="Reserva Activa"
+                :badge-pulse="true"
+                badge-color="amber"
+                icon="workspace_premium"
+                icon-bg="bg-tertiary"
+                summary-left="Bloqueo temporal"
+                summary-right="5 minutos"
+                :action-url="route('public.adquisiciones')"
+                action-text="Ver selectas"
+                action-icon="auto_awesome"
+            />
+        </div>
+
         <!-- Tarjeta Central Estilo Vitrina Curatorial -->
         <div class="relative z-10 mt-10 max-w-4xl mx-auto rounded-2xl bg-white/95 dark:bg-[#1e1430]/95 backdrop-blur-md border border-purple-200/90 dark:border-purple-500/30 shadow-xl p-6 sm:p-10 space-y-8">
             <div class="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-purple-100 dark:border-purple-500/20 text-xs font-label-code text-secondary dark:text-amber-50">

@@ -20,15 +20,15 @@
                 </div>
 
                 <div class="flex flex-wrap justify-center gap-3 pt-2">
-                    <a href="{{ route('public.libros') }}" class="px-5 py-2.5 rounded-xl bg-primary-container hover:bg-primary text-white text-xs font-label-md font-bold uppercase tracking-wider transition shadow-2xs flex items-center gap-1.5">
+                    <a href="{{ route('public.libros') }}" class="btn-glass-purple px-5 py-2.5 rounded-xl text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-md">
                         <span class="material-symbols-outlined text-[16px]">auto_stories</span>
                         <span>Ver Libros Raros</span>
                     </a>
-                    <a href="{{ route('public.vinilos') }}" class="px-5 py-2.5 rounded-xl border border-purple-200 bg-white hover:bg-purple-50 text-primary text-xs font-label-md font-bold uppercase tracking-wider transition shadow-2xs flex items-center gap-1.5">
+                    <a href="{{ route('public.vinilos') }}" class="btn-glass-surface px-5 py-2.5 rounded-xl text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-sm">
                         <span class="material-symbols-outlined text-[16px]">album</span>
                         <span>Ver Vinilos Históricos</span>
                     </a>
-                    <a href="{{ route('public.memorabilia') }}" class="px-5 py-2.5 rounded-xl border border-purple-200 bg-white hover:bg-purple-50 text-primary text-xs font-label-md font-bold uppercase tracking-wider transition shadow-2xs flex items-center gap-1.5">
+                    <a href="{{ route('public.memorabilia') }}" class="btn-glass-surface px-5 py-2.5 rounded-xl text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-sm">
                         <span class="material-symbols-outlined text-[16px]">history_edu</span>
                         <span>Ver Memorabilia</span>
                     </a>
@@ -166,7 +166,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="w-full py-4 px-6 rounded-xl bg-primary-container hover:bg-primary text-white font-bold uppercase tracking-wider text-xs transition shadow-md flex items-center justify-center gap-2">
+                    <button type="submit" class="btn-glass-purple w-full py-4 px-6 rounded-xl font-bold uppercase tracking-wider text-xs shadow-md flex items-center justify-center gap-2">
                         <span class="material-symbols-outlined text-[20px]">verified</span>
                         <span>Confirmar y Procesar Pago Simulado (${{ number_format($carrito['total'], 2) }} MXN)</span>
                     </button>

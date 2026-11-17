@@ -42,28 +42,28 @@
     />
 
     <!-- Acceso Rápido a Reportes Calculados y Exportación (CSV / PDF) Sincronizado con la Sede Activa -->
-    <div class="mb-space-md bg-surface-container-lowest rounded-2xl border border-purple-200/70 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs">
+    <div class="bento-reveal bento-delay-60 mb-space-md bg-white/90 dark:bg-[#1a1626]/90 backdrop-blur-md rounded-2xl border border-purple-200/70 dark:border-white/10 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs transition-all duration-300">
         <div class="flex items-center gap-3">
-            <span class="material-symbols-outlined text-primary text-2xl">analytics</span>
+            <span class="material-symbols-outlined text-primary dark:text-[#ccbeff] text-2xl">analytics</span>
             <div>
-                <h2 class="text-sm font-bold text-on-surface font-quicksand">
+                <h2 class="text-sm font-bold text-on-surface dark:text-[#fdfbf7] font-quicksand">
                     Módulo de Reportes Oficiales &amp; Exportación de Acervo ({{ $etiquetaSede }})
                 </h2>
-                <p class="text-xs text-on-surface-variant">
+                <p class="text-xs text-on-surface-variant dark:text-[#e6dfd5]">
                     Genera resúmenes calculados de inventario en bóveda, lotes certificados COA y descargas directas en CSV y PDF para la sede y período activos.
                 </p>
             </div>
         </div>
         <div class="flex flex-wrap items-center gap-2">
-            <a href="{{ route('admin.reportes', $sucursalFiltroExport) }}" class="px-3.5 py-2 rounded-xl border border-purple-200 bg-white hover:bg-purple-50 text-primary text-xs font-label-md flex items-center gap-1.5 transition">
+            <a href="{{ route('admin.reportes', $sucursalFiltroExport) }}" class="btn-glass-surface px-3.5 py-2 rounded-xl text-xs font-label-md flex items-center gap-1.5">
                 <span class="material-symbols-outlined text-[16px]">monitoring</span>
                 <span>Ver Reportes Calculados</span>
             </a>
-            <a href="{{ route('admin.reportes.csv', $sucursalFiltroExport) }}" class="px-3.5 py-2 rounded-xl border border-purple-200 bg-white hover:bg-purple-50 text-primary text-xs font-label-md flex items-center gap-1.5 transition">
+            <a href="{{ route('admin.reportes.csv', $sucursalFiltroExport) }}" class="btn-glass-surface px-3.5 py-2 rounded-xl text-xs font-label-md flex items-center gap-1.5">
                 <span class="material-symbols-outlined text-[16px]">table_view</span>
                 <span>Exportar CSV</span>
             </a>
-            <a href="{{ route('admin.reportes.pdf', $sucursalFiltroExport) }}" class="px-4 py-2 rounded-xl bg-primary-container hover:bg-primary text-white text-xs font-label-md flex items-center gap-1.5 transition">
+            <a href="{{ route('admin.reportes.pdf', $sucursalFiltroExport) }}" class="btn-glass-purple px-4 py-2 rounded-xl text-white text-xs font-label-md flex items-center gap-1.5">
                 <span class="material-symbols-outlined text-[16px]">picture_as_pdf</span>
                 <span>Exportar PDF Oficial</span>
             </a>
@@ -75,16 +75,20 @@
         
         <!-- KPI 1: Ventas & Ingresos Estimados en la Sede y Período -->
         <x-ui.kpi-card 
-            table-source="pedidos_table &amp; pagos_table ({{ $etiquetaPeriodo }})"
-            title="Ventas &amp; Ingresos Estimados"
+            table-source="pedidos_table & pagos_table ({{ $etiquetaPeriodo }})"
+            title="Ventas & Ingresos Estimados"
             :value="'$'.number_format($ingresosEstimados, 0)"
             currency="MXN"
             :trend="'$'.number_format($ventasConfirmadas, 0).' cobrados'"
             :is-positive="true"
+            badge="Transacciones en Línea"
+            :badge-pulse="true"
+            badge-color="emerald"
             icon="payments"
             icon-bg="bg-primary-container"
             :summary-left="'Pedidos ('.$codigoPeriodo.'): '.$volumenPedidos"
             :summary-right="'Ticket Prom: $'.number_format($ticketPromedio, 0).' MXN'"
+            :bento-delay="120"
         />
 
         <!-- KPI 2: Piezas en Custodia / Stock de la Sucursal Seleccionada -->
@@ -95,24 +99,32 @@
             currency="unidades en bóveda"
             :trend="$alertasBajoStock.' bajo stock'"
             :is-positive="$alertasBajoStock === 0"
+            badge="Bóveda Abierta"
+            :badge-pulse="true"
+            badge-color="purple"
             icon="shelves"
             icon-bg="bg-secondary-container text-on-secondary-container"
             :summary-left="'Valoración: $'.number_format($valoracionInventario, 0)"
             :summary-right="'SKUs en sede: '.$totalSkus"
+            :bento-delay="180"
         />
 
         <!-- KPI 3: Reservas, Envíos y Movimientos en la Sede y Período -->
         <x-ui.kpi-card 
-            table-source="reservas_stock &amp; envios ({{ $etiquetaPeriodo }})"
-            title="Logística &amp; Movimientos"
+            table-source="reservas_stock & envios ({{ $etiquetaPeriodo }})"
+            title="Logística & Movimientos"
             :value="(string) ($enviosActivos + $reservasActivas + $movimientosCount)"
             currency="operaciones en sede"
             :trend="$enviosActivos.' en tránsito'"
             :is-positive="true"
+            badge="Logística Activa"
+            :badge-pulse="true"
+            badge-color="amber"
             icon="local_shipping"
             icon-bg="bg-primary-container"
             :summary-left="'Reservas activas: '.$reservasActivas"
             :summary-right="'Movimientos ('.$codigoPeriodo.'): '.$movimientosCount"
+            :bento-delay="240"
         />
 
         <!-- KPI 4: Lotes Certificados COA en la Sede Seleccionada -->
@@ -123,19 +135,23 @@
             currency="series certificadas"
             :trend="$coaDisponibles.' disponibles'"
             :is-positive="true"
+            badge="Certificación Vigente"
+            :badge-pulse="true"
+            badge-color="purple"
             icon="verified"
             icon-bg="bg-tertiary"
             :summary-left="'En bóveda: '.$coaDisponibles"
             :summary-right="'Comprometidos: '.$coaComprometidos"
+            :bento-delay="300"
         />
 
     </section>
 
     <!-- Barra de Accesos Rápidos de Archivo -->
-    <div class="flex flex-wrap items-center justify-between gap-4 p-space-md bg-surface-container-low border border-purple-200/70 rounded-xl mb-space-lg">
+    <div class="bento-reveal bento-delay-340 flex flex-wrap items-center justify-between gap-4 p-space-md bg-white/80 dark:bg-[#1a1626]/80 backdrop-blur-md border border-purple-200/70 dark:border-white/10 rounded-2xl mb-space-lg transition-all duration-300">
         <div class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-primary text-[20px]">bolt</span>
-            <span class="font-label-md text-on-surface font-semibold text-xs uppercase tracking-wider">Acciones Operativas en {{ $etiquetaSede }}:</span>
+            <span class="material-symbols-outlined text-primary dark:text-[#ccbeff] text-[20px]">bolt</span>
+            <span class="font-label-md text-on-surface dark:text-[#fdfbf7] font-semibold text-xs uppercase tracking-wider">Acciones Operativas en {{ $etiquetaSede }}:</span>
         </div>
         <div class="flex flex-wrap items-center gap-space-xs text-xs font-label-md">
             <a
@@ -143,7 +159,7 @@
                 href="{{ route('admin.inventario', $parametrosSedeActiva) }}"
                 data-base-url="{{ route('admin.inventario') }}"
                 data-sucursal-id="{{ $sucursalActiva?->id ?? 'all' }}"
-                class="bg-primary-container hover:bg-primary text-white px-3.5 py-2 rounded-lg flex items-center gap-1.5 shadow-2xs transition cursor-pointer"
+                class="btn-glass-purple text-white px-3.5 py-2 rounded-xl flex items-center gap-1.5 cursor-pointer"
             >
                 <span class="material-symbols-outlined text-[16px]">inventory_2</span>
                 <span>Gestionar Inventario de Sede</span>
@@ -153,7 +169,7 @@
                     id="btn-ajustes-sede"
                     href="{{ route('almacen.ajustes', $parametrosSedeActiva) }}"
                     data-base-url="{{ route('almacen.ajustes') }}"
-                    class="bg-white hover:bg-surface-container text-on-surface border border-purple-200/80 px-3.5 py-2 rounded-lg flex items-center gap-1.5 transition cursor-pointer"
+                    class="btn-glass-surface px-3.5 py-2 rounded-xl flex items-center gap-1.5 cursor-pointer"
                 >
                     <span class="material-symbols-outlined text-[16px]">tune</span>
                     <span>Ajustes &amp; Recepciones</span>
@@ -162,7 +178,7 @@
                     id="btn-transferencias-sede"
                     href="{{ route('almacen.transferencias', $parametrosSedeActiva) }}"
                     data-base-url="{{ route('almacen.transferencias') }}"
-                    class="bg-white hover:bg-surface-container text-on-surface border border-purple-200/80 px-3.5 py-2 rounded-lg flex items-center gap-1.5 transition cursor-pointer"
+                    class="btn-glass-surface px-3.5 py-2 rounded-xl flex items-center gap-1.5 cursor-pointer"
                 >
                     <span class="material-symbols-outlined text-[16px]">swap_horiz</span>
                     <span>Transferencias entre Sedes</span>
@@ -172,7 +188,7 @@
     </div>
 
     <!-- Tabla Maestra Dinámica de Existencias y Custodia Filtrada por Sucursal -->
-    <section class="bg-surface-container-lowest border border-purple-200/70 rounded-xl shadow-xs overflow-hidden mb-space-lg">
+    <section class="bento-reveal bento-delay-400 bg-white/90 dark:bg-[#1a1626]/90 backdrop-blur-md border border-purple-200/70 dark:border-white/10 rounded-2xl shadow-xs overflow-hidden mb-space-lg transition-all duration-300">
         
         <!-- Encabezado de la Tabla con Indicador de Filtro Activo (Sede + Temporalidad) -->
         <div class="p-space-lg border-b border-purple-200/60 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -275,7 +291,7 @@
     </section>
 
     <!-- Bitácora de Transacciones y Movimientos Filtrados por Sucursal y Período -->
-    <section class="bg-surface-container-lowest border border-purple-200/70 rounded-xl shadow-xs overflow-hidden">
+    <section class="bento-reveal bento-delay-400 bg-white/90 dark:bg-[#1a1626]/90 backdrop-blur-md border border-purple-200/70 dark:border-white/10 rounded-2xl shadow-xs overflow-hidden transition-all duration-300">
         <div class="p-space-lg border-b border-purple-200/60 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
                 <h2 class="font-headline-sm text-lg text-on-surface font-bold">

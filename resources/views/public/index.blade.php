@@ -18,19 +18,19 @@
                 «Un acervo protegido para bibliófilos y audiófilos: primeras ediciones autografiadas, matrices de prensado original y vestigios culturales autenticados con rigor notarial.»
             </p>
             <div class="flex flex-wrap items-center gap-3 text-xs font-label-md">
-                <a href="{{ route('public.libros') }}" class="bg-white text-primary hover:bg-purple-50 px-5 py-3 rounded-xl font-bold uppercase tracking-wider shadow-sm transition flex items-center gap-2">
+                <a href="{{ route('public.libros') }}" class="btn-glass-surface px-5 py-3 rounded-xl font-bold uppercase tracking-wider flex items-center gap-2 shadow-xs">
                     <span class="material-symbols-outlined text-[18px]">auto_stories</span>
                     <span>Libros</span>
                 </a>
-                <a href="{{ route('public.vinilos') }}" class="bg-purple-800/60 hover:bg-purple-800/90 text-white border border-purple-400/30 px-5 py-3 rounded-xl font-semibold uppercase tracking-wider transition flex items-center gap-2">
+                <a href="{{ route('public.vinilos') }}" class="btn-glass-purple px-5 py-3 rounded-xl font-semibold uppercase tracking-wider flex items-center gap-2 shadow-xs">
                     <span class="material-symbols-outlined text-[18px]">album</span>
                     <span>Discos</span>
                 </a>
-                <a href="{{ route('public.memorabilia') }}" class="bg-purple-800/60 hover:bg-purple-800/90 text-white border border-purple-400/30 px-5 py-3 rounded-xl font-semibold uppercase tracking-wider transition flex items-center gap-2">
+                <a href="{{ route('public.memorabilia') }}" class="btn-glass-purple px-5 py-3 rounded-xl font-semibold uppercase tracking-wider flex items-center gap-2 shadow-xs">
                     <span class="material-symbols-outlined text-[18px]">history_edu</span>
                     <span>Coleccionables</span>
                 </a>
-                <a href="{{ route('public.adquisiciones') }}" class="bg-amber-400/20 hover:bg-amber-400/30 text-amber-200 border border-amber-300/40 px-5 py-3 rounded-xl font-semibold uppercase tracking-wider transition flex items-center gap-2">
+                <a href="{{ route('public.adquisiciones') }}" class="btn-glass-surface px-5 py-3 rounded-xl font-semibold uppercase tracking-wider flex items-center gap-2 shadow-xs">
                     <span class="material-symbols-outlined text-[18px]">auto_awesome</span>
                     <span>Adquisiciones Selectas</span>
                 </a>
@@ -201,7 +201,7 @@
                                     <input type="hidden" name="cantidad" value="1" />
                                     <button
                                         type="submit"
-                                        class="w-full sm:w-auto px-4 py-2.5 rounded-xl {{ $esExclusivaActiva ? 'bg-amber-400 hover:bg-amber-300 text-slate-950' : 'bg-purple-500 hover:bg-purple-400 text-white' }} text-xs font-label-md font-extrabold uppercase tracking-wider flex items-center justify-center gap-1.5 transition shadow-md cursor-pointer"
+                                        class="btn-glass-purple w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs font-label-md font-extrabold uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-md cursor-pointer"
                                     >
                                         <span class="material-symbols-outlined text-[16px]">shopping_bag</span>
                                         <span>{{ $esExclusivaActiva ? 'Apartar en Preventa VIP' : 'Adquirir en Apertura' }}</span>
@@ -356,7 +356,7 @@
                         </div>
                         <div class="pt-4 mt-4 border-t border-purple-100 dark:border-purple-500/20 flex items-center justify-between">
                             <span class="font-tabular-data font-bold text-on-surface dark:text-white text-base">$18,500 <span class="text-xs font-normal text-on-surface-variant">MXN</span></span>
-                            <a href="{{ route('public.vinilos') }}" class="px-3 py-1.5 rounded-xl bg-primary-container hover:bg-primary text-white text-xs font-bold uppercase tracking-wider transition">Ver Sala</a>
+                            <a href="{{ route('public.vinilos') }}" class="btn-glass-purple px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider">Ver Sala</a>
                         </div>
                     </article>
                 </div>
@@ -383,7 +383,7 @@
                         </div>
                         <div class="pt-4 mt-4 border-t border-purple-100 dark:border-purple-500/20 flex items-center justify-between">
                             <span class="font-tabular-data font-bold text-on-surface dark:text-white text-base">$32,000 <span class="text-xs font-normal text-on-surface-variant">MXN</span></span>
-                            <a href="{{ route('public.libros') }}" class="px-3 py-1.5 rounded-xl bg-primary-container hover:bg-primary text-white text-xs font-bold uppercase tracking-wider transition">Ver Sala</a>
+                            <a href="{{ route('public.libros') }}" class="btn-glass-purple px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider">Ver Sala</a>
                         </div>
                     </article>
                 </div>
@@ -410,7 +410,7 @@
                         </div>
                         <div class="pt-4 mt-4 border-t border-purple-100 dark:border-purple-500/20 flex items-center justify-between">
                             <span class="font-tabular-data font-bold text-on-surface dark:text-white text-base">$9,400 <span class="text-xs font-normal text-on-surface-variant">MXN</span></span>
-                            <a href="{{ route('public.memorabilia') }}" class="px-3 py-1.5 rounded-xl bg-primary-container hover:bg-primary text-white text-xs font-bold uppercase tracking-wider transition">Ver Sala</a>
+                            <a href="{{ route('public.memorabilia') }}" class="btn-glass-purple px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider">Ver Sala</a>
                         </div>
                     </article>
                 </div>

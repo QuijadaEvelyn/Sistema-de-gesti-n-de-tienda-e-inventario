@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Bitacora;
 use App\Models\Cliente;
+use App\Models\MensajeContacto;
 use App\Models\PiezaUnica;
 use App\Models\Producto;
 use App\Models\Promocion;

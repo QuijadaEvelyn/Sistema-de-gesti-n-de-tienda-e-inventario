@@ -204,7 +204,7 @@
                         <input type="hidden" name="_token" value="${csrfToken}" />
                         <input type="hidden" name="variante_sku_id" value="${item.varianteSkuId}" />
                         <input type="hidden" name="cantidad" value="1" />
-                        <button type="submit" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-primary-container hover:bg-primary text-white text-xs font-label-md font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-sm transition cursor-pointer">
+                        <button type="submit" class="btn-glass-purple w-full sm:w-auto px-5 py-2.5 rounded-xl text-xs font-label-md font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-sm cursor-pointer">
                             <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
                             <span>Reservar en Bóveda</span>
                         </button>

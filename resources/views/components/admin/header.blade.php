@@ -42,8 +42,8 @@
     <div class="flex items-center gap-space-md">
 
         <!-- Botón de Retorno a Portal Público / Tienda -->
-        <a href="{{ route('public.home') }}" class="flex items-center gap-1.5 text-xs font-label-md text-primary hover:text-primary-hover bg-purple-50 hover:bg-purple-100/80 px-3 py-1.5 rounded-lg border border-purple-200 transition">
-            <span class="material-symbols-outlined text-[16px]">storefront</span>
+        <a href="{{ route('public.home') }}" class="btn-glass-surface flex items-center gap-1.5 text-xs font-label-md px-3 py-1.5 rounded-lg shadow-xs">
+            <span class="material-symbols-outlined text-[16px] text-primary">storefront</span>
             <span>Ver Tienda Pública</span>
         </a>
 
@@ -74,7 +74,7 @@
         </form>
 
         <!-- Conmutador de Tema Claro / Oscuro -->
-        <button type="button" id="admin-theme-toggle" class="p-2 rounded-lg bg-surface-container-low hover:bg-surface-container border border-purple-200/60 text-on-surface-variant hover:text-on-surface transition-colors" title="Alternar Tema Claro/Oscuro">
+        <button type="button" id="admin-theme-toggle" class="btn-glass-surface p-2 rounded-lg shadow-xs" title="Alternar Tema Claro/Oscuro">
             <span class="material-symbols-outlined text-[20px] text-primary">light_mode</span>
         </button>
 

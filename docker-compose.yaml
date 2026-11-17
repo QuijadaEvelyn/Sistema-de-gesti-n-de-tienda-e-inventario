@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   bd:
     image: mariadb:11.2
@@ -14,6 +16,8 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root_secreto}
     volumes:
       - db_data:/var/lib/mysql
+    # Cumple con el requisito: No utilizar root para bases de datos
+    user: "999:999"
     networks:
       - archivum-net
     healthcheck:
@@ -41,6 +45,8 @@ services:
       - DB_DATABASE=${DB_DATABASE:-archivum_db}
       - DB_USERNAME=${DB_USERNAME:-archivista}
       - DB_PASSWORD=${DB_PASSWORD:-secreto_seguro}
+    # Cumple con el requisito: No utilizar root para los contenedores (asumiendo ID 1000 del usuario del Dockerfile)
+    user: "1000:1000"
     command: >
       sh -c " [ ! -f .env ] && cp .env.example .env; php artisan key:generate --force; php artisan migrate --force; php-fpm "
     depends_on:
