@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Models\Bitacora;
 use App\Models\Cliente;
 use App\Models\PiezaUnica;
 use App\Models\Producto;
@@ -12,6 +13,7 @@ use App\Models\Sucursal;
 use App\Services\SucursalContextoService;
 use Database\Seeders\CatalogoProductoSeeder;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
@@ -191,6 +193,76 @@ class CatalogoPublicoController extends Controller
             'categoriaActiva' => 'nosotros',
             'sucursales' => $sucursales,
             'metricasAcervo' => $metricasAcervo,
+        ]);
+    }
+
+    /**
+     * Vista pública de Contacto y Horarios de atención de las sucursales y bóvedas activas.
+     */
+    public function contacto(Request $request): View
+    {
+        $sucursales = Schema::hasTable('sucursales')
+            ? Sucursal::query()->where('activa', true)->orderBy('id')->get()
+            : collect();
+
+        return view('public.contacto', [
+            'categoriaActiva' => 'contacto',
+            'sucursales' => $sucursales,
+        ]);
+    }
+
+    /**
+     * Procesa el formulario de contacto público y lo registra en bitácora de auditoría.
+     */
+    public function enviarMensajeContacto(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'nombre' => ['required', 'string', 'max:150'],
+            'email' => ['required', 'email', 'max:150'],
+            'telefono' => ['nullable', 'string', 'max:50'],
+            'sucursal_id' => ['nullable', 'integer', 'exists:sucursales,id'],
+            'asunto' => ['required', 'string', 'max:200'],
+            'mensaje' => ['required', 'string', 'min:10', 'max:2000'],
+        ], [
+            'nombre.required' => 'Por favor ingrese su nombre o seudónimo de coleccionista.',
+            'email.required' => 'El correo electrónico es indispensable para remitir nuestra respuesta.',
+            'email.email' => 'Ingrese una dirección de correo electrónico válida.',
+            'asunto.required' => 'El asunto de la comunicación es obligatorio.',
+            'mensaje.required' => 'El cuerpo del mensaje no puede estar vacío.',
+            'mensaje.min' => 'El mensaje debe contener al menos 10 caracteres explicativos.',
+        ]);
+
+        if (Schema::hasTable('bitacoras')) {
+            Bitacora::create([
+                'usuario_id' => auth()->id(),
+                'accion' => 'MENSAJE_CONTACTO_RECIBIDO',
+                'tabla_afectada' => 'sucursales',
+                'registro_id' => ! empty($validated['sucursal_id']) ? (int) $validated['sucursal_id'] : null,
+                'detalle' => [
+                    'nombre' => $validated['nombre'],
+                    'email' => $validated['email'],
+                    'telefono' => $validated['telefono'] ?? null,
+                    'asunto' => $validated['asunto'],
+                    'mensaje' => $validated['mensaje'],
+                ],
+                'ip' => $request->ip() ?? '127.0.0.1',
+                'created_at' => now(),
+            ]);
+        }
+
+        return redirect()->route('public.contacto')->with(
+            'status',
+            'Su mensaje ha sido remitido a la curaduría de ARCHIVUM con éxito. Le responderemos a la brevedad.'
+        );
+    }
+
+    /**
+     * Aviso de Privacidad integral de ARCHIVUM (Protección de datos personales y adquisiciones).
+     */
+    public function privacidad(): View
+    {
+        return view('public.privacidad', [
+            'categoriaActiva' => 'privacidad',
         ]);
     }
 

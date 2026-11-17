@@ -26,6 +26,7 @@ class MovimientoInventario extends Model
     protected $fillable = [
         'existencia_id',
         'usuario_id',
+        'proveedor_id',
         'tipo',
         'cantidad',
         'motivo',
@@ -61,6 +62,14 @@ class MovimientoInventario extends Model
     public function usuario(): BelongsTo
     {
         return $this->belongsTo(Usuario::class, 'usuario_id');
+    }
+
+    /**
+     * Proveedor del que se recepcionó la mercancía (si aplica).
+     */
+    public function proveedor(): BelongsTo
+    {
+        return $this->belongsTo(Proveedor::class, 'proveedor_id');
     }
 
     /**

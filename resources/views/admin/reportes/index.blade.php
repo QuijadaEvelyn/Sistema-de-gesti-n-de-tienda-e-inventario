@@ -12,6 +12,14 @@
             </div>
 
             <div class="flex flex-wrap items-center gap-2.5">
+                {{-- Botón Importar Catálogo CSV --}}
+                <a href="{{ route('compras.productos') }}"
+                   id="btn-importar-csv"
+                   class="px-4 py-2.5 rounded-xl border border-purple-200 bg-white hover:bg-purple-50 text-secondary text-xs font-label-md flex items-center gap-2 transition shadow-2xs">
+                    <span class="material-symbols-outlined text-[18px]">upload_file</span>
+                    <span>Importar Catálogo (CSV)</span>
+                </a>
+
                 {{-- Botón Exportar CSV --}}
                 <a href="{{ route('admin.reportes.csv', array_filter(['sucursal_id' => $sucursalSeleccionada, 'tipo_catalogo' => $categoriaSeleccionada])) }}"
                    id="btn-exportar-csv"

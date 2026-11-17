@@ -1051,21 +1051,24 @@ class CatalogoCheckoutRastreoTest extends TestCase
         $responseVacio = $this->get(route('public.home'));
         $responseVacio->assertOk();
         $this->assertMatchesRegularExpression(
-            '/id="cart-counter-badge"[\s\S]*?class="[^"]*\bhidden\b[^"]*"/i',
+            '/<span[^>]*id="cart-counter-badge"[^>]*class="[^"]*\bhidden\b[^"]*"[^>]*>/i',
             $responseVacio->getContent()
         );
 
         // 2. Al agregar 2 piezas a la bóveda, el badge se vuelve visible con el valor real '2'
-        $variante = VarianteSku::firstOrFail();
+        $variante = VarianteSku::with('producto')
+            ->whereHas('producto.catalogo', fn ($q) => $q->where('tipo', 'libro'))
+            ->whereDoesntHave('existencias.piezasUnicas')
+            ->firstOrFail();
         $this->post(route('carrito.agregar'), [
             'variante_sku_id' => $variante->id,
             'cantidad' => 2,
-        ]);
+        ])->assertRedirect();
 
         $responseConPiezas = $this->get(route('public.home'));
         $responseConPiezas->assertOk();
         $this->assertDoesNotMatchRegularExpression(
-            '/id="cart-counter-badge"[\s\S]*?class="[^"]*\bhidden\b[^"]*"/i',
+            '/<span[^>]*id="cart-counter-badge"[^>]*class="[^"]*\bhidden\b[^"]*"[^>]*>/i',
             $responseConPiezas->getContent()
         );
         $this->assertMatchesRegularExpression(
@@ -1078,7 +1081,7 @@ class CatalogoCheckoutRastreoTest extends TestCase
         $responseTrasRemover = $this->get(route('public.home'));
         $responseTrasRemover->assertOk();
         $this->assertMatchesRegularExpression(
-            '/id="cart-counter-badge"[\s\S]*?class="[^"]*\bhidden\b[^"]*"/i',
+            '/<span[^>]*id="cart-counter-badge"[^>]*class="[^"]*\bhidden\b[^"]*"[^>]*>/i',
             $responseTrasRemover->getContent()
         );
     }

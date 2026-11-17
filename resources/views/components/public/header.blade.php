@@ -222,6 +222,12 @@
                     <span class="material-symbols-outlined text-[15px]">museum</span>
                     <span>Conoce más de nosotros</span>
                 </a>
+                <a href="{{ route('public.contacto') }}"
+                   id="nav-tab-contacto"
+                   class="pb-0.5 border-b-2 transition flex items-center gap-1 {{ request()->routeIs('public.contacto') ? 'text-primary font-bold border-primary' : 'text-on-surface-variant hover:text-primary border-transparent hover:border-primary' }}">
+                    <span class="material-symbols-outlined text-[15px]">location_on</span>
+                    <span>Contacto &amp; Horarios</span>
+                </a>
             </div>
             <div class="hidden sm:flex items-center text-xs font-normal normal-case text-on-surface-variant">
                 <span class="flex items-center gap-1 text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 text-[11px] font-label-code">

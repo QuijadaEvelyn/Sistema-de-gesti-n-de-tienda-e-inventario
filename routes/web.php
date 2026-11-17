@@ -38,6 +38,9 @@ Route::middleware('reservas.liberar')->group(function (): void {
     Route::get('/catalogo/memorabilia', [CatalogoPublicoController::class, 'memorabilia'])->name('public.memorabilia');
     Route::get('/catalogo/adquisiciones-selectas', [CatalogoPublicoController::class, 'adquisiciones'])->name('public.adquisiciones');
     Route::get('/conoce-mas-de-nosotros', [CatalogoPublicoController::class, 'nosotros'])->name('public.nosotros');
+    Route::get('/contacto', [CatalogoPublicoController::class, 'contacto'])->name('public.contacto');
+    Route::post('/contacto', [CatalogoPublicoController::class, 'enviarMensajeContacto'])->name('public.contacto.enviar');
+    Route::get('/aviso-de-privacidad', [CatalogoPublicoController::class, 'privacidad'])->name('public.privacidad');
 
     // Selector global síncrono de Sucursal Activa y Temporalidad (Público y Panel de Gestión)
     Route::post('/contexto/sucursal', [DashboardController::class, 'cambiarContexto'])->name('sucursal.cambiar');
@@ -217,10 +220,16 @@ Route::prefix('compras')
     ->group(function (): void {
         Route::get('/', [ComprasController::class, 'ordenes'])->name('compras.dashboard');
         Route::get('/proveedores', [ComprasController::class, 'proveedores'])->name('compras.proveedores');
+        Route::post('/proveedores', [ComprasController::class, 'storeProveedor'])->name('compras.proveedores.store');
+        Route::put('/proveedores/{proveedor}', [ComprasController::class, 'updateProveedor'])->name('compras.proveedores.update');
+        Route::patch('/proveedores/{proveedor}/toggle', [ComprasController::class, 'toggleProveedor'])->name('compras.proveedores.toggle');
+
         Route::get('/ordenes', [ComprasController::class, 'ordenes'])->name('compras.ordenes');
         Route::post('/ordenes/recepcionar', [ComprasController::class, 'recepcionar'])->name('compras.ordenes.recepcionar');
         Route::get('/productos', [ComprasController::class, 'productos'])->name('compras.productos');
         Route::post('/productos', [ComprasController::class, 'storeProducto'])->name('compras.productos.store');
+        Route::get('/productos/plantilla-csv', [ComprasController::class, 'descargarPlantillaCsv'])->name('compras.productos.plantilla-csv');
+        Route::post('/productos/importar-csv', [ComprasController::class, 'importarCsv'])->name('compras.productos.importar-csv');
     });
 
 // Rol 5: CLIENTE (Gestión de carrito personal, historial de pedidos propios y apartados con aislamiento estricto)

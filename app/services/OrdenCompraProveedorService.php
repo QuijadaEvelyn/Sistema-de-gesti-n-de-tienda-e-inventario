@@ -32,12 +32,13 @@ class OrdenCompraProveedorService
         ?int $sucursalId = null,
         string $motivo = 'Recepcion de mercancia de proveedor',
         ?Usuario $usuario = null,
+        ?int $proveedorId = null,
     ): array {
         if (empty($items)) {
             throw new RuntimeException('La lista de articulos a recepcionar no puede estar vacia.');
         }
 
-        return DB::transaction(function () use ($items, $sucursalId, $motivo, $usuario): array {
+        return DB::transaction(function () use ($items, $sucursalId, $motivo, $usuario, $proveedorId): array {
             $sucursal = $this->inventarioService->resolverSucursal($sucursalId);
             $movimientos = [];
 
@@ -59,6 +60,10 @@ class OrdenCompraProveedorService
                     tipo: 'entrada',
                 );
 
+                if ($proveedorId !== null) {
+                    $movimiento->update(['proveedor_id' => $proveedorId]);
+                }
+
                 $movimientos[] = $movimiento;
             }
 
@@ -69,6 +74,7 @@ class OrdenCompraProveedorService
                 'registro_id' => $movimientos[0]->id ?? null,
                 'detalle' => [
                     'sucursal_id' => $sucursal->id,
+                    'proveedor_id' => $proveedorId,
                     'total_items' => count($items),
                     'motivo' => $motivo,
                 ],

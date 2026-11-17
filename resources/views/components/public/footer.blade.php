@@ -85,11 +85,11 @@
             <div>
                 <h4 class="font-label-md text-primary font-bold tracking-wider mb-4">Red de Galerías</h4>
                 <ul class="space-y-2 text-xs font-medium text-on-surface-variant">
-                    <li><a href="#" class="hover:text-primary transition">Sucursal Bellas Artes (Central)</a></li>
-                    <li><a href="#" class="hover:text-primary transition">Gabinete Coyoacán (Librería)</a></li>
-                    <li><a href="#" class="hover:text-primary transition">Bóveda Almacén General</a></li>
-                    <li><a href="#" class="hover:text-primary transition">Citas Privadas de Tasación</a></li>
-                    <li><a href="#" class="hover:text-primary transition">Consignación de Fondos</a></li>
+                    <li><a href="{{ route('public.contacto') }}" class="hover:text-primary transition font-semibold text-primary flex items-center gap-1"><span>Sedes &amp; Horarios</span><span class="material-symbols-outlined text-[14px]">arrow_forward</span></a></li>
+                    <li><a href="{{ route('public.contacto') }}" class="hover:text-primary transition">Sucursal Bellas Artes (Central)</a></li>
+                    <li><a href="{{ route('public.contacto') }}" class="hover:text-primary transition">Gabinete Coyoacán (Librería)</a></li>
+                    <li><a href="{{ route('public.contacto') }}" class="hover:text-primary transition">Bóveda Almacén General</a></li>
+                    <li><a href="{{ route('public.contacto') }}" class="hover:text-primary transition">Citas Privadas de Tasación</a></li>
                 </ul>
             </div>
 
@@ -121,9 +121,9 @@
                 &copy; {{ date('Y') }} ARCHIVUM S.A. de C.V. Todos los derechos reservados.
             </div>
             <div class="flex items-center gap-6">
-                <a href="#" class="hover:text-primary transition">Términos de Conservación &amp; Depósito</a>
-                <a href="#" class="hover:text-primary transition">Política de Autenticidad Notariada</a>
-                <a href="#" class="hover:text-primary transition">Aviso de Privacidad</a>
+                <a href="{{ route('public.contacto') }}" class="hover:text-primary transition">Contacto &amp; Horarios</a>
+                <a href="{{ route('public.nosotros') }}" class="hover:text-primary transition">Manifiesto Curatorial</a>
+                <a href="{{ route('public.privacidad') }}" class="hover:text-primary transition">Aviso de Privacidad</a>
             </div>
         </div>
 
