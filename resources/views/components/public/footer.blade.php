@@ -48,7 +48,7 @@
             <!-- Columna de Marca -->
             <div class="lg:col-span-2 space-y-4">
                 <div class="flex items-center gap-3 group">
-                    <x-ui.archivum-logo size="sm" />
+                    <x-ui.archivum-logo size="md" />
                     <div>
                         <span class="text-lg font-bold font-brand-serif tracking-[0.2em] uppercase text-on-surface transition-colors group-hover:text-primary">ARCHIVUM</span>
                         <p class="text-[10px] font-label-code text-primary uppercase tracking-widest">Sistemas de Conservación &amp; Curaduría</p>

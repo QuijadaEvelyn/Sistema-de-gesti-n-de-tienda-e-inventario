@@ -19,7 +19,7 @@
     <div class="p-6 sm:p-8 border-b border-purple-200/70 dark:border-purple-500/30 bg-surface-container-low/50 dark:bg-[#1b132a]">
         <div class="flex items-center justify-between">
             <div class="flex items-center gap-3 group">
-                <x-ui.archivum-logo size="md" />
+                <x-ui.archivum-logo size="lg" />
                 <div>
                     <h2 id="login-drawer-title" class="font-headline-sm text-lg text-on-surface font-bold font-brand-serif tracking-[0.15em] uppercase">
                         Bóveda de Autenticación ARCHIVUM

@@ -42,7 +42,7 @@
     <!-- Barra Superior de Navegación de Acceso -->
     <div class="max-w-6xl w-full mx-auto flex items-center justify-between">
         <a href="{{ url('/') }}" class="flex items-center gap-3 group">
-            <x-ui.archivum-logo size="sm" />
+            <x-ui.archivum-logo size="md" />
             <div class="flex flex-col">
                 <span class="text-lg font-bold font-brand-serif tracking-[0.2em] uppercase text-on-surface transition-colors group-hover:text-primary">ARCHIVUM</span>
                 <span class="font-label-code text-primary uppercase tracking-widest text-[10px]">Autenticación de Bóveda</span>

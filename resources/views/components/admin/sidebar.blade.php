@@ -28,7 +28,7 @@
 
         <!-- Cabecera del Sidebar con Logotipo de Archivo -->
         <a href="{{ $rutaInicioRol }}" class="h-16 px-space-lg flex items-center gap-space-sm border-b border-purple-100 dark:border-purple-500/30 hover:bg-surface-container-low dark:hover:bg-[#1b132a] transition shrink-0 group">
-            <x-ui.archivum-logo size="sm" />
+            <x-ui.archivum-logo size="md" />
             <div class="flex flex-col">
                 <span class="font-brand-serif text-base text-primary dark:text-[#ccbeff] font-bold tracking-[0.2em] leading-none transition-colors group-hover:text-primary">ARCHIVUM</span>
                 <span class="font-label-code text-[10px] text-secondary uppercase tracking-widest mt-1">Archival &amp; Curated</span>
