@@ -248,8 +248,8 @@ class CatalogoPublicoController extends Controller
             Bitacora::create([
                 'usuario_id' => auth()->id(),
                 'accion' => 'MENSAJE_CONTACTO_RECIBIDO',
-                'tabla_afectada' => 'mensajes_contacto',
-                'registro_id' => $mensajeContacto->id,
+                'tabla_afectada' => ! empty($validated['sucursal_id']) ? 'sucursales' : 'mensajes_contacto',
+                'registro_id' => ! empty($validated['sucursal_id']) ? (int) $validated['sucursal_id'] : $mensajeContacto->id,
                 'detalle' => [
                     'mensaje_id' => $mensajeContacto->id,
                     'nombre' => $validated['nombre'],

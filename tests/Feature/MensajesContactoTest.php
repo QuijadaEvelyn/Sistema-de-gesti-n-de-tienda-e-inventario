@@ -70,6 +70,31 @@ class MensajesContactoTest extends TestCase
 
         $this->assertDatabaseHas('bitacoras', [
             'accion' => 'MENSAJE_CONTACTO_RECIBIDO',
+            'tabla_afectada' => 'sucursales',
+        ]);
+    }
+
+    public function test_visitante_puede_enviar_formulario_de_contacto_sin_sucursal_y_se_registra(): void
+    {
+        $payload = [
+            'nombre' => 'Juan Rulfo',
+            'email' => 'juan.rulfo@fce.com.mx',
+            'asunto' => 'Consulta general sobre ediciones especiales',
+            'mensaje' => 'Deseo conocer la disponibilidad de ejemplares encuadernados artesanalmente.',
+        ];
+
+        $response = $this->post(route('public.contacto.enviar'), $payload);
+
+        $response->assertRedirect(route('public.contacto'));
+        $this->assertDatabaseHas('mensajes_contacto', [
+            'nombre' => 'Juan Rulfo',
+            'email' => 'juan.rulfo@fce.com.mx',
+            'sucursal_id' => null,
+            'estatus' => 'pendiente',
+        ]);
+
+        $this->assertDatabaseHas('bitacoras', [
+            'accion' => 'MENSAJE_CONTACTO_RECIBIDO',
             'tabla_afectada' => 'mensajes_contacto',
         ]);
     }
@@ -93,13 +118,17 @@ class MensajesContactoTest extends TestCase
         $this->get(route('admin.mensajes'))
             ->assertRedirect(route('login'));
 
+<<<<<<< Updated upstream
         // Cliente no autorizado es redirigido a la tienda pública con advertencia
+=======
+        // Cliente no autorizado es redirigido a home con advertencia
+>>>>>>> Stashed changes
         $cliente = $this->crearUsuarioConRol('cliente');
         $this->actingAs($cliente)
             ->get(route('admin.mensajes'))
             ->assertRedirect(route('public.home'));
 
-        // Almacén no tiene acceso a esta bandeja
+        // Almacén no tiene acceso a esta bandeja (recibe 403)
         $almacen = $this->crearUsuarioConRol('almacen');
         $this->actingAs($almacen)
             ->get(route('admin.mensajes'))
