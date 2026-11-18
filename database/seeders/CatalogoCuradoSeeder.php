@@ -20,23 +20,23 @@ use Illuminate\Support\Facades\Schema;
 /**
  * Seeder Curatorial Versionado en Git.
  * Generado automáticamente por: php artisan catalogo:exportar-seeder
- * Fecha de última exportación: 2026-11-18 03:29:47
- * Total de productos registrados: 62
+ * Fecha de última exportación: 2026-11-18 03:45:07
+ * Total de productos registrados: 1
  */
 class CatalogoCuradoSeeder extends Seeder
 {
-    public const TOTAL_PRODUCTOS = 62;
-    public const EXPORTADO_EN = '2026-11-18 03:29:47';
+    public const TOTAL_PRODUCTOS = 1;
+    public const EXPORTADO_EN = '2026-11-18 03:45:07';
 
     /**
-     * Sincroniza las imágenes de assets versionados en Git hacia storage/app/public/productos
-     * para asegurar que los enlaces públicos funcionen inmediatamente en cualquier máquina del equipo.
+     * Sincroniza las imágenes de assets versionados en Git hacia public/images/productos (sin symlinks)
+     * y hacia storage/app/public/productos como respaldo.
      */
     public function sincronizarImagenes(): void
     {
         $origenAssets = database_path('seeders/assets/productos');
+        $destinoImages = public_path('images/productos');
         $destinoStorage = storage_path('app/public/productos');
-        $destinoPublic = public_path('storage/productos');
 
         if (! File::isDirectory($origenAssets)) {
             File::ensureDirectoryExists($origenAssets);
@@ -44,21 +44,22 @@ class CatalogoCuradoSeeder extends Seeder
             return;
         }
 
+        File::ensureDirectoryExists($destinoImages);
         File::ensureDirectoryExists($destinoStorage);
 
         foreach (File::files($origenAssets) as $archivo) {
             $nombre = $archivo->getFilename();
-            $rutaDestino = $destinoStorage.DIRECTORY_SEPARATOR.$nombre;
 
-            if (! File::exists($rutaDestino)) {
-                File::copy($archivo->getPathname(), $rutaDestino);
+            // Destino directo primario: public/images/productos (100% compatible entre Docker y Windows)
+            $rutaImages = $destinoImages.DIRECTORY_SEPARATOR.$nombre;
+            if (! File::exists($rutaImages) || filesize($archivo->getPathname()) !== filesize($rutaImages)) {
+                File::copy($archivo->getPathname(), $rutaImages);
             }
 
-            if (File::isDirectory($destinoPublic) && ! is_link(public_path('storage'))) {
-                $rutaPublic = $destinoPublic.DIRECTORY_SEPARATOR.$nombre;
-                if (! File::exists($rutaPublic)) {
-                    File::copy($archivo->getPathname(), $rutaPublic);
-                }
+            // Destino secundario de respaldo: storage/app/public/productos
+            $rutaStorage = $destinoStorage.DIRECTORY_SEPARATOR.$nombre;
+            if (! File::exists($rutaStorage) || filesize($archivo->getPathname()) !== filesize($rutaStorage)) {
+                File::copy($archivo->getPathname(), $rutaStorage);
             }
         }
     }
@@ -125,8 +126,14 @@ class CatalogoCuradoSeeder extends Seeder
                 'activo' => $item['activo'] ?? true,
             ]);
 
-            if (! empty($item['imagen']) && Schema::hasColumn('productos', 'imagen')) {
-                $producto->imagen = $item['imagen'];
+            $rutaImagen = null;
+            if (! empty($item['imagen'])) {
+                $nombreArchivo = basename($item['imagen']);
+                $rutaImagen = 'images/productos/'.$nombreArchivo;
+            }
+
+            if (! empty($rutaImagen) && Schema::hasColumn('productos', 'imagen')) {
+                $producto->imagen = $rutaImagen;
             }
 
             $producto->save();
@@ -136,16 +143,22 @@ class CatalogoCuradoSeeder extends Seeder
             $tipoMeta = $meta['tipo'] ?? $tipoCat;
 
             if ($tipoMeta === 'libro' && Schema::hasTable('libros')) {
+                $datosLibro = array_filter([
+                    'isbn' => $meta['isbn'] ?? null,
+                    'autor' => $meta['autor'] ?? null,
+                    'editorial' => $meta['editorial'] ?? null,
+                    'genero' => $meta['genero'] ?? null,
+                    'anio_publicacion' => $meta['anio_publicacion'] ?? null,
+                    'paginas' => $meta['paginas'] ?? null,
+                ], fn ($val) => ! is_null($val));
+
+                if (! empty($rutaImagen) && Schema::hasColumn('libros', 'imagen')) {
+                    $datosLibro['imagen'] = $rutaImagen;
+                }
+
                 Libro::updateOrCreate(
                     ['producto_id' => $producto->id],
-                    array_filter([
-                        'isbn' => $meta['isbn'] ?? null,
-                        'autor' => $meta['autor'] ?? null,
-                        'editorial' => $meta['editorial'] ?? null,
-                        'genero' => $meta['genero'] ?? null,
-                        'anio_publicacion' => $meta['anio_publicacion'] ?? null,
-                        'paginas' => $meta['paginas'] ?? null,
-                    ], fn ($val) => ! is_null($val))
+                    $datosLibro
                 );
             } elseif (($tipoMeta === 'disco' || $tipoMeta === 'vinilo') && Schema::hasTable('discos')) {
                 $datosDisco = array_filter([
@@ -156,8 +169,8 @@ class CatalogoCuradoSeeder extends Seeder
                     'anio_lanzamiento' => $meta['anio_lanzamiento'] ?? null,
                 ], fn ($val) => ! is_null($val));
 
-                if (! empty($item['imagen']) && Schema::hasColumn('discos', 'imagen')) {
-                    $datosDisco['imagen'] = $item['imagen'];
+                if (! empty($rutaImagen) && Schema::hasColumn('discos', 'imagen')) {
+                    $datosDisco['imagen'] = $rutaImagen;
                 }
 
                 Disco::updateOrCreate(
@@ -173,8 +186,8 @@ class CatalogoCuradoSeeder extends Seeder
                     'edicion_limitada' => $meta['edicion_limitada'] ?? false,
                 ], fn ($val) => ! is_null($val));
 
-                if (! empty($item['imagen']) && Schema::hasColumn('coleccionables', 'imagen')) {
-                    $datosColeccionable['imagen'] = $item['imagen'];
+                if (! empty($rutaImagen) && Schema::hasColumn('coleccionables', 'imagen')) {
+                    $datosColeccionable['imagen'] = $rutaImagen;
                 }
 
                 Coleccionable::updateOrCreate(

@@ -66,4 +66,12 @@ class Disco extends Model
     {
         return $value ?? Producto::IMAGENES_CONOCIDAS[$this->producto?->nombre ?? ''] ?? null;
     }
+
+    /**
+     * Accesor para obtener la URL pública de la portada discográfica.
+     */
+    public function getImagenUrlAttribute(): ?string
+    {
+        return $this->producto?->imagen_url;
+    }
 }

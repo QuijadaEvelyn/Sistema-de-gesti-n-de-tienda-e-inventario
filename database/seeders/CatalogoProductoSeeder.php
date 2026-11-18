@@ -1559,14 +1559,14 @@ class CatalogoProductoSeeder extends Seeder
     }
 
     /**
-     * Sincroniza las imágenes de assets versionados en Git hacia storage/app/public/productos
-     * para asegurar que los enlaces públicos funcionen inmediatamente en cualquier máquina del equipo.
+     * Sincroniza las imágenes de assets versionados en Git hacia public/images/productos (sin symlinks)
+     * y hacia storage/app/public/productos como respaldo para compatibilidad absoluta entre sistemas.
      */
     public static function sincronizarAssetsDeImagenes(): void
     {
         $origenAssets = database_path('seeders/assets/productos');
+        $destinoImages = public_path('images/productos');
         $destinoStorage = storage_path('app/public/productos');
-        $destinoPublicStorage = public_path('storage/productos');
 
         if (! File::isDirectory($origenAssets)) {
             File::ensureDirectoryExists($origenAssets);
@@ -1574,21 +1574,22 @@ class CatalogoProductoSeeder extends Seeder
             return;
         }
 
+        File::ensureDirectoryExists($destinoImages);
         File::ensureDirectoryExists($destinoStorage);
 
         foreach (File::files($origenAssets) as $archivo) {
             $nombre = $archivo->getFilename();
-            $rutaStorage = $destinoStorage.DIRECTORY_SEPARATOR.$nombre;
 
-            if (! File::exists($rutaStorage)) {
-                File::copy($archivo->getPathname(), $rutaStorage);
+            // Destino directo primario en public/ (sin depender de enlaces simbólicos)
+            $rutaImages = $destinoImages.DIRECTORY_SEPARATOR.$nombre;
+            if (! File::exists($rutaImages) || filesize($archivo->getPathname()) !== filesize($rutaImages)) {
+                File::copy($archivo->getPathname(), $rutaImages);
             }
 
-            if (File::isDirectory($destinoPublicStorage) && ! is_link(public_path('storage'))) {
-                $rutaPublic = $destinoPublicStorage.DIRECTORY_SEPARATOR.$nombre;
-                if (! File::exists($rutaPublic)) {
-                    File::copy($archivo->getPathname(), $rutaPublic);
-                }
+            // Destino secundario en storage
+            $rutaStorage = $destinoStorage.DIRECTORY_SEPARATOR.$nombre;
+            if (! File::exists($rutaStorage) || filesize($archivo->getPathname()) !== filesize($rutaStorage)) {
+                File::copy($archivo->getPathname(), $rutaStorage);
             }
         }
     }

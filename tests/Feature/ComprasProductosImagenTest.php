@@ -21,6 +21,24 @@ class ComprasProductosImagenTest extends TestCase
 {
     use RefreshDatabase;
 
+    private array $archivosCreados = [];
+
+    protected function tearDown(): void
+    {
+        foreach ($this->archivosCreados as $ruta) {
+            if (file_exists($ruta)) {
+                @unlink($ruta);
+            }
+        }
+
+        parent::tearDown();
+    }
+
+    private function registrarArchivoParaLimpieza(string $ruta): void
+    {
+        $this->archivosCreados[] = $ruta;
+    }
+
     private function crearUsuarioConRol(string $nombreRol): Usuario
     {
         $rol = Rol::firstOrCreate(
@@ -110,7 +128,9 @@ class ComprasProductosImagenTest extends TestCase
         $producto = Producto::where('nombre', 'Cien Años de Soledad - Primera Edición Sudamericana 1967')->first();
         $this->assertNotNull($producto);
         $this->assertNotNull($producto->imagen);
-        $this->assertStringStartsWith('storage/productos/', $producto->imagen);
+        $this->assertStringStartsWith('images/productos/', $producto->imagen);
+        $this->registrarArchivoParaLimpieza(public_path($producto->imagen));
+        $this->assertFileExists(public_path($producto->imagen));
         $this->assertEquals('Ejemplar histórico catalogado en bóveda curatorial con cubierta original.', $producto->descripcion);
 
         // Confirmar que la tabla libros tiene sus metadatos guardados correctamente sin error de columna inexistente
@@ -125,9 +145,8 @@ class ComprasProductosImagenTest extends TestCase
             $this->assertEquals('978-8437604947', $libro->isbn);
         }
 
-        // Verificar archivo en disco público
-        $rutaAlmacenada = str_replace('storage/', '', $producto->imagen);
-        Storage::disk('public')->assertExists($rutaAlmacenada);
+        // Verificar archivo en images/productos
+        $this->assertFileExists(public_path($producto->imagen));
 
         // Verificar variante SKU asociada
         $variante = VarianteSku::where('producto_id', $producto->id)->first();
@@ -191,7 +210,9 @@ class ComprasProductosImagenTest extends TestCase
         $producto = Producto::where('nombre', 'The Beatles - Abbey Road 1969 UK Original Pressing')->first();
         $this->assertNotNull($producto);
         $this->assertNotNull($producto->imagen);
-        $this->assertStringStartsWith('storage/productos/', $producto->imagen);
+        $this->assertStringStartsWith('images/productos/', $producto->imagen);
+        $this->registrarArchivoParaLimpieza(public_path($producto->imagen));
+        $this->assertFileExists(public_path($producto->imagen));
 
         // Confirmar metadatos en la tabla especializada discos
         if (Schema::hasTable('discos')) {
@@ -204,9 +225,8 @@ class ComprasProductosImagenTest extends TestCase
             $this->assertEquals(1969, $disco->anio_lanzamiento);
         }
 
-        // Verificar archivo en disco público
-        $rutaAlmacenada = str_replace('storage/', '', $producto->imagen);
-        Storage::disk('public')->assertExists($rutaAlmacenada);
+        // Verificar archivo en images/productos
+        $this->assertFileExists(public_path($producto->imagen));
 
         // Verificar variante SKU asociada
         $variante = VarianteSku::where('producto_id', $producto->id)->first();
@@ -306,15 +326,16 @@ class ComprasProductosImagenTest extends TestCase
         $variante->refresh();
 
         $this->assertNotEquals('storage/'.$rutaAntigua, $producto->imagen);
-        $this->assertStringStartsWith('storage/productos/', $producto->imagen);
+        $this->assertStringStartsWith('images/productos/', $producto->imagen);
+        $this->registrarArchivoParaLimpieza(public_path($producto->imagen));
+        $this->assertFileExists(public_path($producto->imagen));
         $this->assertEquals($producto->imagen, $variante->imagen);
 
         // La imagen antigua debe haber sido removida del disco
         Storage::disk('public')->assertMissing($rutaAntigua);
 
         // La nueva imagen debe existir
-        $nuevaRutaAlmacenada = str_replace('storage/', '', $producto->imagen);
-        Storage::disk('public')->assertExists($nuevaRutaAlmacenada);
+        $this->assertFileExists(public_path($producto->imagen));
 
         // Bitácora registrada
         $this->assertDatabaseHas('bitacoras', [

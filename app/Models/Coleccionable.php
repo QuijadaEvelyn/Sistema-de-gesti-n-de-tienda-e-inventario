@@ -66,4 +66,12 @@ class Coleccionable extends Model
     {
         return $value ?? Producto::IMAGENES_CONOCIDAS[$this->producto?->nombre ?? ''] ?? null;
     }
+
+    /**
+     * Accesor para obtener la URL pública de la fotografía del coleccionable.
+     */
+    public function getImagenUrlAttribute(): ?string
+    {
+        return $this->producto?->imagen_url;
+    }
 }

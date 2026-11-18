@@ -27,10 +27,7 @@
         default => ($producto->coleccionable?->marca ?? 'Archivo Histórico').' · '.($producto->coleccionable?->material ?? 'Pieza Autenticada'),
     };
 
-    $imagenRuta = $producto->imagen
-        ?? $producto->disco?->imagen
-        ?? $producto->libro?->imagen
-        ?? $producto->coleccionable?->imagen;
+    $imagenUrl = $producto->imagen_url;
 
     $piezaUnica = $variante
         ? \App\Http\Controllers\CheckoutSimuladoController::obtenerPiezaUnicaDeVariante((int) $variante->id)
@@ -68,7 +65,7 @@
         'sede' => $sedeCustodia ? str_replace('Sucursal ', '', $sedeCustodia) : null,
         'esPiezaUnica' => $esPiezaUnica,
         'numeroSerie' => $piezaUnica?->numero_serie,
-        'imagen' => !empty($imagenRuta) ? asset('/' . $imagenRuta) : null,
+        'imagen' => $imagenUrl,
         'estaAgotado' => $estaAgotado,
         'estaReservada' => $estaReservadaTemporalmente,
         'varianteSkuId' => $variante?->id,
@@ -138,8 +135,8 @@
                 </span>
             @endif
 
-            @if (!empty($imagenRuta))
-                <img src="{{ asset('/' . $imagenRuta) }}" alt="{{ $producto->nombre }}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+            @if (!empty($imagenUrl))
+                <img src="{{ $imagenUrl }}" alt="{{ $producto->nombre }}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
             @else
                 <span class="material-symbols-outlined {{ $esPiezaUnica ? 'text-purple-600 group-hover:scale-105' : 'text-purple-300 group-hover:text-primary' }} transition-all text-[64px]">{{ $iconoCategoria }}</span>
             @endif

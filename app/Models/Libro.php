@@ -60,4 +60,12 @@ class Libro extends Model
     {
         return $this->belongsTo(Producto::class, 'producto_id', 'id');
     }
+
+    /**
+     * Accesor para obtener la URL pública de la portada bibliográfica.
+     */
+    public function getImagenUrlAttribute(): ?string
+    {
+        return $this->producto?->imagen_url;
+    }
 }

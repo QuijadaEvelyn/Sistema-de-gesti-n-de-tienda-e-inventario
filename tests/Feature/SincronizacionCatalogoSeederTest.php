@@ -47,6 +47,11 @@ class SincronizacionCatalogoSeederTest extends TestCase
             File::delete($testStorage);
         }
 
+        $testPublicImages = public_path('images/productos/'.$this->testImageName);
+        if (File::exists($testPublicImages)) {
+            File::delete($testPublicImages);
+        }
+
         // Restaurar JSON original si existía
         $jsonPath = database_path('seeders/assets/catalogo_curado.json');
         if ($this->backupJsonContent !== null) {
@@ -188,7 +193,12 @@ class SincronizacionCatalogoSeederTest extends TestCase
         File::ensureDirectoryExists($assetsDir);
         File::put($assetsDir.DIRECTORY_SEPARATOR.$this->testImageName, 'CONTENIDO_VINILO_AUDIOPHILE');
 
-        // Asegurar que no exista previamente en storage
+        // Asegurar que no exista previamente en images ni en storage
+        $destinoImages = public_path('images/productos/'.$this->testImageName);
+        if (File::exists($destinoImages)) {
+            File::delete($destinoImages);
+        }
+
         $destinoStorage = storage_path('app/public/productos/'.$this->testImageName);
         if (File::exists($destinoStorage)) {
             File::delete($destinoStorage);
@@ -198,14 +208,14 @@ class SincronizacionCatalogoSeederTest extends TestCase
         $this->artisan('db:seed', ['--class' => 'CatalogoCuradoSeeder'])
             ->assertExitCode(0);
 
-        // Verificar que la imagen fue copiada automáticamente a storage/app/public/productos
-        $this->assertFileExists($destinoStorage);
-        $this->assertSame('CONTENIDO_VINILO_AUDIOPHILE', File::get($destinoStorage));
+        // Verificar que la imagen fue copiada automáticamente a public/images/productos (sin symlinks)
+        $this->assertFileExists($destinoImages);
+        $this->assertSame('CONTENIDO_VINILO_AUDIOPHILE', File::get($destinoImages));
 
-        // Verificar existencia en BD
+        // Verificar existencia en BD con ruta limpia images/productos/
         $this->assertDatabaseHas('productos', [
             'nombre' => 'Vinilo Curado de Alta Fidelidad',
-            'imagen' => 'storage/productos/'.$this->testImageName,
+            'imagen' => 'images/productos/'.$this->testImageName,
             'precio' => 2400.00,
         ]);
 

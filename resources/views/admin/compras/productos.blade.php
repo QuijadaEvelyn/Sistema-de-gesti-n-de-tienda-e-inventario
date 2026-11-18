@@ -397,9 +397,9 @@
                         @forelse ($productos as $prod)
                             <tr class="hover:bg-purple-50/40 dark:hover:bg-purple-950/20 transition">
                                 <td class="py-3 px-3 text-center">
-                                    @if ($prod->imagen)
+                                    @if ($prod->imagen_url)
                                         <img
-                                            src="{{ asset('/' . ltrim($prod->imagen, '/')) }}"
+                                            src="{{ $prod->imagen_url }}"
                                             alt="{{ $prod->nombre }}"
                                             class="w-11 h-11 object-cover rounded-xl border border-purple-200 dark:border-purple-700/60 shadow-2xs mx-auto"
                                             loading="lazy"

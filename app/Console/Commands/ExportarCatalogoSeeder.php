@@ -145,10 +145,12 @@ class ExportarCatalogoSeeder extends Command
         }
 
         $posiblesRutas = [
+            public_path('images/productos/'.basename($imagen)),
             public_path($imagen),
             public_path('/'.ltrim($imagen, '/')),
             storage_path('app/public/'.preg_replace('#^/?(public/|storage/)?#', '', $imagen)),
             storage_path('app/'.$imagen),
+            public_path('storage/'.preg_replace('#^/?(public/|storage/)?#', '', $imagen)),
             base_path($imagen),
         ];
 
@@ -172,12 +174,14 @@ class ExportarCatalogoSeeder extends Command
             $imagenesCopiadas++;
         }
 
-        // Si proviene de storage/ o es un archivo local de uploads, normalizar la ruta de guardado
-        if (str_contains($imagen, 'storage/productos') || str_contains($imagen, 'productos/')) {
-            return 'storage/productos/'.$nombreArchivo;
+        // Asegurar que también esté disponible directamente en public/images/productos
+        $rutaPublicImages = public_path('images/productos/'.$nombreArchivo);
+        if (! File::exists($rutaPublicImages) || filesize($archivoOrigen) !== filesize($rutaPublicImages)) {
+            File::ensureDirectoryExists(public_path('images/productos'));
+            File::copy($archivoOrigen, $rutaPublicImages);
         }
 
-        return $imagen;
+        return 'images/productos/'.$nombreArchivo;
     }
 
     /**
@@ -265,14 +269,14 @@ class CatalogoCuradoSeeder extends Seeder
     public const EXPORTADO_EN = '{{fecha}}';
 
     /**
-     * Sincroniza las imágenes de assets versionados en Git hacia storage/app/public/productos
-     * para asegurar que los enlaces públicos funcionen inmediatamente en cualquier máquina del equipo.
+     * Sincroniza las imágenes de assets versionados en Git hacia public/images/productos (sin symlinks)
+     * y hacia storage/app/public/productos como respaldo.
      */
     public function sincronizarImagenes(): void
     {
         $origenAssets = database_path('seeders/assets/productos');
+        $destinoImages = public_path('images/productos');
         $destinoStorage = storage_path('app/public/productos');
-        $destinoPublic = public_path('storage/productos');
 
         if (! File::isDirectory($origenAssets)) {
             File::ensureDirectoryExists($origenAssets);
@@ -280,21 +284,22 @@ class CatalogoCuradoSeeder extends Seeder
             return;
         }
 
+        File::ensureDirectoryExists($destinoImages);
         File::ensureDirectoryExists($destinoStorage);
 
         foreach (File::files($origenAssets) as $archivo) {
             $nombre = $archivo->getFilename();
-            $rutaDestino = $destinoStorage.DIRECTORY_SEPARATOR.$nombre;
 
-            if (! File::exists($rutaDestino)) {
-                File::copy($archivo->getPathname(), $rutaDestino);
+            // Destino directo primario: public/images/productos (100% compatible entre Docker y Windows)
+            $rutaImages = $destinoImages.DIRECTORY_SEPARATOR.$nombre;
+            if (! File::exists($rutaImages) || filesize($archivo->getPathname()) !== filesize($rutaImages)) {
+                File::copy($archivo->getPathname(), $rutaImages);
             }
 
-            if (File::isDirectory($destinoPublic) && ! is_link(public_path('storage'))) {
-                $rutaPublic = $destinoPublic.DIRECTORY_SEPARATOR.$nombre;
-                if (! File::exists($rutaPublic)) {
-                    File::copy($archivo->getPathname(), $rutaPublic);
-                }
+            // Destino secundario de respaldo: storage/app/public/productos
+            $rutaStorage = $destinoStorage.DIRECTORY_SEPARATOR.$nombre;
+            if (! File::exists($rutaStorage) || filesize($archivo->getPathname()) !== filesize($rutaStorage)) {
+                File::copy($archivo->getPathname(), $rutaStorage);
             }
         }
     }
@@ -361,8 +366,14 @@ class CatalogoCuradoSeeder extends Seeder
                 'activo' => $item['activo'] ?? true,
             ]);
 
-            if (! empty($item['imagen']) && Schema::hasColumn('productos', 'imagen')) {
-                $producto->imagen = $item['imagen'];
+            $rutaImagen = null;
+            if (! empty($item['imagen'])) {
+                $nombreArchivo = basename($item['imagen']);
+                $rutaImagen = 'images/productos/'.$nombreArchivo;
+            }
+
+            if (! empty($rutaImagen) && Schema::hasColumn('productos', 'imagen')) {
+                $producto->imagen = $rutaImagen;
             }
 
             $producto->save();
@@ -372,16 +383,22 @@ class CatalogoCuradoSeeder extends Seeder
             $tipoMeta = $meta['tipo'] ?? $tipoCat;
 
             if ($tipoMeta === 'libro' && Schema::hasTable('libros')) {
+                $datosLibro = array_filter([
+                    'isbn' => $meta['isbn'] ?? null,
+                    'autor' => $meta['autor'] ?? null,
+                    'editorial' => $meta['editorial'] ?? null,
+                    'genero' => $meta['genero'] ?? null,
+                    'anio_publicacion' => $meta['anio_publicacion'] ?? null,
+                    'paginas' => $meta['paginas'] ?? null,
+                ], fn ($val) => ! is_null($val));
+
+                if (! empty($rutaImagen) && Schema::hasColumn('libros', 'imagen')) {
+                    $datosLibro['imagen'] = $rutaImagen;
+                }
+
                 Libro::updateOrCreate(
                     ['producto_id' => $producto->id],
-                    array_filter([
-                        'isbn' => $meta['isbn'] ?? null,
-                        'autor' => $meta['autor'] ?? null,
-                        'editorial' => $meta['editorial'] ?? null,
-                        'genero' => $meta['genero'] ?? null,
-                        'anio_publicacion' => $meta['anio_publicacion'] ?? null,
-                        'paginas' => $meta['paginas'] ?? null,
-                    ], fn ($val) => ! is_null($val))
+                    $datosLibro
                 );
             } elseif (($tipoMeta === 'disco' || $tipoMeta === 'vinilo') && Schema::hasTable('discos')) {
                 $datosDisco = array_filter([
@@ -392,8 +409,8 @@ class CatalogoCuradoSeeder extends Seeder
                     'anio_lanzamiento' => $meta['anio_lanzamiento'] ?? null,
                 ], fn ($val) => ! is_null($val));
 
-                if (! empty($item['imagen']) && Schema::hasColumn('discos', 'imagen')) {
-                    $datosDisco['imagen'] = $item['imagen'];
+                if (! empty($rutaImagen) && Schema::hasColumn('discos', 'imagen')) {
+                    $datosDisco['imagen'] = $rutaImagen;
                 }
 
                 Disco::updateOrCreate(
@@ -409,8 +426,8 @@ class CatalogoCuradoSeeder extends Seeder
                     'edicion_limitada' => $meta['edicion_limitada'] ?? false,
                 ], fn ($val) => ! is_null($val));
 
-                if (! empty($item['imagen']) && Schema::hasColumn('coleccionables', 'imagen')) {
-                    $datosColeccionable['imagen'] = $item['imagen'];
+                if (! empty($rutaImagen) && Schema::hasColumn('coleccionables', 'imagen')) {
+                    $datosColeccionable['imagen'] = $rutaImagen;
                 }
 
                 Coleccionable::updateOrCreate(

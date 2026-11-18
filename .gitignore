@@ -25,3 +25,9 @@ _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Imágenes y activos versionados de catálogo y seeders
+!public/images/
+!public/images/productos/
+!database/seeders/assets/
+!database/seeders/assets/productos/
