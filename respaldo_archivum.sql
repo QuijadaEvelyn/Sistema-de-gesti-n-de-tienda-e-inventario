@@ -1,0 +1,1837 @@
+/*M!999999\- enable the sandbox mode */ 
+-- MariaDB dump 10.19-11.2.6-MariaDB, for debian-linux-gnu (x86_64)
+--
+-- Host: localhost    Database: archivum_db
+-- ------------------------------------------------------
+-- Server version	11.2.6-MariaDB-ubu2204
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `bitacoras`
+--
+
+DROP TABLE IF EXISTS `bitacoras`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bitacoras` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `usuario_id` bigint(20) unsigned DEFAULT NULL,
+  `accion` varchar(80) NOT NULL,
+  `tabla_afectada` varchar(80) DEFAULT NULL,
+  `registro_id` bigint(20) unsigned DEFAULT NULL,
+  `detalle` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`detalle`)),
+  `ip` varchar(45) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `bitacoras_usuario_id_foreign` (`usuario_id`),
+  KEY `bitacoras_tabla_afectada_registro_id_index` (`tabla_afectada`,`registro_id`),
+  CONSTRAINT `bitacoras_usuario_id_foreign` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `bitacoras`
+--
+
+LOCK TABLES `bitacoras` WRITE;
+/*!40000 ALTER TABLE `bitacoras` DISABLE KEYS */;
+INSERT INTO `bitacoras` VALUES
+(1,1,'LOGIN_EXITOSO','usuarios',1,'{\"email\":\"admin@archivum.com\",\"roles\":[\"administrador\"]}','172.18.0.1','2026-11-17 01:52:32'),
+(2,1,'LOGOUT','usuarios',1,'{\"ip\":\"172.18.0.1\"}','172.18.0.1','2026-11-17 02:39:18'),
+(3,NULL,'LOGIN_FALLIDO','usuarios',NULL,'{\"email\":\"eve@gmail.com\",\"ip\":\"172.18.0.1\"}','172.18.0.1','2026-11-17 02:39:31'),
+(4,NULL,'LOGIN_FALLIDO','usuarios',NULL,'{\"email\":\"eve@gmail.com\",\"ip\":\"172.18.0.1\"}','172.18.0.1','2026-11-17 02:39:39'),
+(5,NULL,'LOGIN_FALLIDO','usuarios',NULL,'{\"email\":\"eve@gmail.com\",\"ip\":\"172.18.0.1\"}','172.18.0.1','2026-11-17 02:40:38'),
+(6,1,'LOGIN_EXITOSO','usuarios',1,'{\"email\":\"admin@archivum.com\",\"roles\":[\"administrador\"]}','172.18.0.1','2026-11-17 02:51:06'),
+(7,NULL,'LOGIN_FALLIDO','usuarios',NULL,'{\"email\":\"eve@gmail.com\",\"ip\":\"172.18.0.1\"}','172.18.0.1','2026-11-17 05:30:31'),
+(8,NULL,'LOGIN_FALLIDO','usuarios',NULL,'{\"email\":\"eve@gmail.com\",\"ip\":\"172.18.0.1\"}','172.18.0.1','2026-11-17 05:30:38'),
+(9,NULL,'LOGIN_FALLIDO','usuarios',NULL,'{\"email\":\"eve@gmail.com\",\"ip\":\"172.18.0.1\"}','172.18.0.1','2026-11-17 05:32:59'),
+(10,NULL,'LOGIN_FALLIDO','usuarios',NULL,'{\"email\":\"eve@gmail.com\",\"ip\":\"172.18.0.1\"}','172.18.0.1','2026-11-17 05:33:07'),
+(11,NULL,'LOGIN_FALLIDO','usuarios',NULL,'{\"email\":\"eve@gmail.com\",\"ip\":\"172.18.0.1\"}','172.18.0.1','2026-11-17 05:33:27'),
+(12,NULL,'LOGIN_FALLIDO','usuarios',NULL,'{\"email\":\"eve@gmail.com\",\"ip\":\"172.18.0.1\"}','172.18.0.1','2026-11-17 05:33:36'),
+(13,12,'CLIENTE_REGISTRADO','usuarios',12,'{\"email\":\"eve1@gmail.com\",\"cliente_id\":5,\"rol\":\"cliente\"}','172.18.0.1','2026-11-17 05:34:25'),
+(14,12,'MENSAJE_CONTACTO_RECIBIDO','sucursales',1,'{\"nombre\":\"Evelyn\",\"email\":\"eve1@gmail.com\",\"telefono\":\"5650213088\",\"asunto\":\"Verificaci\\u00f3n de pieza\",\"mensaje\":\"Saber de su una pieza es veridica\"}','172.18.0.1','2026-11-17 05:43:56'),
+(15,12,'LOGOUT','usuarios',12,'{\"ip\":\"172.18.0.1\"}','172.18.0.1','2026-11-17 05:44:33'),
+(16,1,'LOGIN_EXITOSO','usuarios',1,'{\"email\":\"admin@archivum.com\",\"roles\":[\"administrador\"]}','172.18.0.1','2026-11-17 05:44:41'),
+(17,1,'LOGOUT','usuarios',1,'{\"ip\":\"172.18.0.1\"}','172.18.0.1','2026-11-17 06:13:09'),
+(18,12,'LOGIN_EXITOSO','usuarios',12,'{\"email\":\"eve1@gmail.com\",\"roles\":[\"cliente\"]}','172.18.0.1','2026-11-17 06:13:17'),
+(19,12,'MENSAJE_CONTACTO_RECIBIDO','sucursales',1,'{\"mensaje_id\":1,\"nombre\":\"Evelyn\",\"email\":\"eve1@gmail.com\",\"telefono\":\"5650213088\",\"asunto\":\"Verificaci\\u00f3n de pieza\",\"mensaje\":\"Checar si una pieza es verdica\",\"sucursal_id\":1}','172.18.0.1','2026-11-17 06:13:50'),
+(20,12,'LOGOUT','usuarios',12,'{\"ip\":\"172.18.0.1\"}','172.18.0.1','2026-11-17 06:13:55'),
+(21,1,'LOGIN_EXITOSO','usuarios',1,'{\"email\":\"admin@archivum.com\",\"roles\":[\"administrador\"]}','172.18.0.1','2026-11-17 06:14:02'),
+(22,1,'LOGOUT','usuarios',1,'{\"ip\":\"172.18.0.1\"}','172.18.0.1','2026-11-17 06:47:20'),
+(23,13,'CLIENTE_REGISTRADO','usuarios',13,'{\"email\":\"quijadaevelin82@gmail.com\",\"cliente_id\":6,\"rol\":\"cliente\"}','172.18.0.1','2026-11-17 07:07:41'),
+(24,13,'LOGOUT','usuarios',13,'{\"ip\":\"172.18.0.1\"}','172.18.0.1','2026-11-17 07:07:50'),
+(25,13,'SOLICITUD_RECUPERACION_CONTRASENA','recuperacion_contrasenas',13,'{\"email\":\"quijadaevelin82@gmail.com\",\"ip\":\"172.18.0.1\",\"expira_en\":\"2026-11-17 08:08:07\"}','172.18.0.1','2026-11-17 07:08:07'),
+(26,6,'LOGIN_EXITOSO','usuarios',6,'{\"email\":\"compras1@archivum.com\",\"roles\":[\"compras\"]}','172.18.0.1','2026-11-18 00:10:03'),
+(27,6,'PRODUCTO_CREADO_CON_IMAGEN','productos',60,'{\"nombre\":\"Lugares Asombrosos 2\",\"sku\":\"LIB-2024-19\",\"imagen\":\"storage\\/productos\\/ZNfsGtDFd6BzxQ4iW6fopcb71HuJN67Yf025BxuD.webp\"}','172.18.0.1','2026-11-18 00:32:40'),
+(28,6,'LOGOUT','usuarios',6,'{\"ip\":\"172.18.0.1\"}','172.18.0.1','2026-11-18 00:32:50'),
+(29,1,'LOGIN_EXITOSO','usuarios',1,'{\"email\":\"admin@archivum.com\",\"roles\":[\"administrador\"]}','172.18.0.1','2026-11-18 00:33:32'),
+(30,1,'PRODUCTO_CREADO_CON_IMAGEN','productos',61,'{\"nombre\":\"La raz\\u00f3n de estar contigo\",\"sku\":\"LIB-2024-20\",\"imagen\":\"storage\\/productos\\/Du8c2M6YdbJzHp5ifofcw4SJxIRkIghemAhV2Ha0.jpg\"}','172.18.0.1','2026-11-18 00:57:40'),
+(31,1,'LOGOUT','usuarios',1,'{\"ip\":\"172.18.0.1\"}','172.18.0.1','2026-11-18 01:10:29'),
+(32,6,'LOGIN_EXITOSO','usuarios',6,'{\"email\":\"compras1@archivum.com\",\"roles\":[\"compras\"]}','172.18.0.1','2026-11-18 01:10:45');
+/*!40000 ALTER TABLE `bitacoras` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `cache`
+--
+
+DROP TABLE IF EXISTS `cache`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cache` (
+  `key` varchar(255) NOT NULL,
+  `value` mediumtext NOT NULL,
+  `expiration` bigint(20) NOT NULL,
+  PRIMARY KEY (`key`),
+  KEY `cache_expiration_index` (`expiration`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cache`
+--
+
+LOCK TABLES `cache` WRITE;
+/*!40000 ALTER TABLE `cache` DISABLE KEYS */;
+INSERT INTO `cache` VALUES
+('laravel-cache-forgot-password|quijadaevelin82@gmail.com|172.18.0.1','i:1;',1794899407),
+('laravel-cache-forgot-password|quijadaevelin82@gmail.com|172.18.0.1:timer','i:1794899407;',1794899407);
+/*!40000 ALTER TABLE `cache` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `cache_locks`
+--
+
+DROP TABLE IF EXISTS `cache_locks`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cache_locks` (
+  `key` varchar(255) NOT NULL,
+  `owner` varchar(255) NOT NULL,
+  `expiration` bigint(20) NOT NULL,
+  PRIMARY KEY (`key`),
+  KEY `cache_locks_expiration_index` (`expiration`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cache_locks`
+--
+
+LOCK TABLES `cache_locks` WRITE;
+/*!40000 ALTER TABLE `cache_locks` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cache_locks` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `carrito_items`
+--
+
+DROP TABLE IF EXISTS `carrito_items`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `carrito_items` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `carrito_id` bigint(20) unsigned NOT NULL,
+  `variante_sku_id` bigint(20) unsigned NOT NULL,
+  `cantidad` int(10) unsigned NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `carrito_items_carrito_id_variante_sku_id_unique` (`carrito_id`,`variante_sku_id`),
+  KEY `carrito_items_variante_sku_id_foreign` (`variante_sku_id`),
+  CONSTRAINT `carrito_items_carrito_id_foreign` FOREIGN KEY (`carrito_id`) REFERENCES `carritos` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `carrito_items_variante_sku_id_foreign` FOREIGN KEY (`variante_sku_id`) REFERENCES `variantes_sku` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `carrito_items`
+--
+
+LOCK TABLES `carrito_items` WRITE;
+/*!40000 ALTER TABLE `carrito_items` DISABLE KEYS */;
+/*!40000 ALTER TABLE `carrito_items` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `carritos`
+--
+
+DROP TABLE IF EXISTS `carritos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `carritos` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `cliente_id` bigint(20) unsigned NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `carritos_cliente_id_unique` (`cliente_id`),
+  CONSTRAINT `carritos_cliente_id_foreign` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `carritos`
+--
+
+LOCK TABLES `carritos` WRITE;
+/*!40000 ALTER TABLE `carritos` DISABLE KEYS */;
+INSERT INTO `carritos` VALUES
+(1,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(2,2,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(3,3,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(4,4,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(5,5,'2026-11-17 05:34:25','2026-11-17 05:34:25'),
+(6,6,'2026-11-17 07:07:41','2026-11-17 07:07:41');
+/*!40000 ALTER TABLE `carritos` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `catalogos`
+--
+
+DROP TABLE IF EXISTS `catalogos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `catalogos` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(120) NOT NULL,
+  `tipo` enum('libro','disco','coleccionable') NOT NULL,
+  `descripcion` text DEFAULT NULL,
+  `activo` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `catalogos_nombre_unique` (`nombre`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `catalogos`
+--
+
+LOCK TABLES `catalogos` WRITE;
+/*!40000 ALTER TABLE `catalogos` DISABLE KEYS */;
+INSERT INTO `catalogos` VALUES
+(1,'Libros','libro','Primeras ediciones hispanoamericanas, ejemplares autografiados, narrativa, ensayo, poesía e historia con peritaje bibliográfico.',1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(2,'Discos','disco','Prensados analógicos en vinilo de 180g y ediciones maestras en CD clasificadas con alta fidelidad.',1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(3,'Coleccionables','coleccionable','Figuras de colección, numismática, juguetes manufacturados, objetos históricos y memorabilia de videojuegos.',1,'2026-11-17 01:52:18','2026-11-17 01:52:18');
+/*!40000 ALTER TABLE `catalogos` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `cliente_promocion`
+--
+
+DROP TABLE IF EXISTS `cliente_promocion`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cliente_promocion` (
+  `cliente_frecuente_id` bigint(20) unsigned NOT NULL,
+  `promocion_id` bigint(20) unsigned NOT NULL,
+  `recibida_en` timestamp NOT NULL DEFAULT current_timestamp(),
+  `usada_en` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`cliente_frecuente_id`,`promocion_id`),
+  KEY `cliente_promocion_promocion_id_foreign` (`promocion_id`),
+  CONSTRAINT `cliente_promocion_cliente_frecuente_id_foreign` FOREIGN KEY (`cliente_frecuente_id`) REFERENCES `clientes_frecuentes` (`cliente_id`) ON DELETE CASCADE,
+  CONSTRAINT `cliente_promocion_promocion_id_foreign` FOREIGN KEY (`promocion_id`) REFERENCES `promociones` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cliente_promocion`
+--
+
+LOCK TABLES `cliente_promocion` WRITE;
+/*!40000 ALTER TABLE `cliente_promocion` DISABLE KEYS */;
+INSERT INTO `cliente_promocion` VALUES
+(1,1,'2026-11-17 01:52:19',NULL),
+(1,2,'2026-11-17 01:52:19',NULL),
+(1,3,'2026-11-17 01:52:19',NULL);
+/*!40000 ALTER TABLE `cliente_promocion` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `clientes`
+--
+
+DROP TABLE IF EXISTS `clientes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `clientes` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `usuario_id` bigint(20) unsigned DEFAULT NULL,
+  `nombre` varchar(120) NOT NULL,
+  `apellidos` varchar(120) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `telefono` varchar(20) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `clientes_email_unique` (`email`),
+  UNIQUE KEY `clientes_usuario_id_unique` (`usuario_id`),
+  CONSTRAINT `clientes_usuario_id_foreign` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `clientes`
+--
+
+LOCK TABLES `clientes` WRITE;
+/*!40000 ALTER TABLE `clientes` DISABLE KEYS */;
+INSERT INTO `clientes` VALUES
+(1,7,'Elena','Ramírez Castillo','elena.ramirez@gmail.com','5511223344','2026-11-17 01:52:18','2026-11-17 01:52:18',NULL),
+(2,8,'Javier','Morales Pineda','javier.morales@hotmail.com','5522334455','2026-11-17 01:52:18','2026-11-17 01:52:18',NULL),
+(3,9,'Mariana','Rivas Soto','mariana.rivas@outlook.com','5533445566','2026-11-17 01:52:18','2026-11-17 01:52:18',NULL),
+(4,10,'Daniel','Castro Herrera','daniel.castro@gmail.com','5544556677','2026-11-17 01:52:18','2026-11-17 01:52:18',NULL),
+(5,12,'Evelyn','Alvarez','eve1@gmail.com','5650213088','2026-11-17 05:34:25','2026-11-17 05:34:25',NULL),
+(6,13,'Vanesa','Quijada','quijadaevelin82@gmail.com','5650213084','2026-11-17 07:07:41','2026-11-17 07:07:41',NULL);
+/*!40000 ALTER TABLE `clientes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `clientes_frecuentes`
+--
+
+DROP TABLE IF EXISTS `clientes_frecuentes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `clientes_frecuentes` (
+  `cliente_id` bigint(20) unsigned NOT NULL,
+  `desde` date NOT NULL,
+  `puntos` int(10) unsigned NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`cliente_id`),
+  CONSTRAINT `clientes_frecuentes_cliente_id_foreign` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `clientes_frecuentes`
+--
+
+LOCK TABLES `clientes_frecuentes` WRITE;
+/*!40000 ALTER TABLE `clientes_frecuentes` DISABLE KEYS */;
+INSERT INTO `clientes_frecuentes` VALUES
+(1,'2026-11-17',500,'2026-11-17 01:52:19','2026-11-17 01:52:19');
+/*!40000 ALTER TABLE `clientes_frecuentes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `coleccionables`
+--
+
+DROP TABLE IF EXISTS `coleccionables`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `coleccionables` (
+  `producto_id` bigint(20) unsigned NOT NULL,
+  `marca` varchar(255) DEFAULT NULL,
+  `serie` varchar(255) DEFAULT NULL,
+  `categoria` varchar(60) DEFAULT NULL,
+  `material` varchar(80) DEFAULT NULL,
+  `edicion_limitada` tinyint(1) NOT NULL DEFAULT 0,
+  `imagen` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`producto_id`),
+  CONSTRAINT `coleccionables_producto_id_foreign` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `coleccionables`
+--
+
+LOCK TABLES `coleccionables` WRITE;
+/*!40000 ALTER TABLE `coleccionables` DISABLE KEYS */;
+INSERT INTO `coleccionables` VALUES
+(29,'Colección Diplomática','Archivo Histórico Bellas Artes','historicos','Papel Algodón & Tinta Ferrogálica',1,NULL),
+(30,'Archivo Coyoacán','Correspondencia Muralista S. XX','historicos','Tinta Sepia sobre Papel Ingres',1,NULL),
+(31,'Casa de Moneda de México','Numismática del Centenario','numismatica','Plata Ley .925 en Estuche de Época',1,NULL),
+(32,'Archivo Fotográfico Mexicano','Vanguardia Documental S. XX','historicos','Plata sobre Gelatina en Papel Fibra',1,NULL),
+(33,'Fondo Conservatorio Nacional','Manuscritos Musicales del Porfiriato','historicos','Papel Pautado de Lino',1,NULL),
+(34,'Imprenta Mundial / INBA','Efemérides Culturales de México','historicos','Papel Couché & Huecograbado',0,NULL),
+(35,'Taller de Gráfica Popular','Gráfica Mexicana de Medio Siglo','historicos','Linóleo sobre Papel Fabriano',0,NULL),
+(36,'Archivum Conservation Lab','Insumos de Preservación Documental','juguetes','Cartón Libre de Ácido pH Neutro',0,NULL),
+(37,'Kaiyodo / Gainax Japón','Neon Genesis Evangelion Masterpiece','figuras','Resina Polystone Pintada a Mano',1,NULL),
+(38,'United States Mint','Gold Bullion Series','numismatica','Oro Puro 900',1,'images/coleccionables/Double-Eagle-de-1933.jpg'),
+(39,'United States Mint','Early US Silver Dollars','numismatica','Plata Ley 892',1,'images/coleccionables/Dolar-Flowing-Hair-de-1794.jpg'),
+(40,'Royal Mint UK','Medieval Gold Series','numismatica','Oro Medieval',1,'images/coleccionables/Florin-de-Eduardo-III-de-1344.jpg'),
+(41,'Ceca Omeya','Ancient Islamic Coinage','numismatica','Oro Nativo',1,'images/coleccionables/Dinar-de-Oro-Omeya-del-año-723.jpg'),
+(42,'Ceca de México (Mo)','Spanish Colonial Currency','numismatica','Plata Colonial',0,'images/coleccionables/Monedas-Reales.jpg'),
+(43,'Casa de Moneda de México','Monedas Bicentenario de Oro','numismatica','Oro Puro 0.900',0,'images/coleccionables/Centenario-de-Oro.jpg'),
+(44,'Casa de Moneda de México','Serie Libertad','numismatica','Plata Pura Ley .999',0,'images/coleccionables/Moneda-Libertad.jpg'),
+(45,'Banco de México','Familia C1 Conmemorativa','numismatica','Aleación Bimetálica',0,'images/coleccionables/Monedas-Conmemorativas.jpg'),
+(46,'Banco de México / ABNC','Billetes Retirados','numismatica','Papel Seguridad Antiguo',0,'images/coleccionables/Familia-AAA.jpg'),
+(47,'Pop Mart','The Monsters Series','juguetes','Vinilo & Peluche Sintético',1,'images/coleccionables/Pop-Mart.jpg'),
+(48,'Funko','Pop! Animation & Movies','juguetes','Plástico Vinilo',0,'images/coleccionables/Funko-Pop.jpg'),
+(49,'LEGO Systems A/S','Collector Series / Harry Potter','juguetes','Plástico ABS de Alta Resistencia',1,'images/coleccionables/lego.jpg'),
+(50,'Artesanías Temáticas','Egyptian Mythology Collection','figuras','Resina Poliéster Pintada a Mano',0,'images/coleccionables/Estatua-Anubis.jpg'),
+(51,'Snowflake Flower (Cochiti Pueblo)','Native American Storyteller Series','figuras','Arcilla y Pigmentos Naturales',1,'images/coleccionables/Figura-ceramica.jpg'),
+(52,'DecoArte Colección','Egyptian Artifacts','figuras','Resina Compuesta',0,'images/coleccionables/Exquisito-Joyero.jpg'),
+(53,'Banpresto / Bird Studio','Dragon Ball Z Vintage Series','figuras','PVC Grado Colección & Acrílico UV',1,NULL),
+(54,'Yonezawa Toys Japón','Space Age Tin Toy Series','juguetes','Hojalata Litografiada & Resorte de Acero',1,NULL),
+(55,'Gobierno Constitucionalista de México','Papel Moneda de la Revolución Mexicana','numismatica','Papel Moneda de Seguridad',1,NULL),
+(56,'Real Casa de Moneda de México','Numismática Virreinal Novohispana','numismatica','Plata Ley .903',1,NULL),
+(57,'Nintendo Co., Ltd. Japón','Silver Series Game & Watch (AC-01)','videojuegos','Plástico ABS & Pantalla LCD Reflectiva',1,NULL),
+(58,'Nintendo of America','NES Classic Gold Series (NES-ZL-USA)','videojuegos','Carcasa Dorada Metalizada & Placa PCB',1,NULL);
+/*!40000 ALTER TABLE `coleccionables` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `detalle_envios`
+--
+
+DROP TABLE IF EXISTS `detalle_envios`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `detalle_envios` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `envio_id` bigint(20) unsigned NOT NULL,
+  `detalle_pedido_id` bigint(20) unsigned NOT NULL,
+  `cantidad` int(10) unsigned NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `detalle_envios_envio_id_detalle_pedido_id_unique` (`envio_id`,`detalle_pedido_id`),
+  KEY `detalle_envios_detalle_pedido_id_foreign` (`detalle_pedido_id`),
+  CONSTRAINT `detalle_envios_detalle_pedido_id_foreign` FOREIGN KEY (`detalle_pedido_id`) REFERENCES `detalle_pedidos` (`id`),
+  CONSTRAINT `detalle_envios_envio_id_foreign` FOREIGN KEY (`envio_id`) REFERENCES `envios` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `detalle_envios`
+--
+
+LOCK TABLES `detalle_envios` WRITE;
+/*!40000 ALTER TABLE `detalle_envios` DISABLE KEYS */;
+/*!40000 ALTER TABLE `detalle_envios` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `detalle_pagos`
+--
+
+DROP TABLE IF EXISTS `detalle_pagos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `detalle_pagos` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `pago_id` bigint(20) unsigned NOT NULL,
+  `referencia_externa` varchar(255) DEFAULT NULL,
+  `ultimos_digitos` varchar(4) DEFAULT NULL,
+  `autorizacion` varchar(60) DEFAULT NULL,
+  `respuesta_pasarela` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`respuesta_pasarela`)),
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `detalle_pagos_pago_id_foreign` (`pago_id`),
+  CONSTRAINT `detalle_pagos_pago_id_foreign` FOREIGN KEY (`pago_id`) REFERENCES `pagos` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `detalle_pagos`
+--
+
+LOCK TABLES `detalle_pagos` WRITE;
+/*!40000 ALTER TABLE `detalle_pagos` DISABLE KEYS */;
+/*!40000 ALTER TABLE `detalle_pagos` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `detalle_pedidos`
+--
+
+DROP TABLE IF EXISTS `detalle_pedidos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `detalle_pedidos` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `pedido_id` bigint(20) unsigned NOT NULL,
+  `variante_sku_id` bigint(20) unsigned NOT NULL,
+  `cantidad` int(10) unsigned NOT NULL,
+  `precio_unitario` decimal(10,2) NOT NULL,
+  `subtotal` decimal(12,2) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `detalle_pedidos_pedido_id_variante_sku_id_unique` (`pedido_id`,`variante_sku_id`),
+  KEY `detalle_pedidos_variante_sku_id_foreign` (`variante_sku_id`),
+  CONSTRAINT `detalle_pedidos_pedido_id_foreign` FOREIGN KEY (`pedido_id`) REFERENCES `pedidos` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `detalle_pedidos_variante_sku_id_foreign` FOREIGN KEY (`variante_sku_id`) REFERENCES `variantes_sku` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `detalle_pedidos`
+--
+
+LOCK TABLES `detalle_pedidos` WRITE;
+/*!40000 ALTER TABLE `detalle_pedidos` DISABLE KEYS */;
+/*!40000 ALTER TABLE `detalle_pedidos` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `devoluciones`
+--
+
+DROP TABLE IF EXISTS `devoluciones`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `devoluciones` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `folio_devolucion` varchar(40) DEFAULT NULL,
+  `pedido_id` bigint(20) unsigned NOT NULL,
+  `cliente_id` bigint(20) unsigned NOT NULL,
+  `detalle_pedido_id` bigint(20) unsigned NOT NULL,
+  `cantidad` int(10) unsigned NOT NULL,
+  `motivo` varchar(255) NOT NULL,
+  `comentarios_cliente` text DEFAULT NULL,
+  `evidencias` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`evidencias`)),
+  `estatus` enum('solicitada','aprobada','rechazada','completada') NOT NULL DEFAULT 'solicitada',
+  `etapa_devolucion` varchar(40) NOT NULL DEFAULT 'solicitada',
+  `monto_reembolso` decimal(12,2) DEFAULT NULL,
+  `dictamen_admin` text DEFAULT NULL,
+  `guia_retorno` varchar(50) DEFAULT NULL,
+  `instrucciones_retorno` text DEFAULT NULL,
+  `destino_inventario` varchar(40) DEFAULT NULL,
+  `sucursal_destino_id` bigint(20) unsigned DEFAULT NULL,
+  `nueva_graduacion` varchar(120) DEFAULT NULL,
+  `stock_procesado` tinyint(1) NOT NULL DEFAULT 0,
+  `revisado_por` bigint(20) unsigned DEFAULT NULL,
+  `aprobada_en` timestamp NULL DEFAULT NULL,
+  `recibida_en` timestamp NULL DEFAULT NULL,
+  `reembolsada_en` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `devoluciones_folio_devolucion_unique` (`folio_devolucion`),
+  KEY `devoluciones_pedido_id_foreign` (`pedido_id`),
+  KEY `devoluciones_cliente_id_foreign` (`cliente_id`),
+  KEY `devoluciones_detalle_pedido_id_foreign` (`detalle_pedido_id`),
+  KEY `devoluciones_sucursal_destino_id_foreign` (`sucursal_destino_id`),
+  KEY `devoluciones_revisado_por_foreign` (`revisado_por`),
+  KEY `devoluciones_etapa_devolucion_index` (`etapa_devolucion`),
+  CONSTRAINT `devoluciones_cliente_id_foreign` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`),
+  CONSTRAINT `devoluciones_detalle_pedido_id_foreign` FOREIGN KEY (`detalle_pedido_id`) REFERENCES `detalle_pedidos` (`id`),
+  CONSTRAINT `devoluciones_pedido_id_foreign` FOREIGN KEY (`pedido_id`) REFERENCES `pedidos` (`id`),
+  CONSTRAINT `devoluciones_revisado_por_foreign` FOREIGN KEY (`revisado_por`) REFERENCES `usuarios` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `devoluciones_sucursal_destino_id_foreign` FOREIGN KEY (`sucursal_destino_id`) REFERENCES `sucursales` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `devoluciones`
+--
+
+LOCK TABLES `devoluciones` WRITE;
+/*!40000 ALTER TABLE `devoluciones` DISABLE KEYS */;
+/*!40000 ALTER TABLE `devoluciones` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `direcciones`
+--
+
+DROP TABLE IF EXISTS `direcciones`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `direcciones` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `cliente_id` bigint(20) unsigned NOT NULL,
+  `alias` varchar(50) DEFAULT NULL,
+  `calle` varchar(255) NOT NULL,
+  `numero_exterior` varchar(20) NOT NULL,
+  `numero_interior` varchar(20) DEFAULT NULL,
+  `colonia` varchar(120) NOT NULL,
+  `municipio` varchar(120) NOT NULL,
+  `estado` varchar(80) NOT NULL,
+  `codigo_postal` varchar(10) NOT NULL,
+  `pais` varchar(60) NOT NULL DEFAULT 'México',
+  `referencias` varchar(255) DEFAULT NULL,
+  `predeterminada` tinyint(1) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `direcciones_cliente_id_foreign` (`cliente_id`),
+  CONSTRAINT `direcciones_cliente_id_foreign` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `direcciones`
+--
+
+LOCK TABLES `direcciones` WRITE;
+/*!40000 ALTER TABLE `direcciones` DISABLE KEYS */;
+INSERT INTO `direcciones` VALUES
+(1,1,'Residencia Principal','Av. Paseo de la Reforma 222','222',NULL,'Juárez','Cuauhtémoc','CDMX','06600','México',NULL,1,'2026-11-17 01:52:19','2026-11-17 01:52:19');
+/*!40000 ALTER TABLE `direcciones` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `discos`
+--
+
+DROP TABLE IF EXISTS `discos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `discos` (
+  `producto_id` bigint(20) unsigned NOT NULL,
+  `artista` varchar(255) NOT NULL,
+  `sello` varchar(255) DEFAULT NULL,
+  `genero` varchar(80) DEFAULT NULL,
+  `formato` enum('CD','vinilo','cassette','digital') NOT NULL DEFAULT 'CD',
+  `anio_lanzamiento` smallint(5) unsigned DEFAULT NULL,
+  `imagen` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`producto_id`),
+  CONSTRAINT `discos_producto_id_foreign` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `discos`
+--
+
+LOCK TABLES `discos` WRITE;
+/*!40000 ALTER TABLE `discos` DISABLE KEYS */;
+INSERT INTO `discos` VALUES
+(10,'Miles Davis','Columbia Records CL 1355','Modal Jazz','vinilo',1959,NULL),
+(11,'John Coltrane','Blue Note BLP 1577','Hard Bop Jazz','vinilo',1957,NULL),
+(12,'John Coltrane Quartet','Impulse! A-77','Spiritual Jazz','vinilo',1965,NULL),
+(13,'The Beatles','Apple Records PCS 7088','Rock Clásico','vinilo',1969,NULL),
+(14,'Pink Floyd','Harvest / Toshiba-EMI CP35-3017','Rock Progresivo','CD',1983,NULL),
+(15,'Led Zeppelin','Atlantic Records SD 7208','Hard Rock','vinilo',1971,NULL),
+(16,'Radiohead','Parlophone / EMI 7243 8 55229 2 4','Art Rock & Alternativo','CD',1997,NULL),
+(17,'Las Cabras Montañesas','Independiente','Rock / Indie','vinilo',2017,'images/coleccionables/las-cabras-montañeras.jpg'),
+(18,'Los Yaki','Latin Gold Records','Rock and Roll / Go-Go','vinilo',1970,'images/coleccionables/Los-Yaki.jpg'),
+(19,'Caifanes','RCA Victor (102-02124)','Rock Pop Latino','vinilo',1990,'images/coleccionables/Caifanes.jpg'),
+(20,'Mägo de Oz','Locomotive Music','Folk Metal','vinilo',2007,'images/coleccionables/Mago-de-oz-La-ciudad.jpg'),
+(21,'Mägo de Oz','Warner Music Spain','Folk Metal','vinilo',2024,'images/coleccionables/Mago-de-oz-Alicia.jpg'),
+(22,'Varios Artistas','Sony Music / BMG','Balada Romántica','CD',2005,'images/coleccionables/Los-Grandes-Romanticos.jpg'),
+(23,'La Arrolladora Banda El Limón','Disa / Universal','Banda / Regional Mexicano','CD',2012,'images/coleccionables/Cd-la-arrolladora.jpg'),
+(24,'Juan Gabriel & Rocío Dúrcal','BMG Ariola','Ranchera / Balada','CD',1997,'images/coleccionables/Juan-Gabriel.jpg'),
+(25,'La Sonora Santanera','Sony Music','Tropical / Danzón / Bolero','CD',2010,'images/coleccionables/3-cds-La-Sonora.jpg'),
+(26,'Varios Artistas','Discos Peerless','Folklor Mexicano / Huapango','CD',2000,'images/coleccionables/Huapangos.jpg'),
+(27,'Taylor Swift','Republic Records / Universal','Pop / Synth-Pop','vinilo',2022,'images/coleccionables/TAYLO.jpg'),
+(28,'Buena Vista Social Club','World Circuit WCD050','Son Cubano & Trova Tradicional','CD',1997,NULL);
+/*!40000 ALTER TABLE `discos` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `envios`
+--
+
+DROP TABLE IF EXISTS `envios`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `envios` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `pedido_id` bigint(20) unsigned NOT NULL,
+  `sucursal_id` bigint(20) unsigned DEFAULT NULL,
+  `paqueteria` varchar(80) DEFAULT NULL,
+  `numero_guia` varchar(80) DEFAULT NULL,
+  `estado_actual` enum('pendiente','en_preparacion','en_transito','en_camino','entregado','incidencia') NOT NULL DEFAULT 'pendiente',
+  `fecha_estimada_entrega` timestamp NULL DEFAULT NULL,
+  `estatus` enum('preparando','en_transito','entregado','devuelto') NOT NULL DEFAULT 'preparando',
+  `enviado_en` timestamp NULL DEFAULT NULL,
+  `entregado_en` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `envios_numero_guia_unique` (`numero_guia`),
+  KEY `envios_pedido_id_foreign` (`pedido_id`),
+  KEY `envios_sucursal_id_foreign` (`sucursal_id`),
+  CONSTRAINT `envios_pedido_id_foreign` FOREIGN KEY (`pedido_id`) REFERENCES `pedidos` (`id`),
+  CONSTRAINT `envios_sucursal_id_foreign` FOREIGN KEY (`sucursal_id`) REFERENCES `sucursales` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `envios`
+--
+
+LOCK TABLES `envios` WRITE;
+/*!40000 ALTER TABLE `envios` DISABLE KEYS */;
+/*!40000 ALTER TABLE `envios` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `existencias`
+--
+
+DROP TABLE IF EXISTS `existencias`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `existencias` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `variante_sku_id` bigint(20) unsigned NOT NULL,
+  `sucursal_id` bigint(20) unsigned NOT NULL,
+  `cantidad` int(10) unsigned NOT NULL DEFAULT 0,
+  `stock_minimo` int(10) unsigned NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `existencias_variante_sku_id_sucursal_id_unique` (`variante_sku_id`,`sucursal_id`),
+  KEY `existencias_sucursal_id_foreign` (`sucursal_id`),
+  CONSTRAINT `existencias_sucursal_id_foreign` FOREIGN KEY (`sucursal_id`) REFERENCES `sucursales` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `existencias_variante_sku_id_foreign` FOREIGN KEY (`variante_sku_id`) REFERENCES `variantes_sku` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `existencias`
+--
+
+LOCK TABLES `existencias` WRITE;
+/*!40000 ALTER TABLE `existencias` DISABLE KEYS */;
+INSERT INTO `existencias` VALUES
+(1,1,3,1,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(2,2,2,1,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(3,3,1,1,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(4,4,1,8,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(5,5,2,9,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(6,6,3,15,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(7,7,1,2,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(8,7,2,1,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(9,8,1,4,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(10,8,2,3,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(11,8,3,6,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(12,9,1,3,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(13,9,3,5,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(14,10,1,1,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(15,11,2,1,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(16,12,1,6,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(17,13,3,1,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(18,14,2,7,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(19,15,3,14,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(20,16,1,5,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(21,16,2,2,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(22,16,3,8,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(23,17,1,4,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(24,17,2,2,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(25,18,2,5,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(26,19,2,1,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(27,20,1,6,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(28,21,1,3,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(29,21,2,2,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(30,22,3,12,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(31,23,1,5,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(32,23,2,3,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(33,24,1,2,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(34,24,2,4,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(35,25,3,8,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(36,26,1,10,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(37,27,3,1,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(38,28,1,4,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(39,28,2,4,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(40,28,3,6,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(41,29,1,1,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(42,30,2,1,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(43,31,3,1,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(44,32,1,0,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(45,33,1,2,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(46,34,1,12,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(47,35,2,9,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(48,36,3,18,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(49,37,1,2,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(50,37,2,1,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(51,38,3,1,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(52,39,1,1,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(53,40,2,1,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(54,41,3,1,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(55,42,1,4,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(56,42,2,3,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(57,42,3,5,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(58,43,1,2,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(59,43,2,1,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(60,43,3,2,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(61,44,1,15,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(62,44,2,10,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(63,44,3,20,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(64,45,1,25,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(65,45,2,15,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(66,45,3,30,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(67,46,1,5,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(68,46,2,4,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(69,46,3,8,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(70,47,1,3,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(71,47,2,4,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(72,47,3,6,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(73,48,1,8,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(74,48,2,6,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(75,48,3,10,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(76,49,1,1,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(77,49,3,2,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(78,50,1,3,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(79,50,2,2,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(80,50,3,4,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(81,51,2,1,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(82,52,1,5,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(83,52,2,3,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(84,52,3,4,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(85,53,1,1,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(86,53,2,2,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(87,54,1,1,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(88,54,3,1,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(89,55,1,3,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(90,55,2,2,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(91,55,3,4,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(92,56,1,1,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(93,57,1,1,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(94,57,2,1,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(95,58,1,1,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(96,58,3,1,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(97,60,1,2,1,'2026-11-18 00:32:40','2026-11-18 00:32:40'),
+(98,60,2,5,1,'2026-11-18 00:32:40','2026-11-18 00:32:40'),
+(99,60,3,2,1,'2026-11-18 00:32:40','2026-11-18 00:32:40'),
+(100,61,1,2,1,'2026-11-18 00:57:40','2026-11-18 00:57:40'),
+(101,61,2,10,1,'2026-11-18 00:57:40','2026-11-18 00:57:40'),
+(102,61,3,2,1,'2026-11-18 00:57:40','2026-11-18 00:57:40');
+/*!40000 ALTER TABLE `existencias` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `failed_jobs`
+--
+
+DROP TABLE IF EXISTS `failed_jobs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `failed_jobs` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `uuid` varchar(255) NOT NULL,
+  `connection` varchar(255) NOT NULL,
+  `queue` varchar(255) NOT NULL,
+  `payload` longtext NOT NULL,
+  `exception` longtext NOT NULL,
+  `failed_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`),
+  KEY `failed_jobs_connection_queue_failed_at_index` (`connection`,`queue`,`failed_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `failed_jobs`
+--
+
+LOCK TABLES `failed_jobs` WRITE;
+/*!40000 ALTER TABLE `failed_jobs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `failed_jobs` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `historial_envios`
+--
+
+DROP TABLE IF EXISTS `historial_envios`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `historial_envios` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `envio_id` bigint(20) unsigned NOT NULL,
+  `estado` varchar(60) NOT NULL,
+  `ubicacion` varchar(120) DEFAULT NULL,
+  `descripcion` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `historial_envios_envio_id_foreign` (`envio_id`),
+  CONSTRAINT `historial_envios_envio_id_foreign` FOREIGN KEY (`envio_id`) REFERENCES `envios` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `historial_envios`
+--
+
+LOCK TABLES `historial_envios` WRITE;
+/*!40000 ALTER TABLE `historial_envios` DISABLE KEYS */;
+/*!40000 ALTER TABLE `historial_envios` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `job_batches`
+--
+
+DROP TABLE IF EXISTS `job_batches`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `job_batches` (
+  `id` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `total_jobs` int(11) NOT NULL,
+  `pending_jobs` int(11) NOT NULL,
+  `failed_jobs` int(11) NOT NULL,
+  `failed_job_ids` longtext NOT NULL,
+  `options` mediumtext DEFAULT NULL,
+  `cancelled_at` int(11) DEFAULT NULL,
+  `created_at` int(11) NOT NULL,
+  `finished_at` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `job_batches`
+--
+
+LOCK TABLES `job_batches` WRITE;
+/*!40000 ALTER TABLE `job_batches` DISABLE KEYS */;
+/*!40000 ALTER TABLE `job_batches` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `jobs`
+--
+
+DROP TABLE IF EXISTS `jobs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `jobs` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `queue` varchar(255) NOT NULL,
+  `payload` longtext NOT NULL,
+  `attempts` smallint(5) unsigned NOT NULL,
+  `reserved_at` int(10) unsigned DEFAULT NULL,
+  `available_at` int(10) unsigned NOT NULL,
+  `created_at` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `jobs_queue_index` (`queue`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `jobs`
+--
+
+LOCK TABLES `jobs` WRITE;
+/*!40000 ALTER TABLE `jobs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `jobs` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `libros`
+--
+
+DROP TABLE IF EXISTS `libros`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `libros` (
+  `producto_id` bigint(20) unsigned NOT NULL,
+  `isbn` varchar(17) DEFAULT NULL,
+  `autor` varchar(255) NOT NULL,
+  `genero` varchar(60) DEFAULT NULL,
+  `editorial` varchar(255) DEFAULT NULL,
+  `anio_publicacion` smallint(5) unsigned DEFAULT NULL,
+  `paginas` smallint(5) unsigned DEFAULT NULL,
+  PRIMARY KEY (`producto_id`),
+  UNIQUE KEY `libros_isbn_unique` (`isbn`),
+  CONSTRAINT `libros_producto_id_foreign` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `libros`
+--
+
+LOCK TABLES `libros` WRITE;
+/*!40000 ALTER TABLE `libros` DISABLE KEYS */;
+INSERT INTO `libros` VALUES
+(1,'978-950-07-0010-1','Gabriel García Márquez','novela','Editorial Sudamericana',1967,351),
+(2,'978-968-16-0001-2','Juan Rulfo','novela','Fondo de Cultura Económica',1955,155),
+(3,'978-950-03-0049-8','Jorge Luis Borges','novela','Editorial Losada',1949,146),
+(4,'978-968-16-0050-0','Octavio Paz','ensayo','Cuadernos Americanos',1950,195),
+(5,'978-968-411-062-5','Carlos Fuentes','novela','Ediciones Era',1962,62),
+(6,'978-950-07-0063-7','Julio Cortázar','novela','Editorial Sudamericana',1963,635),
+(7,'978-968-16-0157-6','Octavio Paz','poesia','Fondo de Cultura Económica',1957,112),
+(8,'978-970-32-4469-0','Miguel León-Portilla','historia','Universidad Nacional Autónoma de México',1959,218),
+(9,'978-968-16-0442-3','Thomas S. Kuhn','ciencia','Fondo de Cultura Económica',1971,319),
+(60,NULL,'Curaduría ARCHIVUM','novela','Ediciones ARCHIVUM',2026,100),
+(61,'9788416867219','W. Bruce Cameron','Drama Emotivo','Roca Editorial',2017,318);
+/*!40000 ALTER TABLE `libros` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `mensajes_contacto`
+--
+
+DROP TABLE IF EXISTS `mensajes_contacto`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `mensajes_contacto` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(150) NOT NULL,
+  `email` varchar(150) NOT NULL,
+  `telefono` varchar(50) DEFAULT NULL,
+  `sucursal_id` bigint(20) unsigned DEFAULT NULL,
+  `asunto` varchar(200) NOT NULL,
+  `mensaje` text NOT NULL,
+  `estatus` enum('pendiente','leido','respondido') NOT NULL DEFAULT 'pendiente',
+  `ip` varchar(45) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `mensajes_contacto_sucursal_id_foreign` (`sucursal_id`),
+  CONSTRAINT `mensajes_contacto_sucursal_id_foreign` FOREIGN KEY (`sucursal_id`) REFERENCES `sucursales` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `mensajes_contacto`
+--
+
+LOCK TABLES `mensajes_contacto` WRITE;
+/*!40000 ALTER TABLE `mensajes_contacto` DISABLE KEYS */;
+INSERT INTO `mensajes_contacto` VALUES
+(1,'Evelyn','eve1@gmail.com','5650213088',1,'Verificación de pieza','Checar si una pieza es verdica','pendiente','172.18.0.1','2026-11-17 06:13:50','2026-11-17 06:13:50');
+/*!40000 ALTER TABLE `mensajes_contacto` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `migrations`
+--
+
+DROP TABLE IF EXISTS `migrations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `migrations` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `migration` varchar(255) NOT NULL,
+  `batch` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `migrations`
+--
+
+LOCK TABLES `migrations` WRITE;
+/*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
+INSERT INTO `migrations` VALUES
+(1,'0001_01_01_000000_create_users_table',1),
+(2,'0001_01_01_000001_create_cache_table',1),
+(3,'0001_01_01_000002_create_jobs_table',1),
+(4,'2026_10_22_000001_create_roles_table',1),
+(5,'2026_10_22_000002_create_usuarios_table',1),
+(6,'2026_10_22_000003_create_usuario_rol_table',1),
+(7,'2026_10_22_000004_create_recuperacion_contrasenas_table',1),
+(8,'2026_10_22_000005_create_bitacoras_table',1),
+(9,'2026_10_22_000006_create_clientes_table',1),
+(10,'2026_10_22_000007_create_direcciones_table',1),
+(11,'2026_10_22_000008_create_clientes_frecuentes_table',1),
+(12,'2026_10_22_000009_create_promociones_table',1),
+(13,'2026_10_22_000010_create_cliente_promocion_table',1),
+(14,'2026_10_22_000011_create_catalogos_table',1),
+(15,'2026_10_22_000012_create_productos_table',1),
+(16,'2026_10_22_000013_create_libros_table',1),
+(17,'2026_10_22_000014_create_discos_table',1),
+(18,'2026_10_22_000015_create_coleccionables_table',1),
+(19,'2026_10_22_000016_create_variantes_sku_table',1),
+(20,'2026_10_22_000017_create_sucursales_table',1),
+(21,'2026_10_22_000018_create_existencias_table',1),
+(22,'2026_10_22_000019_create_piezas_unicas_table',1),
+(23,'2026_10_22_000020_create_movimientos_inventario_table',1),
+(24,'2026_10_22_000021_create_carritos_table',1),
+(25,'2026_10_22_000022_create_carrito_items_table',1),
+(26,'2026_10_22_000023_create_pedidos_table',1),
+(27,'2026_10_22_000024_create_detalle_pedidos_table',1),
+(28,'2026_10_22_000025_create_reservas_stock_table',1),
+(29,'2026_10_22_000026_create_pagos_table',1),
+(30,'2026_10_22_000027_create_detalle_pagos_table',1),
+(31,'2026_10_22_000028_create_devoluciones_table',1),
+(32,'2026_10_22_000029_create_envios_table',1),
+(33,'2026_10_22_000030_create_detalle_envios_table',1),
+(34,'2026_10_28_014911_create_historial_envios_table',1),
+(35,'2026_10_28_014912_add_tracking_fields_to_envios_table',1),
+(36,'2026_10_28_014913_add_payment_methods_fields_to_pagos_table',1),
+(37,'2026_11_06_000001_add_preventa_fields_to_productos_table',1),
+(38,'2026_11_09_000001_add_garantia_fields_to_devoluciones_table',1),
+(39,'2026_11_09_000002_add_preventa_fields_to_promociones_and_productos_table',1),
+(40,'2026_11_10_000001_add_filtros_to_libros_and_coleccionables_tables',1),
+(41,'2026_11_11_000001_add_imagen_to_discos_table',1),
+(42,'2026_11_11_000002_add_imagen_to_coleccionables_table',1),
+(43,'2026_11_16_000001_create_proveedores_table',1),
+(44,'2026_11_17_055027_create_mensajes_contacto_table',2),
+(45,'2026_11_17_234459_add_imagen_to_productos_and_variantes_sku_table',3);
+/*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `movimientos_inventario`
+--
+
+DROP TABLE IF EXISTS `movimientos_inventario`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `movimientos_inventario` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `existencia_id` bigint(20) unsigned NOT NULL,
+  `usuario_id` bigint(20) unsigned DEFAULT NULL,
+  `tipo` enum('entrada','salida','ajuste','traspaso','devolucion') NOT NULL,
+  `cantidad` int(11) NOT NULL,
+  `motivo` varchar(255) DEFAULT NULL,
+  `referencia_type` varchar(255) DEFAULT NULL,
+  `referencia_id` bigint(20) unsigned DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `proveedor_id` bigint(20) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `movimientos_inventario_existencia_id_foreign` (`existencia_id`),
+  KEY `movimientos_inventario_usuario_id_foreign` (`usuario_id`),
+  KEY `movimientos_inventario_referencia_type_referencia_id_index` (`referencia_type`,`referencia_id`),
+  KEY `movimientos_inventario_proveedor_id_foreign` (`proveedor_id`),
+  CONSTRAINT `movimientos_inventario_existencia_id_foreign` FOREIGN KEY (`existencia_id`) REFERENCES `existencias` (`id`),
+  CONSTRAINT `movimientos_inventario_proveedor_id_foreign` FOREIGN KEY (`proveedor_id`) REFERENCES `proveedores` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `movimientos_inventario_usuario_id_foreign` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `movimientos_inventario`
+--
+
+LOCK TABLES `movimientos_inventario` WRITE;
+/*!40000 ALTER TABLE `movimientos_inventario` DISABLE KEYS */;
+INSERT INTO `movimientos_inventario` VALUES
+(1,97,6,'entrada',2,'Alta inicial de catálogo [LIB-2024-19]',NULL,NULL,'2026-11-18 00:32:40',NULL),
+(2,98,6,'entrada',5,'Alta inicial de catálogo [LIB-2024-19]',NULL,NULL,'2026-11-18 00:32:40',NULL),
+(3,99,6,'entrada',2,'Alta inicial de catálogo [LIB-2024-19]',NULL,NULL,'2026-11-18 00:32:40',NULL),
+(4,100,1,'entrada',2,'Alta inicial de catálogo [LIB-2024-20]',NULL,NULL,'2026-11-18 00:57:40',NULL),
+(5,101,1,'entrada',10,'Alta inicial de catálogo [LIB-2024-20]',NULL,NULL,'2026-11-18 00:57:40',NULL),
+(6,102,1,'entrada',2,'Alta inicial de catálogo [LIB-2024-20]',NULL,NULL,'2026-11-18 00:57:40',NULL);
+/*!40000 ALTER TABLE `movimientos_inventario` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pagos`
+--
+
+DROP TABLE IF EXISTS `pagos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pagos` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `pedido_id` bigint(20) unsigned NOT NULL,
+  `metodo` enum('tarjeta','transferencia','efectivo','paypal','otro') NOT NULL,
+  `metodo_pago` enum('oxxo','transferencia','tarjeta') DEFAULT NULL,
+  `codigo_oxxo` varchar(60) DEFAULT NULL,
+  `referencia_bancaria` varchar(80) DEFAULT NULL,
+  `expira_at` timestamp NULL DEFAULT NULL,
+  `comprobante_url` varchar(255) DEFAULT NULL,
+  `monto` decimal(12,2) NOT NULL,
+  `estatus` enum('pendiente','aprobado','rechazado','reembolsado') NOT NULL DEFAULT 'pendiente',
+  `pagado_en` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `pagos_pedido_id_foreign` (`pedido_id`),
+  CONSTRAINT `pagos_pedido_id_foreign` FOREIGN KEY (`pedido_id`) REFERENCES `pedidos` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pagos`
+--
+
+LOCK TABLES `pagos` WRITE;
+/*!40000 ALTER TABLE `pagos` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pagos` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `password_reset_tokens`
+--
+
+DROP TABLE IF EXISTS `password_reset_tokens`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `password_reset_tokens` (
+  `email` varchar(255) NOT NULL,
+  `token` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `password_reset_tokens`
+--
+
+LOCK TABLES `password_reset_tokens` WRITE;
+/*!40000 ALTER TABLE `password_reset_tokens` DISABLE KEYS */;
+/*!40000 ALTER TABLE `password_reset_tokens` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pedidos`
+--
+
+DROP TABLE IF EXISTS `pedidos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pedidos` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `folio` varchar(30) NOT NULL,
+  `cliente_id` bigint(20) unsigned NOT NULL,
+  `direccion_envio_id` bigint(20) unsigned DEFAULT NULL,
+  `estatus` enum('pendiente','pagado','enviado','entregado','cancelado') NOT NULL DEFAULT 'pendiente',
+  `subtotal` decimal(12,2) NOT NULL DEFAULT 0.00,
+  `descuento` decimal(12,2) NOT NULL DEFAULT 0.00,
+  `total` decimal(12,2) NOT NULL DEFAULT 0.00,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `pedidos_folio_unique` (`folio`),
+  KEY `pedidos_direccion_envio_id_foreign` (`direccion_envio_id`),
+  KEY `pedidos_cliente_id_estatus_index` (`cliente_id`,`estatus`),
+  CONSTRAINT `pedidos_cliente_id_foreign` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`),
+  CONSTRAINT `pedidos_direccion_envio_id_foreign` FOREIGN KEY (`direccion_envio_id`) REFERENCES `direcciones` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pedidos`
+--
+
+LOCK TABLES `pedidos` WRITE;
+/*!40000 ALTER TABLE `pedidos` DISABLE KEYS */;
+INSERT INTO `pedidos` VALUES
+(1,'ARC-HIST-VIP-001',1,1,'entregado',7800.00,0.00,7800.00,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(2,'ARC-HIST-VIP-002',1,1,'entregado',7800.00,0.00,7800.00,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(3,'ARC-HIST-VIP-003',1,1,'entregado',7800.00,0.00,7800.00,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(4,'ARC-HIST-VIP-004',1,1,'entregado',7800.00,0.00,7800.00,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(5,'ARC-HIST-VIP-005',1,1,'entregado',7800.00,0.00,7800.00,'2026-11-17 01:52:19','2026-11-17 01:52:19');
+/*!40000 ALTER TABLE `pedidos` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `piezas_unicas`
+--
+
+DROP TABLE IF EXISTS `piezas_unicas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `piezas_unicas` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `existencia_id` bigint(20) unsigned NOT NULL,
+  `numero_serie` varchar(80) NOT NULL,
+  `certificado` varchar(255) DEFAULT NULL,
+  `notas` text DEFAULT NULL,
+  `estado` enum('disponible','reservada','vendida') NOT NULL DEFAULT 'disponible',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `piezas_unicas_numero_serie_unique` (`numero_serie`),
+  KEY `piezas_unicas_existencia_id_foreign` (`existencia_id`),
+  CONSTRAINT `piezas_unicas_existencia_id_foreign` FOREIGN KEY (`existencia_id`) REFERENCES `existencias` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `piezas_unicas`
+--
+
+LOCK TABLES `piezas_unicas` WRITE;
+/*!40000 ALTER TABLE `piezas_unicas` DISABLE KEYS */;
+INSERT INTO `piezas_unicas` VALUES
+(1,1,'ARC-LIB-1967-001','COA-BIB-2026-014','Ejemplar único 1/1 catalogado en bóveda climatizada (VERY FINE (VF) · PIEZA ÚNICA 1/1).','disponible','2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(2,2,'ARC-LIB-1955-002','COA-BIB-2026-019','Ejemplar único 1/1 catalogado en bóveda climatizada (NEAR MINT (NM) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA).','disponible','2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(3,3,'ARC-LIB-1949-003','COA-BIB-2026-022','Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA).','disponible','2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(4,14,'ARC-VIN-1959-001','COA-AUD-2026-101','Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA).','disponible','2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(5,15,'ARC-VIN-1957-002','COA-AUD-2026-104','Ejemplar único 1/1 catalogado en bóveda climatizada (NEAR MINT (NM) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA).','disponible','2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(6,17,'ARC-VIN-1969-004','COA-AUD-2026-112','Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA).','disponible','2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(7,26,'ARC-VIN-1990-001','COA-MUS-2026-101','Ejemplar único 1/1 catalogado en bóveda climatizada (NEAR MINT (NM) · PIEZA ÚNICA 1/1).','disponible','2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(8,37,'ARC-VIN-2024-002','COA-MUS-2026-102','Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · PIEZA ÚNICA 1/1).','disponible','2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(9,41,'ARC-MEM-1928-001','COA-NOT-2026-301','Ejemplar único 1/1 catalogado en bóveda climatizada (COA NOTARIADO · PIEZA ÚNICA 1/1).','disponible','2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(10,42,'ARC-MEM-1940-004','COA-NOT-2026-320','Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA).','disponible','2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(11,43,'ARC-MEM-1910-005','COA-NOT-2026-335','Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA).','disponible','2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(12,44,'ARC-MEM-1934-002','COA-NOT-2026-309','Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · COA NOTARIADO · ADQUISICIÓN SELECTA).','vendida','2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(13,51,'ARC-COL-1933-001','COA-COL-2026-001','Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · MONEDA HISTÓRICA RARA).','disponible','2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(14,52,'ARC-COL-1794-002','COA-COL-2026-002','Ejemplar único 1/1 catalogado en bóveda climatizada (VERY FINE (VF) · PRIMER DÓLAR FEDERAL).','disponible','2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(15,53,'ARC-COL-1344-003','COA-COL-2026-003','Ejemplar único 1/1 catalogado en bóveda climatizada (NEAR MINT (NM) · PIEZA ÚNICA MEDIEVAL).','disponible','2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(16,54,'ARC-COL-0723-004','COA-COL-2026-004','Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · CALIFATO OMEYA).','disponible','2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(17,81,'ARC-FIG-1992-005','COA-FIG-2026-005','Ejemplar único 1/1 catalogado en bóveda climatizada (VERY FINE (VF) · ARTE POPULAR INDÍGENA).','disponible','2026-11-17 01:52:19','2026-11-17 01:52:19');
+/*!40000 ALTER TABLE `piezas_unicas` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `productos`
+--
+
+DROP TABLE IF EXISTS `productos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `productos` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `catalogo_id` bigint(20) unsigned NOT NULL,
+  `nombre` varchar(255) NOT NULL,
+  `descripcion` text DEFAULT NULL,
+  `imagen` varchar(500) DEFAULT NULL,
+  `precio` decimal(10,2) NOT NULL,
+  `activo` tinyint(1) NOT NULL DEFAULT 1,
+  `es_preventa` tinyint(1) NOT NULL DEFAULT 0,
+  `limite_preventa` int(10) unsigned DEFAULT NULL,
+  `preventa_exclusiva_hasta` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `productos_catalogo_id_foreign` (`catalogo_id`),
+  KEY `productos_nombre_index` (`nombre`),
+  CONSTRAINT `productos_catalogo_id_foreign` FOREIGN KEY (`catalogo_id`) REFERENCES `catalogos` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `productos`
+--
+
+LOCK TABLES `productos` WRITE;
+/*!40000 ALTER TABLE `productos` DISABLE KEYS */;
+INSERT INTO `productos` VALUES
+(1,1,'Cien Años de Soledad (1ª Edición Sudamericana)','Pieza Única (1/1) custodiada en Almacén General: Tiraje inicial de Buenos Aires (Mayo 1967) con prueba de galera firmada. Cubierta original con galeón en la selva diseñada por Iris Alba.',NULL,32000.00,1,0,NULL,NULL,'2026-11-17 01:52:18','2026-11-17 01:52:18',NULL),
+(2,1,'Pedro Páramo (Edición Príncipe FCE)','Pieza Única (1/1) custodiada en Sucursal Coyoacán: Primera edición de 1955 en la Colección Letras Mexicanas N.º 19 con firma autógrafa de Juan Rulfo en guarda anterior.',NULL,44500.00,1,0,NULL,NULL,'2026-11-17 01:52:18','2026-11-17 01:52:18',NULL),
+(3,1,'El Aleph (Ejemplar Dedicado por el Autor)','Pieza Única (1/1) custodiada en Sucursal Central Bellas Artes: Primera edición impresa por Editorial Losada (1949) con dedicatoria manuscrita de Jorge Luis Borges.',NULL,58000.00,1,0,NULL,NULL,'2026-11-17 01:52:18','2026-11-17 01:52:18',NULL),
+(4,1,'El Laberinto de la Soledad (1ª Edición Cuadernos Americanos)','Stock Masivo en Sucursal Central Bellas Artes: Edición de tiraje múltiple impresa en los talleres de Cuadernos Americanos en papel Chamois. Permite adquirir múltiples ejemplares.',NULL,16900.00,1,0,NULL,NULL,'2026-11-17 01:52:18','2026-11-17 01:52:18',NULL),
+(5,1,'Aura (Edición Conmemorativa Biblioteca Era Coyoacán)','Stock Masivo en Sucursal Coyoacán: Tiraje regular encuadernado en tela editorial por Ediciones Era. Disponible para compra de varias unidades sin bloqueo exclusivo.',NULL,6800.00,1,0,NULL,NULL,'2026-11-17 01:52:18','2026-11-17 01:52:18',NULL),
+(6,1,'Rayuela (Tiraje Clásico Editorial Sudamericana)','Stock Masivo en Almacén General: Edición conmemorativa de tiraje amplio con tablero de dirección de lectura. Existencias múltiples disponibles para despacho inmediato.',NULL,8400.00,1,0,NULL,NULL,'2026-11-17 01:52:18','2026-11-17 01:52:18',NULL),
+(7,1,'Piedra de Sol y Obra Poética (Primera Edición 1957)','Pieza de Poesía de Alto Valor Curatorial: Primera edición del poema circular de 584 versos endecasílabos numerados. Ejemplar de colección impreso en papel especial.',NULL,24500.00,1,0,NULL,NULL,'2026-11-17 01:52:18','2026-11-17 01:52:18',NULL),
+(8,1,'Visión de los Vencidos: Relaciones Indígenas de la Conquista','Obra Fundamental de Historia: Testimonios de los informantes de Sahagún traducidos del náhuatl por Ángel María Garibay con textos y notas de Miguel León-Portilla.',NULL,9800.00,1,0,NULL,NULL,'2026-11-17 01:52:18','2026-11-17 01:52:18',NULL),
+(9,1,'La Estructura de las Revoluciones Científicas (1ª Edición FCE)','Obra Cumbre de Ciencia y Epistemología: Traducción clásica al español del tratado pionero de Thomas Kuhn sobre los cambios de paradigma en la investigación científica.',NULL,11200.00,1,0,NULL,NULL,'2026-11-17 01:52:18','2026-11-17 01:52:18',NULL),
+(10,2,'Kind of Blue (Mono 1st Press 6-Eye)','Pieza Única (1/1) en Sucursal Central Bellas Artes: Matriz original XLP 47324-1A con etiqueta Columbia «6-eye» deep groove y firma certificada.',NULL,18500.00,1,0,NULL,NULL,'2026-11-17 01:52:18','2026-11-17 01:52:18',NULL),
+(11,2,'Blue Train (Plastylite RVG Ear Press)','Pieza Única (1/1) en Sucursal Coyoacán: Grabado por Rudy Van Gelder con sello «ear» en surco muerto y dirección 47 West 63rd NYC.',NULL,27500.00,1,0,NULL,NULL,'2026-11-17 01:52:18','2026-11-17 01:52:18',NULL),
+(12,2,'A Love Supreme (Gatefold 1st Impulse! Mono)','Stock Masivo en Sucursal Central Bellas Artes: Carpeta desplegable laminada con estampado VAN GELDER. Existencias múltiples disponibles.',NULL,16200.00,1,0,NULL,NULL,'2026-11-17 01:52:18','2026-11-17 01:52:18',NULL),
+(13,2,'Abbey Road (UK 1st Press Misaligned Apple)','Pieza Única (1/1) en Almacén General: Prensado británico matriz YEX 749-2 / 750-1 con manzana desalineada en contraportada.',NULL,22900.00,1,0,NULL,NULL,'2026-11-17 01:52:18','2026-11-17 01:52:18',NULL),
+(14,2,'The Dark Side of the Moon (1st Japan Black Triangle CD)','Stock Masivo en Sucursal Coyoacán: Edición en Disco Compacto prensada por Toshiba-EMI en Japón (CP35-3017). Permite adquirir múltiples unidades.',NULL,14800.00,1,0,NULL,NULL,'2026-11-17 01:52:18','2026-11-17 01:52:18',NULL),
+(15,2,'Led Zeppelin IV (Prensado Audiófilo Atlantic 180g)','Stock Masivo en Almacén General: Reedición audiófila de tiraje regular en vinilo virgen de 180 gramos masterizado desde las cintas analógicas.',NULL,5900.00,1,0,NULL,NULL,'2026-11-17 01:52:18','2026-11-17 01:52:18',NULL),
+(16,2,'OK Computer (Collector\'s Edition 2-CD Parlophone)','Edición Maestra en Disco Compacto: Edición doble de 1997 con estuche digipak de colección, libreto con ilustraciones de Stanley Donwood y lados B masterizados.',NULL,4800.00,1,0,NULL,NULL,'2026-11-17 01:52:18','2026-11-17 01:52:18',NULL),
+(17,2,'Las Cabras Montañesas - Góticos (2 LP)','Álbum doble de vinilo (2 LP) en edición de alta calidad.',NULL,521.50,1,0,NULL,NULL,'2026-11-17 01:52:18','2026-11-17 01:52:18',NULL),
+(18,2,'Los Yaki – Los Grandes Años Del Rock','Edición clásica de Latin Gold Records recuperada para coleccionistas de rock en español.',NULL,372.56,1,0,NULL,NULL,'2026-11-17 01:52:18','2026-11-17 01:52:18',NULL),
+(19,2,'Caifanes – Caifanes (LP, Edición Original Venezuela)','Pieza Única (1/1) custodiada en Sucursal Coyoacán: Edición original de 1990 prensada en Venezuela bajo el sello RCA (102-02124).',NULL,7413.93,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(20,2,'Mägo de Oz - La Ciudad de los Árboles (Lp Vinyl)','Edición en LP de vinilo de la reconocida banda de folk metal.',NULL,1566.55,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(21,2,'Mägo de Oz - Alicia En El Pais Del Metalverso (Lp Vinyl)','Edición especial en formato LP de vinilo.',NULL,864.00,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(22,2,'Los Grandes Románticos de la Balada (3CDs)','Compilación de colección con José José, Juan Gabriel, Rocío Dúrcal, entre otros.',NULL,179.00,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(23,2,'La Arrolladora Banda El Limón - Las Bandas Románticas','CD con grandes éxitos románticos de banda sinaloense.',NULL,183.00,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(24,2,'Juan Gabriel & Rocío Dúrcal - Juntos Otra Vez (2CD)','Álbum doble en CD de dos grandes exponentes de la música ranchera y balada.',NULL,129.00,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(25,2,'La Sonora Santanera - Tesoros de Colección Vol. 3 (3 Discos)','Edición especial de 3 discos originales en formato CD.',NULL,391.50,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(26,2,'Los Mejores Huapangos | CD Música','CD con selección folklórica de los huapangos tradicionales más emblemáticos.',NULL,69.00,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(27,2,'Taylor Swift - Midnights (Korea Edition)','Pieza Única (1/1) custodiada en Almacén General: Edición coleccionable de importación coreana.',NULL,641.68,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(28,2,'Buena Vista Social Club (Edición CD Remasterizada World Circuit)','Obra Fonográfica Esencial en Disco Compacto: Grabaciones de La Habana bajo la producción de Ry Cooder, masterizado digital con folleto historiográfico de 48 páginas.',NULL,3950.00,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(29,3,'Carta Manuscrita Bellas Artes (1928)','Pieza Única (1/1) en Sucursal Central Bellas Artes: Pluma estilográfica con tinta ferrogálica original sobre papel membretado con COA notariado.',NULL,9400.00,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(30,3,'Manuscrito Autógrafo Casa Azul Coyoacán (1940)','Pieza Única (1/1) en Sucursal Coyoacán: Misiva autógrafa en papel de algodón fechada en Villa Coyoacán con sello lacrado original.',NULL,36800.00,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(31,3,'Medalla Conmemorativa del Centenario (1910)','Pieza Única (1/1) en Almacén General: Medalla oficial en plata ley .925 acuñada por la Casa de Moneda en 1910 con estuche de terciopelo original.',NULL,29500.00,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(32,3,'Fotografía en Plata sobre Gelatina Firmada (1934)','Copia de época (vintage print) revelada en cuarto oscuro por el estudio original, con sello húmedo al reverso y paspartú libre de ácido.',NULL,41000.00,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(33,3,'Partitura Autógrafa de Estudio en Sol Menor (1912)','Lote limitado en Sucursal Central Bellas Artes: 2 cuadernos musicales de 12 folios con anotaciones de dinámica a lápiz. Conservado en carpeta museográfica.',NULL,21500.00,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(34,3,'Programa Inaugural Palacio de Bellas Artes (1934)','Stock Masivo en Sucursal Central Bellas Artes: Folleto conmemorativo oficial de la inauguración del Palacio de Bellas Artes en septiembre de 1934.',NULL,7800.00,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(35,3,'Litografía Taller de Gráfica Popular Coyoacán (1954)','Stock Masivo en Sucursal Coyoacán: Grabado en linóleo de tiraje amplio impreso sobre papel de algodón en Coyoacán. Disponible en múltiples unidades.',NULL,5400.00,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(36,3,'Kit de Conservación Museográfica & Estuche Antiácido','Stock Masivo en Almacén General: Set profesional de fundas de polipropileno grado archivo, guantes de nitrilo y caja libre de ácido para libros y vinilos.',NULL,3200.00,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(37,3,'Estatua Evangelion Test Type-01 (Edición Limitada Kaiyodo 1997)','Figuras Coleccionables (Cultura Pop & Anime): Escultura en resina pintada a mano supervisada por Gainax Japón. Incluye pedestal con número de serie de tiraje.',NULL,18900.00,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(38,3,'Double Eagle de 1933 (EE. UU.)','Moneda de oro de $20 que el gobierno ordenó fundir durante la Gran Depresión. Pieza de valor histórico incalculable.',NULL,18872250.00,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(39,3,'Dólar Flowing Hair de 1794 (EE. UU.)','El primer dólar de plata acuñado por el gobierno federal estadounidense.',NULL,175000.00,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(40,3,'Florín de Eduardo III de 1344 (Inglaterra)','Legendaria moneda de oro medieval de la cual solo se conocen tres ejemplares en todo el mundo.',NULL,7000000.00,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(41,3,'Dinar de Oro Omeya del año 723 d.C.','Acuñada en la región de la actual Arabia Saudita con oro proveniente de una mina del propio Califa.',NULL,95600000.00,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(42,3,'Monedas de 8 Reales (Época Colonial / Spanish Dollars)','Conocidas mundialmente como columnarios o piezas de 8, fueron la primera moneda de uso internacional.',NULL,5500.00,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(43,3,'Centenario de Oro (50 Pesos)','Contiene 37.5 gramos de oro puro y presenta el clásico diseño del Ángel de la Independencia.',NULL,92250.00,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(44,3,'Moneda de Plata Libertad (Onza Troy)','Una de las monedas de inversión (bullion) de plata más hermosas y cotizadas del mundo.',NULL,1250.00,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(45,3,'Monedas Conmemorativas de 20 Pesos (Familia C y C1)','Piezas recientes conmemorativas (como la Fundación de Veracruz o el Bicentenario de la Independencia).',NULL,100.00,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(46,3,'Familia AA y A (Billetes Desmonetizados)','Billetes antiguos impresos por la American Bank Note Company y de fabricación nacional.',NULL,325.00,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(47,3,'Pop Mart Labubu (Designer Toy Coleccionable)','Figura de diseñador caracterizada por orejas puntiagudas, cuerpo peludo, sonrisa traviesa con 9 dientes y rostro de vinilo.',NULL,1100.00,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(48,3,'Funko Pop! Edición Especial Coleccionable','Figura de vinilo con cabeza grande y diseño estilizado de cultura pop.',NULL,1075.00,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(49,3,'Lego Sets Temáticos y de Colección (Edición Especial)','Set de construcción de edición de coleccionista con miles de piezas y minifiguras exclusivas.',NULL,19999.00,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(50,3,'Estatua Anubis Egipcia con Recipiente Base','Estatua decorativa de acabado negro con detalles dorados e iconografía del antiguo Egipto.',NULL,773.08,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(51,3,'Figura de Cerámica \"Storyteller\" de Cochiti','Pieza artesanal tradicional de Snowflake Flower, ca. 1992, narrativa tradicional en arcilla.',NULL,4914.54,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(52,3,'Exquisito Joyero de Estilo Egipcio Decorado con Anubis','Joyero ornamental decorado con motivos y deidades de la mitología egipcia antigua.',NULL,600.49,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(53,3,'Figura Dragon Ball Z Super Saiyan Goku (Banpresto Japón 1993)','Figuras Coleccionables (Cultura Pop & Anime): Figura vintage con caja sellada original de Toei Animation Japón. Conservada en acrílico anti-UV de coleccionista.',NULL,14200.00,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(54,3,'Robot Mecánico de Hojalata Space Trooper (Japón Vintage 1965)','Juguetes y Objetos Manufacturados: Juguete mecánico a cuerda en hojalata litografiada manufacturado por Yonezawa Toys Japón. Mecanismo de marcha y chispa plenamente funcional.',NULL,21800.00,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(55,3,'Billete Revolucionario 10 Pesos Ejército Constitucionalista (1914)','Monedas y Billetes Históricos: Emisión oficial del Gobierno Provisional de México firmada en Monclova. Papel moneda histórico en estado sin circular (UNC).',NULL,8900.00,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(56,3,'Moneda Virreinal 8 Reales Columnario de Plata (1768)','Monedas y Billetes Históricos: Moneda de 8 Reales acuñada a volante en la Real Casa de Moneda de México bajo Carlos III. Plata pura con pátina histórica intocada.',NULL,38500.00,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(57,3,'Consola Nintendo Game & Watch Ball (Primera Edición Japón 1980)','Coleccionables de Videojuegos: El primer sistema portátil creado por Gunpei Yokoi para Nintendo (Modelo AC-01). En caja de colección con manual y batería sellada.',NULL,26900.00,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(58,3,'Cartucho The Legend of Zelda (Gold Cartridge NES 1987 Sellado)','Coleccionables de Videojuegos: Cartucho dorado original para Nintendo Entertainment System con batería de respaldo interna y sello pericial de graduación Wata/VGA.',NULL,34000.00,1,0,NULL,NULL,'2026-11-17 01:52:19','2026-11-17 01:52:19',NULL),
+(60,1,'Lugares Asombrosos 2','Lugares Asombrosos 2','storage/productos/ZNfsGtDFd6BzxQ4iW6fopcb71HuJN67Yf025BxuD.webp',3345.00,1,0,NULL,NULL,'2026-11-18 00:32:40','2026-11-18 00:32:40',NULL),
+(61,1,'La razón de estar contigo','La razón de estar contigo','storage/productos/Du8c2M6YdbJzHp5ifofcw4SJxIRkIghemAhV2Ha0.jpg',500.00,1,0,NULL,NULL,'2026-11-18 00:57:40','2026-11-18 00:57:40',NULL);
+/*!40000 ALTER TABLE `productos` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `promociones`
+--
+
+DROP TABLE IF EXISTS `promociones`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `promociones` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `producto_id` bigint(20) unsigned DEFAULT NULL,
+  `nombre` varchar(120) NOT NULL,
+  `descripcion` text DEFAULT NULL,
+  `tipo_descuento` enum('porcentaje','monto') NOT NULL DEFAULT 'porcentaje',
+  `valor` decimal(10,2) NOT NULL,
+  `es_preventa_exclusiva` tinyint(1) NOT NULL DEFAULT 1,
+  `preventa_inicia_en` timestamp NULL DEFAULT NULL,
+  `apertura_publica_en` timestamp NULL DEFAULT NULL,
+  `badge_etiqueta` varchar(120) DEFAULT NULL,
+  `inicia_en` date NOT NULL,
+  `termina_en` date DEFAULT NULL,
+  `activa` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `promociones_producto_id_foreign` (`producto_id`),
+  CONSTRAINT `promociones_producto_id_foreign` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `promociones`
+--
+
+LOCK TABLES `promociones` WRITE;
+/*!40000 ALTER TABLE `promociones` DISABLE KEYS */;
+INSERT INTO `promociones` VALUES
+(1,34,'Preventa Exclusiva VIP: Programa Inaugural Palacio de Bellas Artes (Edición Especial)','Acceso anticipado exclusivo para Clientes Frecuentes (5+ compras) antes de la apertura oficial al público general. Incluye carpeta museográfica conmemorativa.','porcentaje',15.00,1,'2026-11-15 01:52:19','2026-11-19 01:52:19','PREVENTA ACTIVA · ACCESO ANTICIPADO VIP','2026-11-15','2026-11-27',1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(2,12,'Apertura Oficial: A Love Supreme (Lanzamiento Audiófilo 180g)','Promoción desbloqueada en Fase de Apertura para todos los clientes comunes de la tienda. Prensado audiófilo con carpeta desplegable laminada.','porcentaje',12.00,1,'2026-11-12 01:52:19','2026-11-16 01:52:19','EDICIÓN ESPECIAL · APERTURA PÚBLICA','2026-11-12','2026-11-22',1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(3,15,'Edición Especial: Led Zeppelin IV (Prensado Audiófilo 180g)','Lanzamiento especial en Fase de Preventa Anticipada para Clientes Frecuentes VIP (5+ compras). Masterizado desde las cintas analógicas originales.','monto',900.00,1,'2026-11-16 01:52:19','2026-11-20 01:52:19','EDICIÓN ESPECIAL · PREVENTA VIP','2026-11-16','2026-11-29',1,'2026-11-17 01:52:19','2026-11-17 01:52:19');
+/*!40000 ALTER TABLE `promociones` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `proveedores`
+--
+
+DROP TABLE IF EXISTS `proveedores`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `proveedores` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(255) NOT NULL,
+  `razon_social` varchar(255) DEFAULT NULL,
+  `rfc` varchar(20) DEFAULT NULL,
+  `contacto_nombre` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `telefono` varchar(50) DEFAULT NULL,
+  `direccion` text DEFAULT NULL,
+  `activo` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `proveedores_rfc_unique` (`rfc`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `proveedores`
+--
+
+LOCK TABLES `proveedores` WRITE;
+/*!40000 ALTER TABLE `proveedores` DISABLE KEYS */;
+/*!40000 ALTER TABLE `proveedores` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `recuperacion_contrasenas`
+--
+
+DROP TABLE IF EXISTS `recuperacion_contrasenas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `recuperacion_contrasenas` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `usuario_id` bigint(20) unsigned NOT NULL,
+  `token_hash` varchar(255) NOT NULL,
+  `expira_en` timestamp NOT NULL,
+  `usado_en` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `recuperacion_contrasenas_token_hash_unique` (`token_hash`),
+  KEY `recuperacion_contrasenas_usuario_id_foreign` (`usuario_id`),
+  CONSTRAINT `recuperacion_contrasenas_usuario_id_foreign` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `recuperacion_contrasenas`
+--
+
+LOCK TABLES `recuperacion_contrasenas` WRITE;
+/*!40000 ALTER TABLE `recuperacion_contrasenas` DISABLE KEYS */;
+INSERT INTO `recuperacion_contrasenas` VALUES
+(1,13,'8322326cb5f420475de6c7a02cb89856c9db59d3217ca94096aff10c24a24234','2026-11-17 08:08:07',NULL,'2026-11-17 07:08:07','2026-11-17 07:08:07');
+/*!40000 ALTER TABLE `recuperacion_contrasenas` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `reservas_stock`
+--
+
+DROP TABLE IF EXISTS `reservas_stock`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `reservas_stock` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `existencia_id` bigint(20) unsigned NOT NULL,
+  `pedido_id` bigint(20) unsigned DEFAULT NULL,
+  `carrito_id` bigint(20) unsigned DEFAULT NULL,
+  `cantidad` int(10) unsigned NOT NULL,
+  `expira_en` timestamp NULL DEFAULT NULL,
+  `estado` enum('activa','confirmada','liberada','expirada') NOT NULL DEFAULT 'activa',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `reservas_stock_existencia_id_foreign` (`existencia_id`),
+  KEY `reservas_stock_pedido_id_foreign` (`pedido_id`),
+  KEY `reservas_stock_carrito_id_foreign` (`carrito_id`),
+  CONSTRAINT `reservas_stock_carrito_id_foreign` FOREIGN KEY (`carrito_id`) REFERENCES `carritos` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `reservas_stock_existencia_id_foreign` FOREIGN KEY (`existencia_id`) REFERENCES `existencias` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `reservas_stock_pedido_id_foreign` FOREIGN KEY (`pedido_id`) REFERENCES `pedidos` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `reservas_stock`
+--
+
+LOCK TABLES `reservas_stock` WRITE;
+/*!40000 ALTER TABLE `reservas_stock` DISABLE KEYS */;
+/*!40000 ALTER TABLE `reservas_stock` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `roles`
+--
+
+DROP TABLE IF EXISTS `roles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `roles` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(50) NOT NULL,
+  `descripcion` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `roles_nombre_unique` (`nombre`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `roles`
+--
+
+LOCK TABLES `roles` WRITE;
+/*!40000 ALTER TABLE `roles` DISABLE KEYS */;
+INSERT INTO `roles` VALUES
+(1,'administrador','Acceso total y configuración del sistema','2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(2,'ventas','Gestión de pedidos, ventas, pagos y promociones','2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(3,'almacen','Gestión de existencias, envíos y transferencias','2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(4,'compras','Gestión de compras, proveedores y recepciones','2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(5,'cliente','Cliente de la tienda y catálogo público','2026-11-17 01:52:18','2026-11-17 01:52:18');
+/*!40000 ALTER TABLE `roles` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `sessions`
+--
+
+DROP TABLE IF EXISTS `sessions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sessions` (
+  `id` varchar(255) NOT NULL,
+  `user_id` bigint(20) unsigned DEFAULT NULL,
+  `ip_address` varchar(45) DEFAULT NULL,
+  `user_agent` text DEFAULT NULL,
+  `payload` longtext NOT NULL,
+  `last_activity` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `sessions_user_id_index` (`user_id`),
+  KEY `sessions_last_activity_index` (`last_activity`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sessions`
+--
+
+LOCK TABLES `sessions` WRITE;
+/*!40000 ALTER TABLE `sessions` DISABLE KEYS */;
+INSERT INTO `sessions` VALUES
+('cjRoVxuAhCzunZlMb5RDc5FOJf0yCRnvQonURPbM',6,'172.18.0.1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36 Edg/157.0.0.0','eyJfdG9rZW4iOiJYbFBrdU1scGJlU2xZY3Ntd01uNDhURHZJdUpWbmxGMjhQbHFwV0RvIiwiX2ZsYXNoIjp7Im5ldyI6W10sIm9sZCI6W119LCJfcHJldmlvdXMiOnsidXJsIjoiaHR0cDpcL1wvbG9jYWxob3N0OjgwMDBcL3N0b3JhZ2VcL3Byb2R1Y3Rvc1wvRHU4YzJNNllkYkp6SHA1aWZvZmN3NFNKeElSa0lnaGVtQWhWMkhhMC5qcGciLCJyb3V0ZSI6InN0b3JhZ2UucHVibGljLmZhbGxiYWNrIn0sImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjo2LCJwYXNzd29yZF9oYXNoX3dlYiI6ImU5MjBiOTJiMzQwY2FmN2NlMjdiMDRkZTJkYjI5ZGZjYjNmNDQ5ODY5NjQ4NGMyYmEyNTM2OGJlNjg4YmExMTQiLCJhcmNoaXZ1bV9zdWN1cnNhbF9pZCI6MX0=',1794964249),
+('kiPsLBMGWGHEQHUX0vy7I4HvxucuBtsxL0epHrzQ',NULL,'172.18.0.1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36 Edg/157.0.0.0','eyJfdG9rZW4iOiJoTlRuQjFrTVIweWdRVEE1MThiVnVGMXZLaVkwT0lmY2ZkaDZ2RHVPIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cL2xvY2FsaG9zdDo4MDAwIiwicm91dGUiOiJwdWJsaWMuaG9tZSJ9LCJfZmxhc2giOnsib2xkIjpbXSwibmV3IjpbXX19',1794960589);
+/*!40000 ALTER TABLE `sessions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `sucursales`
+--
+
+DROP TABLE IF EXISTS `sucursales`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sucursales` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(120) NOT NULL,
+  `direccion` varchar(255) NOT NULL,
+  `telefono` varchar(20) DEFAULT NULL,
+  `activa` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `sucursales_nombre_unique` (`nombre`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sucursales`
+--
+
+LOCK TABLES `sucursales` WRITE;
+/*!40000 ALTER TABLE `sucursales` DISABLE KEYS */;
+INSERT INTO `sucursales` VALUES
+(1,'Sucursal Central Bellas Artes','Av. Juárez 18, Centro Histórico, Cuauhtémoc, CDMX','5555128900',1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(2,'Sucursal Coyoacán','Jardín Centenario 14, Villa Coyoacán, CDMX','5556584420',1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(3,'Almacén General','Calz. Vallejo 1020, Industrial Vallejo, Azcapotzalco, CDMX','5553689100',1,'2026-11-17 01:52:18','2026-11-17 01:52:18');
+/*!40000 ALTER TABLE `sucursales` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `email_verified_at` timestamp NULL DEFAULT NULL,
+  `password` varchar(255) NOT NULL,
+  `remember_token` varchar(100) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `users_email_unique` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `usuario_rol`
+--
+
+DROP TABLE IF EXISTS `usuario_rol`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `usuario_rol` (
+  `usuario_id` bigint(20) unsigned NOT NULL,
+  `rol_id` bigint(20) unsigned NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`usuario_id`,`rol_id`),
+  KEY `usuario_rol_rol_id_foreign` (`rol_id`),
+  CONSTRAINT `usuario_rol_rol_id_foreign` FOREIGN KEY (`rol_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `usuario_rol_usuario_id_foreign` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `usuario_rol`
+--
+
+LOCK TABLES `usuario_rol` WRITE;
+/*!40000 ALTER TABLE `usuario_rol` DISABLE KEYS */;
+INSERT INTO `usuario_rol` VALUES
+(1,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(2,2,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(3,2,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(4,3,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(5,3,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(6,4,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(7,5,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(8,5,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(9,5,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(10,5,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(11,1,'2026-11-17 05:33:22','2026-11-17 05:33:22'),
+(12,5,'2026-11-17 05:34:25','2026-11-17 05:34:25'),
+(13,5,'2026-11-17 07:07:41','2026-11-17 07:07:41');
+/*!40000 ALTER TABLE `usuario_rol` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `usuarios`
+--
+
+DROP TABLE IF EXISTS `usuarios`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `usuarios` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(120) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `activo` tinyint(1) NOT NULL DEFAULT 1,
+  `email_verificado_en` timestamp NULL DEFAULT NULL,
+  `remember_token` varchar(100) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `usuarios_email_unique` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `usuarios`
+--
+
+LOCK TABLES `usuarios` WRITE;
+/*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
+INSERT INTO `usuarios` VALUES
+(1,'Carlos Mendoza','admin@archivum.com','$2y$12$WtAOMI0acovxnv23U5HtuOZUGb/eyweYF/clR8ZNqV5aXN9syUmfm',1,'2026-11-17 01:52:18',NULL,'2026-11-17 01:52:18','2026-11-17 01:52:18',NULL),
+(2,'Sofía Valenzuela','ventas1@archivum.com','$2y$12$WtAOMI0acovxnv23U5HtuOZUGb/eyweYF/clR8ZNqV5aXN9syUmfm',1,'2026-11-17 01:52:18',NULL,'2026-11-17 01:52:18','2026-11-17 01:52:18',NULL),
+(3,'Roberto Domínguez','ventas2@archivum.com','$2y$12$WtAOMI0acovxnv23U5HtuOZUGb/eyweYF/clR8ZNqV5aXN9syUmfm',1,'2026-11-17 01:52:18',NULL,'2026-11-17 01:52:18','2026-11-17 01:52:18',NULL),
+(4,'Miguel Ángel Torres','almacen1@archivum.com','$2y$12$WtAOMI0acovxnv23U5HtuOZUGb/eyweYF/clR8ZNqV5aXN9syUmfm',1,'2026-11-17 01:52:18',NULL,'2026-11-17 01:52:18','2026-11-17 01:52:18',NULL),
+(5,'Laura Esquivel','almacen2@archivum.com','$2y$12$WtAOMI0acovxnv23U5HtuOZUGb/eyweYF/clR8ZNqV5aXN9syUmfm',1,'2026-11-17 01:52:18',NULL,'2026-11-17 01:52:18','2026-11-17 01:52:18',NULL),
+(6,'Fernando Morales','compras1@archivum.com','$2y$12$WtAOMI0acovxnv23U5HtuOZUGb/eyweYF/clR8ZNqV5aXN9syUmfm',1,'2026-11-17 01:52:18',NULL,'2026-11-17 01:52:18','2026-11-17 01:52:18',NULL),
+(7,'Elena Ramírez Castillo','elena.ramirez@gmail.com','$2y$12$WtAOMI0acovxnv23U5HtuOZUGb/eyweYF/clR8ZNqV5aXN9syUmfm',1,'2026-11-17 01:52:18',NULL,'2026-11-17 01:52:18','2026-11-17 01:52:18',NULL),
+(8,'Javier Morales Pineda','javier.morales@hotmail.com','$2y$12$WtAOMI0acovxnv23U5HtuOZUGb/eyweYF/clR8ZNqV5aXN9syUmfm',1,'2026-11-17 01:52:18',NULL,'2026-11-17 01:52:18','2026-11-17 01:52:18',NULL),
+(9,'Mariana Rivas Soto','mariana.rivas@outlook.com','$2y$12$WtAOMI0acovxnv23U5HtuOZUGb/eyweYF/clR8ZNqV5aXN9syUmfm',1,'2026-11-17 01:52:18',NULL,'2026-11-17 01:52:18','2026-11-17 01:52:18',NULL),
+(10,'Daniel Castro Herrera','daniel.castro@gmail.com','$2y$12$WtAOMI0acovxnv23U5HtuOZUGb/eyweYF/clR8ZNqV5aXN9syUmfm',1,'2026-11-17 01:52:18',NULL,'2026-11-17 01:52:18','2026-11-17 01:52:18',NULL),
+(11,'Evelyn','eve@gmail.com','$2y$12$DOe5bQVejv6vArlEJB3c6OOc6UuXUshScsIqDR7ZW3q/A9c1LpmhO',1,NULL,NULL,'2026-11-17 05:33:22','2026-11-17 05:33:22',NULL),
+(12,'Evelyn','eve1@gmail.com','$2y$12$b0INRZvOy533g8rXs86P.ewTqeeAYv8UOM4VPmeHtDmM1KH6Mk/O.',1,NULL,NULL,'2026-11-17 05:34:25','2026-11-17 05:34:25',NULL),
+(13,'Vanesa','quijadaevelin82@gmail.com','$2y$12$p8HC5jRAy9KxgLH.ss7v7e7NJmhwaaHzT/nhaRhDJX1.8cfMAAo.q',1,NULL,NULL,'2026-11-17 07:07:41','2026-11-17 07:07:41',NULL);
+/*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `variantes_sku`
+--
+
+DROP TABLE IF EXISTS `variantes_sku`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `variantes_sku` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `producto_id` bigint(20) unsigned NOT NULL,
+  `sku` varchar(60) NOT NULL,
+  `descripcion` varchar(255) DEFAULT NULL,
+  `imagen` varchar(500) DEFAULT NULL,
+  `precio` decimal(10,2) DEFAULT NULL,
+  `activa` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `variantes_sku_sku_unique` (`sku`),
+  KEY `variantes_sku_producto_id_foreign` (`producto_id`),
+  CONSTRAINT `variantes_sku_producto_id_foreign` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `variantes_sku`
+--
+
+LOCK TABLES `variantes_sku` WRITE;
+/*!40000 ALTER TABLE `variantes_sku` DISABLE KEYS */;
+INSERT INTO `variantes_sku` VALUES
+(1,1,'LIB-1967-SUD','VERY FINE (VF) · PIEZA ÚNICA 1/1',NULL,32000.00,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(2,2,'LIB-1955-FCE','NEAR MINT (NM) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA',NULL,44500.00,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(3,3,'LIB-1949-LOS','MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA',NULL,58000.00,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(4,4,'LIB-1950-FCE','VERY FINE (VF) · TIRAJE MÚLTIPLE',NULL,16900.00,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(5,5,'LIB-1962-ERA','NEAR MINT (NM) · TIRAJE REGULAR',NULL,6800.00,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(6,6,'LIB-1963-SUD','MINT (M) · TIRAJE MÚLTIPLE',NULL,8400.00,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(7,7,'LIB-1957-FCE','MINT (M) · PRIMERA EDICIÓN · POESÍA',NULL,24500.00,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(8,8,'LIB-1959-UNAM','NEAR MINT (NM) · HISTORIA · BIBLIOTECA DEL ESTUDIANTE',NULL,9800.00,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(9,9,'LIB-1971-FCE','VERY FINE (VF) · CIENCIA & FILOSOFÍA',NULL,11200.00,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(10,10,'VIN-1959-COL','MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA',NULL,18500.00,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(11,11,'VIN-1957-BN1577','NEAR MINT (NM) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA',NULL,27500.00,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(12,12,'VIN-1965-IMP77','VERY FINE (VF) · VINILO LP 180G',NULL,16200.00,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(13,13,'VIN-1969-PCS7088','MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA',NULL,22900.00,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(14,14,'CD-1983-CP35','MINT (M) · CD COMPACT DISC · ADQUISICIÓN SELECTA',NULL,14800.00,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(15,15,'VIN-1971-LED4','MINT (M) · VINILO LP 180G',NULL,5900.00,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(16,16,'CD-1997-RAD1','MINT (M) · CD COMPACT DISC',NULL,4800.00,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(17,17,'VIN-2017-GOT','MINT (M) · VINILO LP',NULL,521.50,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(18,18,'VIN-1970-YAK','VERY FINE (VF) · VINILO LP',NULL,372.56,1,'2026-11-17 01:52:18','2026-11-17 01:52:18'),
+(19,19,'VIN-1990-CAI','NEAR MINT (NM) · PIEZA ÚNICA 1/1',NULL,7413.93,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(20,20,'VIN-2007-MAG','MINT (M) · VINILO LP',NULL,1566.55,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(21,21,'VIN-2024-MAG','MINT (M) · VINILO LP',NULL,864.00,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(22,22,'CD-2005-ROM','VERY FINE (VF) · BOX SET CD',NULL,179.00,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(23,23,'CD-2012-ARR','VERY FINE (VF) · CD COMPACT DISC',NULL,183.00,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(24,24,'CD-1997-JUA','VERY FINE (VF) · CD COMPACT DISC',NULL,129.00,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(25,25,'CD-2010-SON','MINT (M) · CD COMPACT DISC',NULL,391.50,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(26,26,'CD-2000-HUA','VERY FINE (VF) · CD COMPACT DISC',NULL,69.00,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(27,27,'VIN-2022-MID','MINT (M) · PIEZA ÚNICA 1/1',NULL,641.68,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(28,28,'CD-1997-BVSC','MINT (M) · CD COMPACT DISC',NULL,3950.00,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(29,29,'MEM-1928-AUT','COA NOTARIADO · PIEZA ÚNICA 1/1',NULL,9400.00,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(30,30,'MEM-1940-COY','MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA',NULL,36800.00,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(31,31,'MEM-1910-ALM','MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA',NULL,29500.00,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(32,32,'MEM-1934-FOT','MINT (M) · COA NOTARIADO · ADQUISICIÓN SELECTA',NULL,41000.00,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(33,33,'MEM-1912-PAR','VERY FINE (VF) · ADQUISICIÓN SELECTA',NULL,21500.00,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(34,34,'MEM-1934-PBA','VERY FINE (VF) · TIRAJE MÚLTIPLE',NULL,7800.00,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(35,35,'MEM-1954-COY','NEAR MINT (NM) · TIRAJE MÚLTIPLE',NULL,5400.00,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(36,36,'MEM-1968-IMP','MINT (M) · ACCESORIO DE BÓVEDA',NULL,3200.00,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(37,37,'COL-1997-EVA1','MINT (M) · FIGURA ANIME · EDICIÓN LIMITADA',NULL,18900.00,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(38,38,'COL-1933-DOU','MINT (M) · MONEDA HISTÓRICA RARA',NULL,18872250.00,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(39,39,'COL-1794-FLO','VERY FINE (VF) · PRIMER DÓLAR FEDERAL',NULL,175000.00,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(40,40,'COL-1344-EDU','NEAR MINT (NM) · PIEZA ÚNICA MEDIEVAL',NULL,7000000.00,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(41,41,'COL-0723-DIN','MINT (M) · CALIFATO OMEYA',NULL,95600000.00,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(42,42,'COL-1800-REA','VERY FINE (VF) · COLONIAL',NULL,5500.00,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(43,43,'COL-1947-CEN','MINT (M) · BULLION MEXICANO',NULL,92250.00,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(44,44,'COL-2020-LIB','MINT (M) · ONZA PLATA PURA',NULL,1250.00,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(45,45,'COL-2023-20P','VERY FINE (VF) · COMMEMORATIVE',NULL,100.00,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(46,46,'COL-1975-BIL','FINE (F) · NOTAFILIA HISTÓRICA',NULL,325.00,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(47,47,'COL-2023-POP','MINT (M) · DESIGNER ART TOY',NULL,1100.00,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(48,48,'COL-2022-FUN','MINT (M) · VINYL FIGURE',NULL,1075.00,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(49,49,'COL-2021-LEG','MINT (M) · MASTER BUILDER SET',NULL,19999.00,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(50,50,'COL-2023-ANU','MINT (M) · FIGURA ORNAMENTAL',NULL,773.08,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(51,51,'COL-1992-COC','VERY FINE (VF) · ARTE POPULAR INDÍGENA',NULL,4914.54,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(52,52,'COL-2023-JOY','MINT (M) · ARTESANÍA DECORATIVA',NULL,600.49,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(53,53,'COL-1993-DBZG','MINT (M) · CULTURA POP & ANIME · EN CAJA ORIGINAL',NULL,14200.00,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(54,54,'COL-1965-ROB','VERY FINE (VF) · JUGUETE MECÁNICO VINTAGE',NULL,21800.00,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(55,55,'COL-1914-BIL','MINT (M) · NUMISMÁTICA & NOTAFILIA REVOLUCIONARIA',NULL,8900.00,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(56,56,'COL-1768-COL8','VERY FINE (VF) · MONEDAS & BILLETES HISTÓRICOS',NULL,38500.00,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(57,57,'COL-1980-NIN','NEAR MINT (NM) · VIDEOJUEGOS RETRO EN CAJA',NULL,26900.00,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(58,58,'COL-1987-ZEL','MINT (M) · CARTUCHO DORADO DE COLECCIÓN · VIDEOJUEGOS',NULL,34000.00,1,'2026-11-17 01:52:19','2026-11-17 01:52:19'),
+(60,60,'LIB-2024-19','Lugares Asombrosos 2','storage/productos/ZNfsGtDFd6BzxQ4iW6fopcb71HuJN67Yf025BxuD.webp',3345.00,1,'2026-11-18 00:32:40','2026-11-18 00:32:40'),
+(61,61,'LIB-2024-20','La razón de estar contigo','storage/productos/Du8c2M6YdbJzHp5ifofcw4SJxIRkIghemAhV2Ha0.jpg',500.00,1,'2026-11-18 00:57:40','2026-11-18 00:57:40');
+/*!40000 ALTER TABLE `variantes_sku` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2026-11-18  1:12:04
