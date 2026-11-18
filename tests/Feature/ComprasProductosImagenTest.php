@@ -89,8 +89,15 @@ class ComprasProductosImagenTest extends TestCase
             'catalogo_id' => $catalogo->id,
             'sku' => 'LIB-CAS-001',
             'nombre' => 'Cien Años de Soledad - Primera Edición Sudamericana 1967',
-            'descripcion' => 'Ejemplar histórico catalogado en bóveda curatorial.',
+            'descripcion' => 'Ejemplar histórico catalogado en bóveda curatorial con cubierta original.',
             'precio' => 38000.00,
+            'stock_inicial' => 3,
+            'autor' => 'Gabriel García Márquez',
+            'editorial' => 'Editorial Sudamericana',
+            'genero' => 'Realismo Mágico',
+            'anio_publicacion' => 1967,
+            'paginas' => 471,
+            'isbn' => '978-8437604947',
             'imagen' => $archivoImagen,
         ];
 
@@ -104,12 +111,18 @@ class ComprasProductosImagenTest extends TestCase
         $this->assertNotNull($producto);
         $this->assertNotNull($producto->imagen);
         $this->assertStringStartsWith('storage/productos/', $producto->imagen);
+        $this->assertEquals('Ejemplar histórico catalogado en bóveda curatorial con cubierta original.', $producto->descripcion);
 
-        // Confirmar que la tabla libros tiene su ficha creada sin error de columna inexistente
+        // Confirmar que la tabla libros tiene sus metadatos guardados correctamente sin error de columna inexistente
         if (Schema::hasTable('libros')) {
             $libro = Libro::where('producto_id', $producto->id)->first();
             $this->assertNotNull($libro);
-            $this->assertEquals('Curaduría ARCHIVUM', $libro->autor);
+            $this->assertEquals('Gabriel García Márquez', $libro->autor);
+            $this->assertEquals('Editorial Sudamericana', $libro->editorial);
+            $this->assertEquals('Realismo Mágico', $libro->genero);
+            $this->assertEquals(1967, $libro->anio_publicacion);
+            $this->assertEquals(471, $libro->paginas);
+            $this->assertEquals('978-8437604947', $libro->isbn);
         }
 
         // Verificar archivo en disco público
@@ -121,11 +134,11 @@ class ComprasProductosImagenTest extends TestCase
         $this->assertNotNull($variante);
         $this->assertEquals($producto->imagen, $variante->imagen);
 
-        // Verificar existencia inicial creada con al menos 1 unidad
+        // Verificar existencia inicial creada con al menos 1 unidad (o stock_inicial)
         $this->assertDatabaseHas('existencias', [
             'variante_sku_id' => $variante->id,
         ]);
-        $this->assertTrue($variante->existencias()->sum('cantidad') >= 1);
+        $this->assertTrue($variante->existencias()->sum('cantidad') >= 3);
 
         // Verificar que aparece de inmediato en la tienda pública (/ y /catalogo/libros) con su foto
         $publicHome = $this->get(route('public.home'));
@@ -161,6 +174,12 @@ class ComprasProductosImagenTest extends TestCase
             'nombre' => 'The Beatles - Abbey Road 1969 UK Original Pressing',
             'descripcion' => 'Prensado en acetato virgen de 180g con matriz original.',
             'precio' => 24000.00,
+            'stock_inicial' => 2,
+            'artista' => 'The Beatles',
+            'sello_discografico' => 'Apple Records / EMI',
+            'genero' => 'Rock Clásico',
+            'formato' => 'vinilo',
+            'anio_lanzamiento' => 1969,
             'imagen' => $archivoImagen,
         ];
 
@@ -174,11 +193,15 @@ class ComprasProductosImagenTest extends TestCase
         $this->assertNotNull($producto->imagen);
         $this->assertStringStartsWith('storage/productos/', $producto->imagen);
 
-        // Confirmar ficha especializada en discos
+        // Confirmar metadatos en la tabla especializada discos
         if (Schema::hasTable('discos')) {
             $disco = Disco::where('producto_id', $producto->id)->first();
             $this->assertNotNull($disco);
-            $this->assertEquals('The Beatles - Abbey Road 1969 UK Original Pressing', $disco->artista);
+            $this->assertEquals('The Beatles', $disco->artista);
+            $this->assertEquals('Apple Records / EMI', $disco->sello);
+            $this->assertEquals('Rock Clásico', $disco->genero);
+            $this->assertEquals('vinilo', $disco->formato);
+            $this->assertEquals(1969, $disco->anio_lanzamiento);
         }
 
         // Verificar archivo en disco público

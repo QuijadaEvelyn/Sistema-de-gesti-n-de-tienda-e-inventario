@@ -48,8 +48,12 @@
                     @csrf
                     <div>
                         <label class="block text-xs font-label-code uppercase mb-1 text-on-surface">Catálogo</label>
-                        <select name="catalogo_id" required class="w-full px-3 py-2 rounded-xl border border-purple-200 dark:border-purple-800/60 text-sm bg-white dark:bg-[#1f1a2e] text-on-surface">
-                            @foreach ($catalogos as $cat)<option value="{{ $cat->id }}">{{ $cat->nombre }}</option>@endforeach
+                        <select id="select_catalogo" name="catalogo_id" required class="w-full px-3 py-2 rounded-xl border border-purple-200 dark:border-purple-800/60 text-sm bg-white dark:bg-[#1f1a2e] text-on-surface">
+                            @foreach ($catalogos as $cat)
+                                <option value="{{ $cat->id }}" data-tipo="{{ $cat->tipo }}" data-nombre="{{ strtolower($cat->nombre) }}">
+                                    {{ $cat->nombre }}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
                     <div>
@@ -59,6 +63,138 @@
                     <div class="md:col-span-2">
                         <label class="block text-xs font-label-code uppercase mb-1 text-on-surface">Nombre del Producto</label>
                         <input type="text" name="nombre" required placeholder="Ej. Cien Años de Soledad (Primera Edición)" class="w-full px-3 py-2 rounded-xl border border-purple-200 dark:border-purple-800/60 text-sm bg-white dark:bg-[#1f1a2e] text-on-surface" />
+                    </div>
+
+                    {{-- Bloque Dinámico: Ficha Técnica & Metadatos según Catálogo Seleccionado --}}
+                    <div class="md:col-span-2 p-4 sm:p-5 rounded-2xl border border-purple-200/80 dark:border-purple-800/60 bg-surface-container-low/40 dark:bg-purple-950/20 backdrop-blur-xs space-y-4">
+                        <div class="flex items-center justify-between border-b border-purple-100 dark:border-purple-900/40 pb-2.5">
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary text-[20px]" id="icono_ficha_tecnica">auto_stories</span>
+                                <h3 class="text-xs font-bold uppercase font-label-code text-on-surface">Ficha Técnica &amp; Metadatos del Artículo</h3>
+                            </div>
+                            <span id="badge_ficha_tipo" class="text-[10px] font-label-code text-primary uppercase font-bold bg-primary/10 px-2.5 py-0.5 rounded-full border border-primary/20">
+                                Metadatos · Libros
+                            </span>
+                        </div>
+
+                        {{-- Panel 1: Ficha Técnica para LIBROS --}}
+                        <div id="panel_ficha_libro" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5 transition-all">
+                            <div>
+                                <label class="block text-[11px] font-label-code uppercase mb-1 text-on-surface font-semibold">Autor <span class="text-primary">*</span></label>
+                                <input type="text" name="autor" placeholder="Ej. Gabriel García Márquez" class="input-ficha w-full px-3 py-2 rounded-xl border border-purple-200 dark:border-purple-800/60 text-xs bg-white dark:bg-[#1f1a2e] text-on-surface" />
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-label-code uppercase mb-1 text-on-surface font-semibold">Editorial</label>
+                                <input type="text" name="editorial" placeholder="Ej. Editorial Sudamericana" class="input-ficha w-full px-3 py-2 rounded-xl border border-purple-200 dark:border-purple-800/60 text-xs bg-white dark:bg-[#1f1a2e] text-on-surface" />
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-label-code uppercase mb-1 text-on-surface font-semibold">Género Literario</label>
+                                <input type="text" name="genero" placeholder="Ej. Novela / Realismo Mágico" class="input-ficha w-full px-3 py-2 rounded-xl border border-purple-200 dark:border-purple-800/60 text-xs bg-white dark:bg-[#1f1a2e] text-on-surface" />
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-label-code uppercase mb-1 text-on-surface font-semibold">Año de Publicación</label>
+                                <input type="number" name="anio_publicacion" min="1800" max="2026" placeholder="1967" class="input-ficha w-full px-3 py-2 rounded-xl border border-purple-200 dark:border-purple-800/60 text-xs bg-white dark:bg-[#1f1a2e] text-on-surface" />
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-label-code uppercase mb-1 text-on-surface font-semibold">Número de Páginas</label>
+                                <input type="number" name="paginas" min="1" max="15000" placeholder="471" class="input-ficha w-full px-3 py-2 rounded-xl border border-purple-200 dark:border-purple-800/60 text-xs bg-white dark:bg-[#1f1a2e] text-on-surface" />
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-label-code uppercase mb-1 text-on-surface font-semibold">Código ISBN</label>
+                                <input type="text" name="isbn" placeholder="978-8437604947" class="input-ficha w-full px-3 py-2 rounded-xl border border-purple-200 dark:border-purple-800/60 text-xs bg-white dark:bg-[#1f1a2e] text-on-surface" />
+                            </div>
+                        </div>
+
+                        {{-- Panel 2: Ficha Técnica para VINILOS & DISCOS --}}
+                        <div id="panel_ficha_vinilo" class="hidden grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5 transition-all">
+                            <div>
+                                <label class="block text-[11px] font-label-code uppercase mb-1 text-on-surface font-semibold">Artista / Banda <span class="text-primary">*</span></label>
+                                <input type="text" name="artista" placeholder="Ej. Pink Floyd" class="input-ficha w-full px-3 py-2 rounded-xl border border-purple-200 dark:border-purple-800/60 text-xs bg-white dark:bg-[#1f1a2e] text-on-surface" disabled />
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-label-code uppercase mb-1 text-on-surface font-semibold">Sello Discográfico</label>
+                                <input type="text" name="sello_discografico" placeholder="Ej. Harvest Records" class="input-ficha w-full px-3 py-2 rounded-xl border border-purple-200 dark:border-purple-800/60 text-xs bg-white dark:bg-[#1f1a2e] text-on-surface" disabled />
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-label-code uppercase mb-1 text-on-surface font-semibold">Género Musical</label>
+                                <input type="text" name="genero" placeholder="Ej. Rock Progresivo" class="input-ficha w-full px-3 py-2 rounded-xl border border-purple-200 dark:border-purple-800/60 text-xs bg-white dark:bg-[#1f1a2e] text-on-surface" disabled />
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-label-code uppercase mb-1 text-on-surface font-semibold">Formato / Velocidad</label>
+                                <select name="formato" class="input-ficha w-full px-3 py-2 rounded-xl border border-purple-200 dark:border-purple-800/60 text-xs bg-white dark:bg-[#1f1a2e] text-on-surface" disabled>
+                                    <option value="vinilo">Vinilo LP 12" · 33 RPM</option>
+                                    <option value="vinilo">Vinilo EP 7" · 45 RPM</option>
+                                    <option value="vinilo">Doble LP 180g Edición Audífilo</option>
+                                    <option value="CD">Disco Compacto (CD Máster)</option>
+                                    <option value="cassette">Casete de Cinta Magnética</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-label-code uppercase mb-1 text-on-surface font-semibold">Año de Lanzamiento</label>
+                                <input type="number" name="anio_lanzamiento" min="1900" max="2026" placeholder="1973" class="input-ficha w-full px-3 py-2 rounded-xl border border-purple-200 dark:border-purple-800/60 text-xs bg-white dark:bg-[#1f1a2e] text-on-surface" disabled />
+                            </div>
+                        </div>
+
+                        {{-- Panel 3: Ficha Técnica para CÓMICS --}}
+                        <div id="panel_ficha_comic" class="hidden grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5 transition-all">
+                            <div>
+                                <label class="block text-[11px] font-label-code uppercase mb-1 text-on-surface font-semibold">Autor / Guionista <span class="text-primary">*</span></label>
+                                <input type="text" name="autor" placeholder="Ej. Alan Moore" class="input-ficha w-full px-3 py-2 rounded-xl border border-purple-200 dark:border-purple-800/60 text-xs bg-white dark:bg-[#1f1a2e] text-on-surface" disabled />
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-label-code uppercase mb-1 text-on-surface font-semibold">Ilustrador / Dibujante</label>
+                                <input type="text" name="ilustrador" placeholder="Ej. Dave Gibbons" class="input-ficha w-full px-3 py-2 rounded-xl border border-purple-200 dark:border-purple-800/60 text-xs bg-white dark:bg-[#1f1a2e] text-on-surface" disabled />
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-label-code uppercase mb-1 text-on-surface font-semibold">Editorial</label>
+                                <input type="text" name="editorial" placeholder="Ej. DC Comics / Vertigo" class="input-ficha w-full px-3 py-2 rounded-xl border border-purple-200 dark:border-purple-800/60 text-xs bg-white dark:bg-[#1f1a2e] text-on-surface" disabled />
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-label-code uppercase mb-1 text-on-surface font-semibold">Número / Edición</label>
+                                <input type="text" name="numero_edicion" placeholder="Ej. #1 Primera Impresión" class="input-ficha w-full px-3 py-2 rounded-xl border border-purple-200 dark:border-purple-800/60 text-xs bg-white dark:bg-[#1f1a2e] text-on-surface" disabled />
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-label-code uppercase mb-1 text-on-surface font-semibold">Año de Publicación</label>
+                                <input type="number" name="anio_publicacion" min="1900" max="2026" placeholder="1986" class="input-ficha w-full px-3 py-2 rounded-xl border border-purple-200 dark:border-purple-800/60 text-xs bg-white dark:bg-[#1f1a2e] text-on-surface" disabled />
+                            </div>
+                        </div>
+
+                        {{-- Panel 4: Ficha Técnica para COLECCIONABLES --}}
+                        <div id="panel_ficha_coleccionable" class="hidden grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5 transition-all">
+                            <div>
+                                <label class="block text-[11px] font-label-code uppercase mb-1 text-on-surface font-semibold">Fabricante / Marca <span class="text-primary">*</span></label>
+                                <input type="text" name="fabricante" placeholder="Ej. Medicom Toy / Artista" class="input-ficha w-full px-3 py-2 rounded-xl border border-purple-200 dark:border-purple-800/60 text-xs bg-white dark:bg-[#1f1a2e] text-on-surface" disabled />
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-label-code uppercase mb-1 text-on-surface font-semibold">Serie / Franquicia</label>
+                                <input type="text" name="serie" placeholder="Ej. Edición Curada ARCHIVUM" class="input-ficha w-full px-3 py-2 rounded-xl border border-purple-200 dark:border-purple-800/60 text-xs bg-white dark:bg-[#1f1a2e] text-on-surface" disabled />
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-label-code uppercase mb-1 text-on-surface font-semibold">Material / Acabado</label>
+                                <input type="text" name="material" placeholder="Ej. Cerámica / Resina / Metal" class="input-ficha w-full px-3 py-2 rounded-xl border border-purple-200 dark:border-purple-800/60 text-xs bg-white dark:bg-[#1f1a2e] text-on-surface" disabled />
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-label-code uppercase mb-1 text-on-surface font-semibold">Categoría Coleccionable</label>
+                                <input type="text" name="categoria" placeholder="Ej. figuras, juguetes, numismática" class="input-ficha w-full px-3 py-2 rounded-xl border border-purple-200 dark:border-purple-800/60 text-xs bg-white dark:bg-[#1f1a2e] text-on-surface" disabled />
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-label-code uppercase mb-1 text-on-surface font-semibold">Año de Edición</label>
+                                <input type="number" name="anio_edicion" min="1900" max="2026" placeholder="2024" class="input-ficha w-full px-3 py-2 rounded-xl border border-purple-200 dark:border-purple-800/60 text-xs bg-white dark:bg-[#1f1a2e] text-on-surface" disabled />
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Campo: Descripción / Notas de Curaduría --}}
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-label-code uppercase mb-1 text-on-surface font-semibold">
+                            Descripción / Notas de Curaduría <span class="text-on-surface-variant font-normal text-[10px]">(Opcional)</span>
+                        </label>
+                        <textarea
+                            name="descripcion"
+                            rows="2"
+                            placeholder="Detalles del estado de conservación, tiraje, notas históricas o especificaciones peritadas de la pieza..."
+                            class="w-full px-3 py-2 rounded-xl border border-purple-200 dark:border-purple-800/60 text-xs bg-white dark:bg-[#1f1a2e] text-on-surface placeholder:text-outline/70 focus:border-primary transition-all resize-y"
+                        ></textarea>
                     </div>
 
                     {{-- Zona de Subida de Imagen del Producto con Vista Previa en Miniatura y Estilo Glossy --}}
@@ -143,13 +279,18 @@
                     </div>
 
                     <div>
-                        <label class="block text-xs font-label-code uppercase mb-1 text-on-surface">Precio Base (MXN)</label>
+                        <label class="block text-xs font-label-code uppercase mb-1 text-on-surface font-semibold">Precio Base (MXN)</label>
                         <input type="number" step="0.01" min="0" name="precio" required placeholder="45000.00" class="w-full px-3 py-2 rounded-xl border border-purple-200 dark:border-purple-800/60 text-sm bg-white dark:bg-[#1f1a2e] text-on-surface" />
                     </div>
 
+                    <div>
+                        <label class="block text-xs font-label-code uppercase mb-1 text-on-surface font-semibold">Stock Inicial (Piezas)</label>
+                        <input type="number" min="1" max="10000" name="stock_inicial" value="1" required class="w-full px-3 py-2 rounded-xl border border-purple-200 dark:border-purple-800/60 text-sm bg-white dark:bg-[#1f1a2e] text-on-surface font-tabular-data" />
+                    </div>
+
                     @if (isset($sucursales) && $sucursales->isNotEmpty())
-                        <div>
-                            <label class="block text-xs font-label-code uppercase mb-1 text-on-surface">Sede de Ingreso Inicial</label>
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-label-code uppercase mb-1 text-on-surface font-semibold">Sede de Ingreso Inicial</label>
                             <select name="sucursal_id" class="w-full px-3 py-2 rounded-xl border border-purple-200 dark:border-purple-800/60 text-sm bg-white dark:bg-[#1f1a2e] text-on-surface">
                                 @foreach ($sucursales as $suc)
                                     <option value="{{ $suc->id }}" {{ (isset($sucursalActivaId) && $sucursalActivaId == $suc->id) ? 'selected' : '' }}>
@@ -160,7 +301,7 @@
                         </div>
                     @endif
 
-                    <div class="{{ isset($sucursales) && $sucursales->isNotEmpty() ? 'md:col-span-2' : '' }} flex items-end">
+                    <div class="md:col-span-2 flex items-end pt-2">
                         <button type="submit" class="btn-glass-purple w-full py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider shadow-sm flex items-center justify-center gap-2">
                             <span class="material-symbols-outlined text-[16px]">add_circle</span>
                             <span>Registrar Producto</span>
@@ -393,7 +534,75 @@
     @push('scripts')
     <script>
         (function () {
+            // Sincronización dinámica de Ficha Técnica según el Catálogo Seleccionado
+            function initFichaTecnicaDinamica() {
+                const selectCatalogo = document.getElementById('select_catalogo');
+                if (!selectCatalogo) return;
+
+                function actualizarFicha() {
+                    const selectedOption = selectCatalogo.options[selectCatalogo.selectedIndex];
+                    if (!selectedOption) return;
+
+                    const tipo = (selectedOption.dataset.tipo || '').toLowerCase();
+                    const nombre = (selectedOption.dataset.nombre || '').toLowerCase();
+
+                    const panelLibro = document.getElementById('panel_ficha_libro');
+                    const panelVinilo = document.getElementById('panel_ficha_vinilo');
+                    const panelComic = document.getElementById('panel_ficha_comic');
+                    const panelColeccionable = document.getElementById('panel_ficha_coleccionable');
+                    const badgeFicha = document.getElementById('badge_ficha_tipo');
+                    const iconoFicha = document.getElementById('icono_ficha_tecnica');
+
+                    let categoriaActiva = 'libro';
+                    if (tipo === 'comic' || nombre.includes('comic')) {
+                        categoriaActiva = 'comic';
+                    } else if (tipo === 'disco' || tipo === 'vinilo' || nombre.includes('disco') || nombre.includes('vinil')) {
+                        categoriaActiva = 'vinilo';
+                    } else if (tipo === 'coleccionable' || nombre.includes('coleccion') || nombre.includes('figura')) {
+                        categoriaActiva = 'coleccionable';
+                    } else if (tipo === 'libro' || nombre.includes('libro')) {
+                        categoriaActiva = 'libro';
+                    }
+
+                    const paneles = {
+                        libro: { el: panelLibro, label: 'Metadatos · Libros', icono: 'auto_stories' },
+                        vinilo: { el: panelVinilo, label: 'Metadatos · Vinilos & Discos', icono: 'album' },
+                        comic: { el: panelComic, label: 'Metadatos · Cómics & Novela Gráfica', icono: 'menu_book' },
+                        coleccionable: { el: panelColeccionable, label: 'Metadatos · Coleccionables', icono: 'history_edu' },
+                    };
+
+                    Object.keys(paneles).forEach(key => {
+                        const item = paneles[key];
+                        if (!item.el) return;
+                        const esActivo = key === categoriaActiva;
+
+                        if (esActivo) {
+                            item.el.classList.remove('hidden');
+                            item.el.querySelectorAll('.input-ficha').forEach(input => {
+                                input.disabled = false;
+                            });
+                            if (badgeFicha) badgeFicha.textContent = item.label;
+                            if (iconoFicha) iconoFicha.textContent = item.icono;
+                        } else {
+                            item.el.classList.add('hidden');
+                            item.el.querySelectorAll('.input-ficha').forEach(input => {
+                                input.disabled = true;
+                            });
+                        }
+                    });
+                }
+
+                if (!selectCatalogo.dataset.fichaInitialized) {
+                    selectCatalogo.dataset.fichaInitialized = 'true';
+                    selectCatalogo.addEventListener('change', actualizarFicha);
+                }
+
+                actualizarFicha();
+            }
+
             function initImageInteractions() {
+                initFichaTecnicaDinamica();
+
                 // Alta Individual - Manejo de Imagen y Drag & Drop
                 const inputImagen = document.getElementById('input_imagen_producto');
                 const dropzone = document.getElementById('dropzone_imagen_producto');

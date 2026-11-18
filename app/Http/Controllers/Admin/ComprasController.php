@@ -71,12 +71,37 @@ class ComprasController extends Controller
         $validated = $request->validate([
             'catalogo_id' => ['required', 'integer', 'exists:catalogos,id'],
             'nombre' => ['required', 'string', 'max:255'],
-            'descripcion' => ['nullable', 'string'],
+            'descripcion' => ['nullable', 'string', 'max:5000'],
             'precio' => ['required', 'numeric', 'min:0'],
             'sku' => ['required', 'string', 'max:100', 'unique:variantes_sku,sku'],
             'imagen' => ['nullable', 'image', 'max:4096'],
             'sucursal_id' => ['nullable', 'integer', 'exists:sucursales,id'],
-            'cantidad' => ['nullable', 'integer', 'min:1'],
+            'stock_inicial' => ['nullable', 'integer', 'min:1', 'max:10000'],
+            'cantidad' => ['nullable', 'integer', 'min:1', 'max:10000'],
+
+            // Metadatos de Libros y Cómics
+            'autor' => ['nullable', 'string', 'max:255'],
+            'editorial' => ['nullable', 'string', 'max:255'],
+            'genero' => ['nullable', 'string', 'max:100'],
+            'anio_publicacion' => ['nullable', 'integer', 'between:1800,2030'],
+            'paginas' => ['nullable', 'integer', 'min:1', 'max:20000'],
+            'isbn' => ['nullable', 'string', 'max:40'],
+            'ilustrador' => ['nullable', 'string', 'max:255'],
+            'numero_edicion' => ['nullable', 'string', 'max:100'],
+
+            // Metadatos de Vinilos y Discos
+            'artista' => ['nullable', 'string', 'max:255'],
+            'sello_discografico' => ['nullable', 'string', 'max:255'],
+            'disquera' => ['nullable', 'string', 'max:255'],
+            'formato' => ['nullable', 'string', 'max:100'],
+            'anio_lanzamiento' => ['nullable', 'integer', 'between:1900,2030'],
+
+            // Metadatos de Coleccionables
+            'fabricante' => ['nullable', 'string', 'max:255'],
+            'serie' => ['nullable', 'string', 'max:255'],
+            'material' => ['nullable', 'string', 'max:255'],
+            'categoria' => ['nullable', 'string', 'max:100'],
+            'anio_edicion' => ['nullable', 'integer', 'between:1900,2030'],
         ], [
             'imagen.image' => 'El archivo adjunto debe ser una imagen válida.',
             'imagen.max' => 'La imagen del producto no debe superar los 4MB.',
@@ -91,10 +116,12 @@ class ComprasController extends Controller
         DB::transaction(function () use ($validated, $request, $imagenRuta): void {
             $catalogo = Catalogo::find($validated['catalogo_id']);
 
+            $descripcion = $validated['descripcion'] ?? $validated['nombre'];
+
             $datosProducto = [
                 'catalogo_id' => $validated['catalogo_id'],
                 'nombre' => $validated['nombre'],
-                'descripcion' => $validated['descripcion'] ?? $validated['nombre'],
+                'descripcion' => $descripcion,
                 'precio' => $validated['precio'],
                 'activo' => true,
             ];
@@ -119,46 +146,92 @@ class ComprasController extends Controller
 
             // Sincronizar ficha especializada según el tipo de catálogo sin enviar columnas inexistentes
             if ($catalogo) {
-                if ($catalogo->tipo === 'disco' && Schema::hasTable('discos')) {
+                $tipoCatalogo = strtolower((string) $catalogo->tipo);
+                $nombreCatalogo = strtolower((string) $catalogo->nombre);
+                $esComic = $tipoCatalogo === 'comic' || str_contains($nombreCatalogo, 'comic');
+                $esVinilo = $tipoCatalogo === 'disco' || $tipoCatalogo === 'vinilo' || str_contains($nombreCatalogo, 'disco') || str_contains($nombreCatalogo, 'vinil');
+                $esLibro = $tipoCatalogo === 'libro' || str_contains($nombreCatalogo, 'libro');
+                $esColeccionable = $tipoCatalogo === 'coleccionable' || str_contains($nombreCatalogo, 'coleccion');
+
+                if ($esVinilo && Schema::hasTable('discos')) {
+                    $formatoNormalizado = 'vinilo';
+                    $formatoRaw = strtolower((string) ($request->input('formato') ?: 'vinilo'));
+                    if (str_contains($formatoRaw, 'cd')) {
+                        $formatoNormalizado = 'CD';
+                    } elseif (str_contains($formatoRaw, 'cassette')) {
+                        $formatoNormalizado = 'cassette';
+                    } elseif (str_contains($formatoRaw, 'digital')) {
+                        $formatoNormalizado = 'digital';
+                    }
+
+                    $sello = $request->input('sello_discografico') ?: ($request->input('disquera') ?: 'Curaduría ARCHIVUM');
+
                     $datosDisco = [
-                        'artista' => $producto->nombre,
-                        'sello' => 'Curaduría ARCHIVUM',
-                        'genero' => 'Fonoteca Histórica',
-                        'formato' => 'vinilo',
-                        'anio_lanzamiento' => (int) date('Y'),
+                        'artista' => $request->input('artista') ?: $producto->nombre,
+                        'sello' => $sello,
+                        'genero' => $request->input('genero') ?: 'Rock / Fonoteca',
+                        'formato' => $formatoNormalizado,
+                        'anio_lanzamiento' => $request->filled('anio_lanzamiento') ? (int) $request->input('anio_lanzamiento') : (int) date('Y'),
                     ];
                     if ($imagenRuta !== null && Schema::hasColumn('discos', 'imagen')) {
                         $datosDisco['imagen'] = $imagenRuta;
                     }
-                    Disco::firstOrCreate(['producto_id' => $producto->id], $datosDisco);
-                } elseif ($catalogo->tipo === 'libro' && Schema::hasTable('libros')) {
+                    Disco::updateOrCreate(['producto_id' => $producto->id], $datosDisco);
+                } elseif ($esComic) {
+                    if (Schema::hasTable('comics')) {
+                        $datosComic = [
+                            'autor' => $request->input('autor') ?: 'Autor de Cómic',
+                            'ilustrador' => $request->input('ilustrador'),
+                            'editorial' => $request->input('editorial') ?: 'Editorial Cómic',
+                            'numero_edicion' => $request->input('numero_edicion'),
+                            'anio_publicacion' => $request->filled('anio_publicacion') ? (int) $request->input('anio_publicacion') : (int) date('Y'),
+                        ];
+                        if ($imagenRuta !== null && Schema::hasColumn('comics', 'imagen')) {
+                            $datosComic['imagen'] = $imagenRuta;
+                        }
+                        DB::table('comics')->updateOrInsert(['producto_id' => $producto->id], $datosComic);
+                    } elseif (Schema::hasTable('libros')) {
+                        $datosLibro = [
+                            'autor' => $request->input('autor') ?: 'Autor de Cómic',
+                            'editorial' => $request->input('editorial') ?: 'Editorial Cómic',
+                            'genero' => 'comic',
+                            'anio_publicacion' => $request->filled('anio_publicacion') ? (int) $request->input('anio_publicacion') : (int) date('Y'),
+                            'paginas' => $request->filled('paginas') ? (int) $request->input('paginas') : 48,
+                        ];
+                        if ($imagenRuta !== null && Schema::hasColumn('libros', 'imagen')) {
+                            $datosLibro['imagen'] = $imagenRuta;
+                        }
+                        Libro::updateOrCreate(['producto_id' => $producto->id], $datosLibro);
+                    }
+                } elseif ($esLibro && Schema::hasTable('libros')) {
                     $datosLibro = [
-                        'autor' => 'Curaduría ARCHIVUM',
-                        'editorial' => 'Ediciones ARCHIVUM',
-                        'genero' => 'novela',
-                        'anio_publicacion' => (int) date('Y'),
-                        'paginas' => 100,
+                        'autor' => $request->input('autor') ?: 'Curaduría ARCHIVUM',
+                        'editorial' => $request->input('editorial') ?: 'Ediciones ARCHIVUM',
+                        'genero' => $request->input('genero') ?: 'novela',
+                        'anio_publicacion' => $request->filled('anio_publicacion') ? (int) $request->input('anio_publicacion') : (int) date('Y'),
+                        'paginas' => $request->filled('paginas') ? (int) $request->input('paginas') : null,
+                        'isbn' => $request->input('isbn') ?: null,
                     ];
                     if ($imagenRuta !== null && Schema::hasColumn('libros', 'imagen')) {
                         $datosLibro['imagen'] = $imagenRuta;
                     }
-                    Libro::firstOrCreate(['producto_id' => $producto->id], $datosLibro);
-                } elseif ($catalogo->tipo === 'coleccionable' && Schema::hasTable('coleccionables')) {
+                    Libro::updateOrCreate(['producto_id' => $producto->id], $datosLibro);
+                } elseif ($esColeccionable && Schema::hasTable('coleccionables')) {
                     $datosColeccionable = [
-                        'marca' => 'ARCHIVUM Histórico',
-                        'serie' => 'Colección Exclusiva',
-                        'categoria' => 'figuras',
-                        'material' => 'Edición Autenticada',
+                        'marca' => $request->input('fabricante') ?: ($request->input('autor') ?: 'ARCHIVUM Histórico'),
+                        'serie' => $request->input('serie') ?: 'Colección Exclusiva',
+                        'categoria' => $request->input('categoria') ?: 'figuras',
+                        'material' => $request->input('material') ?: 'Edición Autenticada',
                         'edicion_limitada' => true,
                     ];
                     if ($imagenRuta !== null && Schema::hasColumn('coleccionables', 'imagen')) {
                         $datosColeccionable['imagen'] = $imagenRuta;
                     }
-                    Coleccionable::firstOrCreate(['producto_id' => $producto->id], $datosColeccionable);
+                    Coleccionable::updateOrCreate(['producto_id' => $producto->id], $datosColeccionable);
                 }
             }
 
-            // Crear existencia inicial con al menos 1 unidad para que aparezca de inmediato en el catálogo del Sitio Público
+            // Crear existencia inicial con la cantidad indicada (por defecto 1 o según stock_inicial)
             $sucursales = Schema::hasTable('sucursales')
                 ? Sucursal::where('activa', true)->get()
                 : collect();
@@ -181,7 +254,9 @@ class ComprasController extends Controller
                     : ($request->session()->get(SucursalContextoService::SESSION_SUCURSAL_KEY)
                         ?: $sucursales->first()->id);
 
-                $cantidadInicial = ! empty($validated['cantidad']) ? (int) $validated['cantidad'] : 5;
+                $cantidadInicial = ! empty($validated['stock_inicial'])
+                    ? (int) $validated['stock_inicial']
+                    : (! empty($validated['cantidad']) ? (int) $validated['cantidad'] : 1);
 
                 foreach ($sucursales as $suc) {
                     $cant = ($suc->id == $sucursalSeleccionadaId) ? $cantidadInicial : 2;
