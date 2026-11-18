@@ -1,7 +1,8 @@
 <x-layouts.admin title="ARCHIVUM · Catálogo y Altas de Productos" active-route="compras-productos">
     <div class="space-y-6">
 
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        {{-- Encabezado con Animación Bento --}}
+        <div class="bento-reveal bento-delay-0 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
                 <h1 class="text-2xl font-bold text-on-surface font-quicksand">Altas de Productos &amp; Variantes SKU</h1>
                 <p class="text-xs text-on-surface-variant font-label-code uppercase tracking-wider mt-1">Gestión del catálogo maestro e importación masiva de inventario</p>
@@ -38,7 +39,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
             {{-- Formulario de Registro Individual (7 cols) --}}
-            <div class="lg:col-span-7 bg-surface-container-lowest p-6 rounded-2xl border border-purple-200/70 shadow-2xs space-y-4">
+            <div class="lg:col-span-7 bento-reveal bento-delay-60 bg-white/90 dark:bg-[#1a1626]/90 backdrop-blur-md p-6 rounded-2xl border border-purple-200/70 dark:border-white/10 shadow-2xs space-y-4 transition-all duration-300 hover:border-purple-300 dark:hover:border-purple-500/40">
                 <div class="flex items-center gap-2 border-b border-purple-100 dark:border-purple-900/40 pb-3">
                     <span class="material-symbols-outlined text-primary text-[20px]">add_box</span>
                     <h2 class="text-sm font-bold uppercase font-label-code text-on-surface">Alta Individual de Producto</h2>
@@ -314,7 +315,7 @@
             </div>
 
             {{-- Formulario de Importación Masiva CSV (5 cols) --}}
-            <div class="lg:col-span-5 bg-surface-container-lowest p-6 rounded-2xl border border-purple-200/70 shadow-2xs space-y-4">
+            <div class="lg:col-span-5 bento-reveal bento-delay-120 bg-white/90 dark:bg-[#1a1626]/90 backdrop-blur-md p-6 rounded-2xl border border-purple-200/70 dark:border-white/10 shadow-2xs space-y-4 transition-all duration-300 hover:border-purple-300 dark:hover:border-purple-500/40">
                 <div class="flex items-center justify-between border-b border-purple-100 dark:border-purple-900/40 pb-3">
                     <div class="flex items-center gap-2">
                         <span class="material-symbols-outlined text-secondary text-[20px]">upload_file</span>
@@ -360,8 +361,9 @@
         </div>
 
         {{-- Tabla de Productos Registrados --}}
-        <div class="bg-surface-container-lowest rounded-2xl border border-purple-200/70 shadow-2xs overflow-hidden space-y-4 p-4 sm:p-6">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="bento-reveal bento-delay-180 bg-white/90 dark:bg-[#1a1626]/90 backdrop-blur-md rounded-2xl border border-purple-200/70 dark:border-white/10 shadow-2xs overflow-hidden space-y-4 p-4 sm:p-6 transition-all duration-300 hover:border-purple-300 dark:hover:border-purple-500/40">
+            {{-- Encabezado con Animación Bento --}}
+        <div class="bento-reveal bento-delay-0 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <h3 class="text-sm font-bold uppercase font-label-code text-on-surface">Catálogo Maestro Registrado</h3>
                 <form method="GET" action="{{ route('compras.productos') }}" class="flex items-center gap-2 max-w-sm w-full">
                     <input
@@ -382,7 +384,7 @@
 
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-sm">
-                    <thead class="bg-surface-container-low border-b border-purple-200/60 dark:border-purple-800/40 text-xs uppercase font-label-code text-secondary">
+                    <thead class="bg-surface-container-low/80 dark:bg-[#201930]/80 backdrop-blur-xs border-b border-purple-200/60 dark:border-white/10 text-xs uppercase font-label-code text-secondary dark:text-purple-300">
                         <tr>
                             <th class="py-3 px-3 text-center w-14">Portada</th>
                             <th class="py-3 px-4">ID</th>
@@ -393,7 +395,7 @@
                             <th class="py-3 px-4 text-center">Acción</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-purple-100 dark:divide-purple-900/40">
+                    <tbody class="divide-y divide-purple-100 dark:divide-white/5">
                         @forelse ($productos as $prod)
                             <tr class="hover:bg-purple-50/40 dark:hover:bg-purple-950/20 transition">
                                 <td class="py-3 px-3 text-center">

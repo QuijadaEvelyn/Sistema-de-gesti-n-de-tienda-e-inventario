@@ -652,7 +652,11 @@ class ComprasController extends Controller
             ->paginate(15)
             ->withQueryString();
 
-        return view('admin.compras.proveedores', [
+        $vista = view()->exists('compras.proveedores')
+            ? 'compras.proveedores'
+            : 'admin.compras.proveedores';
+
+        return view($vista, [
             'proveedores' => $proveedores,
         ]);
     }
@@ -774,7 +778,11 @@ class ComprasController extends Controller
             ->limit(50)
             ->get();
 
-        return view('admin.compras.ordenes', [
+        $vista = view()->exists('compras.ordenes')
+            ? 'compras.ordenes'
+            : 'admin.compras.ordenes';
+
+        return view($vista, [
             'recepciones' => $recepciones,
             'sucursales' => Sucursal::where('activa', true)->orderBy('nombre')->get(),
             'variantes' => VarianteSku::where('activa', true)->orderBy('sku')->get(),

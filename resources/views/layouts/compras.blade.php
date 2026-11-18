@@ -1,0 +1,1 @@
+@include('components.layouts.admin')
