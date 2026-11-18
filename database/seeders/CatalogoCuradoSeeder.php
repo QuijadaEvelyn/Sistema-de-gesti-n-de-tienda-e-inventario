@@ -20,13 +20,13 @@ use Illuminate\Support\Facades\Schema;
 /**
  * Seeder Curatorial Versionado en Git.
  * Generado automáticamente por: php artisan catalogo:exportar-seeder
- * Fecha de última exportación: 2026-11-18 03:45:07
- * Total de productos registrados: 1
+ * Fecha de última exportación: 2026-11-18 05:03:06
+ * Total de productos registrados: 58
  */
 class CatalogoCuradoSeeder extends Seeder
 {
-    public const TOTAL_PRODUCTOS = 1;
-    public const EXPORTADO_EN = '2026-11-18 03:45:07';
+    public const TOTAL_PRODUCTOS = 58;
+    public const EXPORTADO_EN = '2026-11-18 05:03:06';
 
     /**
      * Sincroniza las imágenes de assets versionados en Git hacia public/images/productos (sin symlinks)

@@ -631,7 +631,7 @@
         "descripcion": "Álbum doble de vinilo (2 LP) en edición de alta calidad.",
         "precio": 521.5,
         "activo": true,
-        "imagen": "images/coleccionables/las-cabras-montañeras.jpg",
+        "imagen": "images/productos/las-cabras-montañeras.jpg",
         "metadata": {
             "tipo": "disco",
             "artista": "Las Cabras Montañesas",
@@ -672,7 +672,7 @@
         "descripcion": "Edición clásica de Latin Gold Records recuperada para coleccionistas de rock en español.",
         "precio": 372.56,
         "activo": true,
-        "imagen": "images/coleccionables/Los-Yaki.jpg",
+        "imagen": "images/productos/Los-Yaki.jpg",
         "metadata": {
             "tipo": "disco",
             "artista": "Los Yaki",
@@ -706,7 +706,7 @@
         "descripcion": "Pieza Única (1/1) custodiada en Sucursal Coyoacán: Edición original de 1990 prensada en Venezuela bajo el sello RCA (102-02124).",
         "precio": 7413.93,
         "activo": true,
-        "imagen": "images/coleccionables/Caifanes.jpg",
+        "imagen": "images/productos/Caifanes.jpg",
         "metadata": {
             "tipo": "disco",
             "artista": "Caifanes",
@@ -745,7 +745,7 @@
         "descripcion": "Edición en LP de vinilo de la reconocida banda de folk metal.",
         "precio": 1566.55,
         "activo": true,
-        "imagen": "images/coleccionables/Mago-de-oz-La-ciudad.jpg",
+        "imagen": "images/productos/Mago-de-oz-La-ciudad.jpg",
         "metadata": {
             "tipo": "disco",
             "artista": "Mägo de Oz",
@@ -779,7 +779,7 @@
         "descripcion": "Edición especial en formato LP de vinilo.",
         "precio": 864,
         "activo": true,
-        "imagen": "images/coleccionables/Mago-de-oz-Alicia.jpg",
+        "imagen": "images/productos/Mago-de-oz-Alicia.jpg",
         "metadata": {
             "tipo": "disco",
             "artista": "Mägo de Oz",
@@ -820,7 +820,7 @@
         "descripcion": "Compilación de colección con José José, Juan Gabriel, Rocío Dúrcal, entre otros.",
         "precio": 179,
         "activo": true,
-        "imagen": "images/coleccionables/Los-Grandes-Romanticos.jpg",
+        "imagen": "images/productos/Los-Grandes-Romanticos.jpg",
         "metadata": {
             "tipo": "disco",
             "artista": "Varios Artistas",
@@ -854,7 +854,7 @@
         "descripcion": "CD con grandes éxitos románticos de banda sinaloense.",
         "precio": 183,
         "activo": true,
-        "imagen": "images/coleccionables/Cd-la-arrolladora.jpg",
+        "imagen": "images/productos/Cd-la-arrolladora.jpg",
         "metadata": {
             "tipo": "disco",
             "artista": "La Arrolladora Banda El Limón",
@@ -895,7 +895,7 @@
         "descripcion": "Álbum doble en CD de dos grandes exponentes de la música ranchera y balada.",
         "precio": 129,
         "activo": true,
-        "imagen": "images/coleccionables/Juan-Gabriel.jpg",
+        "imagen": "images/productos/Juan-Gabriel.jpg",
         "metadata": {
             "tipo": "disco",
             "artista": "Juan Gabriel & Rocío Dúrcal",
@@ -936,7 +936,7 @@
         "descripcion": "Edición especial de 3 discos originales en formato CD.",
         "precio": 391.5,
         "activo": true,
-        "imagen": "images/coleccionables/3-cds-La-Sonora.jpg",
+        "imagen": "images/productos/3-cds-La-Sonora.jpg",
         "metadata": {
             "tipo": "disco",
             "artista": "La Sonora Santanera",
@@ -970,7 +970,7 @@
         "descripcion": "CD con selección folklórica de los huapangos tradicionales más emblemáticos.",
         "precio": 69,
         "activo": true,
-        "imagen": "images/coleccionables/Huapangos.jpg",
+        "imagen": "images/productos/Huapangos.jpg",
         "metadata": {
             "tipo": "disco",
             "artista": "Varios Artistas",
@@ -1004,7 +1004,7 @@
         "descripcion": "Pieza Única (1/1) custodiada en Almacén General: Edición coleccionable de importación coreana.",
         "precio": 641.68,
         "activo": true,
-        "imagen": "images/coleccionables/TAYLO.jpg",
+        "imagen": "images/productos/TAYLO.jpg",
         "metadata": {
             "tipo": "disco",
             "artista": "Taylor Swift",
@@ -1227,7 +1227,7 @@
                     {
                         "sucursal_id": 1,
                         "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 1,
+                        "cantidad": 0,
                         "stock_minimo": 1,
                         "pieza_unica": {
                             "numero_serie": "ARC-MEM-1934-002",
@@ -1424,7 +1424,7 @@
         "descripcion": "Moneda de oro de $20 que el gobierno ordenó fundir durante la Gran Depresión. Pieza de valor histórico incalculable.",
         "precio": 18872250,
         "activo": true,
-        "imagen": "images/coleccionables/Double-Eagle-de-1933.jpg",
+        "imagen": "images/productos/Double-Eagle-de-1933.jpg",
         "metadata": {
             "tipo": "coleccionable",
             "marca": "United States Mint",
@@ -1463,7 +1463,7 @@
         "descripcion": "El primer dólar de plata acuñado por el gobierno federal estadounidense.",
         "precio": 175000,
         "activo": true,
-        "imagen": "images/coleccionables/Dolar-Flowing-Hair-de-1794.jpg",
+        "imagen": "images/productos/Dolar-Flowing-Hair-de-1794.jpg",
         "metadata": {
             "tipo": "coleccionable",
             "marca": "United States Mint",
@@ -1502,7 +1502,7 @@
         "descripcion": "Legendaria moneda de oro medieval de la cual solo se conocen tres ejemplares en todo el mundo.",
         "precio": 7000000,
         "activo": true,
-        "imagen": "images/coleccionables/Florin-de-Eduardo-III-de-1344.jpg",
+        "imagen": "images/productos/Florin-de-Eduardo-III-de-1344.jpg",
         "metadata": {
             "tipo": "coleccionable",
             "marca": "Royal Mint UK",
@@ -1541,7 +1541,7 @@
         "descripcion": "Acuñada en la región de la actual Arabia Saudita con oro proveniente de una mina del propio Califa.",
         "precio": 95600000,
         "activo": true,
-        "imagen": "images/coleccionables/Dinar-de-Oro-Omeya-del-año-723.jpg",
+        "imagen": "images/productos/Dinar-de-Oro-Omeya-del-año-723.jpg",
         "metadata": {
             "tipo": "coleccionable",
             "marca": "Ceca Omeya",
@@ -1580,7 +1580,7 @@
         "descripcion": "Conocidas mundialmente como columnarios o piezas de 8, fueron la primera moneda de uso internacional.",
         "precio": 5500,
         "activo": true,
-        "imagen": "images/coleccionables/Monedas-Reales.jpg",
+        "imagen": "images/productos/Monedas-Reales.jpg",
         "metadata": {
             "tipo": "coleccionable",
             "marca": "Ceca de México (Mo)",
@@ -1628,7 +1628,7 @@
         "descripcion": "Contiene 37.5 gramos de oro puro y presenta el clásico diseño del Ángel de la Independencia.",
         "precio": 92250,
         "activo": true,
-        "imagen": "images/coleccionables/Centenario-de-Oro.jpg",
+        "imagen": "images/productos/Centenario-de-Oro.jpg",
         "metadata": {
             "tipo": "coleccionable",
             "marca": "Casa de Moneda de México",
@@ -1676,7 +1676,7 @@
         "descripcion": "Una de las monedas de inversión (bullion) de plata más hermosas y cotizadas del mundo.",
         "precio": 1250,
         "activo": true,
-        "imagen": "images/coleccionables/Moneda-Libertad.jpg",
+        "imagen": "images/productos/Moneda-Libertad.jpg",
         "metadata": {
             "tipo": "coleccionable",
             "marca": "Casa de Moneda de México",
@@ -1724,7 +1724,7 @@
         "descripcion": "Piezas recientes conmemorativas (como la Fundación de Veracruz o el Bicentenario de la Independencia).",
         "precio": 100,
         "activo": true,
-        "imagen": "images/coleccionables/Monedas-Conmemorativas.jpg",
+        "imagen": "images/productos/Monedas-Conmemorativas.jpg",
         "metadata": {
             "tipo": "coleccionable",
             "marca": "Banco de México",
@@ -1772,7 +1772,7 @@
         "descripcion": "Billetes antiguos impresos por la American Bank Note Company y de fabricación nacional.",
         "precio": 325,
         "activo": true,
-        "imagen": "images/coleccionables/Familia-AAA.jpg",
+        "imagen": "images/productos/Familia-AAA.jpg",
         "metadata": {
             "tipo": "coleccionable",
             "marca": "Banco de México / ABNC",
@@ -1820,7 +1820,7 @@
         "descripcion": "Figura de diseñador caracterizada por orejas puntiagudas, cuerpo peludo, sonrisa traviesa con 9 dientes y rostro de vinilo.",
         "precio": 1100,
         "activo": true,
-        "imagen": "images/coleccionables/Pop-Mart.jpg",
+        "imagen": "images/productos/Pop-Mart.jpg",
         "metadata": {
             "tipo": "coleccionable",
             "marca": "Pop Mart",
@@ -1868,7 +1868,7 @@
         "descripcion": "Figura de vinilo con cabeza grande y diseño estilizado de cultura pop.",
         "precio": 1075,
         "activo": true,
-        "imagen": "images/coleccionables/Funko-Pop.jpg",
+        "imagen": "images/productos/Funko-Pop.jpg",
         "metadata": {
             "tipo": "coleccionable",
             "marca": "Funko",
@@ -1916,7 +1916,7 @@
         "descripcion": "Set de construcción de edición de coleccionista con miles de piezas y minifiguras exclusivas.",
         "precio": 19999,
         "activo": true,
-        "imagen": "images/coleccionables/lego.jpg",
+        "imagen": "images/productos/lego.jpg",
         "metadata": {
             "tipo": "coleccionable",
             "marca": "LEGO Systems A/S",
@@ -1957,7 +1957,7 @@
         "descripcion": "Estatua decorativa de acabado negro con detalles dorados e iconografía del antiguo Egipto.",
         "precio": 773.08,
         "activo": true,
-        "imagen": "images/coleccionables/Estatua-Anubis.jpg",
+        "imagen": "images/productos/Estatua-Anubis.jpg",
         "metadata": {
             "tipo": "coleccionable",
             "marca": "Artesanías Temáticas",
@@ -2005,7 +2005,7 @@
         "descripcion": "Pieza artesanal tradicional de Snowflake Flower, ca. 1992, narrativa tradicional en arcilla.",
         "precio": 4914.54,
         "activo": true,
-        "imagen": "images/coleccionables/Figura-ceramica.jpg",
+        "imagen": "images/productos/Figura-ceramica.jpg",
         "metadata": {
             "tipo": "coleccionable",
             "marca": "Snowflake Flower (Cochiti Pueblo)",
@@ -2044,7 +2044,7 @@
         "descripcion": "Joyero ornamental decorado con motivos y deidades de la mitología egipcia antigua.",
         "precio": 600.49,
         "activo": true,
-        "imagen": "images/coleccionables/Exquisito-Joyero.jpg",
+        "imagen": "images/productos/Exquisito-Joyero.jpg",
         "metadata": {
             "tipo": "coleccionable",
             "marca": "DecoArte Colección",
@@ -2324,202 +2324,6 @@
                         "sucursal_id": 3,
                         "sucursal_nombre": "Almacén General",
                         "cantidad": 1,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "nombre": "Lugares Asombrosos",
-        "catalogo_tipo": "libro",
-        "catalogo_nombre": "Libros",
-        "descripcion": "Es una crónica de viajes ilustrada donde Luisito Comunica recorre algunos sitios más inhóspitos, extraños y miseriosos del planeta. Combina fotografías, anécdotas personales y datos curioso sobre distintas culturas para mostrar una cara poco convencional",
-        "precio": 3500,
-        "activo": true,
-        "imagen": null,
-        "metadata": {
-            "tipo": "libro",
-            "isbn": "9786073186995",
-            "autor": "Luisito Comunica",
-            "editorial": "Alfaguara",
-            "genero": "Juvenil/Turismo",
-            "anio_publicacion": 2019,
-            "paginas": 280
-        },
-        "variantes": [
-            {
-                "sku": "LIB-2026-152",
-                "descripcion": "Lugares Asombrosos",
-                "precio": 3500,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 7,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 2,
-                        "sucursal_nombre": "Sucursal Coyoacán",
-                        "cantidad": 2,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 3,
-                        "sucursal_nombre": "Almacén General",
-                        "cantidad": 2,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "nombre": "Lugares Asombrosos 2",
-        "catalogo_tipo": "libro",
-        "catalogo_nombre": "Libros",
-        "descripcion": "Lugares Asombrosos 2",
-        "precio": 3345,
-        "activo": true,
-        "imagen": null,
-        "metadata": {
-            "tipo": "libro",
-            "isbn": null,
-            "autor": "Curaduría ARCHIVUM",
-            "editorial": "Ediciones ARCHIVUM",
-            "genero": "novela",
-            "anio_publicacion": 2026,
-            "paginas": 100
-        },
-        "variantes": [
-            {
-                "sku": "LIB-2024-19",
-                "descripcion": "Lugares Asombrosos 2",
-                "precio": 3345,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 2,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 2,
-                        "sucursal_nombre": "Sucursal Coyoacán",
-                        "cantidad": 5,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 3,
-                        "sucursal_nombre": "Almacén General",
-                        "cantidad": 2,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "nombre": "La razón de estar contigo",
-        "catalogo_tipo": "libro",
-        "catalogo_nombre": "Libros",
-        "descripcion": "La razón de estar contigo",
-        "precio": 500,
-        "activo": true,
-        "imagen": null,
-        "metadata": {
-            "tipo": "libro",
-            "isbn": "9788416867219",
-            "autor": "W. Bruce Cameron",
-            "editorial": "Roca Editorial",
-            "genero": "Drama Emotivo",
-            "anio_publicacion": 2017,
-            "paginas": 318
-        },
-        "variantes": [
-            {
-                "sku": "LIB-2024-20",
-                "descripcion": "La razón de estar contigo",
-                "precio": 500,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 2,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 2,
-                        "sucursal_nombre": "Sucursal Coyoacán",
-                        "cantidad": 10,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 3,
-                        "sucursal_nombre": "Almacén General",
-                        "cantidad": 2,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "nombre": "Psicología Oscura y manipulación mental",
-        "catalogo_tipo": "libro",
-        "catalogo_nombre": "Libros",
-        "descripcion": "Este libro revela sin filtros los 7 fundamentos de la controvertida \"Psicología Negra\" y las técnicas relacionadas.\r\nContiene verdades incómodas y perspectivas radicales. Sigue leyendo solo si estás preparado para enfrentar una realidad posiblemente muy diferente a la que crees conocer. ️",
-        "precio": 500,
-        "activo": true,
-        "imagen": null,
-        "metadata": {
-            "tipo": "libro",
-            "isbn": "9788416867217",
-            "autor": "Ethan Moreau",
-            "editorial": "Opus Edito",
-            "genero": "Drama Emotivo",
-            "anio_publicacion": 2025,
-            "paginas": 500
-        },
-        "variantes": [
-            {
-                "sku": "LIB-2024-28",
-                "descripcion": "Psicología Oscura y manipulación mental",
-                "precio": 500,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 15,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 2,
-                        "sucursal_nombre": "Sucursal Coyoacán",
-                        "cantidad": 2,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 3,
-                        "sucursal_nombre": "Almacén General",
-                        "cantidad": 2,
                         "stock_minimo": 1,
                         "pieza_unica": null
                     }
