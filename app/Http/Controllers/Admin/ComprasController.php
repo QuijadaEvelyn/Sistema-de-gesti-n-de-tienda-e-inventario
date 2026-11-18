@@ -68,6 +68,10 @@ class ComprasController extends Controller
      */
     public function storeProducto(Request $request): RedirectResponse
     {
+        if ($request->has('isbn') && (! is_string($request->input('isbn')) || trim((string) $request->input('isbn')) === '')) {
+            $request->merge(['isbn' => null]);
+        }
+
         $validated = $request->validate([
             'catalogo_id' => ['required', 'integer', 'exists:catalogos,id'],
             'nombre' => ['required', 'string', 'max:255'],
@@ -85,7 +89,7 @@ class ComprasController extends Controller
             'genero' => ['nullable', 'string', 'max:100'],
             'anio_publicacion' => ['nullable', 'integer', 'between:1800,2030'],
             'paginas' => ['nullable', 'integer', 'min:1', 'max:20000'],
-            'isbn' => ['nullable', 'string', 'max:40'],
+            'isbn' => ['nullable', 'string', 'max:32', Rule::unique('libros', 'isbn')],
             'ilustrador' => ['nullable', 'string', 'max:255'],
             'numero_edicion' => ['nullable', 'string', 'max:100'],
 
@@ -105,6 +109,7 @@ class ComprasController extends Controller
         ], [
             'imagen.image' => 'El archivo adjunto debe ser una imagen válida.',
             'imagen.max' => 'La imagen del producto no debe superar los 4MB.',
+            'isbn.unique' => 'Este código ISBN ya está registrado en otro libro.',
         ]);
 
         $imagenRuta = null;
@@ -191,12 +196,14 @@ class ComprasController extends Controller
                         }
                         DB::table('comics')->updateOrInsert(['producto_id' => $producto->id], $datosComic);
                     } elseif (Schema::hasTable('libros')) {
+                        $isbn = filled($request->input('isbn')) ? trim((string) $request->input('isbn')) : null;
                         $datosLibro = [
                             'autor' => $request->input('autor') ?: 'Autor de Cómic',
                             'editorial' => $request->input('editorial') ?: 'Editorial Cómic',
                             'genero' => 'comic',
                             'anio_publicacion' => $request->filled('anio_publicacion') ? (int) $request->input('anio_publicacion') : (int) date('Y'),
                             'paginas' => $request->filled('paginas') ? (int) $request->input('paginas') : 48,
+                            'isbn' => $isbn,
                         ];
                         if ($imagenRuta !== null && Schema::hasColumn('libros', 'imagen')) {
                             $datosLibro['imagen'] = $imagenRuta;
@@ -204,13 +211,14 @@ class ComprasController extends Controller
                         Libro::updateOrCreate(['producto_id' => $producto->id], $datosLibro);
                     }
                 } elseif ($esLibro && Schema::hasTable('libros')) {
+                    $isbn = filled($request->input('isbn')) ? trim((string) $request->input('isbn')) : null;
                     $datosLibro = [
                         'autor' => $request->input('autor') ?: 'Curaduría ARCHIVUM',
                         'editorial' => $request->input('editorial') ?: 'Ediciones ARCHIVUM',
                         'genero' => $request->input('genero') ?: 'novela',
                         'anio_publicacion' => $request->filled('anio_publicacion') ? (int) $request->input('anio_publicacion') : (int) date('Y'),
                         'paginas' => $request->filled('paginas') ? (int) $request->input('paginas') : null,
-                        'isbn' => $request->input('isbn') ?: null,
+                        'isbn' => $isbn,
                     ];
                     if ($imagenRuta !== null && Schema::hasColumn('libros', 'imagen')) {
                         $datosLibro['imagen'] = $imagenRuta;

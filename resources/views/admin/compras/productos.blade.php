@@ -101,7 +101,10 @@
                             </div>
                             <div>
                                 <label class="block text-[11px] font-label-code uppercase mb-1 text-on-surface font-semibold">Código ISBN</label>
-                                <input type="text" name="isbn" placeholder="978-8437604947" class="input-ficha w-full px-3 py-2 rounded-xl border border-purple-200 dark:border-purple-800/60 text-xs bg-white dark:bg-[#1f1a2e] text-on-surface" />
+                                <input type="text" name="isbn" value="{{ old('isbn') }}" placeholder="978-8437604947" class="input-ficha w-full px-3 py-2 rounded-xl border @error('isbn') border-rose-500 @else border-purple-200 dark:border-purple-800/60 @enderror text-xs bg-white dark:bg-[#1f1a2e] text-on-surface" />
+                                @error('isbn')
+                                    <p class="text-rose-500 text-[11px] mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                         </div>
 
