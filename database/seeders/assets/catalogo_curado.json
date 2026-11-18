@@ -1227,7 +1227,7 @@
                     {
                         "sucursal_id": 1,
                         "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 0,
+                        "cantidad": 1,
                         "stock_minimo": 1,
                         "pieza_unica": {
                             "numero_serie": "ARC-MEM-1934-002",
@@ -2324,6 +2324,55 @@
                         "sucursal_id": 3,
                         "sucursal_nombre": "Almacén General",
                         "cantidad": 1,
+                        "stock_minimo": 1,
+                        "pieza_unica": null
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "nombre": "Cielo purpura de roma",
+        "catalogo_tipo": "libro",
+        "catalogo_nombre": "Libros",
+        "descripcion": "Es un mundo de mafia en un grupo de adolecentes",
+        "precio": 510,
+        "activo": true,
+        "imagen": "images/productos/8vVD7HtQx0C6AxFFDPuR4oQUFYLyuPUiS25WdR4I.jpg",
+        "metadata": {
+            "tipo": "libro",
+            "isbn": "978-1097415496",
+            "autor": "Alessandra Neymar.",
+            "editorial": "pinguino",
+            "genero": "mafia/romance",
+            "anio_publicacion": 2000,
+            "paginas": 540
+        },
+        "variantes": [
+            {
+                "sku": "CIE-2000-123",
+                "descripcion": "Cielo purpura de roma",
+                "precio": 510,
+                "activa": true,
+                "existencias": [
+                    {
+                        "sucursal_id": 1,
+                        "sucursal_nombre": "Sucursal Central Bellas Artes",
+                        "cantidad": 1,
+                        "stock_minimo": 1,
+                        "pieza_unica": null
+                    },
+                    {
+                        "sucursal_id": 2,
+                        "sucursal_nombre": "Sucursal Coyoacán",
+                        "cantidad": 2,
+                        "stock_minimo": 1,
+                        "pieza_unica": null
+                    },
+                    {
+                        "sucursal_id": 3,
+                        "sucursal_nombre": "Almacén General",
+                        "cantidad": 2,
                         "stock_minimo": 1,
                         "pieza_unica": null
                     }
