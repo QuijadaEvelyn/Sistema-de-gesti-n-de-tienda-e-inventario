@@ -2428,5 +2428,54 @@
                 ]
             }
         ]
+    },
+    {
+        "nombre": "Psicología Oscura y manipulación mental",
+        "catalogo_tipo": "libro",
+        "catalogo_nombre": "Libros",
+        "descripcion": "Este libro revela sin filtros los 7 fundamentos de la controvertida \"Psicología Negra\" y las técnicas relacionadas.\r\nContiene verdades incómodas y perspectivas radicales. Sigue leyendo solo si estás preparado para enfrentar una realidad posiblemente muy diferente a la que crees conocer. ️",
+        "precio": 500,
+        "activo": true,
+        "imagen": "storage/productos/Jt0ZSKBaZs3psqd4gchqmPNGQ4idNayyXtkhf6ZU.png",
+        "metadata": {
+            "tipo": "libro",
+            "isbn": "9788416867217",
+            "autor": "Ethan Moreau",
+            "editorial": "Opus Edito",
+            "genero": "Drama Emotivo",
+            "anio_publicacion": 2025,
+            "paginas": 500
+        },
+        "variantes": [
+            {
+                "sku": "LIB-2024-28",
+                "descripcion": "Psicología Oscura y manipulación mental",
+                "precio": 500,
+                "activa": true,
+                "existencias": [
+                    {
+                        "sucursal_id": 1,
+                        "sucursal_nombre": "Sucursal Central Bellas Artes",
+                        "cantidad": 15,
+                        "stock_minimo": 1,
+                        "pieza_unica": null
+                    },
+                    {
+                        "sucursal_id": 2,
+                        "sucursal_nombre": "Sucursal Coyoacán",
+                        "cantidad": 2,
+                        "stock_minimo": 1,
+                        "pieza_unica": null
+                    },
+                    {
+                        "sucursal_id": 3,
+                        "sucursal_nombre": "Almacén General",
+                        "cantidad": 2,
+                        "stock_minimo": 1,
+                        "pieza_unica": null
+                    }
+                ]
+            }
+        ]
     }
 ]

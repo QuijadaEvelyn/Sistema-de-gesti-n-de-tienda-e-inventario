@@ -20,13 +20,14 @@ use Illuminate\Support\Facades\Schema;
 /**
  * Seeder Curatorial Versionado en Git.
  * Generado automáticamente por: php artisan catalogo:exportar-seeder
- * Fecha de última exportación: 2026-11-18 02:08:15
- * Total de productos registrados: 60
+ * Fecha de última exportación: 2026-11-18 02:21:21
+ * Total de productos registrados: 61
  */
 class CatalogoCuradoSeeder extends Seeder
 {
-    public const TOTAL_PRODUCTOS = 60;
-    public const EXPORTADO_EN = '2026-11-18 02:08:15';
+    public const TOTAL_PRODUCTOS = 61;
+
+    public const EXPORTADO_EN = '2026-11-18 02:21:21';
 
     /**
      * Sincroniza las imágenes de assets versionados en Git hacia storage/app/public/productos
@@ -115,7 +116,7 @@ class CatalogoCuradoSeeder extends Seeder
 
             $producto = $varianteExistente?->producto
                 ?? Producto::where('nombre', $item['nombre'])->first()
-                ?? new Producto();
+                ?? new Producto;
 
             $producto->fill([
                 'catalogo_id' => $catalogo->id,

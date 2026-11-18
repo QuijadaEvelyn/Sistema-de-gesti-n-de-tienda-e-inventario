@@ -357,4 +357,79 @@ class ComprasProductosImagenTest extends TestCase
 
         $response->assertSessionHasErrors(['imagen']);
     }
+
+    public function test_validacion_rechaza_isbn_duplicado_con_mensaje_en_espanol(): void
+    {
+        $usuario = $this->crearUsuarioConRol('compras');
+        $catalogo = $this->crearCatalogo('Libros', 'libro');
+
+        // 1. Dar de alta un primer libro con un ISBN específico
+        $primerLibro = $this->actingAs($usuario)->post(route('compras.productos.store'), [
+            'catalogo_id' => $catalogo->id,
+            'sku' => 'LIB-ISBN-ORIG-01',
+            'nombre' => 'Cien Años de Soledad',
+            'precio' => 1200.00,
+            'autor' => 'Gabriel García Márquez',
+            'editorial' => 'Sudamericana',
+            'isbn' => '978-950-07-0010-1',
+        ]);
+        $primerLibro->assertRedirect();
+        $this->assertDatabaseHas('libros', ['isbn' => '978-950-07-0010-1']);
+
+        // 2. Intentar registrar un segundo libro con el MISMO ISBN
+        $segundoLibro = $this->actingAs($usuario)->from(route('compras.productos'))->post(route('compras.productos.store'), [
+            'catalogo_id' => $catalogo->id,
+            'sku' => 'LIB-ISBN-DUPL-02',
+            'nombre' => 'Cien Años de Soledad Segunda Copia',
+            'precio' => 1500.00,
+            'autor' => 'Gabriel García Márquez',
+            'editorial' => 'Diana',
+            'isbn' => '978-950-07-0010-1',
+        ]);
+
+        // Debe redirigir limpiamente sin error 500 y con el mensaje de validación exacto
+        $segundoLibro->assertRedirect(route('compras.productos'));
+        $segundoLibro->assertSessionHasErrors([
+            'isbn' => 'Este código ISBN ya está registrado en otro libro.',
+        ]);
+    }
+
+    public function test_validacion_permite_cadenas_vacias_de_isbn_convirtiendolas_a_null(): void
+    {
+        $usuario = $this->crearUsuarioConRol('compras');
+        $catalogo = $this->crearCatalogo('Libros', 'libro');
+
+        // Libro 1 con cadena vacía '' en ISBN
+        $res1 = $this->actingAs($usuario)->post(route('compras.productos.store'), [
+            'catalogo_id' => $catalogo->id,
+            'sku' => 'LIB-EMPTY-ISBN-01',
+            'nombre' => 'Libro Sin ISBN Uno',
+            'precio' => 800.00,
+            'autor' => 'Autor Anónimo',
+            'isbn' => '',
+        ]);
+        $res1->assertSessionHasNoErrors();
+        $res1->assertRedirect();
+
+        // Libro 2 con espacios en blanco en ISBN
+        $res2 = $this->actingAs($usuario)->post(route('compras.productos.store'), [
+            'catalogo_id' => $catalogo->id,
+            'sku' => 'LIB-EMPTY-ISBN-02',
+            'nombre' => 'Libro Sin ISBN Dos',
+            'precio' => 850.00,
+            'autor' => 'Autor Anónimo',
+            'isbn' => '   ',
+        ]);
+        $res2->assertSessionHasNoErrors();
+        $res2->assertRedirect();
+
+        // Ambos libros deben haberse creado con isbn NULL sin colisión de unicidad
+        $libro1 = Libro::whereHas('producto', fn ($q) => $q->where('nombre', 'Libro Sin ISBN Uno'))->first();
+        $this->assertNotNull($libro1);
+        $this->assertNull($libro1->isbn);
+
+        $libro2 = Libro::whereHas('producto', fn ($q) => $q->where('nombre', 'Libro Sin ISBN Dos'))->first();
+        $this->assertNotNull($libro2);
+        $this->assertNull($libro2->isbn);
+    }
 }
