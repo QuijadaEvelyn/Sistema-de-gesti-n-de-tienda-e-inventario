@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Models\Catalogo;
+use App\Models\Disco;
+use App\Models\Libro;
 use App\Models\Producto;
 use App\Models\Rol;
 use App\Models\Usuario;
 use App\Models\VarianteSku;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -51,11 +54,11 @@ class ComprasProductosImagenTest extends TestCase
         return UploadedFile::fake()->createWithContent($nombre, base64_decode($pngBase64));
     }
 
-    private function crearCatalogo(string $nombre = 'Discos'): Catalogo
+    private function crearCatalogo(string $nombre, string $tipo): Catalogo
     {
         return Catalogo::firstOrCreate(
             ['nombre' => $nombre],
-            ['tipo' => 'disco', 'activo' => true]
+            ['tipo' => $tipo, 'activo' => true]
         );
     }
 
@@ -74,32 +77,40 @@ class ComprasProductosImagenTest extends TestCase
         $response->assertSee('enctype="multipart/form-data"', false);
     }
 
-    public function test_compras_puede_dar_de_alta_producto_con_imagen_y_se_guarda_en_disco_public_y_bitacora(): void
+    public function test_compras_puede_dar_de_alta_producto_tipo_libro_con_imagen_sin_error_sql(): void
     {
         Storage::fake('public');
         $usuario = $this->crearUsuarioConRol('compras');
-        $catalogo = $this->crearCatalogo('Libros');
+        $catalogo = $this->crearCatalogo('Libros', 'libro');
 
-        $archivoImagen = $this->crearArchivoImagen('rayuela_portada.jpg');
+        $archivoImagen = $this->crearArchivoImagen('cien_anos_de_soledad.jpg');
 
         $payload = [
             'catalogo_id' => $catalogo->id,
-            'sku' => 'LIB-RAY-001',
-            'nombre' => 'Rayuela - Primera Edición Sudamericana 1963',
-            'descripcion' => 'Ejemplar con dedicatoria manuscrita de Julio Cortázar.',
-            'precio' => 45000.00,
+            'sku' => 'LIB-CAS-001',
+            'nombre' => 'Cien Años de Soledad - Primera Edición Sudamericana 1967',
+            'descripcion' => 'Ejemplar histórico catalogado en bóveda curatorial.',
+            'precio' => 38000.00,
             'imagen' => $archivoImagen,
         ];
 
+        // Ejecutar POST hacia el controlador
         $response = $this->actingAs($usuario)->post(route('compras.productos.store'), $payload);
 
         $response->assertRedirect(route('compras.productos'));
         $response->assertSessionHas('status');
 
-        $producto = Producto::where('nombre', 'Rayuela - Primera Edición Sudamericana 1963')->first();
+        $producto = Producto::where('nombre', 'Cien Años de Soledad - Primera Edición Sudamericana 1967')->first();
         $this->assertNotNull($producto);
         $this->assertNotNull($producto->imagen);
         $this->assertStringStartsWith('storage/productos/', $producto->imagen);
+
+        // Confirmar que la tabla libros tiene su ficha creada sin error de columna inexistente
+        if (Schema::hasTable('libros')) {
+            $libro = Libro::where('producto_id', $producto->id)->first();
+            $this->assertNotNull($libro);
+            $this->assertEquals('Curaduría ARCHIVUM', $libro->autor);
+        }
 
         // Verificar archivo en disco público
         $rutaAlmacenada = str_replace('storage/', '', $producto->imagen);
@@ -116,12 +127,81 @@ class ComprasProductosImagenTest extends TestCase
         ]);
         $this->assertTrue($variante->existencias()->sum('cantidad') >= 1);
 
-        // Verificar que aparece de inmediato en el Sitio Público
-        $publicResponse = $this->get(route('public.home'));
-        $publicResponse->assertOk();
-        $publicResponse->assertSee('Rayuela - Primera Edición Sudamericana 1963');
+        // Verificar que aparece de inmediato en la tienda pública (/ y /catalogo/libros) con su foto
+        $publicHome = $this->get(route('public.home'));
+        $publicHome->assertOk();
+        $publicHome->assertSee('Cien Años de Soledad - Primera Edición Sudamericana 1967');
+        $publicHome->assertSee($producto->imagen, false);
+
+        $publicLibros = $this->get(route('public.libros'));
+        $publicLibros->assertOk();
+        $publicLibros->assertSee('Cien Años de Soledad - Primera Edición Sudamericana 1967');
+        $publicLibros->assertSee($producto->imagen, false);
 
         // Verificar registro de auditoría en Bitácora
+        $this->assertDatabaseHas('bitacoras', [
+            'usuario_id' => $usuario->id,
+            'accion' => 'PRODUCTO_CREADO_CON_IMAGEN',
+            'tabla_afectada' => 'productos',
+            'registro_id' => $producto->id,
+        ]);
+    }
+
+    public function test_compras_puede_dar_de_alta_producto_tipo_vinilo_con_imagen_y_se_muestra_en_catalogo(): void
+    {
+        Storage::fake('public');
+        $usuario = $this->crearUsuarioConRol('compras');
+        $catalogo = $this->crearCatalogo('Discos', 'disco');
+
+        $archivoImagen = $this->crearArchivoPng('abbey_road_portada.png');
+
+        $payload = [
+            'catalogo_id' => $catalogo->id,
+            'sku' => 'DIS-ABB-001',
+            'nombre' => 'The Beatles - Abbey Road 1969 UK Original Pressing',
+            'descripcion' => 'Prensado en acetato virgen de 180g con matriz original.',
+            'precio' => 24000.00,
+            'imagen' => $archivoImagen,
+        ];
+
+        $response = $this->actingAs($usuario)->post(route('compras.productos.store'), $payload);
+
+        $response->assertRedirect(route('compras.productos'));
+        $response->assertSessionHas('status');
+
+        $producto = Producto::where('nombre', 'The Beatles - Abbey Road 1969 UK Original Pressing')->first();
+        $this->assertNotNull($producto);
+        $this->assertNotNull($producto->imagen);
+        $this->assertStringStartsWith('storage/productos/', $producto->imagen);
+
+        // Confirmar ficha especializada en discos
+        if (Schema::hasTable('discos')) {
+            $disco = Disco::where('producto_id', $producto->id)->first();
+            $this->assertNotNull($disco);
+            $this->assertEquals('The Beatles - Abbey Road 1969 UK Original Pressing', $disco->artista);
+        }
+
+        // Verificar archivo en disco público
+        $rutaAlmacenada = str_replace('storage/', '', $producto->imagen);
+        Storage::disk('public')->assertExists($rutaAlmacenada);
+
+        // Verificar variante SKU asociada
+        $variante = VarianteSku::where('producto_id', $producto->id)->first();
+        $this->assertNotNull($variante);
+        $this->assertEquals($producto->imagen, $variante->imagen);
+
+        // Verificar que aparece de inmediato en la tienda pública (/ y /catalogo/vinilos) con su foto
+        $publicHome = $this->get(route('public.home'));
+        $publicHome->assertOk();
+        $publicHome->assertSee('The Beatles - Abbey Road 1969 UK Original Pressing');
+        $publicHome->assertSee($producto->imagen, false);
+
+        $publicVinilos = $this->get(route('public.vinilos'));
+        $publicVinilos->assertOk();
+        $publicVinilos->assertSee('The Beatles - Abbey Road 1969 UK Original Pressing');
+        $publicVinilos->assertSee($producto->imagen, false);
+
+        // Verificar auditoría en Bitácora
         $this->assertDatabaseHas('bitacoras', [
             'usuario_id' => $usuario->id,
             'accion' => 'PRODUCTO_CREADO_CON_IMAGEN',
@@ -133,7 +213,7 @@ class ComprasProductosImagenTest extends TestCase
     public function test_compras_puede_dar_de_alta_producto_sin_imagen(): void
     {
         $usuario = $this->crearUsuarioConRol('compras');
-        $catalogo = $this->crearCatalogo('Coleccionables');
+        $catalogo = $this->crearCatalogo('Coleccionables', 'coleccionable');
 
         $payload = [
             'catalogo_id' => $catalogo->id,
@@ -163,7 +243,7 @@ class ComprasProductosImagenTest extends TestCase
     {
         Storage::fake('public');
         $usuario = $this->crearUsuarioConRol('compras');
-        $catalogo = $this->crearCatalogo('Discos');
+        $catalogo = $this->crearCatalogo('Discos', 'disco');
 
         // Crear producto previo con imagen antigua
         $imagenAntigua = $this->crearArchivoImagen('antigua.jpg');
@@ -226,7 +306,7 @@ class ComprasProductosImagenTest extends TestCase
     {
         Storage::fake('public');
         $usuario = $this->crearUsuarioConRol('compras');
-        $catalogo = $this->crearCatalogo('Libros');
+        $catalogo = $this->crearCatalogo('Libros', 'libro');
 
         // 1. Archivo que no es imagen
         $archivoPdf = UploadedFile::fake()->create('documento.pdf', 500, 'application/pdf');

@@ -91,62 +91,70 @@ class ComprasController extends Controller
         DB::transaction(function () use ($validated, $request, $imagenRuta): void {
             $catalogo = Catalogo::find($validated['catalogo_id']);
 
-            $producto = Producto::create([
+            $datosProducto = [
                 'catalogo_id' => $validated['catalogo_id'],
                 'nombre' => $validated['nombre'],
                 'descripcion' => $validated['descripcion'] ?? $validated['nombre'],
                 'precio' => $validated['precio'],
                 'activo' => true,
-                'imagen' => $imagenRuta,
-            ]);
+            ];
+            if ($imagenRuta !== null && Schema::hasColumn('productos', 'imagen')) {
+                $datosProducto['imagen'] = $imagenRuta;
+            }
 
-            $variante = VarianteSku::create([
+            $producto = Producto::create($datosProducto);
+
+            $datosVariante = [
                 'producto_id' => $producto->id,
                 'sku' => $validated['sku'],
                 'descripcion' => $validated['nombre'],
                 'precio' => $validated['precio'],
                 'activa' => true,
-                'imagen' => $imagenRuta,
-            ]);
+            ];
+            if ($imagenRuta !== null && Schema::hasColumn('variantes_sku', 'imagen')) {
+                $datosVariante['imagen'] = $imagenRuta;
+            }
 
-            // Sincronizar ficha especializada según el tipo de catálogo
+            $variante = VarianteSku::create($datosVariante);
+
+            // Sincronizar ficha especializada según el tipo de catálogo sin enviar columnas inexistentes
             if ($catalogo) {
                 if ($catalogo->tipo === 'disco' && Schema::hasTable('discos')) {
-                    Disco::firstOrCreate(
-                        ['producto_id' => $producto->id],
-                        [
-                            'artista' => $producto->nombre,
-                            'sello' => 'Curaduría ARCHIVUM',
-                            'genero' => 'Fonoteca Histórica',
-                            'formato' => 'vinilo',
-                            'anio_lanzamiento' => (int) date('Y'),
-                            'imagen' => $imagenRuta,
-                        ]
-                    );
+                    $datosDisco = [
+                        'artista' => $producto->nombre,
+                        'sello' => 'Curaduría ARCHIVUM',
+                        'genero' => 'Fonoteca Histórica',
+                        'formato' => 'vinilo',
+                        'anio_lanzamiento' => (int) date('Y'),
+                    ];
+                    if ($imagenRuta !== null && Schema::hasColumn('discos', 'imagen')) {
+                        $datosDisco['imagen'] = $imagenRuta;
+                    }
+                    Disco::firstOrCreate(['producto_id' => $producto->id], $datosDisco);
                 } elseif ($catalogo->tipo === 'libro' && Schema::hasTable('libros')) {
-                    Libro::firstOrCreate(
-                        ['producto_id' => $producto->id],
-                        [
-                            'autor' => 'Curaduría ARCHIVUM',
-                            'editorial' => 'Ediciones ARCHIVUM',
-                            'genero' => 'novela',
-                            'anio_publicacion' => (int) date('Y'),
-                            'paginas' => 100,
-                            'imagen' => $imagenRuta,
-                        ]
-                    );
+                    $datosLibro = [
+                        'autor' => 'Curaduría ARCHIVUM',
+                        'editorial' => 'Ediciones ARCHIVUM',
+                        'genero' => 'novela',
+                        'anio_publicacion' => (int) date('Y'),
+                        'paginas' => 100,
+                    ];
+                    if ($imagenRuta !== null && Schema::hasColumn('libros', 'imagen')) {
+                        $datosLibro['imagen'] = $imagenRuta;
+                    }
+                    Libro::firstOrCreate(['producto_id' => $producto->id], $datosLibro);
                 } elseif ($catalogo->tipo === 'coleccionable' && Schema::hasTable('coleccionables')) {
-                    Coleccionable::firstOrCreate(
-                        ['producto_id' => $producto->id],
-                        [
-                            'marca' => 'ARCHIVUM Histórico',
-                            'serie' => 'Colección Exclusiva',
-                            'categoria' => 'figuras',
-                            'material' => 'Edición Autenticada',
-                            'edicion_limitada' => true,
-                            'imagen' => $imagenRuta,
-                        ]
-                    );
+                    $datosColeccionable = [
+                        'marca' => 'ARCHIVUM Histórico',
+                        'serie' => 'Colección Exclusiva',
+                        'categoria' => 'figuras',
+                        'material' => 'Edición Autenticada',
+                        'edicion_limitada' => true,
+                    ];
+                    if ($imagenRuta !== null && Schema::hasColumn('coleccionables', 'imagen')) {
+                        $datosColeccionable['imagen'] = $imagenRuta;
+                    }
+                    Coleccionable::firstOrCreate(['producto_id' => $producto->id], $datosColeccionable);
                 }
             }
 
@@ -243,9 +251,25 @@ class ComprasController extends Controller
         }
 
         DB::transaction(function () use ($producto, $nuevaRuta, $request): void {
-            $producto->update(['imagen' => $nuevaRuta]);
+            if (Schema::hasColumn('productos', 'imagen')) {
+                $producto->update(['imagen' => $nuevaRuta]);
+            }
 
-            $producto->variantesSku()->update(['imagen' => $nuevaRuta]);
+            if (Schema::hasColumn('variantes_sku', 'imagen')) {
+                $producto->variantesSku()->update(['imagen' => $nuevaRuta]);
+            }
+
+            if (Schema::hasTable('discos') && Schema::hasColumn('discos', 'imagen') && $producto->disco) {
+                $producto->disco->update(['imagen' => $nuevaRuta]);
+            }
+
+            if (Schema::hasTable('libros') && Schema::hasColumn('libros', 'imagen') && $producto->libro) {
+                $producto->libro->update(['imagen' => $nuevaRuta]);
+            }
+
+            if (Schema::hasTable('coleccionables') && Schema::hasColumn('coleccionables', 'imagen') && $producto->coleccionable) {
+                $producto->coleccionable->update(['imagen' => $nuevaRuta]);
+            }
 
             Bitacora::create([
                 'usuario_id' => $request->user()->id,
