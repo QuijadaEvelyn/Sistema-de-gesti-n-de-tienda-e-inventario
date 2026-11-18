@@ -81,7 +81,7 @@ Route::middleware('guest')->group(function (): void {
     Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 
     // Restablecimiento de contraseña mediante token
-    Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+    Route::get('/reset-password/{token?}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
     Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
 });
 
@@ -231,6 +231,7 @@ Route::prefix('compras')
         Route::post('/ordenes/recepcionar', [ComprasController::class, 'recepcionar'])->name('compras.ordenes.recepcionar');
         Route::get('/productos', [ComprasController::class, 'productos'])->name('compras.productos');
         Route::post('/productos', [ComprasController::class, 'storeProducto'])->name('compras.productos.store');
+        Route::post('/productos/{producto}/imagen', [ComprasController::class, 'actualizarImagen'])->name('compras.productos.actualizar-imagen');
         Route::get('/productos/plantilla-csv', [ComprasController::class, 'descargarPlantillaCsv'])->name('compras.productos.plantilla-csv');
         Route::post('/productos/importar-csv', [ComprasController::class, 'importarCsv'])->name('compras.productos.importar-csv');
     });

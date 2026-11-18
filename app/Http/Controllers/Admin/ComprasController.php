@@ -7,17 +7,23 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Bitacora;
 use App\Models\Catalogo;
+use App\Models\Coleccionable;
+use App\Models\Disco;
 use App\Models\Existencia;
+use App\Models\Libro;
 use App\Models\MovimientoInventario;
 use App\Models\Producto;
 use App\Models\Proveedor;
 use App\Models\Sucursal;
 use App\Models\VarianteSku;
 use App\Services\OrdenCompraProveedorService;
+use App\Services\SucursalContextoService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use RuntimeException;
@@ -38,14 +44,27 @@ class ComprasController extends Controller
             ->paginate(20)
             ->withQueryString();
 
-        return view('admin.compras.productos', [
+        $sucursales = Schema::hasTable('sucursales')
+            ? Sucursal::where('activa', true)->orderBy('id')->get()
+            : collect();
+
+        $sucursalActivaId = $request->session()->get(SucursalContextoService::SESSION_SUCURSAL_KEY)
+            ?: $sucursales->first()?->id;
+
+        $vista = view()->exists('compras.productos.index')
+            ? 'compras.productos.index'
+            : 'admin.compras.productos';
+
+        return view($vista, [
             'productos' => $productos,
             'catalogos' => Catalogo::where('activo', true)->orderBy('nombre')->get(),
+            'sucursales' => $sucursales,
+            'sucursalActivaId' => $sucursalActivaId,
         ]);
     }
 
     /**
-     * Alta de un producto con su variante SKU inicial.
+     * Alta de un producto con su variante SKU inicial, soporte para subida de imagen y existencia inicial.
      */
     public function storeProducto(Request $request): RedirectResponse
     {
@@ -55,37 +74,194 @@ class ComprasController extends Controller
             'descripcion' => ['nullable', 'string'],
             'precio' => ['required', 'numeric', 'min:0'],
             'sku' => ['required', 'string', 'max:100', 'unique:variantes_sku,sku'],
+            'imagen' => ['nullable', 'image', 'max:4096'],
+            'sucursal_id' => ['nullable', 'integer', 'exists:sucursales,id'],
+            'cantidad' => ['nullable', 'integer', 'min:1'],
+        ], [
+            'imagen.image' => 'El archivo adjunto debe ser una imagen válida.',
+            'imagen.max' => 'La imagen del producto no debe superar los 4MB.',
         ]);
 
-        DB::transaction(function () use ($validated, $request): void {
+        $imagenRuta = null;
+        if ($request->hasFile('imagen')) {
+            $path = Storage::disk('public')->putFile('productos', $request->file('imagen'));
+            $imagenRuta = 'storage/'.$path;
+        }
+
+        DB::transaction(function () use ($validated, $request, $imagenRuta): void {
+            $catalogo = Catalogo::find($validated['catalogo_id']);
+
             $producto = Producto::create([
                 'catalogo_id' => $validated['catalogo_id'],
                 'nombre' => $validated['nombre'],
-                'descripcion' => $validated['descripcion'] ?? null,
+                'descripcion' => $validated['descripcion'] ?? $validated['nombre'],
                 'precio' => $validated['precio'],
                 'activo' => true,
+                'imagen' => $imagenRuta,
             ]);
 
-            VarianteSku::create([
+            $variante = VarianteSku::create([
                 'producto_id' => $producto->id,
                 'sku' => $validated['sku'],
                 'descripcion' => $validated['nombre'],
                 'precio' => $validated['precio'],
                 'activa' => true,
+                'imagen' => $imagenRuta,
             ]);
+
+            // Sincronizar ficha especializada según el tipo de catálogo
+            if ($catalogo) {
+                if ($catalogo->tipo === 'disco' && Schema::hasTable('discos')) {
+                    Disco::firstOrCreate(
+                        ['producto_id' => $producto->id],
+                        [
+                            'artista' => $producto->nombre,
+                            'sello' => 'Curaduría ARCHIVUM',
+                            'genero' => 'Fonoteca Histórica',
+                            'formato' => 'vinilo',
+                            'anio_lanzamiento' => (int) date('Y'),
+                            'imagen' => $imagenRuta,
+                        ]
+                    );
+                } elseif ($catalogo->tipo === 'libro' && Schema::hasTable('libros')) {
+                    Libro::firstOrCreate(
+                        ['producto_id' => $producto->id],
+                        [
+                            'autor' => 'Curaduría ARCHIVUM',
+                            'editorial' => 'Ediciones ARCHIVUM',
+                            'genero' => 'novela',
+                            'anio_publicacion' => (int) date('Y'),
+                            'paginas' => 100,
+                            'imagen' => $imagenRuta,
+                        ]
+                    );
+                } elseif ($catalogo->tipo === 'coleccionable' && Schema::hasTable('coleccionables')) {
+                    Coleccionable::firstOrCreate(
+                        ['producto_id' => $producto->id],
+                        [
+                            'marca' => 'ARCHIVUM Histórico',
+                            'serie' => 'Colección Exclusiva',
+                            'categoria' => 'figuras',
+                            'material' => 'Edición Autenticada',
+                            'edicion_limitada' => true,
+                            'imagen' => $imagenRuta,
+                        ]
+                    );
+                }
+            }
+
+            // Crear existencia inicial con al menos 1 unidad para que aparezca de inmediato en el catálogo del Sitio Público
+            $sucursales = Schema::hasTable('sucursales')
+                ? Sucursal::where('activa', true)->get()
+                : collect();
+
+            if ($sucursales->isEmpty() && Schema::hasTable('sucursales')) {
+                $sucursalDefault = Sucursal::firstOrCreate(
+                    ['nombre' => 'Sucursal Central Bellas Artes'],
+                    [
+                        'direccion' => 'Av. Juárez 42, Centro Histórico, CDMX',
+                        'telefono' => '5555124200',
+                        'activa' => true,
+                    ]
+                );
+                $sucursales = collect([$sucursalDefault]);
+            }
+
+            if ($sucursales->isNotEmpty()) {
+                $sucursalSeleccionadaId = ! empty($validated['sucursal_id'])
+                    ? (int) $validated['sucursal_id']
+                    : ($request->session()->get(SucursalContextoService::SESSION_SUCURSAL_KEY)
+                        ?: $sucursales->first()->id);
+
+                $cantidadInicial = ! empty($validated['cantidad']) ? (int) $validated['cantidad'] : 5;
+
+                foreach ($sucursales as $suc) {
+                    $cant = ($suc->id == $sucursalSeleccionadaId) ? $cantidadInicial : 2;
+
+                    $existencia = Existencia::firstOrCreate(
+                        [
+                            'variante_sku_id' => $variante->id,
+                            'sucursal_id' => $suc->id,
+                        ],
+                        [
+                            'cantidad' => $cant,
+                            'stock_minimo' => 1,
+                        ]
+                    );
+
+                    if (Schema::hasTable('movimientos_inventario')) {
+                        MovimientoInventario::create([
+                            'existencia_id' => $existencia->id,
+                            'usuario_id' => $request->user()?->id,
+                            'tipo' => 'entrada',
+                            'cantidad' => $cant,
+                            'motivo' => "Alta inicial de catálogo [{$validated['sku']}]",
+                            'created_at' => now(),
+                        ]);
+                    }
+                }
+            }
 
             Bitacora::create([
                 'usuario_id' => $request->user()->id,
-                'accion' => 'PRODUCTO_CREADO',
+                'accion' => $imagenRuta ? 'PRODUCTO_CREADO_CON_IMAGEN' : 'PRODUCTO_CREADO',
                 'tabla_afectada' => 'productos',
                 'registro_id' => $producto->id,
-                'detalle' => ['nombre' => $producto->nombre, 'sku' => $validated['sku']],
+                'detalle' => [
+                    'nombre' => $producto->nombre,
+                    'sku' => $validated['sku'],
+                    'imagen' => $imagenRuta,
+                ],
                 'ip' => $request->ip() ?? '127.0.0.1',
                 'created_at' => now(),
             ]);
         });
 
         return redirect()->route('compras.productos')->with('status', "Producto '{$validated['nombre']}' dado de alta correctamente.");
+    }
+
+    /**
+     * Actualiza la imagen de portada de un producto existente y sus variantes SKU.
+     */
+    public function actualizarImagen(Request $request, Producto $producto): RedirectResponse
+    {
+        $request->validate([
+            'imagen' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
+        ], [
+            'imagen.required' => 'Debe seleccionar una imagen para actualizar el producto.',
+            'imagen.image' => 'El archivo seleccionado debe ser una imagen válida.',
+            'imagen.mimes' => 'La imagen debe tener formato JPG, JPEG, PNG o WEBP.',
+            'imagen.max' => 'La imagen no debe superar los 4MB.',
+        ]);
+
+        $path = Storage::disk('public')->putFile('productos', $request->file('imagen'));
+        $nuevaRuta = 'storage/'.$path;
+
+        if ($producto->imagen && str_starts_with($producto->imagen, 'storage/productos/')) {
+            $viejoPath = str_replace('storage/', '', $producto->imagen);
+            Storage::disk('public')->delete($viejoPath);
+        }
+
+        DB::transaction(function () use ($producto, $nuevaRuta, $request): void {
+            $producto->update(['imagen' => $nuevaRuta]);
+
+            $producto->variantesSku()->update(['imagen' => $nuevaRuta]);
+
+            Bitacora::create([
+                'usuario_id' => $request->user()->id,
+                'accion' => 'PRODUCTO_IMAGEN_ACTUALIZADA',
+                'tabla_afectada' => 'productos',
+                'registro_id' => $producto->id,
+                'detalle' => [
+                    'nombre' => $producto->nombre,
+                    'imagen' => $nuevaRuta,
+                ],
+                'ip' => $request->ip() ?? '127.0.0.1',
+                'created_at' => now(),
+            ]);
+        });
+
+        return redirect()->route('compras.productos')->with('status', "Imagen de '{$producto->nombre}' actualizada correctamente.");
     }
 
     /**

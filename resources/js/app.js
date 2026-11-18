@@ -254,6 +254,9 @@ export async function navigateToAdminUrl(url, isPopState = false) {
 
         // Re-ejecutar scripts inline de la vista cargada
         executeInlineScripts(mainContent);
+
+        // Notificar a listeners que la sección SPA fue reemplazada
+        window.dispatchEvent(new CustomEvent('admin-spa-navigated'));
     } catch (error) {
         console.error('Error durante la navegación SPA:', error);
         window.location.href = url;

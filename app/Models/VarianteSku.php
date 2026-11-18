@@ -24,6 +24,7 @@ class VarianteSku extends Model
         'descripcion',
         'precio',
         'activa',
+        'imagen',
     ];
 
     /**
@@ -69,5 +70,14 @@ class VarianteSku extends Model
     public function detallePedidos(): HasMany
     {
         return $this->hasMany(DetallePedido::class, 'variante_sku_id');
+    }
+
+    /**
+     * Accesor para obtener la imagen de la variante o fallback al producto padre.
+     */
+    public function getImagenAttribute(): ?string
+    {
+        return $this->attributes['imagen']
+            ?? $this->producto?->imagen;
     }
 }

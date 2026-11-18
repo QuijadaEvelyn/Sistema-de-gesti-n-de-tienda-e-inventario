@@ -265,7 +265,8 @@ class AuthControllersTest extends TestCase
             'password_confirmation' => 'claveNueva456',
         ]);
 
-        $response->assertRedirect(route('login'));
+        $response->assertRedirect(route('public.home'));
+        $this->assertAuthenticatedAs($usuario);
 
         $usuarioFresh = $usuario->fresh();
         $this->assertTrue(Hash::check('claveNueva456', $usuarioFresh->password));

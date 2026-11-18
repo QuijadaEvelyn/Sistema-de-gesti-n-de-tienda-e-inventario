@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Mail\RecuperacionContrasenaMail;
 use App\Models\Bitacora;
 use App\Models\RecuperacionContrasena;
 use App\Models\Usuario;
@@ -14,6 +15,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -22,7 +24,7 @@ use Illuminate\View\View;
 class ForgotPasswordController extends Controller
 {
     /**
-     * Muestra el formulario para solicitar el enlace de recuperación de contraseña.
+     * Muestra el formulario para solicitar el enlace y código de recuperación de contraseña.
      */
     public function showLinkRequestForm(Request $request): View|JsonResponse
     {
@@ -37,7 +39,7 @@ class ForgotPasswordController extends Controller
     }
 
     /**
-     * Envía un enlace de restablecimiento con token temporal al correo electrónico del usuario.
+     * Envía un correo electrónico con token temporal de verificación y enlace de restablecimiento.
      *
      * @throws ValidationException
      */
@@ -45,6 +47,9 @@ class ForgotPasswordController extends Controller
     {
         $validated = $request->validate([
             'email' => ['required', 'string', 'email'],
+        ], [
+            'email.required' => 'Por favor, ingresa tu dirección de correo electrónico.',
+            'email.email' => 'La dirección de correo electrónico ingresada no es válida.',
         ]);
 
         $email = Str::lower($validated['email']);
@@ -62,7 +67,7 @@ class ForgotPasswordController extends Controller
             }
 
             throw ValidationException::withMessages([
-                'email' => "Demasiadas solicitudes de recuperación. Por favor espera {$seconds} segundos.",
+                'email' => "Demasiadas solicitudes de recuperación. Por favor espera {$seconds} segundos antes de intentar nuevamente.",
             ]);
         }
 
@@ -71,36 +76,27 @@ class ForgotPasswordController extends Controller
         /** @var Usuario|null $usuario */
         $usuario = Usuario::where('email', $email)->first();
 
-        // Si el usuario existe y está activo, generamos el token temporal
+        // Si el usuario existe y está activo, generamos el token temporal y despachamos el correo real
         if ($usuario && $usuario->activo) {
-            DB::transaction(function () use ($usuario, $request, $email): void {
-                // Invalidar tokens previos no utilizados para este usuario
+            $plainToken = Str::random(64);
+            $tokenHash = hash('sha256', $plainToken);
+            $expiraEn = Carbon::now()->addMinutes(60);
+
+            $resetUrl = route('password.reset', [
+                'token' => $plainToken,
+                'email' => $email,
+            ]);
+
+            DB::transaction(function () use ($usuario, $request, $email, $tokenHash, $expiraEn): void {
+                // Invalidar tokens previos no consumidos para este usuario
                 RecuperacionContrasena::where('usuario_id', $usuario->id)
                     ->whereNull('usado_en')
                     ->delete();
-
-                // Generar token seguro y almacenar su hash sha256 con vigencia de 60 minutos
-                $plainToken = Str::random(64);
-                $tokenHash = hash('sha256', $plainToken);
-                $expiraEn = Carbon::now()->addMinutes(60);
 
                 RecuperacionContrasena::create([
                     'usuario_id' => $usuario->id,
                     'token_hash' => $tokenHash,
                     'expira_en' => $expiraEn,
-                ]);
-
-                // Generar la URL firmada/con token para el restablecimiento
-                $resetUrl = route('password.reset', [
-                    'token' => $plainToken,
-                    'email' => $email,
-                ]);
-
-                // Registrar en log la notificación (y soporte para Mailable en producción)
-                Log::info("[ForgotPasswordController] Enlace de recuperación generado para {$email}.", [
-                    'usuario_id' => $usuario->id,
-                    'expira_en' => $expiraEn->toDateTimeString(),
-                    'reset_url' => $resetUrl,
                 ]);
 
                 // Auditoría de seguridad en Bitácora
@@ -118,17 +114,39 @@ class ForgotPasswordController extends Controller
                     'created_at' => now(),
                 ]);
             });
+
+            // Envío real del correo electrónico vía Mailable
+            Mail::to($usuario->email)->send(new RecuperacionContrasenaMail($usuario, $plainToken, $resetUrl));
+
+            Log::info("[ForgotPasswordController] Correo de recuperación despachado a {$email}.", [
+                'usuario_id' => $usuario->id,
+                'expira_en' => $expiraEn->toDateTimeString(),
+            ]);
+
+            $mensajeExito = 'Hemos enviado un código y enlace de verificación a tu correo electrónico. Por favor revisa tu bandeja de entrada (o carpeta de spam) e ingresa el token recibido para continuar.';
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'status' => 'success',
+                    'message' => $mensajeExito,
+                    'redirect' => route('password.reset', ['email' => $email]),
+                ]);
+            }
+
+            return redirect()->route('password.reset', ['email' => $email])->with('status', $mensajeExito);
         }
 
-        $mensajeExito = 'Si el correo electrónico existe en nuestra base de datos, recibirás un enlace para restablecer tu contraseña en breve.';
+        // Si el usuario no existe o está inactivo, responder genéricamente sin filtrar existencia de cuentas
+        $mensajeSeguro = 'Si el correo electrónico está registrado en ARCHIVUM, recibirás las instrucciones de recuperación en breve. Revisa tu bandeja de entrada o spam.';
 
         if ($request->expectsJson()) {
             return response()->json([
                 'status' => 'success',
-                'message' => $mensajeExito,
+                'message' => $mensajeSeguro,
+                'redirect' => route('password.reset', ['email' => $email]),
             ]);
         }
 
-        return back()->with('status', $mensajeExito);
+        return redirect()->route('password.reset', ['email' => $email])->with('status', $mensajeSeguro);
     }
 }
