@@ -41,6 +41,31 @@ php artisan boost:install
 
 Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
 
+## Sincronización de Catálogo con el Equipo
+
+Cuando des de alta nuevos libros, vinilos o coleccionables (incluyendo sus fotografías y existencias) desde el módulo de Compras (`/compras/productos`), esos registros se guardan en tu base de datos local y las imágenes en `storage/app/public/productos` (ignorado por Git).
+
+Para compartir estos productos e imágenes con todo el equipo de desarrollo a través del repositorio Git:
+
+### 1. Antes de hacer `git commit` y `git push` (quien da de alta productos):
+Ejecuta el comando curatorial para exportar los productos de tu base de datos local y copiar las fotos a la carpeta versionada en Git (`database/seeders/assets/productos/`):
+
+```bash
+php artisan catalogo:exportar-seeder
+git add database/seeders/
+git commit -m "feat(catalogo): sincronizar nuevos productos y fotos en seeders"
+git push
+```
+
+### 2. Después de hacer `git pull` (tus compañeros de equipo):
+Tus compañeros solo necesitan correr el seeder para que los nuevos productos, variantes, precios y fotografías se importen en sus bases de datos locales y las imágenes se copien automáticamente a su almacenamiento público:
+
+```bash
+git pull
+php artisan db:seed
+```
+*(O específicamente `php artisan db:seed --class=CatalogoCuradoSeeder` si solo desean actualizar el catálogo curado).*
+
 ## Contributing
 
 Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).

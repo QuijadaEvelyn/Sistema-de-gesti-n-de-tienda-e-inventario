@@ -20,6 +20,7 @@ use App\Models\Sucursal;
 use App\Models\VarianteSku;
 use App\Services\PromocionDescuentoService;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
 
 class CatalogoProductoSeeder extends Seeder
@@ -30,6 +31,9 @@ class CatalogoProductoSeeder extends Seeder
      */
     public function run(): void
     {
+        // 0. Sincronizar activos multimedia versionados en Git hacia storage público
+        self::sincronizarAssetsDeImagenes();
+
         // 1. Sucursales físicas y bóveda central
         $sucursalBellasArtes = Sucursal::firstOrCreate(
             ['nombre' => 'Sucursal Central Bellas Artes'],
@@ -262,14 +266,20 @@ class CatalogoProductoSeeder extends Seeder
         ];
 
         foreach ($libros as $item) {
+            $datosProducto = [
+                'catalogo_id' => $catLibros->id,
+                'descripcion' => $item['descripcion'],
+                'precio' => $item['precio'],
+                'activo' => true,
+            ];
+
+            if (isset($item['imagen']) && Schema::hasTable('productos') && Schema::hasColumn('productos', 'imagen')) {
+                $datosProducto['imagen'] = $item['imagen'];
+            }
+
             $producto = Producto::updateOrCreate(
                 ['nombre' => $item['nombre']],
-                [
-                    'catalogo_id' => $catLibros->id,
-                    'descripcion' => $item['descripcion'],
-                    'precio' => $item['precio'],
-                    'activo' => true,
-                ]
+                $datosProducto
             );
 
             Libro::updateOrCreate(
@@ -1269,14 +1279,20 @@ class CatalogoProductoSeeder extends Seeder
         ];
 
         foreach ($memorabilia as $item) {
+            $datosProducto = [
+                'catalogo_id' => $catMemorabilia->id,
+                'descripcion' => $item['descripcion'],
+                'precio' => $item['precio'],
+                'activo' => true,
+            ];
+
+            if (isset($item['imagen']) && Schema::hasTable('productos') && Schema::hasColumn('productos', 'imagen')) {
+                $datosProducto['imagen'] = $item['imagen'];
+            }
+
             $producto = Producto::updateOrCreate(
                 ['nombre' => $item['nombre']],
-                [
-                    'catalogo_id' => $catMemorabilia->id,
-                    'descripcion' => $item['descripcion'],
-                    'precio' => $item['precio'],
-                    'activo' => true,
-                ]
+                $datosProducto
             );
 
             Coleccionable::updateOrCreate(
@@ -1538,6 +1554,41 @@ class CatalogoProductoSeeder extends Seeder
                 }
 
                 Existencia::whereIn('id', $existenciasObsoletasIds)->delete();
+            }
+        }
+    }
+
+    /**
+     * Sincroniza las imágenes de assets versionados en Git hacia storage/app/public/productos
+     * para asegurar que los enlaces públicos funcionen inmediatamente en cualquier máquina del equipo.
+     */
+    public static function sincronizarAssetsDeImagenes(): void
+    {
+        $origenAssets = database_path('seeders/assets/productos');
+        $destinoStorage = storage_path('app/public/productos');
+        $destinoPublicStorage = public_path('storage/productos');
+
+        if (! File::isDirectory($origenAssets)) {
+            File::ensureDirectoryExists($origenAssets);
+
+            return;
+        }
+
+        File::ensureDirectoryExists($destinoStorage);
+
+        foreach (File::files($origenAssets) as $archivo) {
+            $nombre = $archivo->getFilename();
+            $rutaStorage = $destinoStorage.DIRECTORY_SEPARATOR.$nombre;
+
+            if (! File::exists($rutaStorage)) {
+                File::copy($archivo->getPathname(), $rutaStorage);
+            }
+
+            if (File::isDirectory($destinoPublicStorage) && ! is_link(public_path('storage'))) {
+                $rutaPublic = $destinoPublicStorage.DIRECTORY_SEPARATOR.$nombre;
+                if (! File::exists($rutaPublic)) {
+                    File::copy($archivo->getPathname(), $rutaPublic);
+                }
             }
         }
     }
