@@ -1227,7 +1227,7 @@
                     {
                         "sucursal_id": 1,
                         "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 0,
+                        "cantidad": 1,
                         "stock_minimo": 1,
                         "pieza_unica": {
                             "numero_serie": "ARC-MEM-1934-002",
@@ -2332,13 +2332,62 @@
         ]
     },
     {
+        "nombre": "Lugares Asombrosos",
+        "catalogo_tipo": "libro",
+        "catalogo_nombre": "Libros",
+        "descripcion": "Es una crónica de viajes ilustrada donde Luisito Comunica recorre algunos sitios más inhóspitos, extraños y miseriosos del planeta. Combina fotografías, anécdotas personales y datos curioso sobre distintas culturas para mostrar una cara poco convencional",
+        "precio": 3500,
+        "activo": true,
+        "imagen": null,
+        "metadata": {
+            "tipo": "libro",
+            "isbn": "9786073186995",
+            "autor": "Luisito Comunica",
+            "editorial": "Alfaguara",
+            "genero": "Juvenil/Turismo",
+            "anio_publicacion": 2019,
+            "paginas": 280
+        },
+        "variantes": [
+            {
+                "sku": "LIB-2026-152",
+                "descripcion": "Lugares Asombrosos",
+                "precio": 3500,
+                "activa": true,
+                "existencias": [
+                    {
+                        "sucursal_id": 1,
+                        "sucursal_nombre": "Sucursal Central Bellas Artes",
+                        "cantidad": 7,
+                        "stock_minimo": 1,
+                        "pieza_unica": null
+                    },
+                    {
+                        "sucursal_id": 2,
+                        "sucursal_nombre": "Sucursal Coyoacán",
+                        "cantidad": 2,
+                        "stock_minimo": 1,
+                        "pieza_unica": null
+                    },
+                    {
+                        "sucursal_id": 3,
+                        "sucursal_nombre": "Almacén General",
+                        "cantidad": 2,
+                        "stock_minimo": 1,
+                        "pieza_unica": null
+                    }
+                ]
+            }
+        ]
+    },
+    {
         "nombre": "Lugares Asombrosos 2",
         "catalogo_tipo": "libro",
         "catalogo_nombre": "Libros",
         "descripcion": "Lugares Asombrosos 2",
         "precio": 3345,
         "activo": true,
-        "imagen": "storage/productos/ZNfsGtDFd6BzxQ4iW6fopcb71HuJN67Yf025BxuD.webp",
+        "imagen": null,
         "metadata": {
             "tipo": "libro",
             "isbn": null,
@@ -2387,7 +2436,7 @@
         "descripcion": "La razón de estar contigo",
         "precio": 500,
         "activo": true,
-        "imagen": "storage/productos/Du8c2M6YdbJzHp5ifofcw4SJxIRkIghemAhV2Ha0.jpg",
+        "imagen": null,
         "metadata": {
             "tipo": "libro",
             "isbn": "9788416867219",
@@ -2436,7 +2485,7 @@
         "descripcion": "Este libro revela sin filtros los 7 fundamentos de la controvertida \"Psicología Negra\" y las técnicas relacionadas.\r\nContiene verdades incómodas y perspectivas radicales. Sigue leyendo solo si estás preparado para enfrentar una realidad posiblemente muy diferente a la que crees conocer. ️",
         "precio": 500,
         "activo": true,
-        "imagen": "storage/productos/Jt0ZSKBaZs3psqd4gchqmPNGQ4idNayyXtkhf6ZU.png",
+        "imagen": null,
         "metadata": {
             "tipo": "libro",
             "isbn": "9788416867217",
