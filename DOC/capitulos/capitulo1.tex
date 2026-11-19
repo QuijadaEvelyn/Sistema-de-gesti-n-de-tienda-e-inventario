@@ -1,100 +1,54 @@
-\chapter{Marco de Referencia}
+\chapter{Introducción y Planteamiento del Problema}
 
-En los últimos años, el comercio electrónico se ha consolidado como un canal de venta habitual, apoyado en el uso de Internet y de aplicaciones web para realizar transacciones comerciales \cite{laudon2021ecommerce}. Existen mercados en línea dedicados a artículos de colección, como Discogs para discos y AbeBooks para libros usados o raros \cite{discogs2026, abebooks2026}, pero en ellos participan múltiples vendedores y la tienda no controla su propio inventario ni su flujo de pago. Por otro lado, plataformas de propósito general como WooCommerce ofrecen control de existencias, incluida una opción para retener el inventario mientras un pedido está pendiente de pago \cite{woocommerce2026inventory}. Esa retención se aplica en el proceso de pedido y a pedidos pendientes de pago, por lo que no cubre, por sí sola, apartar una pieza única desde que se agrega al carrito ni liberar los apartados de transferencias en espera.
- 
-Las tiendas especializadas en Archivum operan de otra manera: conviven en un mismo catálogo productos de existencia general y piezas únicas o de edición limitada, cuyo valor depende de características como el estado de conservación, la edición o la existencia de un certificado de autenticidad.
- 
-Desde el punto de vista técnico, el problema de que varios usuarios intenten adquirir al mismo tiempo la misma pieza corresponde al control de concurrencia en bases de datos \cite{bernstein1987concurrency}. Frameworks como Laravel incorporan herramientas para abordarlo, entre ellas transacciones, bloqueos de registros, colas de trabajo y tareas programadas \cite{laravel2026docs}, y siguen el patrón Modelo-Vista-Controlador (MVC), que separa los datos, la lógica y la interfaz del sistema \cite{krasner1988cookbook}. A esto se suma el diseño responsivo, que adapta las interfaces a distintos tamaños de pantalla \cite{marcotte2010responsive}.
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=10cm, height=8cm]{imagenes/Interfaz página.png}
-    \caption{Vista general de la interfaz pública y catálogo especializado en ARCHIVUM.}
-    \label{fig1_aplicacion_UAV}
-\end{figure}
+\section{Antecedentes}
 
-\section{Antecedentes.}
+La operación de una tienda especializada comprende más que publicar productos y registrar ventas: también requiere identificar sus variantes, conocer las existencias disponibles, recibir mercancía y conservar evidencia de los movimientos realizados. En comercios que ofrecen libros, discos y coleccionables, algunos artículos se administran como existencias cuantificables y otros como ejemplares identificables individualmente. Esta diversidad demanda un modelo de información que permita describir cada tipo de producto y relacionarlo con las operaciones de inventario y venta \cite{laudon2021ecommerce, elmasri2011}.
 
-Los mercados en línea de artículos de colección permiten vender piezas únicas, pero al ser espacios abiertos a múltiples vendedores no resuelven las necesidades de una tienda propia con varias sucursales, que requiere controlar su inventario, su flujo de pago y la información que registra de cada pieza. Las plataformas de comercio electrónico de propósito general, por su parte, cuentan con control de existencias y con mecanismos de retención de inventario, pero estos están pensados para productos de reposición constante y su alcance es limitado frente a las piezas de existencia única. Las necesidades que quedan fuera, como apartar una pieza desde el carrito o liberar apartados vencidos de pedidos que esperan la validación de una transferencia, suelen resolverse con extensiones o con procesos manuales. Esto motiva el desarrollo de un sistema a la medida para la tienda.
+Las aplicaciones web facilitan la consulta de catálogos y el acceso a funciones administrativas desde distintos dispositivos. Sin embargo, para que estas funciones sean útiles en una operación comercial, la información de productos, existencias, pedidos y recepciones debe mantenerse relacionada y actualizada. La ingeniería de software aporta técnicas para estructurar, probar y mantener este tipo de sistemas \cite{sommerville2011}.
 
-\section{Objetivo General}
-Desarrollar un sistema web de gestión de inventario y punto de venta para libros, discos y coleccionables, utilizando el framework laravel y arquitectura MVC, con el propósito del control de existencias y la mejora de los procesos administrativos de las sucursales.
+\section{Planteamiento del Problema}
 
-\textbf{}
-\section{Objetivos Especificos}
+Cuando la información de productos y existencias se administra en registros separados, consultar la disponibilidad, identificar la ubicación de una variante y reconstruir el motivo de un cambio de stock puede exigir revisiones manuales. La duplicación de datos también eleva la posibilidad de discrepancias entre el catálogo visible, el inventario registrado y las operaciones de venta o recepción.
+
+En un catálogo especializado, los atributos no son uniformes: un libro puede describirse mediante autor, editorial, ISBN y año de publicación; un disco, mediante artista, sello, género y formato; y un coleccionable, mediante marca, serie, material y condición de pieza única. Una estructura genérica dificulta representar estas diferencias sin perder consistencia.
+
+Por ello, el problema abordado consiste en integrar en una aplicación web la consulta de productos y las operaciones administrativas principales, relacionando catálogo, variantes y existencias con movimientos de inventario y con los flujos de compra y seguimiento implementados. El sistema también debe ofrecer controles de acceso diferenciados y conservar trazabilidad suficiente para revisar las operaciones.
+
+\section{Justificación}
+
+Archivum centraliza en una sola aplicación el catálogo público y funciones de administración para productos, proveedores, sucursales, existencias, ventas y pedidos. La separación de responsabilidades propia de Laravel y el uso de migraciones permiten organizar y evolucionar el esquema de datos de forma reproducible \cite{laravel_docs, sommerville2011}. MariaDB proporciona almacenamiento relacional, mientras que Docker Compose declara los servicios necesarios para ejecutar la aplicación \cite{mariadb_docs, docker_compose}.
+
+Desde el punto de vista funcional, el modelo diferencia los datos comunes de los productos de los atributos específicos de libros, discos y coleccionables. Asimismo, permite asociar variantes SKU con existencias por sucursal y registrar movimientos de entrada, salida, ajuste, traspaso o devolución. La aplicación incorpora un carrito y un checkout simulado con reservas temporales, sin presentarlos como integración con un procesador de pagos externo.
+
+\section{Objetivos}
+
+\subsection{Objetivo general}
+
+Desarrollar una aplicación web para la gestión de una tienda especializada en libros, discos y coleccionables que integre el catálogo público con las operaciones implementadas de inventario, proveedores, ventas y seguimiento de pedidos.
+
+\subsection{Objetivos específicos}
 
 \begin{enumerate}
-\item Recopilar las necesidades de la tienda para la mejora de la función clave del sistema, como las ventas diarias, la administración de productos y el control entre las sucursales.
-
-\item Diseñar la estructura del sistema mediante el stock tecnológico asignado y el modelo de la base de datos, para la precisión de la información de manera clara, y el buen funcionamiento del sistema.
-
-\item Programar el sistema web utilizando la tecnología necesaria para la gestión de los usuarios, permisos y el catalogo de libros, discos y coleccionables.
-
-\item Crear una interfaz sencilla y visual mediante la integración de componentes intuitivos y flujos de navegación optimizados, para la obtención de un punto de venta ágil y búsquedas de productos rápidas.
-
-\item Ejecutar pruebas de funcionamiento a través de simulaciones de escenarios y pruebas de uso, para la corrección oportuna de errores y la garantía en la exactitud del inventario.
-
-
-
+    \item Modelar los productos, sus especializaciones, variantes SKU, sucursales y existencias mediante entidades relacionales.
+    \item Implementar la consulta y búsqueda del catálogo con filtros acordes con las categorías disponibles.
+    \item Incorporar autenticación, recuperación de contraseña y autorización por roles para separar las funciones públicas y administrativas.
+    \item Registrar recepciones, ajustes y traspasos de inventario, manteniendo movimientos asociados a las existencias.
+    \item Implementar el carrito y el flujo de checkout simulado con reservas temporales de stock.
+    \item Contenerizar la aplicación, la base de datos y el servidor web mediante Docker Compose, y verificar los módulos con las pruebas automatizadas disponibles.
 \end{enumerate}
 
 \section{Alcance}
 
-Gestión de Tienda y Sucursales:
+El sistema incluye un portal público con navegación por libros, discos, coleccionables y adquisiciones selectas; búsqueda por términos y filtros de categoría; registro, inicio de sesión, perfil y recuperación de contraseña; carrito, reserva temporal y checkout simulado; administración de productos, proveedores y recepciones; consulta de existencias por sucursal, movimientos y traspasos; módulos de ventas, promociones, envíos y devoluciones; reportes exportables; y sincronización del catálogo curado mediante un comando Artisan y un seeder.
 
-Catálogo de productos especializado para libros, discos de vinilo y piezas de colección.
+La autorización contempla los roles sembrados por el proyecto: administrador, ventas, almacén, compras y cliente. Algunas rutas y pruebas también reconocen el identificador \texttt{encargado}; este rol no forma parte del conjunto inicial creado por \texttt{UsuarioSeeder}. La asignación efectiva de ese perfil requiere su configuración en los datos.
 
-Manejo de inventario híbrido: control por volumen para productos comunes y control individual para piezas únicas o de edición limitada.
+\section{Limitaciones}
 
-Panel de acceso privado donde el personal administra únicamente el inventario y los pedidos de su sucursal asignada.
-
-
-Tienda en Línea (E-Commerce):
-
-Portal público para clientes con catálogo interactivo, filtros de búsqueda rápidos, carrito de compras y registro de usuarios.
-
-Panel interno para que los trabajadores procesen, preparen y gestionen las compras recibidas por la plataforma web.
-
-
-Seguridad en las Compras e Inventarios:
-
-Congelamiento inmediato del producto exclusivo durante el proceso de compra para evitar que dos personas adquieran la misma pieza única al mismo tiempo.
-
-Registro permanente del precio, descuentos y totales aplicados en el momento exacto en que el cliente realiza su pedido.
-
-
-Procesos de Pagos y Envíos:
-
-Módulo para recepción de pagos mediante transferencia bancaria y validación de comprobantes por parte del equipo interno.
-
-Sistema de envíos que registra datos de entrega, genera guías de rastreo y permite dar seguimiento paso a paso al pedido.
-
-
-Automatización del Sistema:
-
-Cancelación automática de fichas de pago y liberación de productos apartados cuando vence el tiempo límite sin requerir intervención manual.
-
-Envío automático de correos electrónicos al cliente para confirmar su pago, notificar la salida del almacén y compartir su número de guía.
-
-
-
-\section{Limitación}
-La validación de pagos por transferencia depende del registro/verificación administrativa del comprobante y no de una comunicación directa vía API con el core de las entidades bancarias.
-
-La generación de guías y el rastreo paso a paso se gestionan internamente dentro del ecosistema del sistema, salvo integración posterior mediante APIs de proveedores logísticos terceros (como FedEx o DHL).
-
-La liberación automática de apartados y la cancelación de fichas depenenden de la ejecución continua del programador de tareas (Laravel Scheduler) configurado en el servidor web.
-
-El rendimiento general de los bloqueos pesimistas y eventos en segundo plano está limitado por los recursos del hardware del servidor de base de datos y el motor de colas asignado.
-
-\section{Problemática}
-La gestión comercial de artículos de especialidad -como libros, discos de vinilo y piezas de colección- presenta una alta complejidad operativa debido al manejo simultáneo de mercancía masiva y unidades únicas de edición limitada. En sistemas tradicionales o no adaptados, esta dualidad provoca saturación en las bases de datos por la rigidez de sus esquemas, discrepancias de inventario entre múltiples sucursales y vulnerabilidades en la integridad financiera al no congelar los precios al momento de la venta.
-
-Asimismo, la alta demanda de piezas exclusivas suele causar problemas de sobreventa por falta de concurrencia controlada, mientras que el control manual de apartados vencidos, validación de transferencias y generación de guías de envío incrementa la carga administrativa, provocando demoras en la atención y pérdida de trazabilidad en los pedidos.
-
-\section{Justificación}
-El desarrollo de esta plataforma en Laravel se justifica por la necesidad de ofrecer un entorno moderno, seguro y automatizado que resuelva de manera eficiente la administración de tiendas especializadas en libros, vinilos y artículos de colección.
-
-Al estructurar la información de forma flexible, el sistema optimiza el almacenamiento de los detalles propios de cada producto sin desperdiciar espacio. Asimismo, cuenta con mecanismos de control estrictos que garantizan que los precios acordados al momento de la compra se conserven intactos en el historial de los pedidos, y que las piezas exclusivas de edición limitada no sufran problemas de sobreventa.
-
-Finalmente, la integración de servicios automatizados reduce significativamente la carga de trabajo manual, encargándose de tareas rutinarias como la liberación de apartados expirados, la actualización del inventario en tiempo real y el envío automático de notificaciones a los clientes tras confirmar su pago. Esto no solo mejora la experiencia de compra en línea, sino que asegura un control administrativo confiable y transparente en cada una de las sucursales.
-
+\begin{itemize}
+    \item El checkout y los estados de pago forman parte de un flujo simulado; el repositorio no integra una pasarela bancaria externa.
+    \item Las compras a proveedores se registran como recepciones y movimientos de inventario vinculados al proveedor. No existe una tabla independiente para órdenes de compra con partidas y ciclo de aprobación.
+    \item El modelo no incluye un módulo fiscal para emitir comprobantes CFDI ni integración con servicios de paquetería.
+    \item Aunque se definen reservas temporales, no se atribuirán garantías de eliminación de condiciones de carrera sin una prueba concurrente que las demuestre.
+    \item La configuración de Docker describe el entorno reproducible; la disponibilidad en cada sistema anfitrión depende de contar con Docker Engine o Docker Desktop y de validar allí la puesta en marcha.
+\end{itemize}

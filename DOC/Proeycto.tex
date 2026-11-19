@@ -25,7 +25,10 @@
 \usepackage{tabularx}
 \usepackage{textcomp}
 \usepackage[utf8]{inputenc}
-\usepackage[backend=biber,style=ieee, sorting=none, style=numeric]{biblatex}
+\usepackage{csquotes}
+\usepackage[backend=biber,style=ieee,sorting=none]{biblatex}
+\setcounter{biburllcpenalty}{7000}
+\setcounter{biburlucpenalty}{8000}
 \bibliography{Referencias}
 
     
@@ -73,11 +76,12 @@
 \renewcommand{\tablename}{Tabla}
 
 \begin{titlepage}
-\begin{minipage}[l]{3.5cm}
-\includegraphics[width=5cm, height=22.0cm]{imagenes/Imagen_front_UPTex.jpg}
-\end{minipage}
-\vspace*{-3.0cm}
-\begin{minipage}[r]{13.0cm}
+\noindent
+\begin{minipage}[c]{3.5cm}
+\includegraphics[width=3.5cm, height=22.0cm, keepaspectratio=false]{imagenes/Imagen_front_UPTex.jpg}
+\end{minipage}%
+\hfill
+\begin{minipage}[c]{12.5cm}
 \begin{center}
 \textbf{\LARGE{UNIVERSIDAD POLIT\'{E}CNICA }}\\
 \vspace*{0.5cm}
@@ -104,7 +108,7 @@ QUIJADA ALVAREZ EVELYN VANESA
 \vspace*{0.5cm}
 
 \vspace*{1.5cm}
-TEXCOCO, EDO. MÉX. \hspace{3cm}ENERO 2025 \\
+TEXCOCO, EDO. MÉX. \hfill ENERO 2025 \\
 \end{center}
 \end{minipage}
 \end{titlepage}
