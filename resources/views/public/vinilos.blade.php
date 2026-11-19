@@ -127,12 +127,12 @@
             <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center py-6 sm:py-8">
 
                 <!-- COLUMNA IZQUIERDA (7 cols): Escenario 3D con Discos Circulares en Movimiento y Controles -->
-                <div class="lg:col-span-7 flex flex-col items-center">
+                <div class="lg:col-span-7 flex flex-col items-center justify-center">
 
                     <!-- Escenario 3D de Discos -->
                     <div
                         id="disc-showcase-stage"
-                        class="disc-showcase-stage relative w-full h-[330px] sm:h-[390px] flex items-center justify-center select-none overflow-visible"
+                        class="disc-showcase-stage relative w-full h-[330px] sm:h-[390px] flex items-center justify-center select-none overflow-visible py-2"
                     >
                         @foreach ($discosShowcase as $idx => $disco)
                             <div
@@ -142,9 +142,6 @@
                                 tabindex="0"
                                 aria-label="Seleccionar {{ $disco['nombre'] }}"
                             >
-                                @if (!empty($disco['imagen']))
-                                    <img src="{{ $disco['imagen'] }}" alt="{{ $disco['nombre'] }}" class="w-full h-full object-cover">
-                                @endif
                                 <!-- Capa de Inclinación 3D Interactiva al Pasar el Cursor (Tilt 3D) -->
                                 <div class="disc-3d-tilt w-full h-full">
                                     <!-- Capa de Volteo 3D (Flip Lado A / Lado B) -->
@@ -268,7 +265,7 @@
                     <!-- =================================================================
                          BARRA DE CONTROLES INTERACTIVOS (FLIP, PAUSE/PLAY, REPLAY, PREV/NEXT)
                          ================================================================= -->
-                    <div class="mt-4 flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 bg-white/10 backdrop-blur-md border border-white/15 px-4 py-2.5 rounded-2xl shadow-lg">
+                    <div class="mt-6 flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 bg-white/10 backdrop-blur-md border border-white/15 px-4 py-2.5 rounded-2xl shadow-lg">
                         <!-- Botón Anterior (Prev) -->
                         <button
                             type="button"

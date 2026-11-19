@@ -764,6 +764,7 @@
     height: 100%;
     transform-style: preserve-3d;
     transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    filter: drop-shadow(0 22px 28px rgba(0, 0, 0, 0.85));
 }
 
 .disc-3d-flipper.is-flipped {
