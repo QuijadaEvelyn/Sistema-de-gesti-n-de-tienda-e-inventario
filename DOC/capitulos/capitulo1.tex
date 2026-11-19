@@ -1,36 +1,63 @@
 \chapter{Marco de Referencia}
 
- Desde finales del siglo pasado, los avances tecnológicos en la miniaturización de la electrónica y los componentes mecánicos han allanado el camino para la creación y desarrollo de objetos voladores de pequeñas dimensiones, tales como aviones y helicópteros, los cuales están adquiriendo cada vez más habilidades para realizar vuelos de forma autónoma. Estos dispositivos son popularmente conocidos como drones, un término derivado del inglés \say{abejorros}, y se consideran máquinas voladoras autónomas o semi-autónomas capaces de llevar a cabo misiones de vuelo. En el ámbito internacional, se les conoce como UAVs del ingles \say{Unmanned Aerial Vehicles}, y representan una tecnología compleja cuyo control presenta desafíos, dado que sus características aerodinámicas son similares a las de las aeronaves convencionales \cite{eisenbeiss2004mini}.
+\section{Introducción}
+El auge del comercio digital y la preservación del patrimonio cultural han generado una demanda creciente de plataformas tecnológicas capaces de gestionar bienes físicos con un alto nivel de especialización y valor histórico. A diferencia de las tiendas convencionales que administran artículos homogéneos de consumo masivo, las librerías anticuarias, tiendas de discos en vinilo y casas de coleccionismo enfrentan retos operativos singulares: cada ejemplar puede poseer un estado de conservación único, un dictamen notarial o Certificado de Autenticidad (COA) \cite{pressman2010}, y una procedencia histórica que determina su valoración comercial.
 
-El estudio de estos dispositivos despierta un gran interés debido a su versatilidad y capacidad de maniobra, lo que les permite llevar a cabo una amplia gama de tareas en diversas aplicaciones, tales como el uso civil, militar y aeroespacial \cite{nawaz2019applications, shakhatreh2019unmanned, xiaoning2020analysis}. En la figura \ref{fig1_aplicacion_UAV}, se presenta una clasificación detallada de las aplicaciones más importantes de los UAVs.
+En este contexto surge \textbf{\say{Archivum: Bibliotheca \& Discos}}, una solución integral de software web concebida para unificar la exhibición inmersiva de catálogos patrimoniales con un robusto motor de control de inventarios, transferencias de existencias entre sedes y seguimiento transaccional en tiempo real \cite{sommerville2011}.
 
-\begin{figure}[H]
+\begin{figure}[htbp]
     \centering
-    \includegraphics[width=16cm, height=7.5cm]{imagenes/Aplicaciones_UAV.png}
-    \caption{Áreas de aplicación UAVS.}
-    \label{fig1_aplicacion_UAV}
+    \includegraphics[width=0.9\textwidth]{imagenes/dashboard_admin.png}
+    \caption{Panel centralizado de administración y análisis operativo en Archivum.}
+    \label{fig:interfaz_publica_archivum}
 \end{figure}
 
-\section{Antecedentes.}
+\section{Antecedentes}
+Tradicionalmente, los establecimientos orientados al comercio de coleccionables, obras bibliográficas raras y soportes musicales analógicos han gestionado sus existencias mediante métodos empíricos o aplicaciones ofimáticas desarticuladas, como hojas de cálculo locales y libros contables manuales. Esta práctica introduce serias vulnerabilidades operativas:
+\begin{itemize}
+    \item \textbf{Discrepancias en existencias multisede:} La falta de un registro centralizado genera desincronización entre el almacén central (bóveda) y las sucursales físicas abiertas al público.
+    \item \textbf{Carencia de trazabilidad patrimonial:} La ausencia de vinculación digital entre el número de serie de una pieza y su dictamen de certificación dificulta la auditoría y garantía ofrecida a los clientes.
+    \item \textbf{Experiencias de usuario limitadas:} Los catálogos estáticos no transmiten el detalle físico, artístico ni sonoro característico de los discos de vinilo o piezas de colección, mermando el interés y confianza de compradores internacionales.
+\end{itemize}
 
-Los drones han atraído la atención de la comunidad investigadora que trabaja tanto en el campo militar como en el civil, con una gran cantidad de usos que han sido propuestos por los grupos de investigación, debido a sus características como capacidad y configuraciones, donde el helicóptero de cuatro rotores tiene el mayor número de citas en la literatura de control y ha sido ampliamente investigado para pruebas tanto en interiores como en exteriores . 
+Frente a este escenario, la ingeniería de software actual ofrece patrones arquitectónicos desacoplados y marcos de trabajo maduros, tales como el ecosistema Laravel y la virtualización basada en contenedores ligeros \cite{laravel_doc, docker_overview}, que permiten desplegar soluciones seguras, transaccionales y con alta fidelidad gráfica.
 
 \section{Objetivo General}
-\textbf{}
-\section{Objetivos Especificos}
-\begin{enumerate}
-\item Recolectar y organizar conjuntos de datos públicos internacionales sobre calidad del aire, variables meteorológicas y factores geoespaciales. 
-\item Explorar y analizar las principales tendencias, correlaciones y patrones de comportamiento entre los contaminantes atmosféricos y las variables ambientales, utilizando técnicas de análisis exploratorio de datos.
+Diseñar, desarrollar e implementar una plataforma web integral de comercio electrónico y gestión de inventario multisede denominada \textbf{\say{Archivum: Bibliotheca \& Discos}}, aplicando el patrón arquitectónico Modelo-Vista-Controlador (MVC) sobre el framework Laravel 11 y PHP 8.4, que garantice la trazabilidad de artículos coleccionables, certificación notarial y una experiencia interactiva inmersiva para el usuario.
 
+\section{Objetivos Específicos}
+\begin{enumerate}
+    \item Modelar e implementar una base de datos relacional normalizada en MariaDB con soporte de integridad referencial, transacciones ACID y control de inventarios multisede (bóveda central y sucursales).
+    \item Desarrollar una interfaz de usuario pública responsive y accesible con estética temática (\say{Archival Amethyst}), incorporando un visor interactivo 3D para discos de vinilo y exploración fluida de libros raros y memorabilia.
+    \item Construir un panel administrativo seguro dotado de visualizaciones analíticas dinámicas (Chart.js), auditoría de movimientos de stock, conciliación de transferencias y gestión de dictámenes de autenticidad (COA).
+    \item Implementar mecanismos de seguridad informática y control de acceso basado en roles (RBAC), mitigando vulnerabilidades críticas web según las directrices de OWASP \cite{owasp_top10}.
+    \item Empaquetar y configurar la infraestructura de servicios (Nginx, PHP-FPM, MariaDB) utilizando contenedores Docker para garantizar la portabilidad y reproductibilidad del entorno en entornos de desarrollo y producción.
 \end{enumerate}
 
 \section{Alcance}
+El proyecto abarca el ciclo de vida completo de desarrollo de la plataforma web, incluyendo:
+\begin{itemize}
+    \item Módulo de catálogo público con filtrado por categorías (Libros, Discos, Coleccionables), estado de conservación y precios.
+    \item Visor interactivo 3D para la sección de discos, con rotación continua, perspectiva dinámica e inspección visual de carátula y surcos.
+    \item Módulo transaccional de compras (carrito de compras, pasarela de pago simulada, emisión de orden y comprobante digital).
+    \item Panel de administración general con indicadores clave de rendimiento (KPIs), gráficas de ingresos y volumen de pedidos.
+    \item Módulo de control de almacén: ajustes de stock por mermas/recepciones, envíos y transferencias intersedes con confirmación de custodia.
+\end{itemize}
 
-
-\section{Limitación}
+\section{Limitaciones}
+Las principales delimitaciones del presente trabajo son:
+\begin{itemize}
+    \item El procesamiento de pagos opera en un entorno de pruebas (sandbox), sin procesar cobros reales con instituciones bancarias para esta fase institucional.
+    \item La digitalización y captura de metadatos de los artículos requiere el ingreso manual inicial por parte de los administradores o curadores del inventario.
+    \item El soporte del visor interactivo 3D depende de navegadores web compatibles con tecnologías modernas de renderizado CSS 3D y JavaScript estándar.
+\end{itemize}
 
 \section{Problemática}
+El comercio y preservación de piezas de colección presenta desafíos operativos que no son resueltos adecuadamente por los sistemas genéricos de Punto de Venta (POS) o plataformas tradicionales de comercio masivo. Cuando un producto es único o de tiraje extremadamente limitado (por ejemplo, un vinilo de 1968 firmado o una primera edición encuadernada en piel), la pérdida de trazabilidad de su ubicación física en una bodega particular ocasiona ventas duplicadas de piezas inexistentes (\textit{over-selling}), comprometiendo la reputación institucional del negocio. 
 
+Asimismo, la falta de transparencia en la cadena de custodia y la inexistencia de un repositorio centralizado de dictámenes notariales aumentan el riesgo de falsificaciones. Resulta indispensable contar con un sistema unificado que integre la venta directa al público con la fiscalización estricta de las existencias resguardadas en cada sucursal.
 
 \section{Justificación}
+Desde la perspectiva tecnológica, este proyecto demuestra la viabilidad y potencia de utilizar estándares modernos de desarrollo web (PHP 8.4, Laravel 11, Tailwind CSS, Alpine.js y MariaDB) articulados en una infraestructura contenerizada con Docker. Esta combinación asegura mantenibilidad a largo plazo, bajo acoplamiento y un uso eficiente de recursos de hardware.
 
+Desde la perspectiva económica y operativa, la adopción de Archivum permite a la institución automatizar la auditoría de activos, reducir en un 100\% las duplicidades en ventas, y ofrecer a los coleccionistas una plataforma de confianza y prestigio. La experiencia estética y técnica refuerza el valor del acervo cultural y posiciona a la empresa a la vanguardia tecnológica del comercio de antigüedades y coleccionables.

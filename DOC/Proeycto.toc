@@ -1,19 +1,35 @@
 \babel@toc {spanish}{}\relax 
-\contentsline {chapter}{Resumen}{II}{section*.1}%
-\contentsline {chapter}{Abstract}{III}{section*.2}%
+\contentsline {chapter}{Resumen}{II}{Doc-Start}%
+\contentsline {chapter}{Abstract}{III}{Doc-Start}%
 \contentsline {chapter}{\numberline {1}Marco de Referencia}{1}{chapter.1}%
-\contentsline {section}{\numberline {1.1}Antecedentes.}{2}{section.1.1}%
-\contentsline {section}{\numberline {1.2}Objetivo General}{2}{section.1.2}%
-\contentsline {section}{\numberline {1.3}Objetivos Especificos}{2}{section.1.3}%
-\contentsline {section}{\numberline {1.4}Alcance}{3}{section.1.4}%
-\contentsline {section}{\numberline {1.5}Limitación}{3}{section.1.5}%
-\contentsline {section}{\numberline {1.6}Problemática}{3}{section.1.6}%
-\contentsline {section}{\numberline {1.7}Justificación}{3}{section.1.7}%
-\contentsline {chapter}{\numberline {2}Marco Teórico.}{4}{chapter.2}%
-\contentsline {section}{\numberline {2.1}Sección}{4}{section.2.1}%
-\contentsline {section}{\numberline {2.2}Sección 2}{5}{section.2.2}%
-\contentsline {subsection}{\numberline {2.2.1}Subsección}{5}{subsection.2.2.1}%
-\contentsline {section}{\numberline {2.3}Modelos matemáticos.}{5}{section.2.3}%
-\contentsline {subsection}{\numberline {2.3.1}Formalismo de Euler-Lagrange.}{7}{subsection.2.3.1}%
-\contentsline {chapter}{\numberline {3}Desarrollo}{8}{chapter.3}%
-\contentsline {chapter}{\numberline {4}Resultados}{9}{chapter.4}%
+\contentsline {section}{\numberline {1.1}Introducción}{1}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Antecedentes}{1}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Objetivo General}{3}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Objetivos Específicos}{3}{section.1.4}%
+\contentsline {section}{\numberline {1.5}Alcance}{4}{section.1.5}%
+\contentsline {section}{\numberline {1.6}Limitaciones}{4}{section.1.6}%
+\contentsline {section}{\numberline {1.7}Problemática}{5}{section.1.7}%
+\contentsline {section}{\numberline {1.8}Justificación}{5}{section.1.8}%
+\contentsline {chapter}{\numberline {2}Marco Teórico}{6}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Arquitectura de Software y Patrón Modelo-Vista-Controlador (MVC)}{6}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Entorno de Ejecución Backend: PHP 8.4 y Framework Laravel 11}{7}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Persistencia de Datos Relacional y Eloquent ORM}{7}{section.2.3}%
+\contentsline {section}{\numberline {2.4}Virtualización Ligera y Orquestación con Docker}{8}{section.2.4}%
+\contentsline {section}{\numberline {2.5}Diseño Frontend, Reactividad y Visualización Analítica}{8}{section.2.5}%
+\contentsline {section}{\numberline {2.6}Seguridad Web y Control de Acceso Basado en Roles (RBAC)}{9}{section.2.6}%
+\contentsline {chapter}{\numberline {3}Desarrollo e Implementación}{10}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Metodología de Desarrollo}{10}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Diseño y Modelado de la Base de Datos}{11}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Arquitectura del Sistema y Flujo de Peticiones}{11}{section.3.3}%
+\contentsline {section}{\numberline {3.4}Implementación de Módulos Críticos}{12}{section.3.4}%
+\contentsline {subsection}{\numberline {3.4.1}Visor Interactivo 3D para la Colección de Discos}{12}{subsection.3.4.1}%
+\contentsline {subsection}{\numberline {3.4.2}Motor de Gestión de Inventario Multisede}{12}{subsection.3.4.2}%
+\contentsline {subsection}{\numberline {3.4.3}Dashboard de Bóveda y Visualización Analítica}{13}{subsection.3.4.3}%
+\contentsline {chapter}{\numberline {4}Resultados y Conclusiones}{14}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Resultados de Implementación}{14}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}Catálogo Especializado y Visor de Discos}{14}{subsection.4.1.1}%
+\contentsline {subsection}{\numberline {4.1.2}Proceso Transaccional y Checkout}{14}{subsection.4.1.2}%
+\contentsline {subsection}{\numberline {4.1.3}Panel de Administración y Control Patrimonial}{14}{subsection.4.1.3}%
+\contentsline {section}{\numberline {4.2}Evaluación Cuantitativa y de Rendimiento}{16}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Conclusiones}{17}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Trabajo Futuro}{17}{section.4.4}%

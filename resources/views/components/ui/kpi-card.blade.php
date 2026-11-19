@@ -31,12 +31,12 @@
 
 <div
     {{ $attributes->merge([
-        'class' => 'group relative overflow-hidden p-5 sm:p-6 rounded-2xl flex flex-col justify-between ' .
-                   'bg-white/90 dark:bg-[#1a1626]/90 backdrop-blur-md ' .
-                   'border border-purple-200/80 hover:border-primary/40 dark:border-white/10 dark:hover:border-[#9d7bff]/50 ' .
+        'class' => 'group relative overflow-hidden w-full max-w-full box-border p-5 sm:p-6 rounded-2xl flex flex-col justify-between ' .
+                   'bg-white/80 dark:bg-[#161329]/80 backdrop-blur-xl ' .
+                   'border border-purple-200/60 hover:border-primary/50 dark:border-white/12 dark:hover:border-[#9d7bff]/60 ' .
                    'hover:-translate-y-1.5 transition-all duration-300 ease-out ' .
                    'hover:shadow-[0_12px_28px_-8px_rgba(91,59,179,0.16)] dark:hover:shadow-[0_12px_30px_-8px_rgba(139,92,246,0.28)] ' .
-                   'shadow-xs bento-reveal'
+                   'shadow-[0_8px_32px_0_rgba(91,59,179,0.06)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.35)] bento-reveal'
     ]) }}
     @if ($bentoDelay !== null) style="--bento-delay: {{ $bentoDelay }}ms;" @endif
     data-purpose="fluid-kpi-card"

@@ -1,2 +1,90 @@
-\chapter{Desarrollo}
-Desarrollo del proyecto, identifica la metodología  Agiles (sea SCRUM, KABAN, etc. )describe cada una de las fases del proceso de desarrollo de su proyecto. 
+\chapter{Desarrollo e Implementación}
+
+\section{Metodología de Desarrollo}
+Para la planificación y ejecución del proyecto se adoptó el marco de trabajo ágil \textbf{Scrum} \cite{beck2001manifiesto, pressman2010}, debido a su flexibilidad ante cambios y enfoque en entregas de valor continuas e incrementales. El ciclo de vida del desarrollo se estructuró en cuatro \textit{Sprints} de dos semanas cada uno:
+
+\begin{enumerate}
+    \item \textbf{Sprint 1: Análisis de Requerimientos y Capa de Persistencia.} Definición de historias de usuario, diseño del esquema relacional de la base de datos, implementación de migraciones de MariaDB y configuración del entorno de desarrollo contenerizado con Docker Compose.
+    \item \textbf{Sprint 2: Autenticación, Seguridad y Catálogos Públicos.} Construcción del portal de registro y acceso con control de roles (RBAC), implementación de la navegación temática (\say{Archival Amethyst}) y desarrollo de las vistas de catálogo para libros raros, vinilos y coleccionables.
+    \item \textbf{Sprint 3: Visor Interactivo 3D y Flujo Transaccional.} Implementación del visor interactivo para la sección de discos con rotación dinámica y efectos visuales de surcos reflectivos, desarrollo del carrito de compras y pasarela de checkout transaccional.
+    \item \textbf{Sprint 4: Panel Administrativo, Control de Inventario y Analítica.} Creación del dashboard para el administrador con gráficas interactivas en Chart.js, módulos de ajuste de stock por merma/recepción, auditoría de transferencias inter-sucursales y pruebas integrales.
+\end{enumerate}
+
+\section{Diseño y Modelado de la Base de Datos}
+La persistencia de la información fue modelada conforme a las reglas de normalización de bases de datos relacionales para evitar redundancias y anomalías de actualización. La tabla \ref{tab:estructura_bd} sintetiza las entidades fundamentales del sistema y su propósito en el dominio:
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabularx}{\textwidth}{|l|l|X|}
+\hline
+\textbf{Tabla} & \textbf{Clave Primaria} & \textbf{Descripción y Propósito Funcional} \\ \hline
+\texttt{users} & \texttt{id} (BigInt) & Almacena las cuentas de usuario, correos electrónicos, credenciales cifradas y asignación de rol (\texttt{admin}, \texttt{staff}, \texttt{cliente}). \\ \hline
+\texttt{categories} & \texttt{id} (BigInt) & Clasificación de acervos: Libros Raros, Discos Históricos y Memorabilia. \\ \hline
+\texttt{products} & \texttt{id} (BigInt) & Ficha técnica patrimonial: título, autor/artista, año de edición, precio, estado de conservación (\textit{Mint, Near Mint, Fair}) y número de dictamen COA. \\ \hline
+\texttt{branches} & \texttt{id} (BigInt) & Sedes físicas de la empresa (Bóveda Central, Sucursal Norte, etc.). \\ \hline
+\texttt{inventories} & \texttt{id} (BigInt) & Relación M:N entre productos y sucursales indicando existencias en custodia disponible. \\ \hline
+\texttt{orders} & \texttt{id} (BigInt) & Registro transaccional de ventas, fecha, cliente, subtotal, impuestos y estado del pedido. \\ \hline
+\texttt{order\_items} & \texttt{id} (BigInt) & Detalle de piezas adquiridas en cada orden con precio congelado al momento de compra. \\ \hline
+\texttt{transfers} & \texttt{id} (BigInt) & Bitácora de traspaso físico de existencias entre sucursales para auditoría notarial. \\ \hline
+\end{tabularx}
+\caption{Estructura de entidades relacionales en MariaDB para Archivum.}
+\label{tab:estructura_bd}
+\end{table}
+
+\section{Arquitectura del Sistema y Flujo de Peticiones}
+El sistema sigue un flujo de ejecución lineal y seguro gobernado por el kernel HTTP de Laravel:
+\begin{enumerate}
+    \item La petición es capturada por el servidor web \textbf{Nginx}, que resuelve los recursos estáticos (imágenes, CSS y JavaScript empaquetado por Vite) y reenvía las peticiones dinámicas a \textbf{PHP-FPM}.
+    \item El archivo \texttt{routes/web.php} canaliza la URL hacia la acción correspondiente, aplicando de manera previa el grupo de middlewares de sesión (\texttt{web}) y de control de roles (\texttt{auth}, \texttt{role:admin}).
+    \item El controlador (\texttt{DashboardController}, \texttt{InventoryController}, \texttt{CatalogController}) ejecuta la lógica de negocio apoyándose en los modelos Eloquent, los cuales interactúan con la base de datos MariaDB mediante consultas preparadas.
+    \item Los datos procesados se inyectan en las plantillas Blade en \texttt{resources/views/}, donde se ensamblan los componentes de diseño con Tailwind CSS y las directivas reactivas de Alpine.js antes de ser enviados como HTML al navegador.
+\end{enumerate}
+
+\section{Implementación de Módulos Críticos}
+
+\subsection{Visor Interactivo 3D para la Colección de Discos}
+Una de las innovaciones más destacadas de la plataforma es la experiencia de exploración sensorial en el catálogo de música analógica. Mediante transformaciones espaciales en CSS (\texttt{rotateY}, \texttt{translateZ}, \texttt{perspective: 1200px}) y controladores de estado en JavaScript/Alpine.js, se concibió un visor de vinilo limpio y centrado.
+
+El componente renderiza dinámicamente la superficie reflectiva del disco de vinilo, su etiqueta central grabada y los controles de interacción (\texttt{PREV}, \texttt{FLIP}, \texttt{PAUSE}, \texttt{REPLAY}, \texttt{NEXT}). Se eliminaron carátulas cuadradas superpuestas para mantener el protagonismo exclusivo en la pieza física y sus surcos sonoros.
+
+\subsection{Motor de Gestión de Inventario Multisede}
+A fin de resolver la problemática de dispersión geográfica de piezas únicas, el módulo de almacén implementa transacciones atómicas a nivel de base de datos (\texttt{DB::transaction}). Al efectuarse una venta o registrarse una transferencia entre sucursales, el sistema bloquea temporalmente los registros implicados (\textit{pessimistic locking}) para impedir colisiones o lecturas sucias:
+
+\begin{lstlisting}[language=PHP, caption={Transacción atómica de transferencia de existencias entre sucursales.}]
+DB::transaction(function () use ($productId, $originId, $destinationId, $qty) {
+    $originStock = Inventory::where('product_id', $productId)
+        ->where('branch_id', $originId)
+        ->lockForUpdate()
+        ->firstOrFail();
+
+    if ($originStock->quantity < $qty) {
+        throw new \Exception("Existencias insuficientes en la sucursal de origen.");
+    }
+
+    $originStock->decrement('quantity', $qty);
+
+    $destStock = Inventory::firstOrCreate(
+        ['product_id' => $productId, 'branch_id' => $destinationId],
+        ['quantity' => 0]
+    );
+    $destStock->increment('quantity', $qty);
+
+    StockMovement::create([
+        'product_id' => $productId,
+        'from_branch_id' => $originId,
+        'to_branch_id' => $destinationId,
+        'quantity' => $qty,
+        'type' => 'TRANSFERENCIA_INTERNA'
+    ]);
+});
+\end{lstlisting}
+
+\subsection{Dashboard de Bóveda y Visualización Analítica}
+El panel de control ejecutivo integra un resumen de indicadores clave de rendimiento (KPIs) en una cuadrícula compacta y libre de márgenes redundantes:
+\begin{itemize}
+    \item \textbf{Ventas \& Ingresos Estimados:} Total acumulado del periodo con comparativa porcentual.
+    \item \textbf{Piezas en Custodia:} Total de activos físicos catalogados entre todas las sucursales.
+    \item \textbf{Dictamen Notarial COA:} Porcentaje de artículos verificados documentalmente.
+\end{itemize}
+Inmediatamente debajo se sitúa la gráfica de \say{Flujo de Bóveda}, la cual se redibuja dinámicamente mediante Chart.js, adaptando su paleta cromática según el modo visual del usuario (gradientes luminosos amatista en modo oscuro y tintas púrpuras profundas en modo claro).

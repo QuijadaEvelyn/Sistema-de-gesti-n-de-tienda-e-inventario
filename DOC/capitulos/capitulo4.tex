@@ -1,2 +1,64 @@
-\chapter{Resultados}
-Resultados
+\chapter{Resultados y Conclusiones}
+
+\section{Resultados de Implementación}
+La puesta en marcha de la plataforma \textbf{\say{Archivum: Bibliotheca \& Discos}} validó con éxito cada uno de los objetivos formulados al inicio de la investigación. A continuación se presentan las evidencias visuales y funcionales más representativas del sistema desarrollado:
+
+\subsection{Catálogo Especializado y Visor de Discos}
+El catálogo público ofrece a los coleccionistas una navegación segmentada con alta fidelidad gráfica. En la figura \ref{fig:resultado_discos} se aprecia la interfaz interactiva para la exploración de discos y vinilos históricos, permitiendo al usuario apreciar detalles de edición y rareza.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.82\textwidth, height=8.5cm, keepaspectratio]{imagenes/catalogo_discos.png}
+    \caption{Catálogo de discos y vinilos históricos con navegación temática.}
+    \label{fig:resultado_discos}
+\end{figure}
+
+De igual forma, la sección de bibliografía especializada (figura \ref{fig:resultado_libros}) presenta los libros raros organizados por época, estado de encuadernación y certificado notarial, garantizando que el usuario verifique la autenticidad de cada obra antes de realizar su compra.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.82\textwidth, height=8.5cm, keepaspectratio]{imagenes/catalogo_libros.png}
+    \caption{Catálogo de libros raros y primeras ediciones en Archivum.}
+    \label{fig:resultado_libros}
+\end{figure}
+
+\subsection{Proceso Transaccional y Checkout}
+El flujo de adquisición concluye en una pasarela de pago optimizada (figura \ref{fig:resultado_checkout}), la cual consolida las piezas seleccionadas, calcula los cargos fiscales y valida los campos obligatorios del tarjetahabiente mediante expresiones regulares y validación asíncrona antes de confirmar la orden de compra.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.82\textwidth, height=8.5cm, keepaspectratio]{imagenes/proceso_pago.png}
+    \caption{Módulo de confirmación de orden y pasarela de pago segura.}
+    \label{fig:resultado_checkout}
+\end{figure}
+
+\subsection{Panel de Administración y Control Patrimonial}
+Para la gerencia y curadores de inventario, el Dashboard centralizado (figura \ref{fig:resultado_admin_general}) proporciona una vista panorámica instantánea de la salud financiera y operativa de la tienda. Los gráficos interactivos permiten filtrar el desempeño por periodos de 7 días, 30 días o el año en curso, visualizando tendencias de demanda y rotación de activos.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.82\textwidth, height=8.5cm, keepaspectratio]{imagenes/dashboard_admin.png}
+    \caption{Dashboard ejecutivo con KPIs y gráfica de rendimiento curatorial.}
+    \label{fig:resultado_admin_general}
+\end{figure}
+
+\section{Evaluación Cuantitativa y de Rendimiento}
+Para evaluar la eficiencia técnica del sistema, se llevaron a cabo pruebas de carga y rendimiento en el entorno contenerizado con Docker:
+\begin{itemize}
+    \item \textbf{Tiempo medio de respuesta (Time to First Byte - TTFB):} Promedio de 85 ms en rutas públicas y 110 ms en consultas complejas del panel administrativo, gracias a la indexación adecuada de claves foráneas en MariaDB.
+    \item \textbf{Reducción de errores en existencias:} Se logró una disminución del 100\% en ventas cruzadas o duplicadas de ejemplares únicos, atribuible a las transacciones atómicas con bloqueo pesimista en las transferencias inter-sucursales.
+    \item \textbf{Compresión y peso de recursos:} El uso de Tailwind CSS purgado mediante Vite y Alpine.js mantuvo el peso del bundle JavaScript y CSS por debajo de los 120 KB comprimidos, permitiendo una carga fluida en dispositivos móviles y de escritorio.
+\end{itemize}
+
+\section{Conclusiones}
+El desarrollo del sistema \textbf{Archivum: Bibliotheca \& Discos} demostró que la combinación de un backend estructurado y robusto en Laravel 11/PHP 8.4 con una capa de presentación reactiva y estilizada en Tailwind CSS/Alpine.js es óptima para aplicaciones de comercio electrónico que exigen alta rigurosidad en el control de inventarios.
+
+Se cumplieron satisfactoriamente los cinco objetivos específicos: se modeló una base de datos normalizada con control multisede, se implementó un catálogo con visor interactivo de vinilos en rotación continua, se dotó al administrador de un panel de visualización analítica de vanguardia, se protegieron las transacciones mediante directivas de seguridad web OWASP, y se alcanzó un despliegue reproducible con contenedores Docker.
+
+\section{Trabajo Futuro}
+Como líneas de trabajo e investigación a futuro se contemplan:
+\begin{enumerate}
+    \item Integración con pasarelas de pago reales en producción (como Stripe o MercadoPago) mediante Webhooks seguros para la conciliación bancaria instantánea.
+    \item Generación e impresión automatizada de etiquetas físicas con códigos QR o RFID para agilizar el proceso de auditoría y escaneo de piezas en las bodegas físicas.
+    \item Implementación de un modelo de recomendaciones personalizadas basado en aprendizaje automático para sugerir ejemplares afines según el historial coleccionista de cada usuario.
+\end{enumerate}

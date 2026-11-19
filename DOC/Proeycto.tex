@@ -1,10 +1,12 @@
 \documentclass[12pt, oneside,openright]{report} %Letter,
 \usepackage[colorlinks=true, linkcolor=black, citecolor=blue, urlcolor = blue]{hyperref}
 \usepackage[left=2.54cm, right=2.54cm, top=2.54cm, bottom=2.54cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
 \usepackage[spanish]{babel}
+\usepackage{csquotes}
 \usepackage[table]{xcolor}
 \usepackage{algpseudocode}
-\usepackage[T1]{fontenc}
 \usepackage{algorithm}
 \usepackage{fancyhdr}
 \usepackage{setspace}
@@ -24,9 +26,8 @@
 \usepackage{array}
 \usepackage{tabularx}
 \usepackage{textcomp}
-\usepackage[utf8]{inputenc}
-\usepackage[backend=biber,style=ieee, sorting=none, style=numeric]{biblatex}
-\bibliography{Referencias}
+\usepackage[backend=biber,style=ieee,sorting=none]{biblatex}
+\addbibresource{Referencias.bib}
 
     
 \lstdefinestyle{mystyle}{
@@ -112,7 +113,7 @@ TEXCOCO, EDO. MÉX. \hspace{3cm}ENERO 2025 \\
 \end{center}
 \end{minipage}
 \end{titlepage}
-\spacing{1.5}   
+\onehalfspacing   
 \pagenumbering{Roman} \setcounter{page}{2}
 
 \newpage
