@@ -1,54 +1,36 @@
-\chapter{Introducción y Planteamiento del Problema}
+\chapter{Marco de Referencia}
 
-\section{Antecedentes}
+ Desde finales del siglo pasado, los avances tecnológicos en la miniaturización de la electrónica y los componentes mecánicos han allanado el camino para la creación y desarrollo de objetos voladores de pequeñas dimensiones, tales como aviones y helicópteros, los cuales están adquiriendo cada vez más habilidades para realizar vuelos de forma autónoma. Estos dispositivos son popularmente conocidos como drones, un término derivado del inglés \say{abejorros}, y se consideran máquinas voladoras autónomas o semi-autónomas capaces de llevar a cabo misiones de vuelo. En el ámbito internacional, se les conoce como UAVs del ingles \say{Unmanned Aerial Vehicles}, y representan una tecnología compleja cuyo control presenta desafíos, dado que sus características aerodinámicas son similares a las de las aeronaves convencionales \cite{eisenbeiss2004mini}.
 
-La operación de una tienda especializada comprende más que publicar productos y registrar ventas: también requiere identificar sus variantes, conocer las existencias disponibles, recibir mercancía y conservar evidencia de los movimientos realizados. En comercios que ofrecen libros, discos y coleccionables, algunos artículos se administran como existencias cuantificables y otros como ejemplares identificables individualmente. Esta diversidad demanda un modelo de información que permita describir cada tipo de producto y relacionarlo con las operaciones de inventario y venta \cite{laudon2021ecommerce, elmasri2011}.
+El estudio de estos dispositivos despierta un gran interés debido a su versatilidad y capacidad de maniobra, lo que les permite llevar a cabo una amplia gama de tareas en diversas aplicaciones, tales como el uso civil, militar y aeroespacial \cite{nawaz2019applications, shakhatreh2019unmanned, xiaoning2020analysis}. En la figura \ref{fig1_aplicacion_UAV}, se presenta una clasificación detallada de las aplicaciones más importantes de los UAVs.
 
-Las aplicaciones web facilitan la consulta de catálogos y el acceso a funciones administrativas desde distintos dispositivos. Sin embargo, para que estas funciones sean útiles en una operación comercial, la información de productos, existencias, pedidos y recepciones debe mantenerse relacionada y actualizada. La ingeniería de software aporta técnicas para estructurar, probar y mantener este tipo de sistemas \cite{sommerville2011}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=16cm, height=7.5cm]{imagenes/Aplicaciones_UAV.png}
+    \caption{Áreas de aplicación UAVS.}
+    \label{fig1_aplicacion_UAV}
+\end{figure}
 
-\section{Planteamiento del Problema}
+\section{Antecedentes.}
 
-Cuando la información de productos y existencias se administra en registros separados, consultar la disponibilidad, identificar la ubicación de una variante y reconstruir el motivo de un cambio de stock puede exigir revisiones manuales. La duplicación de datos también eleva la posibilidad de discrepancias entre el catálogo visible, el inventario registrado y las operaciones de venta o recepción.
+Los drones han atraído la atención de la comunidad investigadora que trabaja tanto en el campo militar como en el civil, con una gran cantidad de usos que han sido propuestos por los grupos de investigación, debido a sus características como capacidad y configuraciones, donde el helicóptero de cuatro rotores tiene el mayor número de citas en la literatura de control y ha sido ampliamente investigado para pruebas tanto en interiores como en exteriores . 
 
-En un catálogo especializado, los atributos no son uniformes: un libro puede describirse mediante autor, editorial, ISBN y año de publicación; un disco, mediante artista, sello, género y formato; y un coleccionable, mediante marca, serie, material y condición de pieza única. Una estructura genérica dificulta representar estas diferencias sin perder consistencia.
-
-Por ello, el problema abordado consiste en integrar en una aplicación web la consulta de productos y las operaciones administrativas principales, relacionando catálogo, variantes y existencias con movimientos de inventario y con los flujos de compra y seguimiento implementados. El sistema también debe ofrecer controles de acceso diferenciados y conservar trazabilidad suficiente para revisar las operaciones.
-
-\section{Justificación}
-
-Archivum centraliza en una sola aplicación el catálogo público y funciones de administración para productos, proveedores, sucursales, existencias, ventas y pedidos. La separación de responsabilidades propia de Laravel y el uso de migraciones permiten organizar y evolucionar el esquema de datos de forma reproducible \cite{laravel_docs, sommerville2011}. MariaDB proporciona almacenamiento relacional, mientras que Docker Compose declara los servicios necesarios para ejecutar la aplicación \cite{mariadb_docs, docker_compose}.
-
-Desde el punto de vista funcional, el modelo diferencia los datos comunes de los productos de los atributos específicos de libros, discos y coleccionables. Asimismo, permite asociar variantes SKU con existencias por sucursal y registrar movimientos de entrada, salida, ajuste, traspaso o devolución. La aplicación incorpora un carrito y un checkout simulado con reservas temporales, sin presentarlos como integración con un procesador de pagos externo.
-
-\section{Objetivos}
-
-\subsection{Objetivo general}
-
-Desarrollar una aplicación web para la gestión de una tienda especializada en libros, discos y coleccionables que integre el catálogo público con las operaciones implementadas de inventario, proveedores, ventas y seguimiento de pedidos.
-
-\subsection{Objetivos específicos}
-
+\section{Objetivo General}
+\textbf{}
+\section{Objetivos Especificos}
 \begin{enumerate}
-    \item Modelar los productos, sus especializaciones, variantes SKU, sucursales y existencias mediante entidades relacionales.
-    \item Implementar la consulta y búsqueda del catálogo con filtros acordes con las categorías disponibles.
-    \item Incorporar autenticación, recuperación de contraseña y autorización por roles para separar las funciones públicas y administrativas.
-    \item Registrar recepciones, ajustes y traspasos de inventario, manteniendo movimientos asociados a las existencias.
-    \item Implementar el carrito y el flujo de checkout simulado con reservas temporales de stock.
-    \item Contenerizar la aplicación, la base de datos y el servidor web mediante Docker Compose, y verificar los módulos con las pruebas automatizadas disponibles.
+\item Recolectar y organizar conjuntos de datos públicos internacionales sobre calidad del aire, variables meteorológicas y factores geoespaciales. 
+\item Explorar y analizar las principales tendencias, correlaciones y patrones de comportamiento entre los contaminantes atmosféricos y las variables ambientales, utilizando técnicas de análisis exploratorio de datos.
+
 \end{enumerate}
 
 \section{Alcance}
 
-El sistema incluye un portal público con navegación por libros, discos, coleccionables y adquisiciones selectas; búsqueda por términos y filtros de categoría; registro, inicio de sesión, perfil y recuperación de contraseña; carrito, reserva temporal y checkout simulado; administración de productos, proveedores y recepciones; consulta de existencias por sucursal, movimientos y traspasos; módulos de ventas, promociones, envíos y devoluciones; reportes exportables; y sincronización del catálogo curado mediante un comando Artisan y un seeder.
 
-La autorización contempla los roles sembrados por el proyecto: administrador, ventas, almacén, compras y cliente. Algunas rutas y pruebas también reconocen el identificador \texttt{encargado}; este rol no forma parte del conjunto inicial creado por \texttt{UsuarioSeeder}. La asignación efectiva de ese perfil requiere su configuración en los datos.
+\section{Limitación}
 
-\section{Limitaciones}
+\section{Problemática}
 
-\begin{itemize}
-    \item El checkout y los estados de pago forman parte de un flujo simulado; el repositorio no integra una pasarela bancaria externa.
-    \item Las compras a proveedores se registran como recepciones y movimientos de inventario vinculados al proveedor. No existe una tabla independiente para órdenes de compra con partidas y ciclo de aprobación.
-    \item El modelo no incluye un módulo fiscal para emitir comprobantes CFDI ni integración con servicios de paquetería.
-    \item Aunque se definen reservas temporales, no se atribuirán garantías de eliminación de condiciones de carrera sin una prueba concurrente que las demuestre.
-    \item La configuración de Docker describe el entorno reproducible; la disponibilidad en cada sistema anfitrión depende de contar con Docker Engine o Docker Desktop y de validar allí la puesta en marcha.
-\end{itemize}
+
+\section{Justificación}
+
