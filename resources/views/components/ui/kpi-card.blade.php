@@ -31,7 +31,7 @@
 
 <div
     {{ $attributes->merge([
-        'class' => 'group relative overflow-hidden w-full max-w-full box-border p-5 sm:p-6 rounded-2xl flex flex-col justify-between ' .
+        'class' => 'group relative overflow-hidden w-full max-w-full box-border p-4 rounded-2xl flex flex-col justify-between ' .
                    'bg-white/80 dark:bg-[#161329]/80 backdrop-blur-xl ' .
                    'border border-purple-200/60 hover:border-primary/50 dark:border-white/12 dark:hover:border-[#9d7bff]/60 ' .
                    'hover:-translate-y-1.5 transition-all duration-300 ease-out ' .
@@ -55,12 +55,12 @@
     ></div>
 
     <!-- Fila Superior: Origen Técnico y Título -->
-    <div class="relative z-10 flex items-start justify-between gap-3">
-        <div class="flex flex-col space-y-1">
-            <span class="font-label-code uppercase tracking-wider text-outline dark:text-[#ccbeff] font-semibold text-[10px] truncate max-w-[200px] sm:max-w-[240px]">
+    <div class="relative z-10 flex items-start justify-between gap-2.5">
+        <div class="flex flex-col space-y-0.5 min-w-0">
+            <span class="font-label-code uppercase tracking-wider text-outline dark:text-[#ccbeff] font-semibold text-[10px] truncate max-w-[180px] sm:max-w-[220px]">
                 {!! strip_tags(html_entity_decode((string) $tableSource, ENT_QUOTES | ENT_HTML5, 'UTF-8')) !!}
             </span>
-            <span class="font-quicksand text-on-surface dark:text-[#f4f0ea] font-bold text-sm sm:text-base leading-snug">
+            <span class="font-quicksand text-on-surface dark:text-[#f4f0ea] font-bold text-sm leading-snug truncate">
                 {!! strip_tags(html_entity_decode((string) $title, ENT_QUOTES | ENT_HTML5, 'UTF-8')) !!}
             </span>
             @if ($badge)
@@ -74,57 +74,55 @@
                 </div>
             @endif
         </div>
-        <div class="w-10 h-10 rounded-xl {{ $iconBg }} flex items-center justify-center text-white shadow-2xs shrink-0 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
-            <span class="material-symbols-outlined text-[22px]">{{ $icon }}</span>
+        <div class="w-9 h-9 rounded-xl {{ $iconBg }} flex items-center justify-center text-white shadow-2xs shrink-0 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
+            <span class="material-symbols-outlined text-[20px]">{{ $icon }}</span>
         </div>
     </div>
 
     <!-- Valor Principal y Tendencia de Alto Contraste con Count-Up -->
-    <div class="relative z-10 mt-5 pt-1">
-        <div class="font-quicksand text-2xl lg:text-3xl text-primary dark:text-[#fdfbf7] tracking-tight font-bold font-tabular-data flex items-baseline gap-2">
+    <div class="relative z-10 mt-3 pt-0.5">
+        <div class="font-quicksand text-xl lg:text-2xl text-primary dark:text-[#fdfbf7] tracking-tight font-bold font-tabular-data flex items-baseline gap-1.5">
             <span
                 data-countup="{{ $targetNum }}"
                 data-prefix="{{ $prefix }}"
                 data-decimals="{{ $decimals }}"
             >{{ $value }}</span>
             @if ($currency)
-                <span class="font-label-sm font-normal text-on-surface-variant dark:text-[#e6dfd5] text-xs">
+                <span class="font-label-sm font-normal text-on-surface-variant dark:text-[#e6dfd5] text-[11px]">
                     {{ $currency }}
                 </span>
             @endif
         </div>
 
-        <div class="flex items-center gap-2 mt-2 flex-wrap">
-            <span class="px-2.5 py-0.5 rounded-full {{ $isPositive ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-700/60' : 'bg-rose-50 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-200 dark:border-rose-700/60' }} font-label-code text-[11px] flex items-center gap-1 font-bold">
-                <span class="material-symbols-outlined text-[13px]">{{ $isPositive ? 'trending_up' : 'trending_down' }}</span>
+        <div class="flex items-center gap-1.5 mt-1.5 flex-wrap">
+            <span class="px-2 py-0.5 rounded-full {{ $isPositive ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-700/60' : 'bg-rose-50 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-200 dark:border-rose-700/60' }} font-label-code text-[10px] flex items-center gap-1 font-bold">
+                <span class="material-symbols-outlined text-[12px]">{{ $isPositive ? 'trending_up' : 'trending_down' }}</span>
                 <span>{{ $trend }}</span>
             </span>
-            <span class="font-tabular-data text-outline dark:text-[#d2bbff] font-medium text-xs">
+            <span class="font-tabular-data text-outline dark:text-[#d2bbff] font-medium text-[11px]">
                 vs período anterior
             </span>
         </div>
     </div>
 
     <!-- Barra Inferior de Métricas Secundarias -->
-    <div class="relative z-10 mt-5 pt-2">
-        <div class="bg-surface-container-low dark:bg-[#12101a]/70 rounded-xl border border-purple-100 dark:border-white/10 px-3 py-2 flex items-center justify-between font-label-code text-on-surface dark:text-[#f4f0ea] font-semibold text-xs">
-            <span>{{ $summaryLeft }}</span>
-            <span class="text-on-surface dark:text-[#fdfbf7] font-bold">{{ $summaryRight }}</span>
+    <div class="relative z-10 mt-3 pt-1">
+        <div class="bg-surface-container-low dark:bg-[#12101a]/70 rounded-xl border border-purple-100 dark:border-white/10 px-2.5 py-1.5 flex items-center justify-between font-label-code text-on-surface dark:text-[#f4f0ea] font-semibold text-[11px]">
+            <span class="truncate">{{ $summaryLeft }}</span>
+            <span class="text-on-surface dark:text-[#fdfbf7] font-bold shrink-0 ml-1">{{ $summaryRight }}</span>
         </div>
 
         @if ($actionUrl && $actionText)
-            <div class="pt-2 flex justify-end">
+            <div class="pt-1.5 flex justify-end">
                 <a
                     href="{{ $actionUrl }}"
-                    class="inline-flex items-center gap-1 text-[11px] font-label-code font-bold uppercase tracking-wider text-primary dark:text-[#9d7bff] hover:underline active:scale-95 transition-transform"
+                    class="inline-flex items-center gap-1 text-[10px] font-label-code font-bold uppercase tracking-wider text-primary dark:text-[#9d7bff] hover:underline active:scale-95 transition-transform"
                 >
                     <span>{{ $actionText }}</span>
-                    <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+                    <span class="material-symbols-outlined text-[13px]">arrow_forward</span>
                 </a>
             </div>
         @endif
     </div>
-
-</div>
 
 </div>

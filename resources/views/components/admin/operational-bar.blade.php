@@ -12,7 +12,7 @@
     $sucursalParam = $sucursalActiva ? $sucursalActiva->id : ($puedeVerGlobal ? 'all' : null);
 @endphp
 
-<section class="bento-reveal bento-delay-0 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-space-md bg-white/90 dark:bg-[#1a1626]/90 backdrop-blur-md p-space-lg rounded-2xl border border-purple-200/70 dark:border-white/10 shadow-xs mb-space-lg transition-all duration-300">
+<section class="bento-reveal bento-delay-0 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 bg-white/90 dark:bg-[#1a1626]/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-purple-200/70 dark:border-white/10 shadow-xs mb-4 transition-all duration-300">
     
     <!-- Identificador de Sesión, Saludo y Sede Activa -->
     <div class="flex flex-col">

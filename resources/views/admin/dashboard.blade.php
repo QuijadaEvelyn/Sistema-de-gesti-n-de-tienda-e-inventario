@@ -43,43 +43,13 @@
         :puede-ver-global="$puedeVerGlobal ?? true"
     />
 
-    <!-- Acceso Rápido a Reportes Calculados y Exportación (CSV / PDF) Sincronizado con la Sede Activa -->
-    <div class="bento-reveal bento-delay-60 mb-6 bg-white/80 dark:bg-[#161329]/80 backdrop-blur-xl rounded-2xl border border-purple-200/60 dark:border-white/12 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-[0_8px_32px_0_rgba(91,59,179,0.06)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.35)] transition-all duration-300">
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-primary/10 dark:bg-purple-500/15 flex items-center justify-center text-primary dark:text-[#ccbeff] shrink-0 shadow-inner">
-                <span class="material-symbols-outlined text-2xl">analytics</span>
-            </div>
-            <div>
-                <h2 class="text-sm font-bold text-on-surface dark:text-[#fdfbf7] font-quicksand">
-                    Módulo de Reportes Oficiales &amp; Exportación de Acervo ({{ $etiquetaSede }})
-                </h2>
-                <p class="text-xs text-on-surface-variant dark:text-[#e6dfd5]">
-                    Genera resúmenes calculados de inventario en bóveda, lotes certificados COA y descargas directas en CSV y PDF para la sede y período activos.
-                </p>
-            </div>
-        </div>
-        <div class="flex flex-wrap items-center gap-2">
-            <a href="{{ route('admin.reportes', $sucursalFiltroExport) }}" class="btn-glass-surface px-3.5 py-2 rounded-xl text-xs font-label-md flex items-center gap-1.5 shadow-xs">
-                <span class="material-symbols-outlined text-[16px]">monitoring</span>
-                <span>Ver Reportes Calculados</span>
-            </a>
-            <a href="{{ route('admin.reportes.csv', $sucursalFiltroExport) }}" class="btn-glass-surface px-3.5 py-2 rounded-xl text-xs font-label-md flex items-center gap-1.5 shadow-xs">
-                <span class="material-symbols-outlined text-[16px]">table_view</span>
-                <span>Exportar CSV</span>
-            </a>
-            <a href="{{ route('admin.reportes.pdf', $sucursalFiltroExport) }}" class="btn-glass-purple px-4 py-2 rounded-xl text-white text-xs font-label-md flex items-center gap-1.5 shadow-sm">
-                <span class="material-symbols-outlined text-[16px]">picture_as_pdf</span>
-                <span>Exportar PDF Oficial</span>
-            </a>
-        </div>
-    </div>
-
     <!-- =========================================================================
-         FILA SUPERIOR COMPACTA: RESUMEN EJECUTIVO (2 COLUMNAS EN DESKTOP)
+         FILA SUPERIOR COMPACTA: 3 COLUMNAS KPI EN UNA SOLA FILA
+         Agrupa las 3 tarjetas KPI: Ventas & Ingresos Estimados, Piezas en Custodia y Dictamen Notarial COA
          ========================================================================= -->
-    <section class="grid grid-cols-1 lg:grid-cols-2 gap-5 w-full mb-5" id="dashboard-summary-grid">
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full mb-4" id="dashboard-summary-grid">
         
-        <!-- Tarjeta 1 (Izquierda): Ventas & Ingresos Estimados -->
+        <!-- KPI 1: Ventas & Ingresos Estimados -->
         <x-ui.kpi-card 
             table-source="pedidos_table & pagos_table ({{ $etiquetaPeriodo }})"
             title="Ventas &amp; Ingresos Estimados"
@@ -93,12 +63,12 @@
             icon="payments"
             icon-bg="bg-primary-container"
             :summary-left="'Pedidos ('.$codigoPeriodo.'): '.$volumenPedidos"
-            :summary-right="'Ticket Prom: $'.number_format($ticketPromedio, 0).' MXN'"
+            :summary-right="'Ticket: $'.number_format($ticketPromedio, 0).' MXN'"
             :bento-delay="100"
-            class="w-full"
+            class="w-full p-4"
         />
 
-        <!-- Tarjeta 2 (Derecha): Piezas en Custodia -->
+        <!-- KPI 2: Piezas en Custodia -->
         <x-ui.kpi-card 
             table-source="existencias_table ({{ $sucursalActiva ? $sucursalActiva->nombre : 'Global' }})"
             title="Piezas en Custodia"
@@ -114,26 +84,46 @@
             :summary-left="'Valoración: $'.number_format($valoracionInventario, 0)"
             :summary-right="'SKUs en sede: '.$totalSkus"
             :bento-delay="140"
-            class="w-full"
+            class="w-full p-4"
+        />
+
+        <!-- KPI 3: Dictamen Notarial COA -->
+        <x-ui.kpi-card 
+            table-source="piezas_unicas ({{ $sucursalActiva ? $sucursalActiva->nombre : 'Global' }})"
+            title="Dictamen Notarial COA"
+            :value="(string) $totalCoa"
+            currency="series certificadas"
+            :trend="$coaDisponibles.' disponibles'"
+            :is-positive="true"
+            badge="Certificación Vigente"
+            :badge-pulse="true"
+            badge-color="purple"
+            icon="verified"
+            icon-bg="bg-secondary-container text-on-secondary-container"
+            :summary-left="'Disponibles: '.$coaDisponibles"
+            :summary-right="'Comprometidos: '.$coaComprometidos"
+            :bento-delay="180"
+            class="w-full p-4"
         />
 
     </section>
 
     <!-- =========================================================================
          GRÁFICA ANALÍTICA PRINCIPAL: FLUJO DE BÓVEDA (CHART.JS)
+         Subida inmediatamente debajo de la fila de 3 KPIs
          ========================================================================= -->
-    <section class="bento-reveal bento-delay-140 relative w-full max-w-full box-border overflow-hidden p-5 sm:p-6 rounded-3xl bg-white/80 dark:bg-[#161329]/80 backdrop-blur-xl border border-purple-200/60 dark:border-white/12 shadow-[0_8px_32px_0_rgba(91,59,179,0.06)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.35)] mb-6 transition-all duration-300">
+    <section class="bento-reveal bento-delay-140 relative w-full max-w-full box-border overflow-hidden p-4 sm:p-5 rounded-2xl bg-white/80 dark:bg-[#161329]/80 backdrop-blur-xl border border-purple-200/60 dark:border-white/12 shadow-[0_8px_32px_0_rgba(91,59,179,0.06)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.35)] mb-4 transition-all duration-300">
         
         <!-- Cabecera de la Gráfica: Título, Filtro Interactivo de Período y Mini-KPIs Dinámicos -->
-        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-purple-200/60 dark:border-white/10">
-            <div class="space-y-1">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-purple-200/60 dark:border-white/10">
+            <div class="space-y-0.5 min-w-0">
                 <div class="flex items-center gap-2">
-                    <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-primary/10 dark:bg-purple-500/20 text-primary dark:text-[#ccbeff]">
+                    <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-primary/10 dark:bg-purple-500/20 text-primary dark:text-[#ccbeff] shrink-0">
                         <span class="material-symbols-outlined text-[18px]">query_stats</span>
                     </span>
-                    <h2 class="text-base sm:text-lg font-bold text-on-surface dark:text-[#fdfbf7] font-quicksand flex items-center gap-2">
+                    <h2 class="text-sm sm:text-base font-bold text-on-surface dark:text-[#fdfbf7] font-quicksand flex items-center gap-2 flex-wrap">
                         <span>Flujo de Bóveda &amp; Rendimiento Curatorial</span>
-                        <span class="text-xs px-2.5 py-0.5 rounded-full bg-purple-100 dark:bg-purple-950/80 text-purple-900 dark:text-purple-200 font-label-code font-bold uppercase tracking-wider">
+                        <span class="text-[10px] px-2 py-0.5 rounded-full bg-purple-100 dark:bg-purple-950/80 text-purple-900 dark:text-purple-200 font-label-code font-bold uppercase tracking-wider">
                             {{ $etiquetaSede }}
                         </span>
                     </h2>
@@ -144,24 +134,24 @@
             </div>
 
             <!-- Selector de Rango Temporal Interactivo para Chart.js -->
-            <div class="flex items-center gap-1.5 p-1 bg-surface-container-low/70 dark:bg-black/30 backdrop-blur-md rounded-2xl border border-purple-200/60 dark:border-white/10 shrink-0 self-start lg:self-auto">
+            <div class="flex items-center gap-1 p-1 bg-surface-container-low/70 dark:bg-black/30 backdrop-blur-md rounded-xl border border-purple-200/60 dark:border-white/10 shrink-0 self-start lg:self-auto">
                 <button
                     type="button"
-                    class="chart-range-pill px-3 py-1.5 rounded-xl text-xs font-label-code font-bold uppercase tracking-wider transition-all cursor-pointer {{ ($codigoPeriodo === '7d') ? 'bg-primary text-white shadow-xs' : 'text-on-surface-variant hover:text-on-surface hover:bg-white/40 dark:hover:bg-white/5' }}"
+                    class="chart-range-pill px-2.5 py-1 rounded-lg text-[11px] font-label-code font-bold uppercase tracking-wider transition-all cursor-pointer {{ ($codigoPeriodo === '7d') ? 'bg-primary text-white shadow-xs' : 'text-on-surface-variant hover:text-on-surface hover:bg-white/40 dark:hover:bg-white/5' }}"
                     data-range="7d"
                 >
                     7 DÍAS
                 </button>
                 <button
                     type="button"
-                    class="chart-range-pill px-3 py-1.5 rounded-xl text-xs font-label-code font-bold uppercase tracking-wider transition-all cursor-pointer {{ ($codigoPeriodo === '30d' || !in_array($codigoPeriodo, ['7d', '2026'])) ? 'bg-primary text-white shadow-xs' : 'text-on-surface-variant hover:text-on-surface hover:bg-white/40 dark:hover:bg-white/5' }}"
+                    class="chart-range-pill px-2.5 py-1 rounded-lg text-[11px] font-label-code font-bold uppercase tracking-wider transition-all cursor-pointer {{ ($codigoPeriodo === '30d' || !in_array($codigoPeriodo, ['7d', '2026'])) ? 'bg-primary text-white shadow-xs' : 'text-on-surface-variant hover:text-on-surface hover:bg-white/40 dark:hover:bg-white/5' }}"
                     data-range="30d"
                 >
                     30 DÍAS
                 </button>
                 <button
                     type="button"
-                    class="chart-range-pill px-3 py-1.5 rounded-xl text-xs font-label-code font-bold uppercase tracking-wider transition-all cursor-pointer {{ ($codigoPeriodo === '2026') ? 'bg-primary text-white shadow-xs' : 'text-on-surface-variant hover:text-on-surface hover:bg-white/40 dark:hover:bg-white/5' }}"
+                    class="chart-range-pill px-2.5 py-1 rounded-lg text-[11px] font-label-code font-bold uppercase tracking-wider transition-all cursor-pointer {{ ($codigoPeriodo === '2026') ? 'bg-primary text-white shadow-xs' : 'text-on-surface-variant hover:text-on-surface hover:bg-white/40 dark:hover:bg-white/5' }}"
                     data-range="2026"
                 >
                     AÑO 2026
@@ -169,54 +159,85 @@
             </div>
         </div>
 
-        <!-- Mini-Tarjetas de Métricas Rápidas Sincronizadas con la Gráfica (Los 4 KPIs) -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-4 pb-2 w-full box-border">
-            <div class="p-3 rounded-2xl bg-surface-container-low/50 dark:bg-white/5 border border-purple-200/40 dark:border-white/5 backdrop-blur-sm">
-                <span class="block text-[10px] font-label-code uppercase tracking-wider text-on-surface-variant dark:text-[#ccbeff]">Ingresos Totales</span>
-                <div class="flex items-baseline gap-1.5 mt-0.5">
-                    <span id="chart-kpi-ingresos" class="font-quicksand font-bold text-lg text-primary dark:text-[#fdfbf7] font-tabular-data">
+        <!-- Mini-Tarjetas de Métricas Rápidas Sincronizadas con la Gráfica (Los 4 KPIs internos) -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 pt-3 pb-1 w-full box-border">
+            <div class="p-2.5 sm:p-3 rounded-xl bg-surface-container-low/50 dark:bg-white/5 border border-purple-200/40 dark:border-white/5 backdrop-blur-sm min-w-0 overflow-hidden">
+                <span class="block text-[10px] font-label-code uppercase tracking-wider text-on-surface-variant dark:text-[#ccbeff] truncate">Ingresos Totales</span>
+                <div class="flex items-baseline gap-1.5 mt-0.5 truncate">
+                    <span id="chart-kpi-ingresos" class="font-quicksand font-bold text-base sm:text-lg text-primary dark:text-[#fdfbf7] font-tabular-data truncate">
                         ${{ number_format($ventasConfirmadas, 0) }} MXN
                     </span>
-                    <span id="chart-kpi-trend" class="text-[10px] font-label-code text-emerald-600 dark:text-emerald-400 font-bold">+18.4%</span>
+                    <span id="chart-kpi-trend" class="text-[10px] font-label-code text-emerald-600 dark:text-emerald-400 font-bold shrink-0">+18.4%</span>
                 </div>
             </div>
 
-            <div class="p-3 rounded-2xl bg-surface-container-low/50 dark:bg-white/5 border border-purple-200/40 dark:border-white/5 backdrop-blur-sm">
-                <span class="block text-[10px] font-label-code uppercase tracking-wider text-on-surface-variant dark:text-[#ccbeff]">Volumen de Órdenes</span>
-                <div class="flex items-baseline gap-1.5 mt-0.5">
-                    <span id="chart-kpi-pedidos" class="font-quicksand font-bold text-lg text-on-surface dark:text-[#fdfbf7] font-tabular-data">
+            <div class="p-2.5 sm:p-3 rounded-xl bg-surface-container-low/50 dark:bg-white/5 border border-purple-200/40 dark:border-white/5 backdrop-blur-sm min-w-0 overflow-hidden">
+                <span class="block text-[10px] font-label-code uppercase tracking-wider text-on-surface-variant dark:text-[#ccbeff] truncate">Volumen de Órdenes</span>
+                <div class="flex items-baseline gap-1.5 mt-0.5 truncate">
+                    <span id="chart-kpi-pedidos" class="font-quicksand font-bold text-base sm:text-lg text-on-surface dark:text-[#fdfbf7] font-tabular-data truncate">
                         {{ $volumenPedidos }} órdenes
                     </span>
-                    <span class="text-[10px] font-label-code text-secondary dark:text-purple-300">confirmadas</span>
+                    <span class="text-[10px] font-label-code text-secondary dark:text-purple-300 shrink-0">conf.</span>
                 </div>
             </div>
 
-            <div class="p-3 rounded-2xl bg-surface-container-low/50 dark:bg-white/5 border border-purple-200/40 dark:border-white/5 backdrop-blur-sm">
-                <span class="block text-[10px] font-label-code uppercase tracking-wider text-on-surface-variant dark:text-[#ccbeff]">Ticket Promedio</span>
-                <div class="flex items-baseline gap-1.5 mt-0.5">
-                    <span id="chart-kpi-ticket" class="font-quicksand font-bold text-lg text-on-surface dark:text-[#fdfbf7] font-tabular-data">
+            <div class="p-2.5 sm:p-3 rounded-xl bg-surface-container-low/50 dark:bg-white/5 border border-purple-200/40 dark:border-white/5 backdrop-blur-sm min-w-0 overflow-hidden">
+                <span class="block text-[10px] font-label-code uppercase tracking-wider text-on-surface-variant dark:text-[#ccbeff] truncate">Ticket Promedio</span>
+                <div class="flex items-baseline gap-1.5 mt-0.5 truncate">
+                    <span id="chart-kpi-ticket" class="font-quicksand font-bold text-base sm:text-lg text-on-surface dark:text-[#fdfbf7] font-tabular-data truncate">
                         ${{ number_format($ticketPromedio, 0) }} MXN
                     </span>
-                    <span class="text-[10px] font-label-code text-on-surface-variant dark:text-white/60">por venta</span>
+                    <span class="text-[10px] font-label-code text-on-surface-variant dark:text-white/60 shrink-0">prom.</span>
                 </div>
             </div>
 
-            <div class="p-3 rounded-2xl bg-surface-container-low/50 dark:bg-white/5 border border-purple-200/40 dark:border-white/5 backdrop-blur-sm">
-                <span class="block text-[10px] font-label-code uppercase tracking-wider text-on-surface-variant dark:text-[#ccbeff]">Valoración en Custodia</span>
-                <div class="flex items-baseline gap-1.5 mt-0.5">
-                    <span class="font-quicksand font-bold text-lg text-secondary dark:text-purple-200 font-tabular-data">
+            <div class="p-2.5 sm:p-3 rounded-xl bg-surface-container-low/50 dark:bg-white/5 border border-purple-200/40 dark:border-white/5 backdrop-blur-sm min-w-0 overflow-hidden">
+                <span class="block text-[10px] font-label-code uppercase tracking-wider text-on-surface-variant dark:text-[#ccbeff] truncate">Valoración en Custodia</span>
+                <div class="flex items-baseline gap-1.5 mt-0.5 truncate">
+                    <span class="font-quicksand font-bold text-base sm:text-lg text-secondary dark:text-purple-200 font-tabular-data truncate">
                         ${{ number_format($valoracionInventario, 0) }} MXN
                     </span>
-                    <span class="text-[10px] font-label-code text-emerald-600 dark:text-emerald-400 font-bold">Activo</span>
+                    <span class="text-[10px] font-label-code text-emerald-600 dark:text-emerald-400 font-bold shrink-0">Activo</span>
                 </div>
             </div>
         </div>
 
-        <!-- Contenedor del Lienzo de Chart.js con Altura Fija h-56 y w-full relative -->
-        <div class="relative w-full h-56 overflow-hidden mt-3">
+        <!-- Contenedor del Lienzo de Chart.js con Altura Reducida h-48 sm:h-52 y w-full relative -->
+        <div class="relative w-full h-48 sm:h-52 overflow-hidden mt-2">
             <canvas id="archivumPerformanceChart" class="w-full h-full"></canvas>
         </div>
     </section>
+
+    <!-- Acceso Rápido a Reportes Calculados y Exportación (CSV / PDF) Sincronizado con la Sede Activa -->
+    <div class="bento-reveal bento-delay-200 mb-5 bg-white/80 dark:bg-[#161329]/80 backdrop-blur-xl rounded-2xl border border-purple-200/60 dark:border-white/12 p-3.5 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-[0_8px_32px_0_rgba(91,59,179,0.06)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.35)] transition-all duration-300">
+        <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-primary/10 dark:bg-purple-500/15 flex items-center justify-center text-primary dark:text-[#ccbeff] shrink-0 shadow-inner">
+                <span class="material-symbols-outlined text-xl">analytics</span>
+            </div>
+            <div>
+                <h2 class="text-xs sm:text-sm font-bold text-on-surface dark:text-[#fdfbf7] font-quicksand">
+                    Módulo de Reportes Oficiales &amp; Exportación de Acervo ({{ $etiquetaSede }})
+                </h2>
+                <p class="text-[11px] text-on-surface-variant dark:text-[#e6dfd5]">
+                    Genera resúmenes calculados de inventario en bóveda, lotes certificados COA y descargas directas en CSV y PDF para la sede y período activos.
+                </p>
+            </div>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+            <a href="{{ route('admin.reportes', $sucursalFiltroExport) }}" class="btn-glass-surface px-3 py-1.5 rounded-xl text-xs font-label-md flex items-center gap-1.5 shadow-xs">
+                <span class="material-symbols-outlined text-[15px]">monitoring</span>
+                <span>Ver Reportes Calculados</span>
+            </a>
+            <a href="{{ route('admin.reportes.csv', $sucursalFiltroExport) }}" class="btn-glass-surface px-3 py-1.5 rounded-xl text-xs font-label-md flex items-center gap-1.5 shadow-xs">
+                <span class="material-symbols-outlined text-[15px]">table_view</span>
+                <span>Exportar CSV</span>
+            </a>
+            <a href="{{ route('admin.reportes.pdf', $sucursalFiltroExport) }}" class="btn-glass-purple px-3.5 py-1.5 rounded-xl text-white text-xs font-label-md flex items-center gap-1.5 shadow-sm">
+                <span class="material-symbols-outlined text-[15px]">picture_as_pdf</span>
+                <span>Exportar PDF Oficial</span>
+            </a>
+        </div>
+    </div>
 
     <!-- Barra de Accesos Rápidos de Archivo -->
     <div class="bento-reveal bento-delay-340 flex flex-wrap items-center justify-between gap-4 p-space-md bg-white/80 dark:bg-[#161329]/80 backdrop-blur-xl border border-purple-200/60 dark:border-white/12 rounded-2xl mb-6 shadow-[0_8px_32px_0_rgba(91,59,179,0.06)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.35)] transition-all duration-300">
@@ -504,7 +525,7 @@
                     const theme = getThemePalette();
                     const currentData = seriesAnaliticas[activeRange] || { labels: [], ingresos: [], pedidos: [] };
 
-                    const gradient = ctx.createLinearGradient(0, 0, 0, 224);
+                    const gradient = ctx.createLinearGradient(0, 0, 0, 200);
                     gradient.addColorStop(0, theme.gradientStart);
                     gradient.addColorStop(1, theme.gradientEnd);
 

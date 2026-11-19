@@ -49,11 +49,11 @@
         <x-admin.header :user-name="$userName ?? null" :user-role="$userRole ?? null" />
 
         <!-- Lienzo de Contenido Operativo -->
-        <main id="admin-main-canvas" class="relative overflow-hidden w-full min-w-0 max-w-full pt-20 px-4 sm:px-6 md:px-8 py-6 bg-background flex-1 transition-all duration-300 ease-out box-border">
+        <main id="admin-main-canvas" class="relative min-w-0 flex-1 overflow-x-hidden w-full max-w-full pt-20 px-4 sm:px-6 md:px-8 py-6 bg-background transition-all duration-300 ease-out box-border">
             <!-- Fondo Ambiental Temático de Bóveda y Vinilos (Bibliotheca & Discos) -->
             <x-admin.vault-ambient-background />
 
-            <div id="admin-main-content" class="relative z-10 admin-stage-transition w-full min-w-0 max-w-full box-border">
+            <div id="admin-main-content" class="relative z-10 admin-stage-transition min-w-0 w-full max-w-full box-border overflow-x-hidden">
                 @if (session('status'))
                     <div class="mb-6 flex items-center gap-3 p-4 bg-emerald-500/10 border border-emerald-500/30 text-emerald-900 rounded-xl shadow-xs" role="alert">
                         <span class="material-symbols-outlined text-emerald-600 text-xl">check_circle</span>

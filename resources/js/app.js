@@ -242,6 +242,20 @@ export async function navigateToAdminUrl(url, isPopState = false) {
         // Reemplazar el contenido principal de trabajo
         mainContent.innerHTML = newMainContent.innerHTML;
 
+        // Limpiar cualquier nodo huérfano que pudiera haber quedado fuera de admin-main-content en main-canvas
+        const mainCanvas = document.getElementById('admin-main-canvas');
+        if (mainCanvas) {
+            Array.from(mainCanvas.children).forEach((child) => {
+                if (
+                    child.id !== 'admin-main-content' &&
+                    !child.classList.contains('vault-ambient-background') &&
+                    !child.hasAttribute('data-vault-ambient')
+                ) {
+                    child.remove();
+                }
+            });
+        }
+
         // Fase 3: Entrada en cascada estilo Bento de la nueva sección
         window.scrollTo({ top: 0, behavior: 'instant' });
         mainContent.classList.remove('admin-stage-exit');
