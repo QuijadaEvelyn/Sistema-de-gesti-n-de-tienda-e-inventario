@@ -302,7 +302,7 @@
                             };
                         @endphp
                     <div
-                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[220px] sm:w-[290px] md:w-[310px] h-[460px] sm:h-[490px] md:h-[520px]"
+                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[240px] sm:w-[290px] md:w-[310px] h-[480px] sm:h-[510px] md:h-[540px]"
                         style="transform-style: preserve-3d; z-index: {{ $initZIndex }};"
                         data-slide-index="{{ $initIdx }}"
                     >
@@ -489,7 +489,7 @@
 
                     <!-- Fallback 1: Vinilo (Tarjeta Central Activa) -->
                     <div
-                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[220px] sm:w-[290px] md:w-[310px] h-[460px] sm:h-[490px] md:h-[520px]"
+                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[240px] sm:w-[290px] md:w-[310px] h-[480px] sm:h-[510px] md:h-[540px]"
                         style="transform-style: preserve-3d; z-index: 30;"
                         data-slide-index="0"
                     >
@@ -504,7 +504,7 @@
                                     class="bg-white dark:bg-[#171024] border-2 border-purple-600 dark:border-purple-500 ring-2 ring-purple-600/20 dark:ring-purple-500/20 rounded-2xl p-3 sm:p-5 flex flex-col justify-between hover:border-purple-700 hover:shadow-xl transition-all duration-200 group relative h-full select-none"
                                 >
                                     <div>
-                                        <div onclick="abrirModalDetalleProducto(this)" class="w-full h-36 sm:h-52 md:h-60 rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-2.5 sm:mb-4 cursor-pointer group-hover:shadow-inner">
+                                        <div onclick="abrirModalDetalleProducto(this)" class="w-full aspect-square rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-2.5 sm:mb-4 cursor-pointer group-hover:shadow-inner">
                                             <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 dark:via-white/5 dark:to-white/10 pointer-events-none rounded-xl z-20"></div>
                                             <span class="absolute top-2.5 left-2.5 z-10 bg-purple-600 text-white text-[10px] font-label-sm font-bold uppercase px-2.5 py-0.5 rounded-md shadow-sm inline-flex items-center gap-1">
                                                 <span class="material-symbols-outlined text-[12px]">diamond</span>
@@ -539,7 +539,7 @@
 
                     <!-- Fallback 2: Libro (Lateral Derecha) -->
                     <div
-                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[220px] sm:w-[290px] md:w-[310px] h-[460px] sm:h-[490px] md:h-[520px]"
+                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[240px] sm:w-[290px] md:w-[310px] h-[480px] sm:h-[510px] md:h-[540px]"
                         style="transform-style: preserve-3d; z-index: 20;"
                         data-slide-index="1"
                     >
@@ -554,7 +554,7 @@
                                     class="bg-white dark:bg-[#171024] border-2 border-purple-600 dark:border-purple-500 ring-2 ring-purple-600/20 dark:ring-purple-500/20 rounded-2xl p-3 sm:p-5 flex flex-col justify-between hover:border-purple-700 hover:shadow-xl transition-all duration-200 group relative h-full select-none"
                                 >
                                     <div>
-                                        <div onclick="abrirModalDetalleProducto(this)" class="w-full h-36 sm:h-52 md:h-60 rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-2.5 sm:mb-4 cursor-pointer group-hover:shadow-inner">
+                                        <div onclick="abrirModalDetalleProducto(this)" class="w-full aspect-square rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-2.5 sm:mb-4 cursor-pointer group-hover:shadow-inner">
                                             <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 dark:via-white/5 dark:to-white/10 pointer-events-none rounded-xl z-20"></div>
                                             <span class="absolute top-2.5 left-2.5 z-10 bg-purple-600 text-white text-[10px] font-label-sm font-bold uppercase px-2.5 py-0.5 rounded-md shadow-sm inline-flex items-center gap-1">
                                                 <span class="material-symbols-outlined text-[12px]">diamond</span>
@@ -589,7 +589,7 @@
 
                     <!-- Fallback 3: Memorabilia 1 (Segunda Derecha) -->
                     <div
-                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[220px] sm:w-[290px] md:w-[310px] h-[460px] sm:h-[490px] md:h-[520px]"
+                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[240px] sm:w-[290px] md:w-[310px] h-[480px] sm:h-[510px] md:h-[540px]"
                         style="transform-style: preserve-3d; z-index: 10;"
                         data-slide-index="2"
                     >
@@ -604,7 +604,7 @@
                                     class="bg-white dark:bg-[#171024] border-2 border-purple-600 dark:border-purple-500 ring-2 ring-purple-600/20 dark:ring-purple-500/20 rounded-2xl p-3 sm:p-5 flex flex-col justify-between hover:border-purple-700 hover:shadow-xl transition-all duration-200 group relative h-full select-none"
                                 >
                                     <div>
-                                        <div onclick="abrirModalDetalleProducto(this)" class="w-full h-36 sm:h-52 md:h-60 rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-2.5 sm:mb-4 cursor-pointer group-hover:shadow-inner">
+                                        <div onclick="abrirModalDetalleProducto(this)" class="w-full aspect-square rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-2.5 sm:mb-4 cursor-pointer group-hover:shadow-inner">
                                             <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 dark:via-white/5 dark:to-white/10 pointer-events-none rounded-xl z-20"></div>
                                             <span class="absolute top-2.5 left-2.5 z-10 bg-purple-600 text-white text-[10px] font-label-sm font-bold uppercase px-2.5 py-0.5 rounded-md shadow-sm inline-flex items-center gap-1">
                                                 <span class="material-symbols-outlined text-[12px]">diamond</span>
@@ -639,7 +639,7 @@
 
                     <!-- Fallback 4: Disco 2 (Posterior Oculto) -->
                     <div
-                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[220px] sm:w-[290px] md:w-[310px] h-[460px] sm:h-[490px] md:h-[520px]"
+                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[240px] sm:w-[290px] md:w-[310px] h-[480px] sm:h-[510px] md:h-[540px]"
                         style="transform-style: preserve-3d; z-index: 1;"
                         data-slide-index="3"
                     >
@@ -654,7 +654,7 @@
                                     class="bg-white dark:bg-[#171024] border-2 border-purple-600 dark:border-purple-500 ring-2 ring-purple-600/20 dark:ring-purple-500/20 rounded-2xl p-3 sm:p-5 flex flex-col justify-between hover:border-purple-700 hover:shadow-xl transition-all duration-200 group relative h-full select-none"
                                 >
                                     <div>
-                                        <div onclick="abrirModalDetalleProducto(this)" class="w-full h-36 sm:h-52 md:h-60 rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-2.5 sm:mb-4 cursor-pointer group-hover:shadow-inner">
+                                        <div onclick="abrirModalDetalleProducto(this)" class="w-full aspect-square rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-2.5 sm:mb-4 cursor-pointer group-hover:shadow-inner">
                                             <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 dark:via-white/5 dark:to-white/10 pointer-events-none rounded-xl z-20"></div>
                                             <span class="absolute top-2.5 left-2.5 z-10 bg-purple-600 text-white text-[10px] font-label-sm font-bold uppercase px-2.5 py-0.5 rounded-md shadow-sm inline-flex items-center gap-1">
                                                 <span class="material-symbols-outlined text-[12px]">diamond</span>
@@ -689,7 +689,7 @@
 
                     <!-- Fallback 5: Libro 2 (Segunda Izquierda) -->
                     <div
-                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[220px] sm:w-[290px] md:w-[310px] h-[460px] sm:h-[490px] md:h-[520px]"
+                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[240px] sm:w-[290px] md:w-[310px] h-[480px] sm:h-[510px] md:h-[540px]"
                         style="transform-style: preserve-3d; z-index: 10;"
                         data-slide-index="4"
                     >
@@ -704,7 +704,7 @@
                                     class="bg-white dark:bg-[#171024] border-2 border-purple-600 dark:border-purple-500 ring-2 ring-purple-600/20 dark:ring-purple-500/20 rounded-2xl p-3 sm:p-5 flex flex-col justify-between hover:border-purple-700 hover:shadow-xl transition-all duration-200 group relative h-full select-none"
                                 >
                                     <div>
-                                        <div onclick="abrirModalDetalleProducto(this)" class="w-full h-36 sm:h-52 md:h-60 rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-2.5 sm:mb-4 cursor-pointer group-hover:shadow-inner">
+                                        <div onclick="abrirModalDetalleProducto(this)" class="w-full aspect-square rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-2.5 sm:mb-4 cursor-pointer group-hover:shadow-inner">
                                             <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 dark:via-white/5 dark:to-white/10 pointer-events-none rounded-xl z-20"></div>
                                             <span class="absolute top-2.5 left-2.5 z-10 bg-purple-600 text-white text-[10px] font-label-sm font-bold uppercase px-2.5 py-0.5 rounded-md shadow-sm inline-flex items-center gap-1">
                                                 <span class="material-symbols-outlined text-[12px]">diamond</span>
@@ -739,7 +739,7 @@
 
                     <!-- Fallback 6: Memorabilia 2 (Inmediata Izquierda) -->
                     <div
-                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[220px] sm:w-[290px] md:w-[310px] h-[460px] sm:h-[490px] md:h-[520px]"
+                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[240px] sm:w-[290px] md:w-[310px] h-[480px] sm:h-[510px] md:h-[540px]"
                         style="transform-style: preserve-3d; z-index: 20;"
                         data-slide-index="5"
                     >
@@ -754,7 +754,7 @@
                                     class="bg-white dark:bg-[#171024] border-2 border-purple-600 dark:border-purple-500 ring-2 ring-purple-600/20 dark:ring-purple-500/20 rounded-2xl p-3 sm:p-5 flex flex-col justify-between hover:border-purple-700 hover:shadow-xl transition-all duration-200 group relative h-full select-none"
                                 >
                                     <div>
-                                        <div onclick="abrirModalDetalleProducto(this)" class="w-full h-36 sm:h-52 md:h-60 rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-2.5 sm:mb-4 cursor-pointer group-hover:shadow-inner">
+                                        <div onclick="abrirModalDetalleProducto(this)" class="w-full aspect-square rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-2.5 sm:mb-4 cursor-pointer group-hover:shadow-inner">
                                             <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 dark:via-white/5 dark:to-white/10 pointer-events-none rounded-xl z-20"></div>
                                             <span class="absolute top-2.5 left-2.5 z-10 bg-purple-600 text-white text-[10px] font-label-sm font-bold uppercase px-2.5 py-0.5 rounded-md shadow-sm inline-flex items-center gap-1">
                                                 <span class="material-symbols-outlined text-[12px]">diamond</span>

@@ -111,7 +111,7 @@
         <!-- Imagen / Miniatura con Indicador de Disponibilidad Limpio -->
         <div
             onclick="abrirModalDetalleProducto(this)"
-            class="w-full h-36 sm:h-52 md:h-60 rounded-xl {{ $clasesMiniatura }} flex items-center justify-center relative overflow-hidden mb-2.5 sm:mb-4 transition-colors cursor-pointer group-hover:shadow-inner"
+            class="w-full aspect-square rounded-xl {{ $clasesMiniatura }} flex items-center justify-center relative overflow-hidden mb-2.5 sm:mb-4 transition-colors cursor-pointer group-hover:shadow-inner"
             title="Haz clic para ver la ficha curatorial de {{ $producto->nombre }}"
         >
             <!-- Capa Glossy Curatorial Sutil -->

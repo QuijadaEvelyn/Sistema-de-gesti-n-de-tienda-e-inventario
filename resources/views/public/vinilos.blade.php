@@ -124,15 +124,15 @@
             </div>
 
             <!-- Contenedor Principal: Escenario 3D de Discos (Izquierda) + Ficha Curatorial Dinámica (Derecha) -->
-            <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center py-6 sm:py-8">
+            <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start py-6 sm:py-8">
 
                 <!-- COLUMNA IZQUIERDA (7 cols): Escenario 3D con Discos Circulares en Movimiento y Controles -->
-                <div class="lg:col-span-7 flex flex-col items-center justify-center">
+                <div class="lg:col-span-7 flex flex-col items-center">
 
                     <!-- Escenario 3D de Discos -->
                     <div
                         id="disc-showcase-stage"
-                        class="disc-showcase-stage relative w-full max-w-full min-h-[260px] md:min-h-[360px] h-[280px] md:h-[380px] flex items-center justify-center select-none overflow-visible py-2"
+                        class="disc-showcase-stage relative w-full max-w-full min-h-[280px] md:min-h-[380px] h-[300px] md:h-[390px] flex items-center justify-center select-none overflow-visible py-2"
                     >
                         @foreach ($discosShowcase as $idx => $disco)
                             @php

@@ -863,9 +863,23 @@
 .disc-showcase-stage {
     perspective: 1500px;
     transform-style: preserve-3d;
+    position: relative;
+    width: 100%;
+    min-height: 280px;
+    height: 300px;
+}
+
+@media (min-width: 768px) {
+    .disc-showcase-stage {
+        min-height: 380px;
+        height: 390px;
+    }
 }
 
 .disc-3d-slot {
+    position: absolute;
+    inset: 0;
+    margin: auto;
     transform-style: preserve-3d;
     transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.55s ease;
     will-change: transform, opacity;
