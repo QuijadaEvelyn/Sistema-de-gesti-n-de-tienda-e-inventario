@@ -234,9 +234,9 @@
 
     <!-- Vitrina Curatorial: Carrusel 3D Coverflow Interactivo Puro -->
     <section class="relative block w-full py-6 sm:py-10 mt-6 sm:mt-8 clear-both" aria-label="Vitrina Rotativa 3D de Piezas Destacadas">
-        <!-- Encabezado con contenedor responsivo y flex-wrap para que el texto de ayuda nunca se corte a la derecha -->
-        <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-2 sm:gap-4 mb-6 sm:mb-8 relative z-20 flex-wrap">
+        <!-- Encabezado separado con margen inferior amplio -->
+        <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 sm:mb-16 relative z-20">
+            <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-2 sm:gap-4 flex-wrap">
                 <div class="max-w-xl">
                     <span class="inline-flex items-center gap-1.5 text-[11px] font-label-code uppercase tracking-widest text-primary dark:text-purple-300">
                         <span class="material-symbols-outlined text-[15px]">view_in_ar</span>
@@ -252,15 +252,15 @@
             </div>
         </div>
 
-        <!-- Escenario 3D Coverflow Puro: Sin flechas, sin botones, sin barras, sin marco exterior -->
-        <div class="relative w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Escenario 3D Coverflow Puro: Debajo del encabezado sin subirse ni salirse del flujo -->
+        <div class="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
             <div
                 id="vitrina-coverflow-carousel"
                 tabindex="0"
                 role="region"
                 aria-roledescription="carousel"
                 aria-label="Vitrina Rotativa 3D de Piezas Destacadas"
-                class="coverflow-stage relative w-full h-[460px] sm:h-[540px] md:h-[580px] min-h-[460px] sm:min-h-[540px] md:min-h-[580px] flex items-center justify-center overflow-x-clip overflow-y-visible py-6 select-none focus:outline-none"
+                class="coverflow-stage relative z-10 w-full mt-4 h-[520px] sm:h-[580px] flex items-center justify-center overflow-hidden select-none focus:outline-none"
                 style="perspective: 1200px; transform-style: preserve-3d;"
             >
                 <!-- Degradado sutil en los bordes izquierdo y derecho -->
@@ -284,12 +284,12 @@
                                 }
                             }
                             $initTransform = match ($initDiff) {
-                                0 => 'translate3d(0px, 0, 40px) rotateY(0deg) scale(1)',
-                                -1 => 'translate3d(-335px, 0, -110px) rotateY(24deg) scale(0.86)',
-                                1 => 'translate3d(335px, 0, -110px) rotateY(-24deg) scale(0.86)',
-                                -2 => 'translate3d(-610px, 0, -210px) rotateY(30deg) scale(0.74)',
-                                2 => 'translate3d(610px, 0, -210px) rotateY(-30deg) scale(0.74)',
-                                default => 'translate3d(780px, 0, -300px) rotateY(-35deg) scale(0.65)',
+                                0 => 'translate3d(0px, 0px, 40px) rotateY(0deg) scale(1)',
+                                -1 => 'translate3d(-335px, 0px, -110px) rotateY(24deg) scale(0.86)',
+                                1 => 'translate3d(335px, 0px, -110px) rotateY(-24deg) scale(0.86)',
+                                -2 => 'translate3d(-610px, 0px, -210px) rotateY(30deg) scale(0.74)',
+                                2 => 'translate3d(610px, 0px, -210px) rotateY(-30deg) scale(0.74)',
+                                default => 'translate3d(780px, 0px, -300px) rotateY(-35deg) scale(0.65)',
                             };
                             $initOpacity = match ($initDiff) {
                                 0 => '1',
@@ -305,8 +305,8 @@
                             };
                         @endphp
                     <div
-                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[240px] sm:w-[280px] md:w-[300px] h-[400px] sm:h-[440px] md:h-[460px]"
-                        style="transform-style: preserve-3d; z-index: {{ $initZIndex }};"
+                        class="coverflow-slot-anchor absolute w-[240px] sm:w-[280px] md:w-[300px] h-[400px] sm:h-[440px] md:h-[460px]"
+                        style="top: 50%; left: 50%; transform: translate(-50%, -50%); transform-style: preserve-3d; z-index: {{ $initZIndex }};"
                         data-slide-index="{{ $initIdx }}"
                     >
                         <div
@@ -492,13 +492,13 @@
 
                     <!-- Fallback 1: Vinilo (Tarjeta Central Activa) -->
                     <div
-                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[240px] sm:w-[280px] md:w-[300px] h-[400px] sm:h-[440px] md:h-[460px]"
-                        style="transform-style: preserve-3d; z-index: 30;"
+                        class="coverflow-slot-anchor absolute w-[240px] sm:w-[280px] md:w-[300px] h-[400px] sm:h-[440px] md:h-[460px]"
+                        style="top: 50%; left: 50%; transform: translate(-50%, -50%); transform-style: preserve-3d; z-index: 30;"
                         data-slide-index="0"
                     >
                         <div
                             class="coverflow-slot w-full h-full"
-                            style="transform-style: preserve-3d; transform: translate3d(0px, 0, 40px) rotateY(0deg) scale(1); opacity: 1;"
+                            style="transform-style: preserve-3d; transform: translate3d(0px, 0px, 40px) rotateY(0deg) scale(1); opacity: 1;"
                         >
                             <div class="coverflow-card h-full rounded-2xl coverflow-card-active">
                                 <article
@@ -533,7 +533,7 @@
                                             <span class="text-[10px] uppercase font-label-code text-outline dark:text-purple-300/60 block">Precio Tasado:</span>
                                             <span class="font-tabular-data font-bold text-on-surface dark:text-white text-base">$18,500 <span class="text-xs font-normal text-on-surface-variant dark:text-purple-200/60">MXN</span></span>
                                         </div>
-                                        <a draggable="false" href="{{ route('public.vinilos') }}" class="btn-glass-purple px-3.5 py-2.5 rounded-xl text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs cursor-pointer select-none">
+                                        <a draggable="false" data-requires-auth-reserve="true" href="{{ route('public.vinilos') }}" class="btn-glass-purple px-3.5 py-2.5 rounded-xl text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs cursor-pointer select-none">
                                             <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
                                             <span>Reservar</span>
                                         </a>
@@ -545,13 +545,13 @@
 
                     <!-- Fallback 2: Libro (Lateral Derecha) -->
                     <div
-                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[240px] sm:w-[280px] md:w-[300px] h-[400px] sm:h-[440px] md:h-[460px]"
-                        style="transform-style: preserve-3d; z-index: 20;"
+                        class="coverflow-slot-anchor absolute w-[240px] sm:w-[280px] md:w-[300px] h-[400px] sm:h-[440px] md:h-[460px]"
+                        style="top: 50%; left: 50%; transform: translate(-50%, -50%); transform-style: preserve-3d; z-index: 20;"
                         data-slide-index="1"
                     >
                         <div
                             class="coverflow-slot w-full h-full"
-                            style="transform-style: preserve-3d; transform: translate3d(335px, 0, -110px) rotateY(-24deg) scale(0.86); opacity: 0.85;"
+                            style="transform-style: preserve-3d; transform: translate3d(335px, 0px, -110px) rotateY(-24deg) scale(0.86); opacity: 0.85;"
                         >
                             <div class="coverflow-card h-full rounded-2xl">
                                 <article
@@ -586,7 +586,7 @@
                                             <span class="text-[10px] uppercase font-label-code text-outline dark:text-purple-300/60 block">Precio Tasado:</span>
                                             <span class="font-tabular-data font-bold text-on-surface dark:text-white text-base">$32,000 <span class="text-xs font-normal text-on-surface-variant dark:text-purple-200/60">MXN</span></span>
                                         </div>
-                                        <a draggable="false" href="{{ route('public.libros') }}" class="btn-glass-purple px-3.5 py-2.5 rounded-xl text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs cursor-pointer select-none">
+                                        <a draggable="false" data-requires-auth-reserve="true" href="{{ route('public.libros') }}" class="btn-glass-purple px-3.5 py-2.5 rounded-xl text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs cursor-pointer select-none">
                                             <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
                                             <span>Reservar</span>
                                         </a>
@@ -598,13 +598,13 @@
 
                     <!-- Fallback 3: Memorabilia 1 (Segunda Derecha) -->
                     <div
-                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[240px] sm:w-[280px] md:w-[300px] h-[400px] sm:h-[440px] md:h-[460px]"
-                        style="transform-style: preserve-3d; z-index: 10;"
+                        class="coverflow-slot-anchor absolute w-[240px] sm:w-[280px] md:w-[300px] h-[400px] sm:h-[440px] md:h-[460px]"
+                        style="top: 50%; left: 50%; transform: translate(-50%, -50%); transform-style: preserve-3d; z-index: 10;"
                         data-slide-index="2"
                     >
                         <div
                             class="coverflow-slot w-full h-full"
-                            style="transform-style: preserve-3d; transform: translate3d(610px, 0, -210px) rotateY(-30deg) scale(0.74); opacity: 0.55;"
+                            style="transform-style: preserve-3d; transform: translate3d(610px, 0px, -210px) rotateY(-30deg) scale(0.74); opacity: 0.55;"
                         >
                             <div class="coverflow-card h-full rounded-2xl">
                                 <article
@@ -639,7 +639,7 @@
                                             <span class="text-[10px] uppercase font-label-code text-outline dark:text-purple-300/60 block">Precio Tasado:</span>
                                             <span class="font-tabular-data font-bold text-on-surface dark:text-white text-base">$9,400 <span class="text-xs font-normal text-on-surface-variant dark:text-purple-200/60">MXN</span></span>
                                         </div>
-                                        <a draggable="false" href="{{ route('public.memorabilia') }}" class="btn-glass-purple px-3.5 py-2.5 rounded-xl text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs cursor-pointer select-none">
+                                        <a draggable="false" data-requires-auth-reserve="true" href="{{ route('public.memorabilia') }}" class="btn-glass-purple px-3.5 py-2.5 rounded-xl text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs cursor-pointer select-none">
                                             <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
                                             <span>Reservar</span>
                                         </a>
@@ -651,13 +651,13 @@
 
                     <!-- Fallback 4: Disco 2 (Posterior Oculto) -->
                     <div
-                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[240px] sm:w-[280px] md:w-[300px] h-[400px] sm:h-[440px] md:h-[460px]"
-                        style="transform-style: preserve-3d; z-index: 1;"
+                        class="coverflow-slot-anchor absolute w-[240px] sm:w-[280px] md:w-[300px] h-[400px] sm:h-[440px] md:h-[460px]"
+                        style="top: 50%; left: 50%; transform: translate(-50%, -50%); transform-style: preserve-3d; z-index: 1;"
                         data-slide-index="3"
                     >
                         <div
                             class="coverflow-slot w-full h-full"
-                            style="transform-style: preserve-3d; transform: translate3d(780px, 0, -300px) rotateY(-35deg) scale(0.65); opacity: 0;"
+                            style="transform-style: preserve-3d; transform: translate3d(780px, 0px, -300px) rotateY(-35deg) scale(0.65); opacity: 0;"
                         >
                             <div class="coverflow-card h-full rounded-2xl">
                                 <article
@@ -692,7 +692,7 @@
                                             <span class="text-[10px] uppercase font-label-code text-outline dark:text-purple-300/60 block">Precio Tasado:</span>
                                             <span class="font-tabular-data font-bold text-on-surface dark:text-white text-base">$24,500 <span class="text-xs font-normal text-on-surface-variant dark:text-purple-200/60">MXN</span></span>
                                         </div>
-                                        <a draggable="false" href="{{ route('public.vinilos') }}" class="btn-glass-purple px-3.5 py-2.5 rounded-xl text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs cursor-pointer select-none">
+                                        <a draggable="false" data-requires-auth-reserve="true" href="{{ route('public.vinilos') }}" class="btn-glass-purple px-3.5 py-2.5 rounded-xl text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs cursor-pointer select-none">
                                             <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
                                             <span>Reservar</span>
                                         </a>
@@ -704,13 +704,13 @@
 
                     <!-- Fallback 5: Libro 2 (Segunda Izquierda) -->
                     <div
-                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[240px] sm:w-[280px] md:w-[300px] h-[400px] sm:h-[440px] md:h-[460px]"
-                        style="transform-style: preserve-3d; z-index: 10;"
+                        class="coverflow-slot-anchor absolute w-[240px] sm:w-[280px] md:w-[300px] h-[400px] sm:h-[440px] md:h-[460px]"
+                        style="top: 50%; left: 50%; transform: translate(-50%, -50%); transform-style: preserve-3d; z-index: 10;"
                         data-slide-index="4"
                     >
                         <div
                             class="coverflow-slot w-full h-full"
-                            style="transform-style: preserve-3d; transform: translate3d(-610px, 0, -210px) rotateY(30deg) scale(0.74); opacity: 0.55;"
+                            style="transform-style: preserve-3d; transform: translate3d(-610px, 0px, -210px) rotateY(30deg) scale(0.74); opacity: 0.55;"
                         >
                             <div class="coverflow-card h-full rounded-2xl">
                                 <article
@@ -745,7 +745,7 @@
                                             <span class="text-[10px] uppercase font-label-code text-outline dark:text-purple-300/60 block">Precio Tasado:</span>
                                             <span class="font-tabular-data font-bold text-on-surface dark:text-white text-base">$28,000 <span class="text-xs font-normal text-on-surface-variant dark:text-purple-200/60">MXN</span></span>
                                         </div>
-                                        <a draggable="false" href="{{ route('public.libros') }}" class="btn-glass-purple px-3.5 py-2.5 rounded-xl text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs cursor-pointer select-none">
+                                        <a draggable="false" data-requires-auth-reserve="true" href="{{ route('public.libros') }}" class="btn-glass-purple px-3.5 py-2.5 rounded-xl text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs cursor-pointer select-none">
                                             <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
                                             <span>Reservar</span>
                                         </a>
@@ -757,13 +757,13 @@
 
                     <!-- Fallback 6: Memorabilia 2 (Inmediata Izquierda) -->
                     <div
-                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[240px] sm:w-[280px] md:w-[300px] h-[400px] sm:h-[440px] md:h-[460px]"
-                        style="transform-style: preserve-3d; z-index: 20;"
+                        class="coverflow-slot-anchor absolute w-[240px] sm:w-[280px] md:w-[300px] h-[400px] sm:h-[440px] md:h-[460px]"
+                        style="top: 50%; left: 50%; transform: translate(-50%, -50%); transform-style: preserve-3d; z-index: 20;"
                         data-slide-index="5"
                     >
                         <div
                             class="coverflow-slot w-full h-full"
-                            style="transform-style: preserve-3d; transform: translate3d(-335px, 0, -110px) rotateY(24deg) scale(0.86); opacity: 0.85;"
+                            style="transform-style: preserve-3d; transform: translate3d(-335px, 0px, -110px) rotateY(24deg) scale(0.86); opacity: 0.85;"
                         >
                             <div class="coverflow-card h-full rounded-2xl">
                                 <article
@@ -798,7 +798,7 @@
                                             <span class="text-[10px] uppercase font-label-code text-outline dark:text-purple-300/60 block">Precio Tasado:</span>
                                             <span class="font-tabular-data font-bold text-on-surface dark:text-white text-base">$65,000 <span class="text-xs font-normal text-on-surface-variant dark:text-purple-200/60">MXN</span></span>
                                         </div>
-                                        <a draggable="false" href="{{ route('public.memorabilia') }}" class="btn-glass-purple px-3.5 py-2.5 rounded-xl text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs cursor-pointer select-none">
+                                        <a draggable="false" data-requires-auth-reserve="true" href="{{ route('public.memorabilia') }}" class="btn-glass-purple px-3.5 py-2.5 rounded-xl text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs cursor-pointer select-none">
                                             <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
                                             <span>Reservar</span>
                                         </a>
@@ -992,8 +992,12 @@
                                 slot.style.cursor = 'default';
                             }
 
+                            anchor.style.top = '50%';
+                            anchor.style.left = '50%';
+                            anchor.style.translate = 'none';
+                            anchor.style.transform = 'translate(-50%, -50%)';
                             anchor.style.zIndex = zIndex;
-                            slot.style.transform = `translate3d(${posX}px, 0, ${posZ}px) rotateY(${rotY}deg) scale(${scale})`;
+                            slot.style.transform = `translate3d(${posX}px, 0px, ${posZ}px) rotateY(${rotY}deg) scale(${scale})`;
                             slot.style.opacity = opacity;
                             slot.style.visibility = isVisible ? 'visible' : 'hidden';
                         });

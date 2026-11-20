@@ -83,18 +83,18 @@
                 </ul>
             </div>
 
-            <!-- Banner Informativo de Acceso para Pasarela Notariada -->
+            <!-- Banner Informativo de Acceso Obligatorio para Reserva en Bóveda / Pasarela Notariada -->
             <div
                 id="checkout-auth-banner"
-                class="{{ (request('intended') === 'checkout' || request('login') === '1' || session('url.intended') === route('checkout.index')) ? '' : 'hidden' }} p-4 rounded-xl bg-primary/10 border border-primary/30 flex items-start gap-3 text-xs text-on-surface"
+                class="{{ (request()->filled('intended') || request('login') === '1' || session()->has('url.intended') || session()->has('warning')) ? '' : 'hidden' }} p-4 rounded-xl bg-primary/10 border border-primary/30 flex items-start gap-3 text-xs text-on-surface"
             >
                 <div class="w-8 h-8 rounded-lg bg-primary-container text-white flex items-center justify-center shrink-0 mt-0.5">
                     <span class="material-symbols-outlined text-[18px]">verified_user</span>
                 </div>
                 <div class="space-y-0.5">
-                    <p class="font-bold font-quicksand text-primary text-sm">Identificación para Pasarela Notariada</p>
-                    <p class="text-on-surface-variant text-[11px] leading-relaxed">
-                        Inicia sesión o crea tu cuenta para formalizar la adquisición. <strong>Tus piezas en custodia y reserva temporal se mantienen intactas.</strong>
+                    <p id="checkout-auth-banner-title" class="font-bold font-quicksand text-primary text-sm">Autenticación Requerida en Bóveda</p>
+                    <p id="checkout-auth-banner-text" class="text-on-surface-variant text-[11px] leading-relaxed font-semibold">
+                        {{ session('warning') ?: 'Inicia sesión o regístrate para reservar piezas en la bóveda' }}
                     </p>
                 </div>
             </div>
@@ -111,6 +111,7 @@
                 <form id="drawer-login-form" method="POST" action="{{ route('login') }}" class="space-y-4">
                     @csrf
                     <input type="hidden" name="intended" id="drawer-login-intended" value="{{ request('intended') ?? session('url.intended') }}" />
+                    <input type="hidden" name="tab_session_id" id="drawer-login-tab-id" value="" />
 
                     <div class="space-y-1.5">
                         <label for="drawer-login-email" class="block text-xs font-semibold uppercase tracking-wider text-on-surface font-label-code">
@@ -195,6 +196,7 @@
                 <form id="drawer-register-form" method="POST" action="{{ route('register') }}" class="space-y-4">
                     @csrf
                     <input type="hidden" name="intended" id="drawer-register-intended" value="{{ request('intended') ?? session('url.intended') }}" />
+                    <input type="hidden" name="tab_session_id" id="drawer-register-tab-id" value="" />
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div class="space-y-1">
@@ -366,22 +368,27 @@
         }
 
         // Exponer globalmente para cualquier disparador en la página
-        window.openLoginDrawer = function (tab, intended) {
-            if (intended) {
-                const loginIntended = document.getElementById('drawer-login-intended');
-                if (loginIntended) {
-                    loginIntended.value = intended;
-                }
-                const regIntended = document.getElementById('drawer-register-intended');
-                if (regIntended) {
-                    regIntended.value = intended;
-                }
-                const banner = document.getElementById('checkout-auth-banner');
-                if (banner) {
-                    banner.classList.remove('hidden');
-                }
-                sessionStorage.setItem('intended_after_auth', intended);
+        window.openLoginDrawer = function (tab, intended, customMessage) {
+            const targetIntended = intended || window.location.href;
+            const loginIntended = document.getElementById('drawer-login-intended');
+            if (loginIntended) {
+                loginIntended.value = targetIntended;
             }
+            const regIntended = document.getElementById('drawer-register-intended');
+            if (regIntended) {
+                regIntended.value = targetIntended;
+            }
+            const banner = document.getElementById('checkout-auth-banner');
+            const bannerText = document.getElementById('checkout-auth-banner-text');
+            if (banner) {
+                banner.classList.remove('hidden');
+            }
+            if (bannerText) {
+                bannerText.textContent = customMessage || 'Inicia sesión o regístrate para reservar piezas en la bóveda';
+            }
+            try {
+                sessionStorage.setItem('intended_after_auth', targetIntended);
+            } catch (e) {}
             toggleLoginDrawer(true, tab || 'login');
         };
 
@@ -425,6 +432,10 @@
 
             form.addEventListener('submit', async function (e) {
                 e.preventDefault();
+                try {
+                    sessionStorage.setItem('archivum_tab_ok', '1');
+                    sessionStorage.removeItem('archivum_tab_logout_done');
+                } catch (err) {}
                 if (alertBox) {
                     alertBox.classList.add('hidden');
                 }
@@ -439,12 +450,23 @@
                 }
 
                 try {
+                    const currentTabId = window.getArchivumTabSessionId
+                        ? window.getArchivumTabSessionId()
+                        : (sessionStorage.getItem('tab_session_id') || '');
+                    const tabInput = form.querySelector('input[name="tab_session_id"]');
+                    if (tabInput && currentTabId) {
+                        tabInput.value = currentTabId;
+                    }
                     const formData = new FormData(form);
+                    if (currentTabId && !formData.get('tab_session_id')) {
+                        formData.set('tab_session_id', currentTabId);
+                    }
                     const response = await fetch(form.action, {
                         method: 'POST',
                         headers: {
                             'Accept': 'application/json',
                             'X-Requested-With': 'XMLHttpRequest',
+                            'X-Tab-Session-Id': currentTabId,
                             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
                         },
                         body: formData
@@ -453,12 +475,11 @@
                     const data = await response.json();
 
                     if (response.ok && data.status === 'success') {
-                        const intendedAfterAuth = sessionStorage.getItem('intended_after_auth');
-                        if (intendedAfterAuth) {
+                        try {
+                            sessionStorage.setItem('archivum_tab_ok', '1');
+                            sessionStorage.removeItem('archivum_tab_logout_done');
                             sessionStorage.removeItem('intended_after_auth');
-                            window.location.href = intendedAfterAuth;
-                            return;
-                        }
+                        } catch (err) {}
                         window.location.href = data.redirect || '{{ route('public.home') }}';
                         return;
                     }

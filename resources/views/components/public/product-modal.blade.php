@@ -199,6 +199,7 @@
                     const form = document.createElement('form');
                     form.method = 'POST';
                     form.action = item.actionUrl;
+                    form.setAttribute('data-requires-auth-reserve', 'true');
                     form.className = 'flex items-center gap-2';
                     form.innerHTML = `
                         <input type="hidden" name="_token" value="${csrfToken}" />

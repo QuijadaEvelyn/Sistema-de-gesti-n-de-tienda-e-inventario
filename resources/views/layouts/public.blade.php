@@ -6,6 +6,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="google" content="notranslate">
 
+    <!-- Aislamiento de Sesión por Pestaña (sessionStorage) e Interceptor de Reserva con Login -->
+    <x-auth.tab-session-isolation />
+
     <!-- Script de Inicialización Inmediata de Tema (Zero-FOUC Dark Mode) -->
     <script>
         (function() {

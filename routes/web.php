@@ -47,16 +47,19 @@ Route::middleware('reservas.liberar')->group(function (): void {
     // Selector global síncrono de Sucursal Activa y Temporalidad (Público y Panel de Gestión)
     Route::post('/contexto/sucursal', [DashboardController::class, 'cambiarContexto'])->name('sucursal.cambiar');
 
-    // Gestión de Carrito, Expiración de Reserva (5 min), Pasarela de Pago Simulada y Seguimiento de Paquete
-    Route::post('/carrito/agregar', [CheckoutSimuladoController::class, 'agregar'])->name('carrito.agregar');
-    Route::match(['patch', 'post'], '/carrito/actualizar/{varianteSkuId}', [CheckoutSimuladoController::class, 'actualizarCantidad'])->name('carrito.actualizar');
-    Route::delete('/carrito/remover/{varianteSkuId}', [CheckoutSimuladoController::class, 'remover'])->name('carrito.remover');
-    Route::post('/carrito/expirar', [CheckoutSimuladoController::class, 'expirarReservas'])->name('carrito.expirar');
-    Route::get('/checkout', [CheckoutSimuladoController::class, 'checkout'])->name('checkout.index');
-    Route::post('/checkout/pagar', [CheckoutSimuladoController::class, 'procesarPago'])->name('checkout.pagar');
-    Route::get('/checkout/confirmacion/{pedido}', [CheckoutSimuladoController::class, 'confirmacion'])->name('checkout.confirmacion');
-    Route::post('/checkout/pedidos/{pedido}/simular-envio', [CheckoutSimuladoController::class, 'simularAvanceEnvio'])->name('checkout.simular-envio');
-    Route::post('/checkout/pedidos/{pedido}/devoluciones', [CheckoutSimuladoController::class, 'solicitarDevolucion'])->name('cliente.devoluciones.store');
+    // Gestión de Carrito, Expiración de Reserva (5 min), Pasarela de Pago Simulada y Seguimiento de Paquete (Requiere Autenticación Obligatoria)
+    Route::middleware('auth')->group(function (): void {
+        Route::post('/carrito/agregar', [CheckoutSimuladoController::class, 'agregar'])->name('carrito.agregar');
+        Route::match(['patch', 'post'], '/carrito/actualizar/{varianteSkuId}', [CheckoutSimuladoController::class, 'actualizarCantidad'])->name('carrito.actualizar');
+        Route::delete('/carrito/remover/{varianteSkuId}', [CheckoutSimuladoController::class, 'remover'])->name('carrito.remover');
+        Route::post('/carrito/expirar', [CheckoutSimuladoController::class, 'expirarReservas'])->name('carrito.expirar');
+        Route::get('/checkout', [CheckoutSimuladoController::class, 'checkout'])->name('checkout.index');
+        Route::post('/checkout/pagar', [CheckoutSimuladoController::class, 'procesarPago'])->name('checkout.pagar');
+        Route::get('/checkout/confirmacion/{pedido}', [CheckoutSimuladoController::class, 'confirmacion'])->name('checkout.confirmacion');
+        Route::post('/checkout/pedidos/{pedido}/simular-envio', [CheckoutSimuladoController::class, 'simularAvanceEnvio'])->name('checkout.simular-envio');
+        Route::post('/checkout/pedidos/{pedido}/devoluciones', [CheckoutSimuladoController::class, 'solicitarDevolucion'])->name('cliente.devoluciones.store');
+    });
+
     Route::get('/storage/{path}', [CheckoutSimuladoController::class, 'servirArchivoPublico'])
         ->where('path', '.*')
         ->name('storage.public.fallback');

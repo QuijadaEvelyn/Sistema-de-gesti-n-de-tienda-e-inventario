@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\CheckoutSimuladoController;
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\IsolateTabSession;
 use App\Models\Bitacora;
 use App\Models\Carrito;
 use App\Models\Cliente;
@@ -119,14 +120,17 @@ class RegisterController extends Controller
         $request->session()->regenerate();
 
         CheckoutSimuladoController::sincronizarCarritoTrasLogin($usuario);
+        $tabSessionId = IsolateTabSession::bindAuthenticatedTab($request, $usuario);
 
         $intended = $request->input('intended') ?? session('url.intended');
         $redirectUrl = route('public.home');
 
         if (is_string($intended) && Str::contains($intended, ['/checkout', 'checkout'])) {
             $redirectUrl = route('checkout.index');
-        } elseif (! empty(session('carrito_archivum', [])) && $request->filled('intended')) {
+        } elseif (! empty(session('carrito_archivum', [])) && $request->filled('intended') && Str::contains((string) $intended, 'checkout')) {
             $redirectUrl = route('checkout.index');
+        } elseif (is_string($intended) && $this->esUrlIntendedPublicaSegura($intended)) {
+            $redirectUrl = $intended;
         }
 
         $request->session()->forget('url.intended');
@@ -135,6 +139,7 @@ class RegisterController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'Registro completado exitosamente. ¡Bienvenido a ARCHIVUM!',
+                'tab_session_id' => $tabSessionId,
                 'user' => [
                     'id' => $usuario->id,
                     'nombre' => $usuario->nombre,
@@ -146,5 +151,30 @@ class RegisterController extends Controller
         }
 
         return redirect()->to($redirectUrl)->with('status', '¡Registro completado con éxito! Bienvenido a ARCHIVUM.');
+    }
+
+    /**
+     * Verifica si una URL intended corresponde a una página pública válida para clientes.
+     */
+    protected function esUrlIntendedPublicaSegura(string $url): bool
+    {
+        $trimmed = trim($url);
+        if ($trimmed === '') {
+            return false;
+        }
+
+        $path = (string) (parse_url($trimmed, PHP_URL_PATH) ?? '');
+        if ($path === '') {
+            return false;
+        }
+
+        $prefijosBloqueados = ['/admin', '/ventas', '/almacen', '/compras', '/login', '/register', '/logout', '/carrito/'];
+        foreach ($prefijosBloqueados as $prefijo) {
+            if (Str::startsWith($path, $prefijo)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

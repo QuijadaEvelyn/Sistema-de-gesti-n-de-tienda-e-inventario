@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\CheckoutSimuladoController;
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\IsolateTabSession;
 use App\Models\Bitacora;
 use App\Models\Producto;
 use App\Models\Usuario;
@@ -190,6 +191,9 @@ class LoginController extends Controller
         // 5. Vincular y sincronizar carrito de sesión y reservas activas al cliente autenticado
         CheckoutSimuladoController::sincronizarCarritoTrasLogin($user);
 
+        // 6. Vincular la sesión autenticada exclusivamente con el tab_session_id de esta pestaña
+        $tabSessionId = IsolateTabSession::bindAuthenticatedTab($request, $user);
+
         Bitacora::create([
             'usuario_id' => $user->id,
             'accion' => 'LOGIN_EXITOSO',
@@ -198,6 +202,7 @@ class LoginController extends Controller
             'detalle' => [
                 'email' => $user->email,
                 'roles' => $user->roles->pluck('nombre')->toArray(),
+                'tab_session_id' => $tabSessionId ?: null,
             ],
             'ip' => $request->ip() ?? '127.0.0.1',
             'created_at' => now(),
@@ -206,12 +211,14 @@ class LoginController extends Controller
         $redirectUrl = $this->determinarRedireccionPorRol($user);
         $intended = $request->input('intended') ?? session('url.intended');
 
-        // Si el usuario tiene rol cliente: Si tiene intención hacia checkout o artículos en carrito, dirigirlo a la pasarela; de lo contrario a la tienda pública
+        // Si el usuario tiene rol cliente: devolver a la URL pública de origen (url.intended) o checkout sin permitir rutas administrativas
         if ($user->esCliente() && ! $user->tieneRol('administrador', 'encargado', 'ventas', 'almacen', 'compras')) {
             if (is_string($intended) && Str::contains($intended, ['/checkout', 'checkout'])) {
                 $redirectUrl = route('checkout.index');
-            } elseif (! empty(session('carrito_archivum', [])) && $request->filled('intended')) {
+            } elseif (! empty(session('carrito_archivum', [])) && $request->filled('intended') && Str::contains((string) $intended, 'checkout')) {
                 $redirectUrl = route('checkout.index');
+            } elseif (is_string($intended) && $this->esUrlIntendedPublicaSegura($intended)) {
+                $redirectUrl = $intended;
             } else {
                 $redirectUrl = route('public.home');
             }
@@ -222,6 +229,7 @@ class LoginController extends Controller
                 return response()->json([
                     'status' => 'success',
                     'message' => 'Sesión iniciada correctamente.',
+                    'tab_session_id' => $tabSessionId,
                     'user' => [
                         'id' => $user->id,
                         'nombre' => $user->nombre,
@@ -245,6 +253,7 @@ class LoginController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'Sesión iniciada correctamente.',
+                'tab_session_id' => $tabSessionId,
                 'user' => [
                     'id' => $user->id,
                     'nombre' => $user->nombre,
@@ -261,7 +270,7 @@ class LoginController extends Controller
     }
 
     /**
-     * Cierra la sesión activa del usuario y destruye la sesión.
+     * Cierra la sesión activa de la pestaña actual (sin destruir las sesiones de otras pestañas independientes).
      */
     public function logout(Request $request): RedirectResponse|JsonResponse
     {
@@ -281,10 +290,24 @@ class LoginController extends Controller
             ]);
         }
 
-        Auth::logout();
+        $quedanOtrasPestanasActivas = IsolateTabSession::unbindTab($request);
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        if ($quedanOtrasPestanasActivas) {
+            $guard = Auth::guard('web');
+            $request->session()->forget([
+                $guard->getName(),
+                'carrito_archivum',
+                'carrito_reservas_ids',
+                'carrito_expira_en',
+            ]);
+            if (method_exists($guard, 'forgetUser')) {
+                $guard->forgetUser();
+            }
+        } else {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+        }
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -295,6 +318,32 @@ class LoginController extends Controller
         }
 
         return redirect()->route('public.home')->with('status', 'Has cerrado sesión exitosamente.');
+    }
+
+    /**
+     * Verifica si una URL intended corresponde a una página pública válida para clientes
+     * (excluyendo paneles administrativos, login, registro y logout).
+     */
+    protected function esUrlIntendedPublicaSegura(string $url): bool
+    {
+        $trimmed = trim($url);
+        if ($trimmed === '') {
+            return false;
+        }
+
+        $path = (string) (parse_url($trimmed, PHP_URL_PATH) ?? '');
+        if ($path === '') {
+            return false;
+        }
+
+        $prefijosBloqueados = ['/admin', '/ventas', '/almacen', '/compras', '/login', '/register', '/logout', '/carrito/'];
+        foreach ($prefijosBloqueados as $prefijo) {
+            if (Str::startsWith($path, $prefijo)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

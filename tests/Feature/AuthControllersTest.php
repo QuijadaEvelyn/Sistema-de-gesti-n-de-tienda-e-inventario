@@ -834,4 +834,88 @@ class AuthControllersTest extends TestCase
         $this->get('/login')->assertRedirect(route('admin.dashboard'));
         $this->get('/register')->assertRedirect(route('admin.dashboard'));
     }
+
+    public function test_aislamiento_de_sesion_por_pestana_trata_pestana_nueva_como_invitado_y_permite_multiples_usuarios(): void
+    {
+        $admin = Usuario::create([
+            'nombre' => 'Admin Tab Uno',
+            'email' => 'admin.tab1@test.com',
+            'password' => Hash::make('password123'),
+            'activo' => true,
+        ]);
+        $admin->asignarRol('administrador');
+
+        $cliente = Usuario::create([
+            'nombre' => 'Cliente Tab Dos',
+            'email' => 'cliente.tab2@test.com',
+            'password' => Hash::make('password123'),
+            'activo' => true,
+        ]);
+        $cliente->asignarRol('cliente');
+
+        // 1. Pestaña 1 (tab_uno_111111) inicia sesión como Administrador
+        $loginTab1 = $this->withHeader('X-Tab-Session-Id', 'tab_uno_111111')
+            ->postJson('/login', [
+                'email' => 'admin.tab1@test.com',
+                'password' => 'password123',
+                'tab_session_id' => 'tab_uno_111111',
+            ]);
+
+        $loginTab1->assertOk()
+            ->assertJsonPath('status', 'success')
+            ->assertJsonPath('tab_session_id', 'tab_uno_111111');
+
+        // 2. Se abre una Pestaña 2 nueva (sin tab_session_id o con tab_nueva_999999):
+        //    Debe tratarse como Invitado (sin sesión iniciada), mostrando "Iniciar Sesión / Registro"
+        $newTabResponse = $this->withHeader('X-Tab-Session-Id', 'tab_nueva_999999')
+            ->get(route('public.home'));
+
+        $newTabResponse->assertOk()
+            ->assertSee('Iniciar Sesión / Registro')
+            ->assertSee('id="user-menu-guest"', false)
+            ->assertDontSee('id="user-menu-auth"', false);
+
+        // 3. En la Pestaña 2 (tab_nueva_999999) se inicia sesión con otro usuario distinto (Cliente)
+        $loginTab2 = $this->withHeader('X-Tab-Session-Id', 'tab_nueva_999999')
+            ->postJson('/login', [
+                'email' => 'cliente.tab2@test.com',
+                'password' => 'password123',
+                'tab_session_id' => 'tab_nueva_999999',
+            ]);
+
+        $loginTab2->assertOk()
+            ->assertJsonPath('status', 'success')
+            ->assertJsonPath('tab_session_id', 'tab_nueva_999999')
+            ->assertJsonPath('user.email', 'cliente.tab2@test.com');
+
+        // 4. La Pestaña 1 (tab_uno_111111) conserva intacta su sesión de Administrador y puede acceder a /admin
+        $tab1AdminResponse = $this->withHeader('X-Tab-Session-Id', 'tab_uno_111111')
+            ->get('/admin');
+
+        $tab1AdminResponse->assertOk()
+            ->assertSee('Admin Tab Uno');
+
+        // 5. La Pestaña 2 (tab_nueva_999999) sigue autenticada como Cliente
+        $tab2PublicResponse = $this->withHeader('X-Tab-Session-Id', 'tab_nueva_999999')
+            ->get(route('public.home'));
+
+        $tab2PublicResponse->assertOk()
+            ->assertSee('Cliente Tab Dos')
+            ->assertSee('id="user-menu-auth"', false);
+
+        // 6. Al cerrar sesión en la Pestaña 2, la Pestaña 1 sigue con su sesión activa de Administrador
+        $this->withHeader('X-Tab-Session-Id', 'tab_nueva_999999')
+            ->post('/logout', ['tab_session_id' => 'tab_nueva_999999'])
+            ->assertRedirect(route('public.home'));
+
+        $this->withHeader('X-Tab-Session-Id', 'tab_nueva_999999')
+            ->get(route('public.home'))
+            ->assertOk()
+            ->assertSee('id="user-menu-guest"', false);
+
+        $this->withHeader('X-Tab-Session-Id', 'tab_uno_111111')
+            ->get('/admin')
+            ->assertOk()
+            ->assertSee('Admin Tab Uno');
+    }
 }

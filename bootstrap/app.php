@@ -2,8 +2,10 @@
 
 use App\Http\Middleware\CheckRole;
 use App\Http\Middleware\EnsureClientOwnership;
+use App\Http\Middleware\IsolateTabSession;
 use App\Http\Middleware\ReleaseExpiredReservations;
 use App\Http\Middleware\VerifyBranchAccess;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -16,6 +18,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Aislamiento estricto de sesión por pestaña del navegador (sessionStorage + tab_session_id)
+        $middleware->web(append: [
+            IsolateTabSession::class,
+        ]);
+
         // Redirección condicional para usuarios con sesión activa que intenten acceder a /login o /register
         $middleware->redirectUsersTo(function (Request $request): string {
             $user = $request->user();
@@ -52,10 +59,32 @@ return Application::configure(basePath: dirname(__DIR__))
             'sucursal.acceso' => VerifyBranchAccess::class,
             // Libera reservas de stock vencidas antes de procesar checkout o consultas de stock
             'reservas.liberar' => ReleaseExpiredReservations::class,
+            // Aislamiento de sesión por pestaña
+            'tab.session' => IsolateTabSession::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
             fn (Request $request) => $request->is('api/*') || $request->expectsJson(),
         );
+
+        $exceptions->render(function (AuthenticationException $e, Request $request) {
+            if ($request->expectsJson() || $request->ajax() || $request->is('api/*')) {
+                return response()->json([
+                    'status' => 'unauthenticated',
+                    'message' => 'Inicia sesión o regístrate para reservar piezas en la bóveda.',
+                    'login_url' => route('login'),
+                    'redirect' => route('login'),
+                ], 401);
+            }
+
+            $intendedUrl = $request->isMethod('GET')
+                ? $request->fullUrl()
+                : (url()->previous() ?: route('public.home'));
+
+            session(['url.intended' => $intendedUrl]);
+
+            return redirect()->to(route('login'))
+                ->with('warning', 'Inicia sesión o regístrate para reservar piezas en la bóveda.');
+        });
     })->create();

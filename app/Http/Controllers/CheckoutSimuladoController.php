@@ -144,7 +144,8 @@ class CheckoutSimuladoController extends Controller
      */
     public static function obtenerEstadoCarrito(): array
     {
-        if (! Schema::hasTable('variantes_sku')) {
+        // Un visitante sin sesión iniciada jamás puede tener artículos precargados o activos en el carrito (0)
+        if (! auth()->check() || ! Schema::hasTable('variantes_sku')) {
             return [
                 'items' => [],
                 'subtotal' => 0.0,
@@ -336,6 +337,22 @@ class CheckoutSimuladoController extends Controller
      */
     public function agregar(Request $request): RedirectResponse|JsonResponse
     {
+        if (! auth()->check()) {
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json([
+                    'status' => 'unauthenticated',
+                    'message' => 'Inicia sesión o regístrate para reservar piezas en la bóveda.',
+                    'login_url' => route('login'),
+                    'redirect' => route('login'),
+                ], 401);
+            }
+
+            session(['url.intended' => url()->previous() ?: route('public.home')]);
+
+            return redirect()->route('login')
+                ->with('warning', 'Inicia sesión o regístrate para reservar piezas en la bóveda.');
+        }
+
         self::liberarReservasExpiradas();
 
         $validated = $request->validate([
@@ -630,6 +647,22 @@ class CheckoutSimuladoController extends Controller
      */
     public function actualizarCantidad(Request $request, int $varianteSkuId): JsonResponse|RedirectResponse
     {
+        if (! auth()->check()) {
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json([
+                    'status' => 'unauthenticated',
+                    'message' => 'Inicia sesión o regístrate para reservar piezas en la bóveda.',
+                    'login_url' => route('login'),
+                    'redirect' => route('login'),
+                ], 401);
+            }
+
+            session(['url.intended' => url()->previous() ?: route('public.home')]);
+
+            return redirect()->route('login')
+                ->with('warning', 'Inicia sesión o regístrate para reservar piezas en la bóveda.');
+        }
+
         self::liberarReservasExpiradas();
 
         $validated = $request->validate([
@@ -834,6 +867,22 @@ class CheckoutSimuladoController extends Controller
      */
     public function remover(Request $request, int $varianteSkuId): RedirectResponse|JsonResponse
     {
+        if (! auth()->check()) {
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json([
+                    'status' => 'unauthenticated',
+                    'message' => 'Inicia sesión o regístrate para reservar piezas en la bóveda.',
+                    'login_url' => route('login'),
+                    'redirect' => route('login'),
+                ], 401);
+            }
+
+            session(['url.intended' => url()->previous() ?: route('public.home')]);
+
+            return redirect()->route('login')
+                ->with('warning', 'Inicia sesión o regístrate para reservar piezas en la bóveda.');
+        }
+
         self::liberarReservasExpiradas();
 
         /** @var array<int, int> $carrito */

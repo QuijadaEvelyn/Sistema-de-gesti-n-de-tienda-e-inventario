@@ -161,8 +161,10 @@ class CatalogoCheckoutRastreoTest extends TestCase
 
     public function test_checkout_vacio_y_cajon_de_boveda_tienen_centrado_vertical_en_pantalla(): void
     {
-        // 1. Vista de Checkout vacía tiene contenedor con min-h-[70vh] y centrado vertical flexbox
-        $responseCheckout = $this->get(route('checkout.index'));
+        $cliente = Usuario::whereHas('roles', fn ($q) => $q->where('nombre', 'cliente'))->firstOrFail();
+
+        // 1. Vista de Checkout vacía (para cliente autenticado) tiene contenedor con min-h-[70vh] y centrado vertical flexbox
+        $responseCheckout = $this->actingAs($cliente)->get(route('checkout.index'));
         $responseCheckout->assertStatus(200)
             ->assertSee('min-h-[70vh]', false)
             ->assertSee('flex flex-col justify-center items-center', false)
@@ -564,7 +566,11 @@ class CatalogoCheckoutRastreoTest extends TestCase
             ->assertSee('RESERVADA EN BÓVEDA (5 MIN)');
 
         // 3. Concurrencia: Otro cliente intenta adquirir la misma Pieza Única mientras está bloqueada -> 422 / Error
-        $this->postJson(route('carrito.agregar'), [
+        $clienteB = Usuario::where('id', '!=', $clienteA->id)
+            ->whereHas('roles', fn ($q) => $q->where('nombre', 'cliente'))
+            ->firstOrFail();
+
+        $this->actingAs($clienteB)->postJson(route('carrito.agregar'), [
             'variante_sku_id' => $varianteUnica->id,
             'cantidad' => 1,
         ])
@@ -670,7 +676,11 @@ class CatalogoCheckoutRastreoTest extends TestCase
         $this->assertSame(6, (int) $varianteMasiva->existencias()->sum('cantidad'));
 
         // Otro cliente puede adquirir simultáneamente 2 unidades adicionales vía JSON sin bloqueo de concurrencia
-        $this->postJson(route('carrito.agregar'), [
+        $clienteB = Usuario::where('id', '!=', $cliente->id)
+            ->whereHas('roles', fn ($q) => $q->where('nombre', 'cliente'))
+            ->firstOrFail();
+
+        $this->actingAs($clienteB)->postJson(route('carrito.agregar'), [
             'variante_sku_id' => $varianteMasiva->id,
             'cantidad' => 2,
         ])
@@ -856,16 +866,17 @@ class CatalogoCheckoutRastreoTest extends TestCase
 
     public function test_cajon_de_boveda_renderiza_selector_de_cantidades_y_disponibilidad(): void
     {
+        $cliente = Usuario::whereHas('roles', fn ($q) => $q->where('nombre', 'cliente'))->firstOrFail();
         $variante = VarianteSku::whereHas('producto.catalogo', fn ($q) => $q->where('tipo', 'libro'))
             ->whereDoesntHave('existencias.piezasUnicas')
             ->firstOrFail();
 
-        $this->post(route('carrito.agregar'), [
+        $this->actingAs($cliente)->post(route('carrito.agregar'), [
             'variante_sku_id' => $variante->id,
             'cantidad' => 1,
         ]);
 
-        $response = $this->get(route('public.home'));
+        $response = $this->actingAs($cliente)->get(route('public.home'));
         $response->assertOk()
             ->assertSee('class="cart-qty-select', false)
             ->assertSee('data-update-url', false)
@@ -876,6 +887,7 @@ class CatalogoCheckoutRastreoTest extends TestCase
 
     public function test_carrito_permite_actualizar_cantidad_dinamicamente_con_recalculo_de_subtotal_y_stock(): void
     {
+        $cliente = Usuario::whereHas('roles', fn ($q) => $q->where('nombre', 'cliente'))->firstOrFail();
         $variante = VarianteSku::with('producto')
             ->whereHas('producto.catalogo', fn ($q) => $q->where('tipo', 'libro'))
             ->whereDoesntHave('existencias.piezasUnicas')
@@ -883,7 +895,7 @@ class CatalogoCheckoutRastreoTest extends TestCase
         $precioUnitario = (float) ($variante->precio ?? $variante->producto->precio);
 
         // 1. Agregar inicialmente 1 unidad
-        $this->post(route('carrito.agregar'), [
+        $this->actingAs($cliente)->post(route('carrito.agregar'), [
             'variante_sku_id' => $variante->id,
             'cantidad' => 1,
         ]);
@@ -891,7 +903,7 @@ class CatalogoCheckoutRastreoTest extends TestCase
         $stockInicial = (int) Existencia::where('variante_sku_id', $variante->id)->sum('cantidad');
 
         // 2. Actualizar vía PATCH a 2 unidades
-        $responsePatch = $this->patchJson(route('carrito.actualizar', $variante->id), [
+        $responsePatch = $this->actingAs($cliente)->patchJson(route('carrito.actualizar', $variante->id), [
             'cantidad' => 2,
         ]);
 
@@ -906,7 +918,7 @@ class CatalogoCheckoutRastreoTest extends TestCase
         $this->assertSame($stockInicial - 1, (int) Existencia::where('variante_sku_id', $variante->id)->sum('cantidad'));
 
         // 3. Reducir vía PATCH a 1 unidad
-        $responseReduce = $this->patchJson(route('carrito.actualizar', $variante->id), [
+        $responseReduce = $this->actingAs($cliente)->patchJson(route('carrito.actualizar', $variante->id), [
             'cantidad' => 1,
         ]);
 
@@ -923,15 +935,16 @@ class CatalogoCheckoutRastreoTest extends TestCase
 
     public function test_pieza_unica_bloquea_seleccion_de_multiples_unidades(): void
     {
+        $cliente = Usuario::whereHas('roles', fn ($q) => $q->where('nombre', 'cliente'))->firstOrFail();
         $piezaUnica = PiezaUnica::with('existencia.varianteSku.producto')->firstOrFail();
         $variante = $piezaUnica->existencia->varianteSku;
 
-        $this->post(route('carrito.agregar'), [
+        $this->actingAs($cliente)->post(route('carrito.agregar'), [
             'variante_sku_id' => $variante->id,
             'cantidad' => 1,
         ]);
 
-        $response = $this->patchJson(route('carrito.actualizar', $variante->id), [
+        $response = $this->actingAs($cliente)->patchJson(route('carrito.actualizar', $variante->id), [
             'cantidad' => 2,
         ]);
 
@@ -942,112 +955,48 @@ class CatalogoCheckoutRastreoTest extends TestCase
         $this->assertStringContainsString('1/1', (string) $response->json('message'));
     }
 
-    public function test_invitado_con_items_al_acceder_a_checkout_es_redirigido_a_autenticacion_protegiendo_lote(): void
+    public function test_invitado_no_puede_agregar_ni_modificar_carrito_y_recibe_401_o_redireccion_a_login(): void
     {
         $variante = VarianteSku::firstOrFail();
 
-        // 1. Invitado agrega producto a la bóveda
-        $this->post(route('carrito.agregar'), [
+        // 1. Petición web normal de invitado a /carrito/agregar redirige a /login guardando url.intended
+        $responseWeb = $this->from(route('public.libros'))
+            ->post(route('carrito.agregar'), [
+                'variante_sku_id' => $variante->id,
+                'cantidad' => 1,
+            ]);
+
+        $responseWeb->assertRedirect(route('login'));
+        $this->assertSame(route('public.libros'), session('url.intended'));
+        $this->assertEmpty(session('carrito_archivum', []));
+
+        // 2. Petición JSON/AJAX de invitado a /carrito/agregar devuelve 401 Unauthorized con URL de login
+        $this->postJson(route('carrito.agregar'), [
             'variante_sku_id' => $variante->id,
             'cantidad' => 1,
-        ]);
+        ])
+            ->assertStatus(401)
+            ->assertJsonPath('login_url', route('login'));
 
-        $this->assertNotEmpty(session('carrito_archivum'));
+        // 3. Petición JSON/AJAX de invitado a actualizar o remover también devuelve 401
+        $this->patchJson(route('carrito.actualizar', $variante->id), ['cantidad' => 2])
+            ->assertStatus(401)
+            ->assertJsonPath('login_url', route('login'));
 
-        // 2. Al intentar acceder a /checkout sin sesión, es interceptado y dirigido a autenticación
-        $responseCheckout = $this->get(route('checkout.index'));
-        $responseCheckout->assertRedirect(route('public.home', ['login' => '1', 'intended' => 'checkout']));
-        $this->assertSame(route('checkout.index'), session('url.intended'));
+        $this->deleteJson(route('carrito.remover', $variante->id))
+            ->assertStatus(401)
+            ->assertJsonPath('login_url', route('login'));
 
-        // 3. El carrito y el temporizador en sesión se mantienen intactos
-        $this->assertNotEmpty(session('carrito_archivum'));
-        $this->assertArrayHasKey($variante->id, session('carrito_archivum'));
-        $this->assertNotEmpty(session('carrito_reservas_ids'));
-    }
-
-    public function test_login_redirige_a_checkout_y_conserva_carrito_tras_autenticacion(): void
-    {
-        $cliente = Usuario::whereHas('roles', fn ($q) => $q->where('nombre', 'cliente'))->firstOrFail();
-        $variante = VarianteSku::firstOrFail();
-
-        // 1. Invitado reserva un artículo
-        $this->post(route('carrito.agregar'), [
-            'variante_sku_id' => $variante->id,
-            'cantidad' => 1,
-        ]);
-
-        // 2. Inicia sesión vía JSON con intended = checkout
-        $responseLogin = $this->postJson(route('login'), [
-            'email' => $cliente->email,
-            'password' => 'Password123!',
-            'intended' => route('checkout.index'),
-        ]);
-
-        $responseLogin->assertOk()
-            ->assertJsonPath('status', 'success')
-            ->assertJsonPath('redirect', route('checkout.index'));
-
-        $this->assertAuthenticatedAs($cliente);
-
-        // 3. Accede inmediatamente a la pasarela notariada con sus piezas intactas
-        $responseCheckout = $this->get(route('checkout.index'));
-        $responseCheckout->assertOk()
-            ->assertSee($variante->producto->nombre)
-            ->assertSee('Formalización de Adquisición');
-    }
-
-    public function test_registro_redirige_a_checkout_y_conserva_carrito_tras_crear_cuenta(): void
-    {
-        $variante = VarianteSku::firstOrFail();
-
-        // 1. Invitado reserva un artículo
-        $this->post(route('carrito.agregar'), [
-            'variante_sku_id' => $variante->id,
-            'cantidad' => 1,
-        ]);
-
-        // 2. Se registra como nuevo cliente con intended = checkout
-        $responseRegister = $this->postJson(route('register'), [
-            'nombre' => 'Aura',
-            'apellidos' => 'Fuentes Silva',
-            'email' => 'aura.fuentes@archivum.test',
-            'password' => 'Password123!',
-            'password_confirmation' => 'Password123!',
-            'intended' => route('checkout.index'),
-        ]);
-
-        $responseRegister->assertCreated()
-            ->assertJsonPath('status', 'success')
-            ->assertJsonPath('redirect', route('checkout.index'));
-
-        $nuevoUsuario = Usuario::where('email', 'aura.fuentes@archivum.test')->firstOrFail();
-        $this->assertAuthenticatedAs($nuevoUsuario);
-
-        // 3. Accede a checkout con sus piezas reservadas
-        $responseCheckout = $this->get(route('checkout.index'));
-        $responseCheckout->assertOk()
-            ->assertSee($variante->producto->nombre);
-    }
-
-    public function test_cajon_de_boveda_muestra_control_de_acceso_segun_sesion(): void
-    {
-        // 1. Como invitado, se renderiza el botón de validación de acceso
-        $resGuest = $this->get(route('public.home'));
-        $resGuest->assertOk()
-            ->assertSee('id="btn-proceder-pasarela-guest"', false)
-            ->assertSee('Proceder a Pasarela Notariada');
-
-        // 2. Como usuario autenticado, se renderiza el enlace directo
-        $cliente = Usuario::whereHas('roles', fn ($q) => $q->where('nombre', 'cliente'))->firstOrFail();
-        $resAuth = $this->actingAs($cliente)->get(route('public.home'));
-        $resAuth->assertOk()
-            ->assertDontSee('id="btn-proceder-pasarela-guest"', false)
-            ->assertSee(route('checkout.index'));
+        // 4. Al intentar acceder a /checkout sin sesión, redirige a /login
+        $this->get(route('checkout.index'))
+            ->assertRedirect(route('login'));
     }
 
     public function test_contador_del_carrito_se_oculta_cuando_esta_vacio_y_refleja_piezas_reales(): void
     {
-        // 1. En estado inicial vacío, el badge tiene la clase 'hidden' y no muestra un número falso
+        $cliente = Usuario::whereHas('roles', fn ($q) => $q->where('nombre', 'cliente'))->firstOrFail();
+
+        // 1. En estado inicial vacío (como invitado), el badge tiene la clase 'hidden' y siempre es 0
         $responseVacio = $this->get(route('public.home'));
         $responseVacio->assertOk();
         $this->assertMatchesRegularExpression(
@@ -1055,17 +1004,17 @@ class CatalogoCheckoutRastreoTest extends TestCase
             $responseVacio->getContent()
         );
 
-        // 2. Al agregar 2 piezas a la bóveda, el badge se vuelve visible con el valor real '2'
+        // 2. Al agregar 2 piezas a la bóveda como cliente autenticado, el badge se vuelve visible con el valor real '2'
         $variante = VarianteSku::with('producto')
             ->whereHas('producto.catalogo', fn ($q) => $q->where('tipo', 'libro'))
             ->whereDoesntHave('existencias.piezasUnicas')
             ->firstOrFail();
-        $this->post(route('carrito.agregar'), [
+        $this->actingAs($cliente)->post(route('carrito.agregar'), [
             'variante_sku_id' => $variante->id,
             'cantidad' => 2,
         ])->assertRedirect();
 
-        $responseConPiezas = $this->get(route('public.home'));
+        $responseConPiezas = $this->actingAs($cliente)->get(route('public.home'));
         $responseConPiezas->assertOk();
         $this->assertDoesNotMatchRegularExpression(
             '/<span[^>]*id="cart-counter-badge"[^>]*class="[^"]*\bhidden\b[^"]*"[^>]*>/i',
@@ -1077,8 +1026,8 @@ class CatalogoCheckoutRastreoTest extends TestCase
         );
 
         // 3. Al eliminar el artículo, el contador regresa a 0 y se vuelve a ocultar
-        $this->delete(route('carrito.remover', $variante->id));
-        $responseTrasRemover = $this->get(route('public.home'));
+        $this->actingAs($cliente)->delete(route('carrito.remover', $variante->id));
+        $responseTrasRemover = $this->actingAs($cliente)->get(route('public.home'));
         $responseTrasRemover->assertOk();
         $this->assertMatchesRegularExpression(
             '/<span[^>]*id="cart-counter-badge"[^>]*class="[^"]*\bhidden\b[^"]*"[^>]*>/i',

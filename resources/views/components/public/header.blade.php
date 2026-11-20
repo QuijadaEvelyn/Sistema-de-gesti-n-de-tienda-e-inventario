@@ -4,9 +4,11 @@
 ])
 
 @php
-    $estadoCarritoHeader = \App\Http\Controllers\CheckoutSimuladoController::obtenerEstadoCarrito();
-    $contadorCarrito = (int) ($estadoCarritoHeader['cantidad_total'] ?? 0);
-    if ($contadorCarrito === 0 && isset($cartCount) && is_numeric($cartCount) && (int) $cartCount > 0) {
+    $estadoCarritoHeader = auth()->check()
+        ? \App\Http\Controllers\CheckoutSimuladoController::obtenerEstadoCarrito()
+        : ['cantidad_total' => 0];
+    $contadorCarrito = auth()->check() ? (int) ($estadoCarritoHeader['cantidad_total'] ?? 0) : 0;
+    if (auth()->check() && $contadorCarrito === 0 && isset($cartCount) && is_numeric($cartCount) && (int) $cartCount > 0) {
         $contadorCarrito = (int) $cartCount;
     }
     $contextoPublico = app(\App\Services\SucursalContextoService::class);
