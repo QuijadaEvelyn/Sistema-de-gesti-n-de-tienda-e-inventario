@@ -94,7 +94,7 @@
                 </div>
 
                 @auth
-                    <a href="{{ route('cliente.mis-pedidos') }}" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-purple-950 text-purple-100 hover:bg-primary text-xs font-label-md font-bold uppercase tracking-wider transition self-start lg:self-end shadow-xs">
+                    <a href="{{ route('cliente.mis-pedidos') }}" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 dark:bg-purple-950 text-white dark:text-purple-100 text-xs font-label-md font-bold uppercase tracking-wider transition self-start lg:self-end shadow-md dark:shadow-xs">
                         <span class="material-symbols-outlined text-[16px] text-amber-300">notifications_active</span>
                         <span>Ver Mi Panel de Preventas VIP</span>
                     </a>

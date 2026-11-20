@@ -8,27 +8,27 @@
     @endphp
 
     <!-- Encabezado Curatorial de la Sala Bibliográfica (Paleta Oficial Archivum) -->
-    <section class="relative rounded-2xl overflow-hidden bg-gradient-to-r from-purple-950 via-indigo-950 to-slate-950 text-white p-6 sm:p-8 mb-8 shadow-lg border border-purple-700/40">
+    <section class="relative rounded-2xl overflow-hidden bg-[#FAF8FF] dark:bg-gradient-to-r dark:from-purple-950 dark:via-indigo-950 dark:to-slate-950 text-slate-900 dark:text-white p-6 sm:p-8 mb-8 shadow-xs dark:shadow-lg border border-purple-200 dark:border-purple-700/40">
         <div class="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             <div class="max-w-2xl space-y-2">
-                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/20 border border-purple-300/30 text-purple-200 text-xs font-label-md tracking-wider">
-                    <span class="material-symbols-outlined text-[15px] text-purple-300">auto_stories</span>
+                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-500/20 border border-purple-200 dark:border-purple-300/30 text-purple-800 dark:text-purple-200 text-xs font-label-md tracking-wider font-semibold">
+                    <span class="material-symbols-outlined text-[15px] text-purple-600 dark:text-purple-300">auto_stories</span>
                     <span>{{ $meta['badge'] ?? 'CATÁLOGO BIBLIOGRÁFICO · LIBROS & INCUNABLES' }}</span>
                 </span>
-                <h1 class="text-2xl sm:text-4xl font-bold font-quicksand leading-tight text-white">
+                <h1 class="text-2xl sm:text-4xl font-bold font-quicksand leading-tight text-slate-900 dark:text-white">
                     {{ $meta['titulo'] ?? 'Libros Raros & Primeras Ediciones' }}
                 </h1>
-                <p class="font-title-editorial text-purple-100/90 text-sm sm:text-base leading-relaxed">
+                <p class="font-title-editorial text-slate-600 dark:text-purple-100/90 text-sm sm:text-base leading-relaxed">
                     «Explora nuestra estantería curatorial interactiva en 3D: examina cada lomo encuadernado en piel y tela de época, desliza el cursor para abrir los ejemplares adyacentes y gira cada libro para descubrir su portada original, ficha técnica y certificado notarial COA.»
                 </p>
             </div>
 
             <div class="flex flex-wrap items-center gap-2 text-xs font-label-code">
-                <span class="px-3 py-1.5 rounded-xl bg-white/10 border border-white/15 text-purple-200 flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span class="px-3 py-1.5 rounded-xl bg-purple-100 dark:bg-white/10 border border-purple-200 dark:border-white/15 text-purple-800 dark:text-purple-200 flex items-center gap-1.5 font-medium">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                     <span>Estante 3D Activo</span>
                 </span>
-                <a href="#acervo-libros-grid" class="px-3.5 py-1.5 rounded-xl bg-primary-container hover:bg-primary text-white font-bold uppercase tracking-wider transition shadow-sm">
+                <a href="#acervo-libros-grid" class="px-3.5 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold uppercase tracking-wider transition shadow-sm">
                     Ver Acervo Completo ({{ $coleccionLibros->count() }})
                 </a>
             </div>
@@ -41,7 +41,7 @@
              ========================================================================= -->
         <section
             id="bookshelf-showcase-section"
-            class="relative rounded-3xl overflow-hidden bg-gradient-to-b from-[#130b24] via-[#1b1033] to-[#0d0718] text-white border border-purple-500/30 shadow-2xl mb-12 p-4 sm:p-8 w-full max-w-full"
+            class="relative rounded-3xl overflow-hidden bg-purple-50/80 dark:bg-gradient-to-b dark:from-[#130b24] dark:via-[#1b1033] dark:to-[#0d0718] text-slate-900 dark:text-white border border-purple-200 dark:border-purple-500/30 shadow-sm dark:shadow-2xl mb-12 p-4 sm:p-8 w-full max-w-full"
             aria-label="Estantería Curatorial 3D de Libros Raros"
         >
             <!-- Halo Ambiental Dinámico -->
@@ -52,21 +52,21 @@
             ></div>
 
             <!-- Barra Superior de Estado del Estante -->
-            <div class="relative z-10 flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-purple-500/20">
+            <div class="relative z-10 flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-purple-200/80 dark:border-purple-500/20">
                 <div class="flex items-center gap-2.5">
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-[11px] font-label-code uppercase tracking-wider text-purple-200">
-                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-100 dark:bg-white/10 border border-purple-200 dark:border-white/15 text-[11px] font-label-code uppercase tracking-wider text-purple-900 dark:text-purple-200 font-semibold">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
                         <span id="bookshelf-status-label">BÓVEDA DE INCUNABLES · LOMO A PORTADA</span>
                     </span>
-                    <span id="bookshelf-genre-pill" class="px-3 py-1 rounded-full bg-purple-500/20 border border-purple-400/30 text-purple-200 text-[11px] font-label-code font-bold uppercase tracking-wider flex items-center gap-1">
+                    <span id="bookshelf-genre-pill" class="px-3 py-1 rounded-full bg-purple-200/60 dark:bg-purple-500/20 border border-purple-300 dark:border-purple-400/30 text-purple-900 dark:text-purple-200 text-[11px] font-label-code font-bold uppercase tracking-wider flex items-center gap-1">
                         <span class="material-symbols-outlined text-[13px]" id="bookshelf-genre-icon">{{ $libroInicial['genero_icono'] }}</span>
                         <span id="bookshelf-genre-name">{{ $libroInicial['genero_nombre'] }}</span>
                     </span>
                 </div>
 
-                <div class="text-xs font-label-code text-purple-200/80 flex items-center gap-3">
+                <div class="text-xs font-label-code text-slate-600 dark:text-purple-200/80 flex items-center gap-3">
                     <span class="hidden sm:inline-flex items-center gap-1">
-                        <span class="material-symbols-outlined text-[16px] text-purple-300">3d_rotation</span>
+                        <span class="material-symbols-outlined text-[16px] text-purple-600 dark:text-purple-300">3d_rotation</span>
                         <span>Pasa el cursor o usa ← → para examinar cada obra</span>
                     </span>
                     <!-- Controles Anterior / Siguiente -->
@@ -74,19 +74,19 @@
                         <button
                             type="button"
                             id="bookshelf-prev-btn"
-                            class="w-8 h-8 rounded-lg bg-white/10 hover:bg-purple-600/60 border border-white/20 text-white flex items-center justify-center transition cursor-pointer"
+                            class="w-8 h-8 rounded-lg bg-white dark:bg-white/10 hover:bg-purple-100 dark:hover:bg-purple-600/60 border border-purple-200 dark:border-white/20 text-purple-900 dark:text-white flex items-center justify-center transition cursor-pointer shadow-xs"
                             title="Libro anterior (Flecha Izquierda)"
                             aria-label="Libro anterior"
                         >
                             <span class="material-symbols-outlined text-[18px]">chevron_left</span>
                         </button>
-                        <span id="bookshelf-counter-label" class="text-[11px] font-mono px-2 text-purple-300">
+                        <span id="bookshelf-counter-label" class="text-[11px] font-mono px-2 text-purple-800 dark:text-purple-300 font-bold">
                             01 / {{ str_pad((string) $totalLibrosEstante, 2, '0', STR_PAD_LEFT) }}
                         </span>
                         <button
                             type="button"
                             id="bookshelf-next-btn"
-                            class="w-8 h-8 rounded-lg bg-white/10 hover:bg-purple-600/60 border border-white/20 text-white flex items-center justify-center transition cursor-pointer"
+                            class="w-8 h-8 rounded-lg bg-white dark:bg-white/10 hover:bg-purple-100 dark:hover:bg-purple-600/60 border border-purple-200 dark:border-white/20 text-purple-900 dark:text-white flex items-center justify-center transition cursor-pointer shadow-xs"
                             title="Siguiente libro (Flecha Derecha)"
                             aria-label="Siguiente libro"
                         >
@@ -254,17 +254,17 @@
 
                 <!-- Repisa de Madera con Placa de Archivo Grabada -->
                 <div class="relative w-full max-w-4xl mx-auto mt-2">
-                    <div class="h-4 sm:h-5 rounded-b-xl bg-gradient-to-r from-[#170e24] via-[#241638] to-[#120a1c] border-t-2 border-purple-500/50 shadow-2xl flex items-center justify-center px-4">
-                        <div class="px-4 py-0.5 rounded bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-900 border border-purple-400/50 shadow-inner flex items-center gap-2">
-                            <span class="w-1.5 h-1.5 rounded-full bg-purple-300"></span>
-                            <span class="text-[9px] sm:text-[10px] font-label-code text-purple-100 uppercase tracking-widest font-bold">
-                                ARCHIVUM · ESTANTERÍA DE PRIMERAS EDICIONES & INCUNABLES HISTÓRICOS
+                    <div class="h-4 sm:h-5 rounded-b-xl bg-gradient-to-r from-purple-200 via-purple-100 to-purple-200 dark:from-[#170e24] dark:via-[#241638] dark:to-[#120a1c] border-t-2 border-purple-400 dark:border-purple-500/50 shadow-md dark:shadow-2xl flex items-center justify-center px-4">
+                        <div class="px-4 py-0.5 rounded bg-white dark:bg-gradient-to-r dark:from-purple-900 dark:via-indigo-900 dark:to-purple-900 border border-purple-300 dark:border-purple-400/50 shadow-2xs dark:shadow-inner flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-purple-600 dark:bg-purple-300"></span>
+                            <span class="text-[9px] sm:text-[10px] font-label-code text-purple-950 dark:text-purple-100 uppercase tracking-widest font-bold">
+                                ARCHIVUM · ESTANTERÍA DE PRIMERAS EDICIONES &amp; INCUNABLES HISTÓRICOS
                             </span>
-                            <span class="w-1.5 h-1.5 rounded-full bg-purple-300"></span>
+                            <span class="w-1.5 h-1.5 rounded-full bg-purple-600 dark:bg-purple-300"></span>
                         </div>
                     </div>
                     <!-- Sombra proyectada por la repisa -->
-                    <div class="h-3 w-full bg-gradient-to-b from-black/80 to-transparent blur-xs"></div>
+                    <div class="h-3 w-full bg-gradient-to-b from-purple-300/40 dark:from-black/80 to-transparent blur-xs"></div>
                 </div>
             </div>
 
@@ -273,51 +273,51 @@
                  ========================================================================= -->
             <div
                 id="bookshelf-dossier"
-                class="relative z-10 mt-6 rounded-2xl bg-white/95 dark:bg-[#1b1226]/95 backdrop-blur-md text-stone-900 dark:text-stone-100 border border-purple-500/30 p-5 sm:p-7 shadow-2xl transition-all duration-300"
+                class="relative z-10 mt-6 rounded-2xl bg-white dark:bg-[#1b1226]/95 backdrop-blur-md text-slate-800 dark:text-stone-100 border border-purple-200 dark:border-purple-500/30 p-5 sm:p-7 shadow-lg dark:shadow-2xl transition-all duration-300"
             >
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                     
                     <!-- Columna Izquierda (7 cols): Ficha Curatorial, Sinopsis y Metadatos -->
                     <div class="lg:col-span-7 space-y-3">
                         <div class="flex flex-wrap items-center gap-2">
-                            <span id="dossier-genre-badge" class="px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-800 dark:text-purple-300 text-[11px] font-label-code font-bold uppercase tracking-wider border border-purple-400/40 flex items-center gap-1">
+                            <span id="dossier-genre-badge" class="px-2.5 py-0.5 rounded-full bg-purple-100 dark:bg-purple-500/20 text-purple-800 dark:text-purple-300 text-[11px] font-label-code font-bold uppercase tracking-wider border border-purple-300 dark:border-purple-400/40 flex items-center gap-1">
                                 <span class="material-symbols-outlined text-[13px]" id="dossier-genre-icon">{{ $libroInicial['genero_icono'] }}</span>
                                 <span id="dossier-genre-name">{{ $libroInicial['genero_nombre'] }}</span>
                             </span>
-                            <span id="dossier-grading-badge" class="px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-800 dark:text-purple-300 text-[11px] font-label-code font-bold uppercase tracking-wider border border-purple-400/30">
+                            <span id="dossier-grading-badge" class="px-2.5 py-0.5 rounded-full bg-purple-100 dark:bg-purple-500/20 text-purple-800 dark:text-purple-300 text-[11px] font-label-code font-bold uppercase tracking-wider border border-purple-300 dark:border-purple-400/30">
                                 {{ $libroInicial['graduacion'] }}
                             </span>
-                            <span id="dossier-unique-badge" class="px-2.5 py-0.5 rounded-full {{ $libroInicial['es_pieza_unica'] ? 'bg-rose-500/20 text-rose-700 dark:text-rose-300 border border-rose-400/40' : 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-400/40' }} text-[11px] font-label-code font-bold uppercase tracking-wider">
+                            <span id="dossier-unique-badge" class="px-2.5 py-0.5 rounded-full {{ $libroInicial['es_pieza_unica'] ? 'bg-rose-100 dark:bg-rose-500/20 text-rose-800 dark:text-rose-300 border border-rose-300 dark:border-rose-400/40' : 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-400/40' }} text-[11px] font-label-code font-bold uppercase tracking-wider">
                                 {{ $libroInicial['es_pieza_unica'] ? 'Pieza Única 1/1' : 'Tiraje Coleccionable' }}
                             </span>
                         </div>
 
                         <div>
-                            <h2 id="dossier-title" class="text-xl sm:text-2xl font-bold font-quicksand text-on-surface text-stone-900 dark:text-white leading-snug">
+                            <h2 id="dossier-title" class="text-xl sm:text-2xl font-bold font-quicksand text-slate-900 dark:text-white leading-snug">
                                 {{ $libroInicial['nombre'] }}
                             </h2>
-                            <p id="dossier-author-row" class="font-title-editorial text-sm sm:text-base text-purple-800 dark:text-purple-300 italic mt-0.5">
+                            <p id="dossier-author-row" class="font-title-editorial text-sm sm:text-base text-purple-800 dark:text-purple-300 italic mt-0.5 font-medium">
                                 {{ $libroInicial['autor'] }} · {{ $libroInicial['editorial'] }} ({{ $libroInicial['anio'] }})
                             </p>
                         </div>
 
-                        <p id="dossier-description" class="text-xs sm:text-sm text-stone-700 dark:text-stone-300 leading-relaxed font-normal">
+                        <p id="dossier-description" class="text-xs sm:text-sm text-slate-700 dark:text-purple-100 leading-relaxed font-normal">
                             {{ $libroInicial['descripcion'] }}
                         </p>
 
                         <!-- Datos Técnicos en Píldoras -->
                         <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-2 text-xs font-mono">
-                            <div class="p-2 rounded-xl bg-stone-100 dark:bg-[#140d20] border border-stone-200 dark:border-purple-500/20">
-                                <span class="text-[10px] text-stone-500 dark:text-stone-400 block uppercase">ISBN Archivo</span>
-                                <span id="dossier-isbn" class="font-bold text-stone-800 dark:text-stone-200 text-[11px]">{{ $libroInicial['isbn'] }}</span>
+                            <div class="p-2 rounded-xl bg-purple-50 dark:bg-white/5 border border-purple-200 dark:border-purple-500/20">
+                                <span class="text-[10px] text-purple-700 dark:text-purple-300 font-semibold block uppercase">ISBN Archivo</span>
+                                <span id="dossier-isbn" class="font-bold text-slate-700 dark:text-purple-100 text-[11px]">{{ $libroInicial['isbn'] }}</span>
                             </div>
-                            <div class="p-2 rounded-xl bg-stone-100 dark:bg-[#140d20] border border-stone-200 dark:border-purple-500/20">
-                                <span class="text-[10px] text-stone-500 dark:text-stone-400 block uppercase">Páginas</span>
-                                <span id="dossier-pages" class="font-bold text-stone-800 dark:text-stone-200 text-[11px]">{{ $libroInicial['paginas'] }} págs.</span>
+                            <div class="p-2 rounded-xl bg-purple-50 dark:bg-white/5 border border-purple-200 dark:border-purple-500/20">
+                                <span class="text-[10px] text-purple-700 dark:text-purple-300 font-semibold block uppercase">Páginas</span>
+                                <span id="dossier-pages" class="font-bold text-slate-700 dark:text-purple-100 text-[11px]">{{ $libroInicial['paginas'] }} págs.</span>
                             </div>
-                            <div class="p-2 rounded-xl bg-stone-100 dark:bg-[#140d20] border border-stone-200 dark:border-purple-500/20 col-span-2 sm:col-span-1">
-                                <span class="text-[10px] text-stone-500 dark:text-stone-400 block uppercase">Custodia</span>
-                                <span id="dossier-sede" class="font-bold text-purple-800 dark:text-purple-300 text-[11px] truncate block">{{ $libroInicial['sede'] }}</span>
+                            <div class="p-2 rounded-xl bg-purple-50 dark:bg-white/5 border border-purple-200 dark:border-purple-500/20 col-span-2 sm:col-span-1">
+                                <span class="text-[10px] text-purple-700 dark:text-purple-300 font-semibold block uppercase">Custodia</span>
+                                <span id="dossier-sede" class="font-bold text-slate-700 dark:text-purple-100 text-[11px] truncate block">{{ $libroInicial['sede'] }}</span>
                             </div>
                         </div>
                     </div>
@@ -325,16 +325,16 @@
                     <!-- Columna Derecha (5 cols): Valoración, Certificado COA y Acciones de Compra -->
                     <div class="lg:col-span-5 flex flex-col justify-between p-4 sm:p-5 rounded-2xl bg-purple-50/70 dark:bg-[#140d20]/90 border border-purple-200/80 dark:border-purple-500/30 space-y-4">
                         <div class="space-y-1">
-                            <span class="text-[10px] font-label-code text-stone-500 dark:text-stone-400 uppercase tracking-wider block">
+                            <span class="text-[10px] font-label-code text-purple-700 dark:text-purple-300 uppercase tracking-wider block font-bold">
                                 Cotización &amp; Valor Patrimonial
                             </span>
                             <div class="flex items-baseline gap-2">
-                                <span id="dossier-price" class="text-2xl sm:text-3xl font-bold font-mono text-primary dark:text-purple-300">
+                                <span id="dossier-price" class="text-2xl sm:text-3xl font-bold font-mono text-purple-600 dark:text-purple-300">
                                     {{ $libroInicial['precio_formateado'] }}
                                 </span>
-                                <span class="text-xs text-stone-500 font-mono">MXN</span>
+                                <span class="text-xs text-purple-800 dark:text-purple-200 font-mono font-semibold">MXN</span>
                             </div>
-                            <div class="flex items-center gap-1.5 text-xs text-stone-600 dark:text-stone-400 pt-1">
+                            <div class="flex items-center gap-1.5 text-xs text-purple-700 dark:text-purple-300 pt-1 font-mono font-medium">
                                 <span class="material-symbols-outlined text-[15px] text-emerald-600 dark:text-emerald-400">verified</span>
                                 <span id="dossier-certificate">{{ $libroInicial['certificado'] }}</span>
                             </div>
@@ -349,7 +349,7 @@
                                 <button
                                     type="submit"
                                     id="dossier-submit-btn"
-                                    class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-violet-700 hover:from-purple-500 hover:to-violet-600 text-white font-bold text-xs font-label-code uppercase tracking-wider shadow-lg shadow-purple-900/30 transition flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                                    class="w-full py-3 px-4 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs font-label-code uppercase tracking-wider shadow-md transition flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                                     {{ $libroInicial['agotado'] ? 'disabled' : '' }}
                                 >
                                     <span class="material-symbols-outlined text-[18px]">lock</span>
@@ -360,9 +360,9 @@
                             <button
                                 type="button"
                                 id="dossier-details-btn"
-                                class="w-full py-2.5 px-4 rounded-xl bg-white dark:bg-[#1e152d] hover:bg-stone-100 dark:hover:bg-[#281c3c] text-stone-800 dark:text-stone-200 border border-stone-300 dark:border-purple-500/30 font-bold text-xs font-label-code uppercase tracking-wider transition flex items-center justify-center gap-2 cursor-pointer"
+                                class="w-full py-2.5 px-4 rounded-xl text-purple-800 bg-purple-100 hover:bg-purple-200 dark:text-purple-200 dark:bg-purple-900/40 dark:hover:bg-purple-900/60 border border-purple-200 dark:border-purple-500/30 font-bold text-xs font-label-code uppercase tracking-wider transition flex items-center justify-center gap-2 cursor-pointer"
                             >
-                                <span class="material-symbols-outlined text-[17px] text-primary dark:text-purple-400">visibility</span>
+                                <span class="material-symbols-outlined text-[17px] text-purple-700 dark:text-purple-400">visibility</span>
                                 <span>Ver Ficha Técnica Completa</span>
                             </button>
                         </div>
@@ -731,7 +731,7 @@
                 if (dossierTitle) dossierTitle.textContent = libro.nombre;
                 if (dossierAuthorRow) {
                     dossierAuthorRow.textContent = `${libro.autor} · ${libro.editorial} (${libro.anio})`;
-                    dossierAuthorRow.className = 'font-title-editorial text-sm sm:text-base text-purple-800 dark:text-purple-300 italic mt-0.5';
+                    dossierAuthorRow.className = 'font-title-editorial text-sm sm:text-base text-purple-800 dark:text-purple-300 italic mt-0.5 font-medium';
                 }
                 if (dossierDescription) dossierDescription.textContent = libro.descripcion;
                 if (dossierGenreIcon) dossierGenreIcon.textContent = libro.genero_icono || 'auto_stories';
@@ -741,9 +741,9 @@
                 if (dossierUniqueBadge) {
                     dossierUniqueBadge.textContent = libro.es_pieza_unica ? 'Pieza Única 1/1' : 'Tiraje Coleccionable';
                     if (libro.es_pieza_unica) {
-                        dossierUniqueBadge.className = 'px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-700 dark:text-rose-300 border border-rose-400/40 text-[11px] font-label-code font-bold uppercase tracking-wider';
+                        dossierUniqueBadge.className = 'px-2.5 py-0.5 rounded-full bg-rose-100 dark:bg-rose-500/20 text-rose-800 dark:text-rose-300 border border-rose-300 dark:border-rose-400/40 text-[11px] font-label-code font-bold uppercase tracking-wider';
                     } else {
-                        dossierUniqueBadge.className = 'px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-400/40 text-[11px] font-label-code font-bold uppercase tracking-wider';
+                        dossierUniqueBadge.className = 'px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-400/40 text-[11px] font-label-code font-bold uppercase tracking-wider';
                     }
                 }
 
@@ -751,11 +751,11 @@
                 if (dossierPages) dossierPages.textContent = `${libro.paginas || 300} págs.`;
                 if (dossierSede) {
                     dossierSede.textContent = libro.sede || 'Bóveda Central';
-                    dossierSede.className = 'font-bold text-purple-800 dark:text-purple-300 text-[11px] truncate block';
+                    dossierSede.className = 'font-bold text-slate-700 dark:text-purple-100 text-[11px] truncate block';
                 }
                 if (dossierPrice) {
                     dossierPrice.textContent = libro.precio_formateado || '$0';
-                    dossierPrice.className = 'text-2xl sm:text-3xl font-bold font-mono text-primary dark:text-purple-300';
+                    dossierPrice.className = 'text-2xl sm:text-3xl font-bold font-mono text-purple-600 dark:text-purple-300';
                 }
                 if (dossierCertificate) dossierCertificate.textContent = libro.certificado || 'COA-BIB-2026';
 

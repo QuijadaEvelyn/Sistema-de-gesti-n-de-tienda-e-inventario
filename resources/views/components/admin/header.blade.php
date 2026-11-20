@@ -78,6 +78,11 @@
             <span class="material-symbols-outlined text-[20px] text-primary">light_mode</span>
         </button>
 
+        <!-- Conmutador de Sonido Háptico / Táctil -->
+        <button type="button" class="sound-toggle-btn btn-glass-surface p-2 rounded-lg shadow-xs" title="Alternar sonidos táctiles del sistema" aria-label="Alternar sonidos">
+            <span class="material-symbols-outlined text-[20px] text-primary">volume_up</span>
+        </button>
+
         <div class="h-6 w-px bg-purple-200"></div>
 
         <!-- Cápsula de Usuario Operador y Cierre de Sesión -->

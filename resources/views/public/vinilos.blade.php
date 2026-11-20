@@ -58,27 +58,27 @@
     @endphp
 
     <!-- Encabezado Curatorial de la Sala Fonográfica -->
-    <section class="relative rounded-2xl overflow-hidden bg-gradient-to-r from-purple-950 via-indigo-950 to-slate-950 text-white p-6 sm:p-8 mb-8 shadow-lg border border-purple-700/40">
+    <section class="relative rounded-2xl overflow-hidden bg-[#FAF8FF] dark:bg-gradient-to-r dark:from-purple-950 dark:via-indigo-950 dark:to-slate-950 text-slate-900 dark:text-white p-6 sm:p-8 mb-8 shadow-xs dark:shadow-lg border border-purple-200 dark:border-purple-700/40">
         <div class="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div class="max-w-2xl space-y-2">
-                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/20 border border-purple-300/30 text-purple-200 text-xs font-label-md tracking-wider">
-                    <span class="material-symbols-outlined text-[15px] text-purple-300">album</span>
+                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-500/20 border border-purple-200 dark:border-purple-300/30 text-purple-800 dark:text-purple-200 text-xs font-label-md tracking-wider font-semibold">
+                    <span class="material-symbols-outlined text-[15px] text-purple-600 dark:text-purple-300">album</span>
                     <span>{{ $meta['badge'] ?? 'CATÁLOGO FONOGRÁFICO · VINILOS & CDS HISTÓRICOS' }}</span>
                 </span>
-                <h1 class="text-2xl sm:text-4xl font-bold font-quicksand leading-tight text-white">
+                <h1 class="text-2xl sm:text-4xl font-bold font-quicksand leading-tight text-slate-900 dark:text-white">
                     {{ $meta['titulo'] ?? 'Discos & Vinilos Históricos' }}
                 </h1>
-                <p class="font-title-editorial text-purple-100/90 text-sm sm:text-base leading-relaxed">
+                <p class="font-title-editorial text-slate-600 dark:text-purple-100/90 text-sm sm:text-base leading-relaxed">
                     «Explora nuestra cámara fonográfica interactiva en 3D: inspecciona los surcos concéntricos de acetato en 180g, el acabado refractivo de los primeros CDs de colección y voltea cada disco para verificar su matriz.»
                 </p>
             </div>
 
             <div class="flex flex-wrap items-center gap-2 text-xs font-label-code">
-                <span class="px-3 py-1.5 rounded-xl bg-white/10 border border-white/15 text-purple-100 flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span class="px-3 py-1.5 rounded-xl bg-purple-100 dark:bg-white/10 border border-purple-200 dark:border-white/15 text-purple-800 dark:text-purple-100 flex items-center gap-1.5 font-medium">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                     <span>Tocadiscos 3D Activo</span>
                 </span>
-                <a href="#acervo-vinilos-grid" class="px-3.5 py-1.5 rounded-xl bg-primary-container hover:bg-primary text-white font-bold uppercase tracking-wider transition">
+                <a href="#acervo-vinilos-grid" class="px-3.5 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold uppercase tracking-wider transition shadow-sm">
                     Ver Cuadrícula Completa ({{ count($discosShowcase) }})
                 </a>
             </div>
@@ -95,7 +95,7 @@
              ========================================================================= -->
         <section
             id="disc-showcase-section"
-            class="relative rounded-3xl overflow-hidden bg-gradient-to-b from-[#130b24] via-[#1b1033] to-[#0d0718] text-white border border-purple-500/30 shadow-2xl mb-14 p-4 sm:p-10 w-full max-w-full"
+            class="relative rounded-3xl overflow-hidden bg-purple-50/70 dark:bg-gradient-to-b dark:from-[#130b24] dark:via-[#1b1033] dark:to-[#0d0718] text-slate-900 dark:text-white border border-purple-200 dark:border-purple-500/30 shadow-sm dark:shadow-2xl mb-14 p-4 sm:p-10 w-full max-w-full"
             aria-label="Reproductor y Galería Interactiva 3D de Discos y Vinilos"
         >
             <!-- Halo Ambiental Dinámico -->
@@ -106,19 +106,19 @@
             ></div>
 
             <!-- Barra Superior de Estado del Reproductor Curatorial -->
-            <div class="relative z-10 flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-white/10">
+            <div class="relative z-10 flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-purple-200/80 dark:border-white/10">
                 <div class="flex items-center gap-2.5">
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-[11px] font-label-code uppercase tracking-wider text-purple-200">
-                        <span id="showcase-spin-dot" class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-100 dark:bg-white/10 border border-purple-200 dark:border-white/15 text-[11px] font-label-code uppercase tracking-wider text-purple-900 dark:text-purple-200 font-semibold">
+                        <span id="showcase-spin-dot" class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
                         <span id="showcase-status-label">ROTACIÓN CONTINUA · LADO A</span>
                     </span>
-                    <span id="showcase-format-pill" class="px-3 py-1 rounded-full bg-primary-container/80 text-white text-[11px] font-label-code font-bold uppercase tracking-wider">
+                    <span id="showcase-format-pill" class="px-3 py-1 rounded-full bg-purple-600 dark:bg-primary-container/80 text-white text-[11px] font-label-code font-bold uppercase tracking-wider">
                         {{ $discoInicial['formato_etiqueta'] }}
                     </span>
                 </div>
 
-                <div class="text-xs font-label-code text-purple-200/80 flex items-center gap-2">
-                    <span class="material-symbols-outlined text-[16px] text-purple-300">3d_rotation</span>
+                <div class="text-xs font-label-code text-slate-600 dark:text-purple-200/80 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[16px] text-purple-600 dark:text-purple-300">3d_rotation</span>
                     <span>Pasa el cursor sobre el disco para inclinar en 3D (Tilt X/Y)</span>
                 </div>
             </div>
@@ -281,12 +281,12 @@
                         <!-- =================================================================
                              BARRA DE CONTROLES INTERACTIVOS (FLIP, PAUSE/PLAY, REPLAY, PREV/NEXT)
                              ================================================================= -->
-                        <div class="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 bg-white/10 backdrop-blur-md border border-white/15 px-4 py-2.5 rounded-2xl shadow-lg">
+                        <div class="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 bg-white/90 dark:bg-white/10 backdrop-blur-md border border-purple-200 dark:border-white/15 px-4 py-2.5 rounded-2xl shadow-sm dark:shadow-lg">
                             <!-- Botón Anterior (Prev) -->
                             <button
                                 type="button"
                                 id="disc-prev-btn"
-                                class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1 transition cursor-pointer"
+                                class="px-3 py-2 rounded-xl bg-purple-50 dark:bg-white/10 hover:bg-purple-100 dark:hover:bg-white/20 text-purple-900 dark:text-white text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1 transition cursor-pointer border border-purple-200 dark:border-transparent"
                                 title="Disco Anterior"
                             >
                                 <span class="material-symbols-outlined text-[18px]">skip_previous</span>
@@ -297,7 +297,7 @@
                             <button
                                 type="button"
                                 id="disc-flip-btn"
-                                class="px-3.5 py-2 rounded-xl bg-purple-600/80 hover:bg-purple-500 text-white border border-purple-300/40 text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 transition cursor-pointer shadow-xs"
+                                class="px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 transition cursor-pointer shadow-sm"
                                 title="Voltear disco para inspeccionar Lado B / Matriz"
                             >
                                 <span class="material-symbols-outlined text-[18px]">flip_camera_android</span>
@@ -319,7 +319,7 @@
                             <button
                                 type="button"
                                 id="disc-replay-btn"
-                                class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/15 text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 transition cursor-pointer"
+                                class="px-3.5 py-2 rounded-xl bg-purple-50 dark:bg-white/10 hover:bg-purple-100 dark:hover:bg-white/20 text-purple-900 dark:text-white border border-purple-200 dark:border-white/15 text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 transition cursor-pointer"
                                 title="Reiniciar rotación en Lado A"
                             >
                                 <span class="material-symbols-outlined text-[18px]">replay</span>
@@ -330,7 +330,7 @@
                             <button
                                 type="button"
                                 id="disc-next-btn"
-                                class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1 transition cursor-pointer"
+                                class="px-3 py-2 rounded-xl bg-purple-50 dark:bg-white/10 hover:bg-purple-100 dark:hover:bg-white/20 text-purple-900 dark:text-white border border-purple-200 dark:border-white/15 text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1 transition cursor-pointer"
                                 title="Siguiente Disco"
                             >
                                 <span class="hidden sm:inline">Next</span>
@@ -343,7 +343,7 @@
                             @foreach ($discosShowcase as $idx => $disco)
                                 <button
                                     type="button"
-                                    class="disc-selector-pill px-3 py-1.5 rounded-full text-[11px] font-label-code transition flex items-center gap-1.5 cursor-pointer {{ $disco['es_pieza_unica'] ? 'border-2 border-purple-600 shadow-sm shadow-purple-600/30' : 'border border-white/15' }} {{ $idx === 0 ? 'bg-white text-slate-950 font-bold' : 'bg-white/10 text-purple-200 hover:bg-white/20' }}"
+                                    class="disc-selector-pill px-3 py-1.5 rounded-full text-[11px] font-label-code transition flex items-center gap-1.5 cursor-pointer {{ $disco['es_pieza_unica'] ? 'border-2 border-purple-500 shadow-sm' : 'border border-purple-200 dark:border-white/15' }} {{ $idx === 0 ? 'bg-purple-600 text-white font-bold' : 'bg-white dark:bg-white/10 text-slate-800 dark:text-purple-200 hover:bg-purple-50 dark:hover:bg-white/20' }}"
                                     data-select-disc="{{ $idx }}"
                                     data-unique-piece="{{ $disco['es_pieza_unica'] ? '1' : '0' }}"
                                 >
@@ -363,12 +363,12 @@
                 <div class="lg:col-span-5">
                     <div
                         id="showcase-curatorial-card"
-                        class="rounded-2xl bg-white/10 backdrop-blur-md {{ $discoInicial['es_pieza_unica'] ? 'border-2 border-purple-600 ring-2 ring-purple-600/30 shadow-purple-600/25' : 'border border-white/15' }} p-6 sm:p-7 space-y-5 shadow-xl transition-all"
+                        class="rounded-2xl bg-white dark:bg-[#150e22]/90 backdrop-blur-md {{ $discoInicial['es_pieza_unica'] ? 'border-2 border-purple-500 ring-2 ring-purple-500/20 shadow-purple-500/10' : 'border border-purple-200 dark:border-white/15' }} p-6 sm:p-7 space-y-5 shadow-lg dark:shadow-xl transition-all"
                     >
 
                         <!-- Cabecera de Ficha: SKU, Graduación Goldmine y Disponibilidad en Tiempo Real -->
-                        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
-                            <span id="card-sku" class="font-label-code text-xs text-purple-200 uppercase tracking-wider">
+                        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-purple-200/80 dark:border-white/10 pb-3">
+                            <span id="card-sku" class="font-label-code text-xs text-purple-700 dark:text-purple-200 uppercase tracking-wider font-semibold">
                                 SKU: #{{ $discoInicial['sku'] }}
                             </span>
 
@@ -381,13 +381,13 @@
                                     <span>Pieza Única · Edición Coleccionable</span>
                                 </span>
 
-                                <span id="card-graduacion" class="px-2.5 py-0.5 rounded bg-amber-400/20 border border-amber-300/40 text-amber-200 text-[11px] font-label-code font-bold uppercase">
+                                <span id="card-graduacion" class="px-2.5 py-0.5 rounded bg-amber-100 dark:bg-amber-400/20 border border-amber-300 dark:border-amber-300/40 text-amber-900 dark:text-amber-200 text-[11px] font-label-code font-bold uppercase">
                                     {{ $discoInicial['graduacion'] }}
                                 </span>
 
                                 <span
                                     id="card-stock-badge"
-                                    class="px-2.5 py-0.5 rounded-full text-[11px] font-label-code font-bold uppercase {{ $discoInicial['agotado'] ? 'bg-red-600 text-white border border-red-700' : 'bg-emerald-500/20 text-emerald-200 border border-emerald-400/40' }}"
+                                    class="px-2.5 py-0.5 rounded-full text-[11px] font-label-code font-bold uppercase {{ $discoInicial['agotado'] ? 'bg-red-600 text-white border border-red-700' : 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-200 border border-emerald-300 dark:border-emerald-400/40' }}"
                                 >
                                     {{ $discoInicial['agotado'] ? 'AGOTADO' : $discoInicial['stock'].' en bóveda' }}
                                 </span>
@@ -396,42 +396,42 @@
 
                         <!-- Título del Álbum, Artista y Sello Discográfico -->
                         <div class="space-y-1.5">
-                            <span id="card-velocidad" class="text-[10px] font-label-code uppercase tracking-widest text-purple-300 block">
+                            <span id="card-velocidad" class="text-[10px] font-label-code uppercase tracking-widest text-purple-700 dark:text-purple-300 block font-semibold">
                                 {{ $discoInicial['velocidad'] }}
                             </span>
-                            <h2 id="card-titulo" class="text-2xl sm:text-3xl font-bold font-quicksand text-white leading-tight">
+                            <h2 id="card-titulo" class="text-2xl sm:text-3xl font-bold font-quicksand text-slate-900 dark:text-white leading-tight">
                                 {{ $discoInicial['nombre'] }}
                             </h2>
-                            <p id="card-artista-sello" class="font-title-editorial text-base text-purple-200 italic">
+                            <p id="card-artista-sello" class="font-title-editorial text-base text-purple-800 dark:text-purple-200 italic font-medium">
                                 {{ $discoInicial['artista'] }} &middot; {{ $discoInicial['sello'] }} ({{ $discoInicial['anio'] }})
                             </p>
                         </div>
 
                         <!-- Notas Periciales y Matriz -->
-                        <p id="card-descripcion" class="text-xs sm:text-sm text-purple-100/85 leading-relaxed">
+                        <p id="card-descripcion" class="text-xs sm:text-sm text-slate-700 dark:text-purple-100/85 leading-relaxed">
                             {{ $discoInicial['descripcion'] }}
                         </p>
 
-                        <div class="grid grid-cols-2 gap-3 p-3.5 rounded-xl bg-black/30 border border-white/10 text-xs">
+                        <div class="grid grid-cols-2 gap-3 p-3.5 rounded-xl bg-purple-50 dark:bg-black/30 border border-purple-200/80 dark:border-white/10 text-xs">
                             <div>
-                                <span class="text-[10px] font-label-code uppercase text-purple-300 block">Género Fonográfico</span>
-                                <span id="card-genero" class="font-semibold text-white">{{ $discoInicial['genero'] }}</span>
+                                <span class="text-[10px] font-label-code uppercase text-purple-700 dark:text-purple-300 block font-semibold">Género Fonográfico</span>
+                                <span id="card-genero" class="font-semibold text-slate-900 dark:text-white">{{ $discoInicial['genero'] }}</span>
                             </div>
                             <div>
-                                <span class="text-[10px] font-label-code uppercase text-purple-300 block">Inspección de Matriz</span>
-                                <span id="card-matriz" class="font-label-code text-amber-200 text-[11px]">{{ $discoInicial['matriz_lado_b'] }}</span>
+                                <span class="text-[10px] font-label-code uppercase text-purple-700 dark:text-purple-300 block font-semibold">Inspección de Matriz</span>
+                                <span id="card-matriz" class="font-label-code text-purple-900 dark:text-amber-200 text-[11px] font-bold">{{ $discoInicial['matriz_lado_b'] }}</span>
                             </div>
                         </div>
 
                         <!-- Precio Tasado y Botón Directo de «RESERVAR» Vinculado con Stock en Tiempo Real -->
-                        <div class="pt-3 border-t border-white/15 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <div class="pt-3 border-t border-purple-200/80 dark:border-white/15 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                             <div>
-                                <span class="text-[10px] uppercase font-label-code text-purple-300 block">Precio Tasado en Bóveda:</span>
+                                <span class="text-[10px] uppercase font-label-code text-purple-700 dark:text-purple-300 block font-semibold">Precio Tasado en Bóveda:</span>
                                 <div class="flex items-baseline gap-1.5">
-                                    <span id="card-precio" class="font-tabular-data font-bold text-2xl sm:text-3xl text-white">
+                                    <span id="card-precio" class="font-tabular-data font-bold text-2xl sm:text-3xl text-purple-600 dark:text-white">
                                         {{ $discoInicial['precio_formateado'] }}
                                     </span>
-                                    <span class="text-xs font-label-code text-purple-200">MXN</span>
+                                    <span class="text-xs font-label-code text-purple-800 dark:text-purple-200 font-semibold">MXN</span>
                                 </div>
                             </div>
 
@@ -450,7 +450,7 @@
                                     type="submit"
                                     id="showcase-reserve-btn"
                                     @disabled($discoInicial['agotado'] || ! $discoInicial['variante_sku_id'])
-                                    class="w-full sm:w-auto px-6 py-3.5 rounded-xl text-xs font-label-md font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition shadow-lg {{ ($discoInicial['agotado'] || ! $discoInicial['variante_sku_id']) ? 'bg-slate-600 text-slate-300 opacity-50 cursor-not-allowed pointer-events-none' : 'bg-primary-container hover:bg-primary text-white cursor-pointer' }}"
+                                    class="w-full sm:w-auto px-6 py-3.5 rounded-xl text-xs font-label-md font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition shadow-md {{ ($discoInicial['agotado'] || ! $discoInicial['variante_sku_id']) ? 'bg-slate-600 text-slate-300 opacity-50 cursor-not-allowed pointer-events-none' : 'bg-purple-600 hover:bg-purple-500 text-white cursor-pointer' }}"
                                 >
                                     <span id="showcase-reserve-icon" class="material-symbols-outlined text-[18px]">
                                         {{ $discoInicial['agotado'] ? 'block' : 'add_shopping_cart' }}
@@ -690,11 +690,11 @@
 
                         pills.forEach(function (pill, idx) {
                             const esUnica = pill.dataset.uniquePiece === '1';
-                            const bordeClase = esUnica ? 'border-2 border-purple-600 shadow-sm shadow-purple-600/30' : 'border border-white/15';
+                            const bordeClase = esUnica ? 'border-2 border-purple-500 shadow-sm' : 'border border-purple-200 dark:border-white/15';
                             if (idx === activeIndex) {
-                                pill.className = 'disc-selector-pill px-3 py-1.5 rounded-full text-[11px] font-label-code transition flex items-center gap-1.5 cursor-pointer bg-white text-slate-950 font-bold ' + bordeClase;
+                                pill.className = 'disc-selector-pill px-3 py-1.5 rounded-full text-[11px] font-label-code transition flex items-center gap-1.5 cursor-pointer bg-purple-600 text-white font-bold ' + bordeClase;
                             } else {
-                                pill.className = 'disc-selector-pill px-3 py-1.5 rounded-full text-[11px] font-label-code transition flex items-center gap-1.5 cursor-pointer bg-white/10 text-purple-200 hover:bg-white/20 ' + bordeClase;
+                                pill.className = 'disc-selector-pill px-3 py-1.5 rounded-full text-[11px] font-label-code transition flex items-center gap-1.5 cursor-pointer bg-white dark:bg-white/10 text-slate-800 dark:text-purple-200 hover:bg-purple-50 dark:hover:bg-white/20 ' + bordeClase;
                             }
                         });
                     }
@@ -708,8 +708,8 @@
 
                         if (curatorialCard) {
                             curatorialCard.className = disco.es_pieza_unica
-                                ? 'rounded-2xl bg-white/10 backdrop-blur-md border-2 border-purple-600 ring-2 ring-purple-600/30 shadow-purple-600/25 p-6 sm:p-7 space-y-5 shadow-xl transition-all'
-                                : 'rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 p-6 sm:p-7 space-y-5 shadow-xl transition-all';
+                                ? 'rounded-2xl bg-white dark:bg-[#150e22]/90 backdrop-blur-md border-2 border-purple-500 ring-2 ring-purple-500/20 shadow-purple-500/10 p-6 sm:p-7 space-y-5 shadow-lg dark:shadow-xl transition-all'
+                                : 'rounded-2xl bg-white dark:bg-[#150e22]/90 backdrop-blur-md border border-purple-200 dark:border-white/15 p-6 sm:p-7 space-y-5 shadow-lg dark:shadow-xl transition-all';
                         }
 
                         if (uniqueBadge) {

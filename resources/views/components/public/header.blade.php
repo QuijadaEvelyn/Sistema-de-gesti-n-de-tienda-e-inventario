@@ -70,6 +70,16 @@
                     <span class="material-symbols-outlined text-[18px] sm:text-[20px] text-primary">light_mode</span>
                 </button>
 
+                <!-- Botón de Alternancia de Sonido Háptico / Silenciar -->
+                <button
+                    type="button"
+                    class="sound-toggle-btn btn-glass-surface w-9 h-9 sm:w-11 sm:h-11 p-0 sm:p-2.5 rounded-xl text-on-surface-variant hover:text-on-surface shadow-xs flex items-center justify-center focus:outline-none cursor-pointer"
+                    title="Alternar sonidos táctiles del sistema"
+                    aria-label="Alternar sonidos del sistema"
+                >
+                    <span class="material-symbols-outlined text-[18px] sm:text-[20px] text-primary">volume_up</span>
+                </button>
+
                 {{-- ===== Zona de Usuario: Dinámica por Estado de Sesión y Rol ===== --}}
 
                 @guest

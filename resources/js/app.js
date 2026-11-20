@@ -347,6 +347,131 @@ export function initAdminSpaNavigation() {
     });
 }
 
+/**
+ * ==========================================================================
+ * ARCHIVUM · RETROALIMENTACIÓN HÁPTICA SONORA DE ALTA DEFINICIÓN
+ * Síntesis procedural pura con Web Audio API (Sin dependencias ni MP3 externos)
+ * Clic táctil ultracorto, sutil y elegante (~38ms, 820Hz -> 320Hz, vol: 0.08)
+ * ==========================================================================
+ */
+let audioCtx = null;
+let soundEnabled = localStorage.getItem('archivum_sound_enabled') !== 'false';
+
+function getAudioContext() {
+    if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) {
+            audioCtx = new AudioContextClass();
+        }
+    }
+    if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+    return audioCtx;
+}
+
+export function playTactileClick() {
+    if (!soundEnabled) {
+        return;
+    }
+    try {
+        const ctx = getAudioContext();
+        if (!ctx) {
+            return;
+        }
+
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        // Forma de onda sinusoidal suave para simular pulsación mecánica refinada
+        osc.type = 'sine';
+        // Rampa de frecuencia descendente tipo micro-switch de cristal (820 Hz a 320 Hz)
+        osc.frequency.setValueAtTime(820, now);
+        osc.frequency.exponentialRampToValueAtTime(320, now + 0.038);
+
+        // Curva de envolvente: ataque ultra rápido de 3ms, decaimiento exponencial a 0.0001
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.linearRampToValueAtTime(0.075, now + 0.003);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.038);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.040);
+    } catch (e) {
+        // En navegadores que restrinjan audio previo a interacción
+    }
+}
+
+export function toggleArchivumSound() {
+    soundEnabled = !soundEnabled;
+    localStorage.setItem('archivum_sound_enabled', soundEnabled ? 'true' : 'false');
+    updateSoundToggleButtons();
+    if (soundEnabled) {
+        playTactileClick();
+    }
+    return soundEnabled;
+}
+
+function updateSoundToggleButtons() {
+    const buttons = document.querySelectorAll('.sound-toggle-btn');
+    buttons.forEach((btn) => {
+        const icon = btn.querySelector('.material-symbols-outlined, span');
+        if (icon) {
+            icon.textContent = soundEnabled ? 'volume_up' : 'volume_off';
+        }
+        btn.setAttribute('title', soundEnabled ? 'Silenciar sonidos del sistema' : 'Activar sonidos táctiles');
+        btn.setAttribute('aria-label', soundEnabled ? 'Silenciar sonidos' : 'Activar sonidos');
+        if (soundEnabled) {
+            btn.classList.remove('opacity-60');
+        } else {
+            btn.classList.add('opacity-60');
+        }
+    });
+}
+
+export function initArchivumSound() {
+    // Desbloquear AudioContext al primer gesto del usuario
+    const unlockEvents = ['pointerdown', 'keydown', 'touchstart'];
+    const unlockHandler = () => {
+        getAudioContext();
+        unlockEvents.forEach((ev) => window.removeEventListener(ev, unlockHandler, { capture: true }));
+    };
+    unlockEvents.forEach((ev) => window.addEventListener(ev, unlockHandler, { capture: true, once: true }));
+
+    // Delegación global para cualquier botón, píldora o enlace de navegación
+    document.addEventListener('click', (event) => {
+        const target = event.target;
+        if (!target) {
+            return;
+        }
+
+        const soundBtn = target.closest('.sound-toggle-btn');
+        if (soundBtn) {
+            event.preventDefault();
+            toggleArchivumSound();
+            return;
+        }
+
+        const interactive = target.closest(
+            'button, .btn, [role="button"], a.btn-glass-purple, a.btn-glass-surface, ' +
+            'nav a, #header-main-nav a, .sidebar-link-glossy-active, .sidebar-link-glossy-idle, ' +
+            '#theme-toggle-btn, #admin-theme-toggle, .chart-range-pill, input[type="submit"]'
+        );
+
+        if (interactive) {
+            playTactileClick();
+        }
+    });
+
+    updateSoundToggleButtons();
+}
+
+window.playTactileClick = playTactileClick;
+window.toggleArchivumSound = toggleArchivumSound;
+
 // Inicialización automática al cargar el DOM inicial
 function bootApp() {
     initCountUps();
@@ -356,6 +481,7 @@ function bootApp() {
     }
     initAdminSpaNavigation();
     initCoverflowCarousel();
+    initArchivumSound();
 }
 
 if (document.readyState === 'loading') {
