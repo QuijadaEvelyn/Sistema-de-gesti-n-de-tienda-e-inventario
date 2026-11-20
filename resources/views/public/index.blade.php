@@ -19,16 +19,16 @@
     @endphp
 
     <!-- Héroe Curatorial & Bienvenida al Archivo -->
-    <section class="relative rounded-2xl overflow-hidden bg-gradient-to-r from-purple-900 to-indigo-950 text-white p-6 sm:p-12 mb-10 shadow-lg border border-purple-800/40">
+    <section class="relative rounded-2xl overflow-hidden bg-[#FAF8FF] dark:bg-gradient-to-r dark:from-purple-900 dark:to-indigo-950 text-slate-900 dark:text-white p-6 sm:p-12 mb-10 shadow-xs dark:shadow-lg border border-purple-200 dark:border-purple-800/40">
         <div class="relative z-10 max-w-3xl">
-            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/20 border border-purple-300/30 text-purple-200 text-xs font-label-md tracking-wider mb-4">
-                <span class="material-symbols-outlined text-[14px] text-purple-300">verified</span>
+            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-500/20 border border-purple-200 dark:border-purple-300/30 text-purple-800 dark:text-purple-200 text-xs font-label-md tracking-wider mb-4 font-semibold">
+                <span class="material-symbols-outlined text-[14px] text-purple-600 dark:text-purple-300">verified</span>
                 CATÁLOGO DESCLASIFICADO · PRIMAVERA 2026
             </span>
-            <h1 class="text-2xl sm:text-5xl font-bold font-quicksand leading-tight tracking-tight text-white mb-4">
+            <h1 class="text-2xl sm:text-5xl font-bold font-quicksand leading-tight tracking-tight text-slate-900 dark:text-white mb-4">
                 Tesoros del Pensamiento &amp; Sonido Histórico
             </h1>
-            <p class="font-title-editorial text-purple-100/90 text-lg sm:text-xl leading-relaxed mb-6">
+            <p class="font-title-editorial text-slate-600 dark:text-purple-100/90 text-lg sm:text-xl leading-relaxed mb-6">
                 «Un acervo protegido para bibliófilos y audiófilos: primeras ediciones autografiadas, matrices de prensado original y vestigios culturales autenticados con rigor notarial.»
             </p>
             <div class="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2.5 text-xs sm:text-sm font-label-md">
@@ -52,7 +52,7 @@
         </div>
 
         <!-- Marca de Agua Geométrica de Bóveda con Nuevo Isotipo ARCHIVUM -->
-        <div class="absolute -right-12 -bottom-12 opacity-10 pointer-events-none">
+        <div class="absolute -right-12 -bottom-12 opacity-5 dark:opacity-10 text-purple-900 pointer-events-none">
             <x-ui.archivum-logo size="xl" svg-class="w-96 h-96" :isotype-only="true" />
         </div>
     </section>
@@ -123,82 +123,82 @@
                     <article
                         data-promo-card="true"
                         data-promo-phase="{{ $fasePromo }}"
-                        class="promo-card-animated rounded-2xl bg-gradient-to-br from-purple-950 via-indigo-950 to-slate-950 text-white p-6 border-2 {{ $esExclusivaActiva ? 'border-amber-400/80' : 'border-purple-400/70' }} flex flex-col justify-between shadow-xl"
+                        class="promo-card-animated rounded-2xl bg-white dark:bg-gradient-to-br dark:from-purple-950 dark:via-indigo-950 dark:to-slate-950 text-slate-900 dark:text-white p-6 border-2 {{ $esExclusivaActiva ? 'border-amber-300 dark:border-amber-400/80' : 'border-purple-200 dark:border-purple-400/70' }} flex flex-col justify-between shadow-xs dark:shadow-xl"
                     >
                         <div class="relative z-10 space-y-4">
                             <!-- Cabecera de Insignias Animadas -->
                             <div class="flex flex-wrap items-center justify-between gap-2">
-                                <span class="promo-shimmer-badge inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-label-code font-bold uppercase tracking-wider {{ $esExclusivaActiva ? 'bg-amber-400 text-slate-950' : 'bg-purple-500 text-white' }}">
+                                <span class="promo-shimmer-badge inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-label-code font-bold uppercase tracking-wider {{ $esExclusivaActiva ? 'bg-amber-100 text-amber-900 border border-amber-300 dark:bg-amber-400 dark:text-slate-950 dark:border-transparent' : 'bg-purple-100 text-purple-800 border border-purple-200 dark:bg-purple-500 dark:text-white dark:border-transparent' }}">
                                     <span class="material-symbols-outlined text-[13px]">{{ $esExclusivaActiva ? 'lock_open_right' : 'bolt' }}</span>
                                     <span>{{ $promo->badge_etiqueta ?? ($esExclusivaActiva ? 'PREVENTA ACTIVA · VIP' : 'EDICIÓN ESPECIAL') }}</span>
                                 </span>
 
-                                <span class="inline-flex items-center px-2.5 py-1 rounded-lg bg-emerald-500/20 border border-emerald-400/50 text-emerald-300 font-tabular-data text-xs font-extrabold">
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 dark:bg-emerald-500/20 dark:border-emerald-400/50 dark:text-emerald-300 font-tabular-data text-xs font-extrabold">
                                     {{ $etiquetaDescuento }}
                                 </span>
                             </div>
 
                             <!-- Fase de Preventa vs Fase de Apertura -->
-                            <div class="flex items-center justify-between text-[10px] font-label-code uppercase tracking-wider px-3 py-1.5 rounded-xl {{ $esExclusivaActiva ? 'bg-amber-500/15 border border-amber-400/40 text-amber-200' : 'bg-emerald-500/15 border border-emerald-400/40 text-emerald-200' }}">
+                            <div class="flex items-center justify-between text-[10px] font-label-code uppercase tracking-wider px-3 py-1.5 rounded-xl {{ $esExclusivaActiva ? 'bg-amber-50 border border-amber-200 text-amber-900 dark:bg-amber-500/15 dark:border-amber-400/40 dark:text-amber-200' : 'bg-emerald-50 border border-emerald-200 text-emerald-800 dark:bg-emerald-500/15 dark:border-emerald-400/40 dark:text-emerald-200' }}">
                                 <span class="font-bold">{{ $promo->etiquetaFase() }}</span>
                                 <span>{{ $stockPromo > 0 ? $stockPromo . ' disp.' : 'Cupo limitado' }}</span>
                             </div>
 
                             <!-- Título y Descripción -->
                             <div>
-                                <h3 class="text-lg font-bold font-quicksand text-white leading-snug">
+                                <h3 class="text-lg font-bold font-quicksand text-slate-900 dark:text-white leading-snug">
                                     {{ $promo->nombre }}
                                 </h3>
-                                <p class="text-xs text-purple-200/90 mt-1.5 leading-relaxed">
+                                <p class="text-xs text-slate-600 dark:text-purple-200/90 mt-1.5 leading-relaxed">
                                     {{ $promo->descripcion }}
                                 </p>
                             </div>
 
                             <!-- Reloj Contador Regresivo en Tiempo Real (Countdown) -->
                             <div
-                                class="p-3.5 rounded-xl bg-black/40 border border-purple-500/30 space-y-2"
+                                class="p-3.5 rounded-xl bg-purple-50/70 dark:bg-black/40 border border-purple-200 dark:border-purple-500/30 space-y-2"
                                 data-promo-countdown="{{ $countdownTargetMs }}"
                             >
-                                <div class="flex items-center justify-between text-[10px] font-label-code uppercase tracking-wider text-purple-200">
-                                    <span class="inline-flex items-center gap-1">
-                                        <span class="material-symbols-outlined text-[13px] text-amber-300 animate-spin">schedule</span>
+                                <div class="flex items-center justify-between text-[10px] font-label-code uppercase tracking-wider text-purple-900 dark:text-purple-200">
+                                    <span class="inline-flex items-center gap-1 font-semibold">
+                                        <span class="material-symbols-outlined text-[13px] text-amber-600 dark:text-amber-300 animate-spin">schedule</span>
                                         <span>{{ $promo->etiquetaCountdown() }}</span>
                                     </span>
-                                    <span class="text-amber-300 font-bold">TIEMPO REAL</span>
+                                    <span class="text-amber-600 dark:text-amber-300 font-bold">TIEMPO REAL</span>
                                 </div>
                                 <div class="grid grid-cols-4 gap-2 text-center font-tabular-data">
-                                    <div class="bg-purple-900/60 border border-purple-500/40 rounded-lg py-1.5 px-1">
-                                        <span data-cd-days class="block text-base sm:text-lg font-extrabold text-white">02</span>
-                                        <span class="block text-[9px] font-label-code uppercase text-purple-300">Días</span>
+                                    <div class="bg-purple-50 dark:bg-purple-900/60 border border-purple-200 dark:border-purple-500/40 rounded-lg py-1.5 px-1 shadow-2xs">
+                                        <span data-cd-days class="block text-base sm:text-lg font-extrabold text-purple-950 dark:text-white">02</span>
+                                        <span class="block text-[9px] font-label-code uppercase text-purple-700 dark:text-purple-300 font-semibold">Días</span>
                                     </div>
-                                    <div class="bg-purple-900/60 border border-purple-500/40 rounded-lg py-1.5 px-1">
-                                        <span data-cd-hours class="block text-base sm:text-lg font-extrabold text-white">11</span>
-                                        <span class="block text-[9px] font-label-code uppercase text-purple-300">Horas</span>
+                                    <div class="bg-purple-50 dark:bg-purple-900/60 border border-purple-200 dark:border-purple-500/40 rounded-lg py-1.5 px-1 shadow-2xs">
+                                        <span data-cd-hours class="block text-base sm:text-lg font-extrabold text-purple-950 dark:text-white">11</span>
+                                        <span class="block text-[9px] font-label-code uppercase text-purple-700 dark:text-purple-300 font-semibold">Horas</span>
                                     </div>
-                                    <div class="bg-purple-900/60 border border-purple-500/40 rounded-lg py-1.5 px-1">
-                                        <span data-cd-minutes class="block text-base sm:text-lg font-extrabold text-white">45</span>
-                                        <span class="block text-[9px] font-label-code uppercase text-purple-300">Min</span>
+                                    <div class="bg-purple-50 dark:bg-purple-900/60 border border-purple-200 dark:border-purple-500/40 rounded-lg py-1.5 px-1 shadow-2xs">
+                                        <span data-cd-minutes class="block text-base sm:text-lg font-extrabold text-purple-950 dark:text-white">45</span>
+                                        <span class="block text-[9px] font-label-code uppercase text-purple-700 dark:text-purple-300 font-semibold">Min</span>
                                     </div>
-                                    <div class="bg-purple-900/60 border border-amber-400/50 rounded-lg py-1.5 px-1">
-                                        <span data-cd-seconds class="block text-base sm:text-lg font-extrabold text-amber-300">30</span>
-                                        <span class="block text-[9px] font-label-code uppercase text-amber-200">Seg</span>
+                                    <div class="bg-purple-50 dark:bg-purple-900/60 border border-amber-300 dark:border-amber-400/50 rounded-lg py-1.5 px-1 shadow-2xs">
+                                        <span data-cd-seconds class="block text-base sm:text-lg font-extrabold text-amber-700 dark:text-amber-300">30</span>
+                                        <span class="block text-[9px] font-label-code uppercase text-amber-800 dark:text-amber-200 font-semibold">Seg</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Pie de Tarjeta: Precio Preferencial y Acción según Fase / Nivel de Cliente -->
-                        <div class="relative z-10 pt-4 mt-5 border-t border-purple-700/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div class="relative z-10 pt-4 mt-5 border-t border-purple-200 dark:border-purple-700/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                             <div>
                                 @if ($precioOriginalPromo > 0)
-                                    <span class="text-[11px] font-tabular-data text-purple-300 line-through block">
+                                    <span class="text-[11px] font-tabular-data text-slate-400 dark:text-purple-300 line-through block">
                                         Antes: ${{ number_format($precioOriginalPromo, 2) }} MXN
                                     </span>
-                                    <span class="text-lg font-extrabold font-tabular-data text-amber-300">
-                                        ${{ number_format($precioConDescuentoPromo, 2) }} <span class="text-xs font-normal text-purple-200">MXN</span>
+                                    <span class="text-lg font-extrabold font-tabular-data text-purple-700 dark:text-amber-300">
+                                        ${{ number_format($precioConDescuentoPromo, 2) }} <span class="text-xs font-normal text-slate-500 dark:text-purple-200">MXN</span>
                                     </span>
                                 @else
-                                    <span class="text-xs font-label-code uppercase text-amber-300 font-bold">
+                                    <span class="text-xs font-label-code uppercase text-purple-700 dark:text-amber-300 font-bold">
                                         Bonificación: {{ $etiquetaDescuento }}
                                     </span>
                                 @endif
@@ -211,7 +211,7 @@
                                     <input type="hidden" name="cantidad" value="1" />
                                     <button
                                         type="submit"
-                                        class="btn-glass-purple w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs font-label-md font-extrabold uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-md cursor-pointer"
+                                        class="btn-glass-purple w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs font-label-md font-extrabold uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-sm cursor-pointer"
                                     >
                                         <span class="material-symbols-outlined text-[16px]">shopping_bag</span>
                                         <span>{{ $esExclusivaActiva ? 'Apartar en Preventa VIP' : 'Adquirir en Apertura' }}</span>
@@ -219,7 +219,7 @@
                                 </form>
                             @elseif ($esExclusivaActiva && ! $puedeComprarPromo)
                                 <div class="text-right">
-                                    <span class="inline-flex items-center gap-1 px-3 py-2 rounded-xl bg-purple-900/80 border border-amber-400/40 text-amber-200 text-[10px] font-label-code font-bold uppercase">
+                                    <span class="inline-flex items-center gap-1 px-3 py-2 rounded-xl bg-purple-100 dark:bg-purple-900/80 border border-purple-200 dark:border-amber-400/40 text-purple-800 dark:text-amber-200 text-[10px] font-label-code font-bold uppercase">
                                         <span class="material-symbols-outlined text-[14px]">lock</span>
                                         <span>Exclusivo 5+ Compras (Abre {{ $promo->fechaAperturaPublica()->format('d/m') }})</span>
                                     </span>
@@ -501,16 +501,18 @@
                                 <article
                                     draggable="false"
                                     data-product-details="{{ json_encode($fallbackDisco, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) }}"
-                                    class="bg-white dark:bg-[#171024] border-2 border-purple-600 dark:border-purple-500 ring-2 ring-purple-600/20 dark:ring-purple-500/20 rounded-2xl p-3 sm:p-5 flex flex-col justify-between hover:border-purple-700 hover:shadow-xl transition-all duration-200 group relative h-full select-none"
+                                    class="bg-white dark:bg-[#171024] border-2 border-purple-300 dark:border-purple-500 ring-1 ring-purple-300/30 dark:ring-2 dark:ring-purple-500/20 rounded-2xl p-3 sm:p-5 flex flex-col justify-between hover:border-purple-400 dark:hover:border-purple-400 hover:shadow-md dark:hover:shadow-xl transition-all duration-200 group relative h-full select-none"
                                 >
                                     <div>
                                         <div onclick="abrirModalDetalleProducto(this)" class="w-full aspect-square rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-2.5 sm:mb-4 cursor-pointer group-hover:shadow-inner">
                                             <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 dark:via-white/5 dark:to-white/10 pointer-events-none rounded-xl z-20"></div>
-                                            <span class="absolute top-2.5 left-2.5 z-10 bg-purple-600 text-white text-[10px] font-label-sm font-bold uppercase px-2.5 py-0.5 rounded-md shadow-sm inline-flex items-center gap-1">
-                                                <span class="material-symbols-outlined text-[12px]">diamond</span>
-                                                <span>PIEZA ÚNICA 1/1</span>
-                                            </span>
-                                            <span class="absolute top-2.5 right-2.5 z-10 bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
+                                            <div class="absolute top-2.5 inset-x-2.5 flex items-center justify-between gap-1.5 z-10 pointer-events-none">
+                                                <span class="inline-flex items-center gap-1 bg-purple-100 dark:bg-purple-600 text-purple-800 dark:text-white border border-purple-300 dark:border-purple-400/60 text-[9px] sm:text-[10px] font-label-sm font-bold uppercase px-2 sm:px-2.5 py-0.5 rounded-md shadow-2xs dark:shadow-sm">
+                                                    <span class="material-symbols-outlined text-[11px] sm:text-[12px]">diamond</span>
+                                                    <span>PIEZA ÚNICA 1/1</span>
+                                                </span>
+                                                <span class="inline-flex items-center bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[9px] sm:text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
+                                            </div>
                                             <span class="material-symbols-outlined text-purple-400 dark:text-purple-300 group-hover:text-primary transition-colors text-[64px]">album</span>
                                         </div>
                                         <div class="space-y-1">
@@ -551,16 +553,18 @@
                                 <article
                                     draggable="false"
                                     data-product-details="{{ json_encode($fallbackLibro, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) }}"
-                                    class="bg-white dark:bg-[#171024] border-2 border-purple-600 dark:border-purple-500 ring-2 ring-purple-600/20 dark:ring-purple-500/20 rounded-2xl p-3 sm:p-5 flex flex-col justify-between hover:border-purple-700 hover:shadow-xl transition-all duration-200 group relative h-full select-none"
+                                    class="bg-white dark:bg-[#171024] border-2 border-purple-300 dark:border-purple-500 ring-1 ring-purple-300/30 dark:ring-2 dark:ring-purple-500/20 rounded-2xl p-3 sm:p-5 flex flex-col justify-between hover:border-purple-400 dark:hover:border-purple-400 hover:shadow-md dark:hover:shadow-xl transition-all duration-200 group relative h-full select-none"
                                 >
                                     <div>
                                         <div onclick="abrirModalDetalleProducto(this)" class="w-full aspect-square rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-2.5 sm:mb-4 cursor-pointer group-hover:shadow-inner">
                                             <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 dark:via-white/5 dark:to-white/10 pointer-events-none rounded-xl z-20"></div>
-                                            <span class="absolute top-2.5 left-2.5 z-10 bg-purple-600 text-white text-[10px] font-label-sm font-bold uppercase px-2.5 py-0.5 rounded-md shadow-sm inline-flex items-center gap-1">
-                                                <span class="material-symbols-outlined text-[12px]">diamond</span>
-                                                <span>PIEZA ÚNICA 1/1</span>
-                                            </span>
-                                            <span class="absolute top-2.5 right-2.5 z-10 bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
+                                            <div class="absolute top-2.5 inset-x-2.5 flex items-center justify-between gap-1.5 z-10 pointer-events-none">
+                                                <span class="inline-flex items-center gap-1 bg-purple-100 dark:bg-purple-600 text-purple-800 dark:text-white border border-purple-300 dark:border-purple-400/60 text-[9px] sm:text-[10px] font-label-sm font-bold uppercase px-2 sm:px-2.5 py-0.5 rounded-md shadow-2xs dark:shadow-sm">
+                                                    <span class="material-symbols-outlined text-[11px] sm:text-[12px]">diamond</span>
+                                                    <span>PIEZA ÚNICA 1/1</span>
+                                                </span>
+                                                <span class="inline-flex items-center bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[9px] sm:text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
+                                            </div>
                                             <span class="material-symbols-outlined text-purple-400 dark:text-purple-300 group-hover:text-primary transition-colors text-[64px]">auto_stories</span>
                                         </div>
                                         <div class="space-y-1">
@@ -601,16 +605,18 @@
                                 <article
                                     draggable="false"
                                     data-product-details="{{ json_encode($fallbackMemorabilia, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) }}"
-                                    class="bg-white dark:bg-[#171024] border-2 border-purple-600 dark:border-purple-500 ring-2 ring-purple-600/20 dark:ring-purple-500/20 rounded-2xl p-3 sm:p-5 flex flex-col justify-between hover:border-purple-700 hover:shadow-xl transition-all duration-200 group relative h-full select-none"
+                                    class="bg-white dark:bg-[#171024] border-2 border-purple-300 dark:border-purple-500 ring-1 ring-purple-300/30 dark:ring-2 dark:ring-purple-500/20 rounded-2xl p-3 sm:p-5 flex flex-col justify-between hover:border-purple-400 dark:hover:border-purple-400 hover:shadow-md dark:hover:shadow-xl transition-all duration-200 group relative h-full select-none"
                                 >
                                     <div>
                                         <div onclick="abrirModalDetalleProducto(this)" class="w-full aspect-square rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-2.5 sm:mb-4 cursor-pointer group-hover:shadow-inner">
                                             <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 dark:via-white/5 dark:to-white/10 pointer-events-none rounded-xl z-20"></div>
-                                            <span class="absolute top-2.5 left-2.5 z-10 bg-purple-600 text-white text-[10px] font-label-sm font-bold uppercase px-2.5 py-0.5 rounded-md shadow-sm inline-flex items-center gap-1">
-                                                <span class="material-symbols-outlined text-[12px]">diamond</span>
-                                                <span>PIEZA ÚNICA 1/1</span>
-                                            </span>
-                                            <span class="absolute top-2.5 right-2.5 z-10 bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
+                                            <div class="absolute top-2.5 inset-x-2.5 flex items-center justify-between gap-1.5 z-10 pointer-events-none">
+                                                <span class="inline-flex items-center gap-1 bg-purple-100 dark:bg-purple-600 text-purple-800 dark:text-white border border-purple-300 dark:border-purple-400/60 text-[9px] sm:text-[10px] font-label-sm font-bold uppercase px-2 sm:px-2.5 py-0.5 rounded-md shadow-2xs dark:shadow-sm">
+                                                    <span class="material-symbols-outlined text-[11px] sm:text-[12px]">diamond</span>
+                                                    <span>PIEZA ÚNICA 1/1</span>
+                                                </span>
+                                                <span class="inline-flex items-center bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[9px] sm:text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
+                                            </div>
                                             <span class="material-symbols-outlined text-purple-400 dark:text-purple-300 group-hover:text-primary transition-colors text-[64px]">history_edu</span>
                                         </div>
                                         <div class="space-y-1">
@@ -651,16 +657,18 @@
                                 <article
                                     draggable="false"
                                     data-product-details="{{ json_encode($fallbackDisco2, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) }}"
-                                    class="bg-white dark:bg-[#171024] border-2 border-purple-600 dark:border-purple-500 ring-2 ring-purple-600/20 dark:ring-purple-500/20 rounded-2xl p-3 sm:p-5 flex flex-col justify-between hover:border-purple-700 hover:shadow-xl transition-all duration-200 group relative h-full select-none"
+                                    class="bg-white dark:bg-[#171024] border-2 border-purple-300 dark:border-purple-500 ring-1 ring-purple-300/30 dark:ring-2 dark:ring-purple-500/20 rounded-2xl p-3 sm:p-5 flex flex-col justify-between hover:border-purple-400 dark:hover:border-purple-400 hover:shadow-md dark:hover:shadow-xl transition-all duration-200 group relative h-full select-none"
                                 >
                                     <div>
                                         <div onclick="abrirModalDetalleProducto(this)" class="w-full aspect-square rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-2.5 sm:mb-4 cursor-pointer group-hover:shadow-inner">
                                             <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 dark:via-white/5 dark:to-white/10 pointer-events-none rounded-xl z-20"></div>
-                                            <span class="absolute top-2.5 left-2.5 z-10 bg-purple-600 text-white text-[10px] font-label-sm font-bold uppercase px-2.5 py-0.5 rounded-md shadow-sm inline-flex items-center gap-1">
-                                                <span class="material-symbols-outlined text-[12px]">diamond</span>
-                                                <span>PIEZA ÚNICA 1/1</span>
-                                            </span>
-                                            <span class="absolute top-2.5 right-2.5 z-10 bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
+                                            <div class="absolute top-2.5 inset-x-2.5 flex items-center justify-between gap-1.5 z-10 pointer-events-none">
+                                                <span class="inline-flex items-center gap-1 bg-purple-100 dark:bg-purple-600 text-purple-800 dark:text-white border border-purple-300 dark:border-purple-400/60 text-[9px] sm:text-[10px] font-label-sm font-bold uppercase px-2 sm:px-2.5 py-0.5 rounded-md shadow-2xs dark:shadow-sm">
+                                                    <span class="material-symbols-outlined text-[11px] sm:text-[12px]">diamond</span>
+                                                    <span>PIEZA ÚNICA 1/1</span>
+                                                </span>
+                                                <span class="inline-flex items-center bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[9px] sm:text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
+                                            </div>
                                             <span class="material-symbols-outlined text-purple-400 dark:text-purple-300 group-hover:text-primary transition-colors text-[64px]">album</span>
                                         </div>
                                         <div class="space-y-1">
@@ -701,16 +709,18 @@
                                 <article
                                     draggable="false"
                                     data-product-details="{{ json_encode($fallbackLibro2, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) }}"
-                                    class="bg-white dark:bg-[#171024] border-2 border-purple-600 dark:border-purple-500 ring-2 ring-purple-600/20 dark:ring-purple-500/20 rounded-2xl p-3 sm:p-5 flex flex-col justify-between hover:border-purple-700 hover:shadow-xl transition-all duration-200 group relative h-full select-none"
+                                    class="bg-white dark:bg-[#171024] border-2 border-purple-300 dark:border-purple-500 ring-1 ring-purple-300/30 dark:ring-2 dark:ring-purple-500/20 rounded-2xl p-3 sm:p-5 flex flex-col justify-between hover:border-purple-400 dark:hover:border-purple-400 hover:shadow-md dark:hover:shadow-xl transition-all duration-200 group relative h-full select-none"
                                 >
                                     <div>
                                         <div onclick="abrirModalDetalleProducto(this)" class="w-full aspect-square rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-2.5 sm:mb-4 cursor-pointer group-hover:shadow-inner">
                                             <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 dark:via-white/5 dark:to-white/10 pointer-events-none rounded-xl z-20"></div>
-                                            <span class="absolute top-2.5 left-2.5 z-10 bg-purple-600 text-white text-[10px] font-label-sm font-bold uppercase px-2.5 py-0.5 rounded-md shadow-sm inline-flex items-center gap-1">
-                                                <span class="material-symbols-outlined text-[12px]">diamond</span>
-                                                <span>PIEZA ÚNICA 1/1</span>
-                                            </span>
-                                            <span class="absolute top-2.5 right-2.5 z-10 bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
+                                            <div class="absolute top-2.5 inset-x-2.5 flex items-center justify-between gap-1.5 z-10 pointer-events-none">
+                                                <span class="inline-flex items-center gap-1 bg-purple-100 dark:bg-purple-600 text-purple-800 dark:text-white border border-purple-300 dark:border-purple-400/60 text-[9px] sm:text-[10px] font-label-sm font-bold uppercase px-2 sm:px-2.5 py-0.5 rounded-md shadow-2xs dark:shadow-sm">
+                                                    <span class="material-symbols-outlined text-[11px] sm:text-[12px]">diamond</span>
+                                                    <span>PIEZA ÚNICA 1/1</span>
+                                                </span>
+                                                <span class="inline-flex items-center bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[9px] sm:text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
+                                            </div>
                                             <span class="material-symbols-outlined text-purple-400 dark:text-purple-300 group-hover:text-primary transition-colors text-[64px]">auto_stories</span>
                                         </div>
                                         <div class="space-y-1">
@@ -751,16 +761,18 @@
                                 <article
                                     draggable="false"
                                     data-product-details="{{ json_encode($fallbackMemorabilia2, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) }}"
-                                    class="bg-white dark:bg-[#171024] border-2 border-purple-600 dark:border-purple-500 ring-2 ring-purple-600/20 dark:ring-purple-500/20 rounded-2xl p-3 sm:p-5 flex flex-col justify-between hover:border-purple-700 hover:shadow-xl transition-all duration-200 group relative h-full select-none"
+                                    class="bg-white dark:bg-[#171024] border-2 border-purple-300 dark:border-purple-500 ring-1 ring-purple-300/30 dark:ring-2 dark:ring-purple-500/20 rounded-2xl p-3 sm:p-5 flex flex-col justify-between hover:border-purple-400 dark:hover:border-purple-400 hover:shadow-md dark:hover:shadow-xl transition-all duration-200 group relative h-full select-none"
                                 >
                                     <div>
                                         <div onclick="abrirModalDetalleProducto(this)" class="w-full aspect-square rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-2.5 sm:mb-4 cursor-pointer group-hover:shadow-inner">
                                             <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 dark:via-white/5 dark:to-white/10 pointer-events-none rounded-xl z-20"></div>
-                                            <span class="absolute top-2.5 left-2.5 z-10 bg-purple-600 text-white text-[10px] font-label-sm font-bold uppercase px-2.5 py-0.5 rounded-md shadow-sm inline-flex items-center gap-1">
-                                                <span class="material-symbols-outlined text-[12px]">diamond</span>
-                                                <span>PIEZA ÚNICA 1/1</span>
-                                            </span>
-                                            <span class="absolute top-2.5 right-2.5 z-10 bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
+                                            <div class="absolute top-2.5 inset-x-2.5 flex items-center justify-between gap-1.5 z-10 pointer-events-none">
+                                                <span class="inline-flex items-center gap-1 bg-purple-100 dark:bg-purple-600 text-purple-800 dark:text-white border border-purple-300 dark:border-purple-400/60 text-[9px] sm:text-[10px] font-label-sm font-bold uppercase px-2 sm:px-2.5 py-0.5 rounded-md shadow-2xs dark:shadow-sm">
+                                                    <span class="material-symbols-outlined text-[11px] sm:text-[12px]">diamond</span>
+                                                    <span>PIEZA ÚNICA 1/1</span>
+                                                </span>
+                                                <span class="inline-flex items-center bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[9px] sm:text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
+                                            </div>
                                             <span class="material-symbols-outlined text-purple-400 dark:text-purple-300 group-hover:text-primary transition-colors text-[64px]">history_edu</span>
                                         </div>
                                         <div class="space-y-1">

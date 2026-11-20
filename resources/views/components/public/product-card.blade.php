@@ -43,11 +43,11 @@
     $maxUnidadesCompra = $piezaUnica !== null ? 1 : max(1, min(10, $stockTotal));
 
     $clasesTarjeta = $esPiezaUnica
-        ? 'bg-white dark:bg-[#171024] border-2 border-purple-600 dark:border-purple-500 ring-2 ring-purple-600/20 dark:ring-purple-500/20 shadow-md shadow-purple-600/15 hover:border-purple-700 hover:shadow-xl hover:shadow-purple-600/25'
+        ? 'bg-white dark:bg-[#171024] border-2 border-purple-300 dark:border-purple-500 ring-1 ring-purple-300/30 dark:ring-2 dark:ring-purple-500/20 shadow-xs dark:shadow-md dark:shadow-purple-600/15 hover:border-purple-400 dark:hover:border-purple-400 hover:shadow-md dark:hover:shadow-xl'
         : 'bg-white dark:bg-[#171024] border border-purple-200/80 dark:border-purple-500/30 shadow-xs hover:border-primary hover:shadow-lg';
 
     $clasesMiniatura = $esPiezaUnica
-        ? 'bg-purple-50/60 dark:bg-[#140d20] border-2 border-purple-600/80 dark:border-purple-500/40 ring-1 ring-purple-500/30 group-hover:bg-purple-100/60'
+        ? 'bg-purple-50/60 dark:bg-[#140d20] border border-purple-200 dark:border-purple-500/40 group-hover:bg-purple-100/60'
         : 'bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 group-hover:bg-purple-50 dark:group-hover:bg-purple-900/20';
 
     $datosModal = [
@@ -117,27 +117,34 @@
             <!-- Capa Glossy Curatorial Sutil -->
             <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 dark:via-white/5 dark:to-white/10 pointer-events-none rounded-xl z-20"></div>
 
-            @if ($esPiezaUnica)
-                <span class="absolute top-2 left-2 sm:top-2.5 sm:left-2.5 z-10 bg-purple-600 text-white border border-purple-400/60 text-[9px] sm:text-[10px] font-label-sm font-bold uppercase px-2 sm:px-2.5 py-0.5 rounded-md shadow-sm inline-flex items-center gap-1">
-                    <span class="material-symbols-outlined text-[11px] sm:text-[12px]">diamond</span>
-                    <span>PIEZA ÚNICA 1/1</span>
-                    <span class="sr-only">Pieza Única · Edición Coleccionable {{ $piezaUnica?->numero_serie }}</span>
-                </span>
-            @endif
+            <!-- Contenedor Flex Superior para Insignias (Izquierda: Pieza Única, Derecha: Stock) sin Encimarse Jamás -->
+            <div class="absolute top-2.5 inset-x-2.5 flex items-center justify-between gap-1.5 sm:gap-2 z-10 pointer-events-none">
+                <div>
+                    @if ($esPiezaUnica)
+                        <span class="inline-flex items-center gap-1 bg-purple-100 dark:bg-purple-600 text-purple-800 dark:text-white border border-purple-300 dark:border-purple-400/60 text-[9px] sm:text-[10px] font-label-sm font-bold uppercase px-1.5 sm:px-2.5 py-0.5 rounded-md shadow-2xs dark:shadow-sm">
+                            <span class="material-symbols-outlined text-[11px] sm:text-[12px]">diamond</span>
+                            <span class="whitespace-nowrap">PIEZA ÚNICA 1/1</span>
+                            <span class="sr-only">Pieza Única · Edición Coleccionable {{ $piezaUnica?->numero_serie }}</span>
+                        </span>
+                    @endif
+                </div>
 
-            @if ($estaReservadaTemporalmente)
-                <span class="absolute top-2 right-2 sm:top-2.5 sm:right-2.5 z-10 bg-amber-600 text-white border border-amber-700 text-[9px] sm:text-[10px] font-label-code font-bold uppercase tracking-wider px-2 sm:px-2.5 py-0.5 rounded-full shadow-xs">
-                    RESERVADA (5 MIN)
-                </span>
-            @elseif ($estaAgotado)
-                <span class="absolute top-2 right-2 sm:top-2.5 sm:right-2.5 z-10 bg-red-600 text-white border border-red-700 text-[9px] sm:text-[10px] font-label-code font-bold uppercase tracking-wider px-2 sm:px-2.5 py-0.5 rounded-full shadow-xs">
-                    AGOTADO
-                </span>
-            @else
-                <span class="absolute top-2 right-2 sm:top-2.5 sm:right-2.5 z-10 bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[9px] sm:text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">
-                    {{ $stockTotal }} en bóveda
-                </span>
-            @endif
+                <div class="shrink-0">
+                    @if ($estaReservadaTemporalmente)
+                        <span class="inline-flex items-center bg-amber-600 text-white border border-amber-700 text-[9px] sm:text-[10px] font-label-code font-bold uppercase tracking-wider px-1.5 sm:px-2.5 py-0.5 rounded-full shadow-xs whitespace-nowrap">
+                            RESERVADA (5 MIN)
+                        </span>
+                    @elseif ($estaAgotado)
+                        <span class="inline-flex items-center bg-red-600 text-white border border-red-700 text-[9px] sm:text-[10px] font-label-code font-bold uppercase tracking-wider px-1.5 sm:px-2.5 py-0.5 rounded-full shadow-xs whitespace-nowrap">
+                            AGOTADO
+                        </span>
+                    @else
+                        <span class="inline-flex items-center bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[9px] sm:text-[10px] font-label-code font-semibold px-1.5 sm:px-2 py-0.5 rounded-full shadow-2xs whitespace-nowrap">
+                            {{ $stockTotal }} en bóveda
+                        </span>
+                    @endif
+                </div>
+            </div>
 
             @if (!empty($imagenUrl))
                 <img draggable="false" src="{{ $imagenUrl }}" alt="{{ $producto->nombre }}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 pointer-events-none select-none">

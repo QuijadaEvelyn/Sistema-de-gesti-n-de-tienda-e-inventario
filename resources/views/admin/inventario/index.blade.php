@@ -18,25 +18,25 @@
             </div>
             <div class="flex flex-wrap gap-2">
                 @if (auth()->user()?->esAdmin())
-                    <a href="{{ route('admin.reportes.csv', array_filter(['sucursal_id' => $sucursalActiva?->id ?? request('sucursal_id')])) }}" class="px-4 py-2 rounded-xl border border-purple-200 bg-white hover:bg-purple-50 text-primary text-xs font-label-md flex items-center gap-1.5 transition">
+                    <a href="{{ route('admin.reportes.csv', array_filter(['sucursal_id' => $sucursalActiva?->id ?? request('sucursal_id')])) }}" class="px-4 py-2 rounded-xl border border-purple-200 bg-purple-100 hover:bg-purple-200 text-purple-800 dark:bg-white/5 dark:border-purple-500/30 dark:text-purple-300 dark:hover:bg-white/10 text-xs font-label-md flex items-center gap-1.5 transition">
                         <span class="material-symbols-outlined text-[16px]">table_view</span>
                         <span>Exportar CSV (.csv)</span>
                     </a>
-                    <a href="{{ route('admin.reportes.pdf', array_filter(['sucursal_id' => $sucursalActiva?->id ?? request('sucursal_id')])) }}" class="px-4 py-2 rounded-xl border border-purple-200 bg-white hover:bg-purple-50 text-primary text-xs font-label-md flex items-center gap-1.5 transition">
+                    <a href="{{ route('admin.reportes.pdf', array_filter(['sucursal_id' => $sucursalActiva?->id ?? request('sucursal_id')])) }}" class="px-4 py-2 rounded-xl border border-purple-200 bg-purple-100 hover:bg-purple-200 text-purple-800 dark:bg-white/5 dark:border-purple-500/30 dark:text-purple-300 dark:hover:bg-white/10 text-xs font-label-md flex items-center gap-1.5 transition">
                         <span class="material-symbols-outlined text-[16px]">picture_as_pdf</span>
                         <span>Exportar PDF (.pdf)</span>
                     </a>
                 @endif
                 @if ($puedeAjustar)
-                    <a href="{{ route('almacen.ajustes', array_filter(['sucursal_id' => $sucursalActiva?->id ?? request('sucursal_id')])) }}" class="px-4 py-2 rounded-xl bg-primary-container hover:bg-primary text-white text-xs font-label-md flex items-center gap-1.5 transition">
+                    <a href="{{ route('almacen.ajustes', array_filter(['sucursal_id' => $sucursalActiva?->id ?? request('sucursal_id')])) }}" class="px-4 py-2 rounded-xl bg-purple-500 hover:bg-purple-600 dark:bg-purple-600 dark:hover:bg-purple-500 text-white text-xs font-label-md flex items-center gap-1.5 transition shadow-sm">
                         <span class="material-symbols-outlined text-[16px]">tune</span>
                         <span>Ajustes &amp; Recepciones</span>
                     </a>
-                    <a href="{{ route('almacen.transferencias', array_filter(['sucursal_id' => $sucursalActiva?->id ?? request('sucursal_id')])) }}" class="px-4 py-2 rounded-xl border border-purple-200 bg-white hover:bg-purple-50 text-primary text-xs font-label-md flex items-center gap-1.5 transition">
+                    <a href="{{ route('almacen.transferencias', array_filter(['sucursal_id' => $sucursalActiva?->id ?? request('sucursal_id')])) }}" class="px-4 py-2 rounded-xl border border-purple-200 bg-purple-100 hover:bg-purple-200 text-purple-800 dark:bg-white/5 dark:border-purple-500/30 dark:text-purple-300 dark:hover:bg-white/10 text-xs font-label-md flex items-center gap-1.5 transition">
                         <span class="material-symbols-outlined text-[16px]">swap_horiz</span>
                         <span>Transferencias</span>
                     </a>
-                    <a href="{{ route('almacen.envios', array_filter(['sucursal_id' => $sucursalActiva?->id ?? request('sucursal_id')])) }}" class="px-4 py-2 rounded-xl border border-purple-200 bg-white hover:bg-purple-50 text-primary text-xs font-label-md flex items-center gap-1.5 transition">
+                    <a href="{{ route('almacen.envios', array_filter(['sucursal_id' => $sucursalActiva?->id ?? request('sucursal_id')])) }}" class="px-4 py-2 rounded-xl border border-purple-200 bg-purple-100 hover:bg-purple-200 text-purple-800 dark:bg-white/5 dark:border-purple-500/30 dark:text-purple-300 dark:hover:bg-white/10 text-xs font-label-md flex items-center gap-1.5 transition">
                         <span class="material-symbols-outlined text-[16px]">local_shipping</span>
                         <span>Envíos &amp; Despacho</span>
                     </a>
@@ -58,7 +58,7 @@
                 <input type="checkbox" name="bajo_stock" value="1" @checked(request()->boolean('bajo_stock')) class="rounded border-purple-300 text-primary" />
                 <span>Solo stock crítico</span>
             </label>
-            <button type="submit" class="px-4 py-2 rounded-xl bg-primary text-white text-xs font-bold uppercase tracking-wider">Filtrar</button>
+            <button type="submit" class="px-4 py-2 rounded-xl bg-purple-500 hover:bg-purple-600 dark:bg-purple-600 dark:hover:bg-purple-500 text-white text-xs font-bold uppercase tracking-wider transition shadow-sm cursor-pointer">Filtrar</button>
         </form>
 
         <div class="bg-surface-container-lowest rounded-2xl border border-purple-200/70 overflow-hidden shadow-xs">

@@ -1,16 +1,16 @@
 <x-layouts.public :title="'ARCHIVUM · ' . $meta['titulo']">
 
     <!-- Encabezado Curatorial de la Categoría -->
-    <section class="relative rounded-2xl overflow-hidden bg-gradient-to-r from-purple-900 to-indigo-950 text-white p-6 sm:p-10 mb-8 shadow-lg border border-purple-800/40">
+    <section class="relative rounded-2xl overflow-hidden bg-[#FAF8FF] dark:bg-gradient-to-r dark:from-purple-900 dark:to-indigo-950 text-slate-900 dark:text-white p-6 sm:p-10 mb-8 shadow-xs dark:shadow-lg border border-purple-200 dark:border-purple-800/40">
         <div class="relative z-10 max-w-3xl space-y-3">
-            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/20 border border-purple-300/30 text-purple-200 text-xs font-label-md tracking-wider">
-                <span class="material-symbols-outlined text-[15px] text-purple-300">{{ $meta['icono'] }}</span>
+            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-500/20 border border-purple-200 dark:border-purple-300/30 text-purple-800 dark:text-purple-200 text-xs font-label-md tracking-wider font-semibold">
+                <span class="material-symbols-outlined text-[15px] text-purple-600 dark:text-purple-300">{{ $meta['icono'] }}</span>
                 <span>{{ $meta['badge'] }}</span>
             </span>
-            <h1 class="text-2xl sm:text-4xl font-bold font-quicksand leading-tight text-white">
+            <h1 class="text-2xl sm:text-4xl font-bold font-quicksand leading-tight text-slate-900 dark:text-white">
                 {{ $meta['titulo'] }}
             </h1>
-            <p class="font-title-editorial text-purple-100/90 text-base sm:text-lg leading-relaxed">
+            <p class="font-title-editorial text-slate-600 dark:text-purple-100/90 text-base sm:text-lg leading-relaxed">
                 «{{ $meta['descripcion'] }}»
             </p>
         </div>
