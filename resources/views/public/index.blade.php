@@ -233,20 +233,23 @@
     @endif
 
     <!-- Vitrina Curatorial: Carrusel 3D Coverflow Interactivo Puro -->
-    <section class="relative block w-full py-10 mt-8 clear-both" aria-label="Vitrina Rotativa 3D de Piezas Destacadas">
-        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 mb-8 relative z-20">
-            <div>
-                <span class="inline-flex items-center gap-1.5 text-[11px] font-label-code uppercase tracking-widest text-primary dark:text-purple-300">
-                    <span class="material-symbols-outlined text-[15px]">view_in_ar</span>
-                    <span>Exhibición Curatorial · Desplazamiento Fluido</span>
-                </span>
-                <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-on-surface dark:text-white font-quicksand">
-                    Vitrina Rotativa de Piezas Destacadas
-                </h2>
+    <section class="relative block w-full py-6 sm:py-10 mt-6 sm:mt-8 clear-both" aria-label="Vitrina Rotativa 3D de Piezas Destacadas">
+        <!-- Encabezado con contenedor responsivo y flex-wrap para que el texto de ayuda nunca se corte a la derecha -->
+        <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-2 sm:gap-4 mb-6 sm:mb-8 relative z-20 flex-wrap">
+                <div class="max-w-xl">
+                    <span class="inline-flex items-center gap-1.5 text-[11px] font-label-code uppercase tracking-widest text-primary dark:text-purple-300">
+                        <span class="material-symbols-outlined text-[15px]">view_in_ar</span>
+                        <span>Exhibición Curatorial · Desplazamiento Fluido</span>
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-on-surface dark:text-white font-quicksand">
+                        Vitrina Rotativa de Piezas Destacadas
+                    </h2>
+                </div>
+                <p class="text-xs text-on-surface-variant dark:text-purple-300/80 font-label-code max-w-sm md:text-right leading-relaxed">
+                    Desliza con el mouse, pantalla táctil o rueda para explorar el acervo 3D
+                </p>
             </div>
-            <p class="text-xs text-on-surface-variant dark:text-purple-300/80 font-label-code">
-                Desliza con el mouse, pantalla táctil o rueda para explorar el acervo 3D
-            </p>
         </div>
 
         <!-- Escenario 3D Coverflow Puro: Sin flechas, sin botones, sin barras, sin marco exterior -->
@@ -257,8 +260,8 @@
                 role="region"
                 aria-roledescription="carousel"
                 aria-label="Vitrina Rotativa 3D de Piezas Destacadas"
-                class="coverflow-stage relative w-full h-[460px] sm:h-[520px] min-h-[460px] flex items-center justify-center overflow-hidden select-none focus:outline-none"
-                style="min-height: 460px; height: 520px; perspective: 1200px; transform-style: preserve-3d;"
+                class="coverflow-stage relative w-full h-[460px] sm:h-[540px] md:h-[580px] min-h-[460px] sm:min-h-[540px] md:min-h-[580px] flex items-center justify-center overflow-x-clip overflow-y-visible py-6 select-none focus:outline-none"
+                style="perspective: 1200px; transform-style: preserve-3d;"
             >
                 <!-- Degradado sutil en los bordes izquierdo y derecho -->
                 <div class="absolute left-0 top-0 bottom-0 w-16 sm:w-28 bg-gradient-to-r from-background dark:from-[#0d0714] to-transparent z-40 pointer-events-none"></div>

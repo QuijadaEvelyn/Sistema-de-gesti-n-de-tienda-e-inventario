@@ -737,13 +737,14 @@
     position: relative;
     width: 100%;
     min-height: 460px;
-    height: 520px;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
+    height: 580px;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
+    overflow-x: clip;
+    overflow-y: visible;
     perspective: 1200px;
     perspective-origin: 50% 50%;
     transform-style: preserve-3d;
@@ -800,13 +801,25 @@
 @media (max-width: 639px) {
     #vitrina-coverflow-carousel,
     .coverflow-stage {
-        min-height: 420px;
-        height: 440px;
+        min-height: 460px;
+        height: 480px;
+        overflow-x: clip;
+        overflow-y: visible;
     }
 
     .coverflow-slot-anchor {
         width: 250px;
         height: 400px;
+    }
+}
+
+@media (min-width: 640px) and (max-width: 767px) {
+    #vitrina-coverflow-carousel,
+    .coverflow-stage {
+        min-height: 520px;
+        height: 540px;
+        overflow-x: clip;
+        overflow-y: visible;
     }
 }
 
