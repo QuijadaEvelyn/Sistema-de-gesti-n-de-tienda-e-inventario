@@ -66,6 +66,50 @@ class Producto extends Model
     }
 
     /**
+     * Da de baja el producto ocultándolo del catálogo público sin borrar su historial.
+     */
+    public function darDeBaja(): bool
+    {
+        $this->activo = false;
+        $guardado = $this->save();
+        if ($guardado) {
+            $this->variantesSku()->update(['activa' => false]);
+        }
+
+        return $guardado;
+    }
+
+    /**
+     * Reactiva y da de alta el producto para que vuelva a estar visible en el catálogo público.
+     */
+    public function reactivar(): bool
+    {
+        $this->activo = true;
+        $guardado = $this->save();
+        if ($guardado) {
+            $this->variantesSku()->update(['activa' => true]);
+        }
+
+        return $guardado;
+    }
+
+    /**
+     * Filtra únicamente productos activos para la tienda y catálogo público.
+     */
+    public function scopeActivos($query)
+    {
+        return $query->where('activo', true);
+    }
+
+    /**
+     * Filtra únicamente productos dados de baja / inactivos.
+     */
+    public function scopeDadosDeBaja($query)
+    {
+        return $query->where('activo', false);
+    }
+
+    /**
      * Catálogo al que pertenece el producto.
      */
     public function catalogo(): BelongsTo

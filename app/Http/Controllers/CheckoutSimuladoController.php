@@ -354,7 +354,23 @@ class CheckoutSimuladoController extends Controller
         $carrito = session('carrito_archivum', []);
         $cantidadActualEnCarrito = (int) ($carrito[$varianteId] ?? 0);
 
-        // 0. Validar Fase de Preventa Exclusiva para Clientes Frecuentes (5+ compras) vs Apertura al Público General
+        // 0. Validar que la pieza no esté dada de baja del catálogo
+        if ($producto && ! $producto->activo) {
+            $mensajeInactivo = "La pieza «{$nombrePieza}» ha sido dada de baja del catálogo y no se encuentra disponible para reserva.";
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $mensajeInactivo,
+                ], 422);
+            }
+
+            return back()
+                ->with('error', $mensajeInactivo)
+                ->withErrors(['stock' => $mensajeInactivo]);
+        }
+
+        // 0.B Validar Fase de Preventa Exclusiva para Clientes Frecuentes (5+ compras) vs Apertura al Público General
         if ($producto) {
             $promoProducto = self::obtenerPromocionDeProducto($producto);
             $usuarioActual = $request->user();

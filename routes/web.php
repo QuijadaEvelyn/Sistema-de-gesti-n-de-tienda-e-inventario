@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EmpleadoController;
 use App\Http\Controllers\Admin\InventarioController;
 use App\Http\Controllers\Admin\MensajeContactoController;
+use App\Http\Controllers\Admin\ProductoController;
 use App\Http\Controllers\Admin\ReporteController;
 use App\Http\Controllers\Admin\RolController;
 use App\Http\Controllers\Admin\SucursalController;
@@ -107,9 +108,9 @@ Route::middleware('auth')->group(function (): void {
 // 4. Módulos y Portales Protegidos por Rol (5 Roles de Negocio)
 // =========================================================================
 
-// Panel General Backoffice /admin: Acceso para personal (administrador, encargado, ventas, almacen, compras)
+// Panel General Backoffice /admin: Acceso para personal (administrador, encargado, ventas, almacen, compras, empleados y trabajadores)
 Route::prefix('admin')
-    ->middleware(['auth', 'rol:administrador,encargado,ventas,almacen,compras'])
+    ->middleware(['auth', 'rol:administrador,encargado,ventas,almacen,compras,empleado,trabajador,operador'])
     ->group(function (): void {
         // Dashboard Financiero General y Reportes Monetarios: Acceso EXCLUSIVO para el rol Administrador
         Route::middleware('rol:administrador')->group(function (): void {
@@ -122,8 +123,24 @@ Route::prefix('admin')
         // Estado Técnico de Terminal Operativa
         Route::get('/terminal', [DashboardController::class, 'terminal'])->name('admin.terminal');
 
+        // Gestión de Productos: Altas, Bajas, Edición y Catálogo Maestro (para Administradores y Empleados)
+        Route::prefix('productos')->group(function (): void {
+            Route::get('/', [ProductoController::class, 'index'])->name('admin.productos.index');
+            Route::get('/crear', [ProductoController::class, 'create'])->name('admin.productos.create');
+            Route::get('/alta', [ProductoController::class, 'create'])->name('admin.productos.alta');
+            Route::post('/', [ProductoController::class, 'store'])->name('admin.productos.store');
+            Route::get('/{producto}/editar', [ProductoController::class, 'edit'])->name('admin.productos.edit');
+            Route::put('/{producto}', [ProductoController::class, 'update'])->name('admin.productos.update');
+            Route::patch('/{producto}/toggle-estado', [ProductoController::class, 'toggleEstado'])->name('admin.productos.toggle-estado');
+            Route::post('/{producto}/baja', [ProductoController::class, 'baja'])->name('admin.productos.baja');
+            Route::post('/{producto}/reactivar', [ProductoController::class, 'reactivar'])->name('admin.productos.reactivar');
+            Route::post('/{producto}/imagen', [ProductoController::class, 'actualizarImagen'])->name('admin.productos.actualizar-imagen');
+            Route::delete('/{producto}', [ProductoController::class, 'destroy'])->name('admin.productos.destroy');
+        });
+        Route::get('/catalogo-productos', [ProductoController::class, 'index'])->name('admin.productos');
+
         // Inventario Unificado y Submódulos de Almacén (accesibles para todo el personal operativo del panel)
-        Route::middleware('rol:administrador,encargado,ventas,almacen,compras')->group(function (): void {
+        Route::middleware('rol:administrador,encargado,ventas,almacen,compras,empleado,trabajador,operador')->group(function (): void {
             Route::get('/inventario', [InventarioController::class, 'index'])->name('admin.inventario');
             Route::get('/ajustes', [InventarioController::class, 'movimientos'])->name('admin.ajustes');
             Route::get('/recepciones', [InventarioController::class, 'movimientos'])->name('admin.recepciones');
@@ -219,7 +236,7 @@ Route::prefix('almacen')
 
 // Rol 4: COMPRAS (Gestión de proveedores, órdenes de compra, recepciones y altas de productos)
 Route::prefix('compras')
-    ->middleware(['auth', 'rol:compras,administrador'])
+    ->middleware(['auth', 'rol:compras,administrador,almacen,ventas,encargado,empleado,trabajador,operador'])
     ->group(function (): void {
         Route::get('/', [ComprasController::class, 'ordenes'])->name('compras.dashboard');
         Route::get('/proveedores', [ComprasController::class, 'proveedores'])->name('compras.proveedores');
@@ -229,9 +246,9 @@ Route::prefix('compras')
 
         Route::get('/ordenes', [ComprasController::class, 'ordenes'])->name('compras.ordenes');
         Route::post('/ordenes/recepcionar', [ComprasController::class, 'recepcionar'])->name('compras.ordenes.recepcionar');
-        Route::get('/productos', [ComprasController::class, 'productos'])->name('compras.productos');
-        Route::post('/productos', [ComprasController::class, 'storeProducto'])->name('compras.productos.store');
-        Route::post('/productos/{producto}/imagen', [ComprasController::class, 'actualizarImagen'])->name('compras.productos.actualizar-imagen');
+        Route::get('/productos', [ProductoController::class, 'index'])->name('compras.productos');
+        Route::post('/productos', [ProductoController::class, 'store'])->name('compras.productos.store');
+        Route::post('/productos/{producto}/imagen', [ProductoController::class, 'actualizarImagen'])->name('compras.productos.actualizar-imagen');
         Route::get('/productos/plantilla-csv', [ComprasController::class, 'descargarPlantillaCsv'])->name('compras.productos.plantilla-csv');
         Route::post('/productos/importar-csv', [ComprasController::class, 'importarCsv'])->name('compras.productos.importar-csv');
     });

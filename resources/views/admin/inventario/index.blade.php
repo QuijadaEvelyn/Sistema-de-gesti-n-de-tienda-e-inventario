@@ -17,6 +17,16 @@
                 </p>
             </div>
             <div class="flex flex-wrap gap-2">
+                @if (auth()->user()?->esAdmin() || auth()->user()?->esEmpleado())
+                    <a href="{{ route('admin.productos.create') }}" class="btn-glass-purple px-4 py-2 rounded-xl text-white text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-sm transition">
+                        <span class="material-symbols-outlined text-[16px]">add_circle</span>
+                        <span>+ Dar de Alta Producto</span>
+                    </a>
+                    <a href="{{ route('admin.productos.index') }}" class="px-4 py-2 rounded-xl border border-purple-200 bg-purple-100 hover:bg-purple-200 text-purple-900 dark:bg-white/5 dark:border-purple-500/30 dark:text-purple-300 dark:hover:bg-white/10 text-xs font-label-md flex items-center gap-1.5 transition">
+                        <span class="material-symbols-outlined text-[16px]">library_add</span>
+                        <span>Catálogo, Altas & Bajas</span>
+                    </a>
+                @endif
                 @if (auth()->user()?->esAdmin())
                     <a href="{{ route('admin.reportes.csv', array_filter(['sucursal_id' => $sucursalActiva?->id ?? request('sucursal_id')])) }}" class="px-4 py-2 rounded-xl border border-purple-200 bg-purple-100 hover:bg-purple-200 text-purple-800 dark:bg-white/5 dark:border-purple-500/30 dark:text-purple-300 dark:hover:bg-white/10 text-xs font-label-md flex items-center gap-1.5 transition">
                         <span class="material-symbols-outlined text-[16px]">table_view</span>
@@ -98,6 +108,16 @@
                             <td class="py-3 px-4 text-right font-tabular-data text-outline">{{ $item->stock_minimo }}</td>
                             <td class="py-3 px-4 text-right">
                                 <div class="inline-flex items-center justify-end gap-1.5">
+                                    @if ($item->varianteSku?->producto)
+                                        <a
+                                            href="{{ route('admin.productos.edit', $item->varianteSku->producto->id) }}"
+                                            class="px-2.5 py-1 rounded-lg bg-surface-container-low hover:bg-purple-100 dark:hover:bg-purple-900/40 text-purple-700 dark:text-purple-300 border border-purple-200/70 text-[11px] font-label-code font-semibold transition inline-flex items-center gap-1"
+                                            title="Editar ficha o gestionar estado de {{ $item->varianteSku->producto->nombre }}"
+                                        >
+                                            <span class="material-symbols-outlined text-[14px]">edit</span>
+                                            <span>Ficha</span>
+                                        </a>
+                                    @endif
                                     <a
                                         href="{{ route('almacen.ajustes', ['sucursal_id' => $item->sucursal_id]) }}"
                                         class="px-2.5 py-1 rounded-lg bg-purple-50 hover:bg-purple-100 text-primary border border-purple-200 text-[11px] font-label-code font-semibold transition inline-flex items-center gap-1"

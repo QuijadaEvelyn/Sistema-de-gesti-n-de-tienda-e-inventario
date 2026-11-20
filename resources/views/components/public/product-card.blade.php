@@ -121,7 +121,7 @@
             <div class="absolute top-2.5 inset-x-2.5 flex items-center justify-between gap-1.5 sm:gap-2 z-10 pointer-events-none">
                 <div>
                     @if ($esPiezaUnica)
-                        <span class="inline-flex items-center gap-1 bg-purple-100 dark:bg-purple-600 text-purple-800 dark:text-white border border-purple-300 dark:border-purple-400/60 text-[9px] sm:text-[10px] font-label-sm font-bold uppercase px-1.5 sm:px-2 py-0.5 rounded-md shadow-2xs dark:shadow-sm">
+                        <span class="inline-flex items-center gap-1 bg-purple-100 dark:bg-purple-600 text-purple-800 dark:text-white border border-purple-300 dark:border-purple-400/60 text-[9px] sm:text-[10px] font-label-sm font-bold uppercase px-1.5 sm:px-2 py-0.5 rounded-md shadow-2xs dark:shadow-sm whitespace-nowrap">
                             <span class="material-symbols-outlined text-[11px] sm:text-[12px]">diamond</span>
                             <span class="hidden sm:inline">PIEZA ÚNICA</span>
                             <span>1/1</span>

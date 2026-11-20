@@ -66,7 +66,13 @@
                 @endif
 
                 {{-- 2. INVENTARIO UNIFICADO: Personal Operativo y Administrador --}}
-                @if ($esAdmin || $esAlmacen || $esCompras || $esVentas)
+                @if ($esAdmin || $esAlmacen || $esCompras || $esVentas || $authUser?->esEmpleado())
+                    <a href="{{ route('admin.productos.index') }}"
+                       class="flex items-center gap-space-sm px-space-md py-2.5 rounded-xl transition-all duration-200 active:scale-95 {{ $activeRoute === 'productos' || request()->routeIs('admin.productos*') ? 'sidebar-link-glossy-active font-label-md shadow-xs' : 'sidebar-link-glossy-idle font-body-md text-sm' }}">
+                        <span class="material-symbols-outlined text-[20px]">library_add</span>
+                        <span>Altas &amp; Bajas de Productos</span>
+                    </a>
+
                     <a href="{{ route('admin.inventario') }}"
                        class="flex items-center gap-space-sm px-space-md py-2.5 rounded-xl transition-all duration-200 active:scale-95 {{ $activeRoute === 'inventario' || request()->routeIs('admin.inventario', 'almacen.dashboard') ? 'sidebar-link-glossy-active font-label-md shadow-xs' : 'sidebar-link-glossy-idle font-body-md text-sm' }}">
                         <span class="material-symbols-outlined text-[20px]">inventory_2</span>

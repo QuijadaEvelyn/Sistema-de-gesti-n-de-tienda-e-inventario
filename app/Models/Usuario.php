@@ -96,6 +96,9 @@ class Usuario extends Authenticatable
             'almacenista' => ['almacenista', 'almacen', 'encargado'],
             'compras' => ['compras', 'comprador', 'adquisiciones'],
             'encargado' => ['encargado', 'supervisor', 'almacenista', 'almacen', 'gerente'],
+            'empleado' => ['empleado', 'trabajador', 'operador', 'almacen', 'almacenista', 'ventas', 'vendedor', 'compras', 'comprador', 'encargado', 'supervisor', 'administrador', 'admin'],
+            'trabajador' => ['trabajador', 'empleado', 'operador', 'almacen', 'almacenista', 'ventas', 'vendedor', 'compras', 'comprador', 'encargado', 'supervisor', 'administrador', 'admin'],
+            'operador' => ['operador', 'empleado', 'trabajador', 'almacen', 'almacenista', 'ventas', 'vendedor', 'compras', 'comprador', 'encargado'],
             'cliente' => ['cliente', 'comprador', 'consumidor'],
         ];
 
@@ -154,6 +157,14 @@ class Usuario extends Authenticatable
     public function esAdmin(): bool
     {
         return $this->tieneRol('admin', 'administrador');
+    }
+
+    /**
+     * Comprueba si el usuario es empleado o personal operativo (admin, ventas, almacén, compras, etc.).
+     */
+    public function esEmpleado(): bool
+    {
+        return $this->tieneRol('administrador', 'admin', 'ventas', 'almacen', 'almacenista', 'compras', 'encargado', 'empleado', 'trabajador', 'operador');
     }
 
     /**

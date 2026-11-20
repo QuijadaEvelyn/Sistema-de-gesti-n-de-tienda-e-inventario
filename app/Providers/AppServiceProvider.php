@@ -58,6 +58,9 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('gestionar-ventas', fn (Usuario $user): bool => $user->esVentas());
         Gate::define('gestionar-almacen', fn (Usuario $user): bool => $user->esAlmacen() || $user->esEncargado() || $user->esCompras());
         Gate::define('gestionar-compras', fn (Usuario $user): bool => $user->esCompras());
+        Gate::define('gestionar-productos', fn (Usuario $user): bool => $user->esEmpleado() || $user->esAdmin());
+        Gate::define('dar-alta-productos', fn (Usuario $user): bool => $user->esEmpleado() || $user->esAdmin());
+        Gate::define('dar-baja-productos', fn (Usuario $user): bool => $user->esEmpleado() || $user->esAdmin());
 
         // Gates de navegación del panel administrativo (sidebar)
         Gate::define('ver-dashboard-general', fn (Usuario $user): bool => $user->esAdmin());

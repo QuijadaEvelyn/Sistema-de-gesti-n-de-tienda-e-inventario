@@ -22,6 +22,9 @@ class CheckRole
         'almacenista' => ['almacenista', 'almacen', 'encargado'],
         'compras' => ['compras', 'comprador', 'adquisiciones'],
         'encargado' => ['encargado', 'supervisor', 'almacenista', 'almacen', 'gerente'],
+        'empleado' => ['empleado', 'trabajador', 'operador', 'almacen', 'almacenista', 'ventas', 'vendedor', 'compras', 'comprador', 'encargado', 'supervisor', 'administrador', 'admin'],
+        'trabajador' => ['trabajador', 'empleado', 'operador', 'almacen', 'almacenista', 'ventas', 'vendedor', 'compras', 'comprador', 'encargado', 'supervisor', 'administrador', 'admin'],
+        'operador' => ['operador', 'empleado', 'trabajador', 'almacen', 'almacenista', 'ventas', 'vendedor', 'compras', 'comprador', 'encargado'],
         'cliente' => ['cliente', 'comprador', 'consumidor'],
     ];
 
