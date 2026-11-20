@@ -202,8 +202,8 @@
             </div>
         </div>
 
-        <!-- Contenedor del Lienzo de Chart.js con Altura Reducida h-48 sm:h-52 y w-full relative -->
-        <div class="relative w-full h-48 sm:h-52 overflow-hidden mt-2">
+        <!-- Contenedor del Lienzo de Chart.js con Altura Reducida h-52 y w-full relative -->
+        <div class="relative w-full h-52 overflow-hidden mt-2">
             <canvas id="archivumPerformanceChart" class="w-full h-full"></canvas>
         </div>
     </section>
@@ -573,6 +573,14 @@
                             options: {
                                 responsive: true,
                                 maintainAspectRatio: false,
+                                layout: {
+                                    padding: {
+                                        left: 8,
+                                        right: 12,
+                                        top: 4,
+                                        bottom: 4,
+                                    }
+                                },
                                 interaction: {
                                     mode: 'index',
                                     intersect: false,
@@ -743,6 +751,9 @@
 
                 // Escuchar el evento de cambio de tema en tiempo real
                 window.addEventListener('archivum-theme-change', function () {
+                    renderChart();
+                });
+                window.addEventListener('themeChanged', function () {
                     renderChart();
                 });
 

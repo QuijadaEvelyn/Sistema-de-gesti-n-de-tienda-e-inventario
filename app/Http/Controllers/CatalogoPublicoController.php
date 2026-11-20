@@ -70,8 +70,12 @@ class CatalogoPublicoController extends Controller
             ? Cliente::with(['pedidos', 'clienteFrecuente'])->where('usuario_id', auth()->id())->first()
             : null;
 
+        // Selección curatorial de exactamente 6 piezas balanceadas para el carrusel 3D (2 libros, 2 discos, 2 coleccionables)
+        $productosCarrusel = $this->obtenerPiezasCarruselDestacadas($productos);
+
         return view('public.index', [
             'productos' => $productos,
+            'productosCarrusel' => $productosCarrusel,
             'categoriaActiva' => 'inicio',
             'promocionesDestacadas' => $promocionesDestacadas,
             'clienteActual' => $clienteActual,
@@ -432,5 +436,82 @@ class CatalogoPublicoController extends Controller
             ->get()
             ->filter(fn (Promocion $p): bool => in_array($p->faseActual(), ['preventa_exclusiva', 'abierta_publico', 'programada'], true))
             ->values();
+    }
+
+    /**
+     * Obtiene exactamente 6 piezas activas balanceadas para el carrusel 3D Coverflow:
+     * 2 Libros, 2 Discos y 2 Coleccionables, intercalados armoniosamente.
+     *
+     * @param  Collection<int, Producto>|null  $productosBase
+     * @return Collection<int, Producto>
+     */
+    protected function obtenerPiezasCarruselDestacadas(?Collection $productosBase = null): Collection
+    {
+        if (! Schema::hasTable('productos') || ! Schema::hasTable('catalogos')) {
+            return collect();
+        }
+
+        $esLibro = fn (Producto $p): bool => $p->catalogo?->tipo === 'libro'
+            || str_starts_with((string) $p->catalogo?->tipo, 'libro')
+            || ($p->relationLoaded('libro') && $p->libro !== null);
+
+        $esDisco = fn (Producto $p): bool => in_array($p->catalogo?->tipo, ['disco', 'vinilo', 'vinilos'], true)
+            || ($p->relationLoaded('disco') && $p->disco !== null);
+
+        $esColeccionable = fn (Producto $p): bool => in_array($p->catalogo?->tipo, ['coleccionable', 'memorabilia', 'coleccionables'], true)
+            || ($p->relationLoaded('coleccionable') && $p->coleccionable !== null);
+
+        $libros = $productosBase ? $productosBase->filter($esLibro)->take(2)->values() : collect();
+        $discos = $productosBase ? $productosBase->filter($esDisco)->take(2)->values() : collect();
+        $coleccionables = $productosBase ? $productosBase->filter($esColeccionable)->take(2)->values() : collect();
+
+        // Si la colección base no tiene los 2 de cada categoría (ej. por filtros de búsqueda),
+        // consultamos directamente los productos activos para garantizar la presencia de las 6 piezas.
+        if ($libros->count() < 2 || $discos->count() < 2 || $coleccionables->count() < 2) {
+            $consultarCategoria = function (array $tipos): Collection {
+                return Producto::query()
+                    ->with([
+                        'catalogo',
+                        'libro',
+                        'disco',
+                        'coleccionable',
+                        'variantesSku.existencias.piezasUnicas',
+                        'variantesSku.existencias.sucursal',
+                    ])
+                    ->where('activo', true)
+                    ->whereHas('catalogo', fn (Builder $q) => $q->whereIn('tipo', $tipos))
+                    ->orderByDesc('precio')
+                    ->limit(2)
+                    ->get();
+            };
+
+            if ($libros->count() < 2) {
+                $libros = $consultarCategoria(['libro']);
+            }
+            if ($discos->count() < 2) {
+                $discos = $consultarCategoria(['disco', 'vinilo']);
+            }
+            if ($coleccionables->count() < 2) {
+                $coleccionables = $consultarCategoria(['coleccionable', 'memorabilia']);
+            }
+        }
+
+        // Intercalar armoniosamente: Libro 1, Disco 1, Coleccionable 1, Libro 2, Disco 2, Coleccionable 2
+        $intercalados = collect();
+        $totalMax = max($libros->count(), $discos->count(), $coleccionables->count());
+
+        for ($i = 0; $i < $totalMax; $i++) {
+            if ($libros->has($i)) {
+                $intercalados->push($libros->get($i));
+            }
+            if ($discos->has($i)) {
+                $intercalados->push($discos->get($i));
+            }
+            if ($coleccionables->has($i)) {
+                $intercalados->push($coleccionables->get($i));
+            }
+        }
+
+        return $intercalados->take(6)->values();
     }
 }

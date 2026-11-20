@@ -2,6 +2,20 @@
 
     @php
         $coleccionProductos = $productos ?? collect();
+
+        // 6 piezas balanceadas para la Vitrina 3D (2 libros, 2 discos, 2 coleccionables intercalados)
+        $coleccionCarrusel = $productosCarrusel ?? (
+            $coleccionProductos->isNotEmpty()
+                ? collect([
+                    $coleccionProductos->first(fn ($p) => $p->catalogo?->tipo === 'libro'),
+                    $coleccionProductos->first(fn ($p) => in_array($p->catalogo?->tipo, ['disco', 'vinilo'], true)),
+                    $coleccionProductos->first(fn ($p) => in_array($p->catalogo?->tipo, ['coleccionable', 'memorabilia'], true)),
+                    $coleccionProductos->filter(fn ($p) => $p->catalogo?->tipo === 'libro')->skip(1)->first(),
+                    $coleccionProductos->filter(fn ($p) => in_array($p->catalogo?->tipo, ['disco', 'vinilo'], true))->skip(1)->first(),
+                    $coleccionProductos->filter(fn ($p) => in_array($p->catalogo?->tipo, ['coleccionable', 'memorabilia'], true))->skip(1)->first(),
+                ])->filter()->values()
+                : collect()
+        );
     @endphp
 
     <!-- Héroe Curatorial & Bienvenida al Archivo -->
@@ -218,201 +232,565 @@
         </section>
     @endif
 
-    <!-- Vitrina Curatorial: Desplazamiento Horizontal Nativo ("Scroll") con Scroll-Snap -->
-    <section class="mb-14" aria-label="Vitrina Curatorial de Desplazamiento Horizontal">
-        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-4">
+    <!-- Vitrina Curatorial: Carrusel 3D Coverflow Interactivo Puro -->
+    <section class="mb-14 relative" aria-label="Vitrina Rotativa 3D de Piezas Destacadas">
+        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 mb-6">
             <div>
-                <span class="inline-flex items-center gap-1.5 text-[11px] font-label-code uppercase tracking-widest text-primary">
-                    <span class="material-symbols-outlined text-[15px]">swipe</span>
+                <span class="inline-flex items-center gap-1.5 text-[11px] font-label-code uppercase tracking-widest text-primary dark:text-purple-300">
+                    <span class="material-symbols-outlined text-[15px]">view_in_ar</span>
                     <span>Exhibición Curatorial · Desplazamiento Fluido</span>
                 </span>
-                <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-on-surface font-quicksand">
+                <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-on-surface dark:text-white font-quicksand">
                     Vitrina Rotativa de Piezas Destacadas
                 </h2>
             </div>
-            <p class="text-xs text-on-surface-variant font-label-code">
-                Desliza horizontalmente con el mouse, trackpad o pantalla táctil para explorar el acervo
+            <p class="text-xs text-on-surface-variant dark:text-purple-300/80 font-label-code">
+                Desliza con el mouse, pantalla táctil o rueda para explorar el acervo 3D
             </p>
         </div>
 
-        <!-- Contenedor con Desbordamiento Horizontal Nativo, Scroll-Snap y Barra Oculta -->
-        <div id="vitrina-scroll-horizontal" class="vitrina-scroll-container flex items-stretch gap-6 overflow-x-auto pb-4 pt-2 no-scrollbar" style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;">
-            @forelse ($coleccionProductos as $productoCarrusel)
-                <div class="vitrina-scroll-card shrink-0 w-[280px] sm:w-[320px] md:w-[340px]" style="scroll-snap-align: start;">
-                    <x-public.product-card :producto="$productoCarrusel" />
-                </div>
-            @empty
-                @php
-                    $fallbackDisco = [
-                        'id' => 9991,
-                        'nombre' => 'Kind of Blue (Mono 1st Press)',
-                        'subtitulo' => 'Miles Davis · Columbia Records CL 1355',
-                        'descripcion' => 'Matriz original con etiqueta seis ojos («6-eye»). Sonido analógico sin reprocesar peritado con alta fidelidad.',
-                        'precio' => '18,500',
-                        'tipo' => 'disco',
-                        'icono' => 'album',
-                        'sku' => 'VIN-1959-COL',
-                        'graduacion' => 'MINT (M)',
-                        'badgeType' => 'mint',
-                        'stock' => 1,
-                        'sede' => 'Central Bellas Artes',
-                        'esPiezaUnica' => true,
-                        'numeroSerie' => 'COL-1959-CL1355',
-                        'estaAgotado' => false,
-                        'estaReservada' => false,
-                        'varianteSkuId' => null,
-                        'actionUrl' => route('public.vinilos'),
-                        'especificaciones' => [
-                            'Artista / Intérprete' => 'Miles Davis',
-                            'Sello Discográfico' => 'Columbia Records (CL 1355)',
-                            'Año de Lanzamiento' => '1959',
-                            'Formato' => 'Vinilo LP 180g (Mono Original)',
-                            'Velocidad' => '33 ⅓ RPM',
-                            'Pistas' => '5 temas magistrales',
-                            'Estado Funda / Vinilo' => 'Mint (M) / Mint (M)',
-                        ],
-                    ];
-                    $fallbackLibro = [
-                        'id' => 9992,
-                        'nombre' => 'Cien Años de Soledad',
-                        'subtitulo' => 'Gabriel García Márquez · Sudamericana',
-                        'descripcion' => 'Tiraje inicial de Buenos Aires (Mayo 1967). Cubierta original diseñada por Iris Alba.',
-                        'precio' => '32,000',
-                        'tipo' => 'libro',
-                        'icono' => 'auto_stories',
-                        'sku' => 'LIB-1967-SUD',
-                        'graduacion' => 'VERY FINE (VF)',
-                        'badgeType' => 'rare',
-                        'stock' => 1,
-                        'sede' => 'Coyoacán',
-                        'esPiezaUnica' => true,
-                        'numeroSerie' => 'SUD-1967-001',
-                        'estaAgotado' => false,
-                        'estaReservada' => false,
-                        'varianteSkuId' => null,
-                        'actionUrl' => route('public.libros'),
-                        'especificaciones' => [
-                            'Autor' => 'Gabriel García Márquez',
-                            'Editorial' => 'Editorial Sudamericana (Buenos Aires)',
-                            'Año de Publicación' => '1967',
-                            'Género Literario' => 'Novela · Realismo Mágico',
-                            'Páginas' => '471 págs.',
-                            'Encuadernación' => 'Rústica con solapas originales',
-                        ],
-                    ];
-                    $fallbackMemorabilia = [
-                        'id' => 9993,
-                        'nombre' => 'Carta Manuscrita Bellas Artes',
-                        'subtitulo' => 'Colección Diplomática · Archivo Notarial',
-                        'descripcion' => 'Pluma estilográfica con tinta ferrogálica original y dictamen caligráfico notariado.',
-                        'precio' => '9,400',
-                        'tipo' => 'coleccionable',
-                        'icono' => 'history_edu',
-                        'sku' => 'MEM-1928-AUT',
-                        'graduacion' => 'COA NOTARIADO',
-                        'badgeType' => 'coa',
-                        'stock' => 1,
-                        'sede' => 'Central Bellas Artes',
-                        'esPiezaUnica' => true,
-                        'numeroSerie' => 'COA-1928-AUT',
-                        'estaAgotado' => false,
-                        'estaReservada' => false,
-                        'varianteSkuId' => null,
-                        'actionUrl' => route('public.memorabilia'),
-                        'especificaciones' => [
-                            'Marca / Fabricante' => 'Archivo Notarial de Bellas Artes',
-                            'Material de Confección' => 'Papel vitela verjurado con tinta ferrogálica',
-                            'Categoría' => 'Manuscritos Históricos',
-                            'Año / Datación' => '1928',
-                            'Certificación COA' => 'Certamen Notarial con Dictamen Grafológico',
-                        ],
-                    ];
-                @endphp
+        <!-- Escenario 3D Coverflow Puro: Sin flechas, sin botones, sin barras, sin marco exterior -->
+        <div class="relative left-1/2 -translate-x-1/2 w-screen max-w-[1440px] px-4 sm:px-6 lg:px-8 overflow-x-clip overflow-y-visible">
+            <div
+                id="vitrina-coverflow-carousel"
+                tabindex="0"
+                role="region"
+                aria-roledescription="carousel"
+                aria-label="Vitrina Rotativa 3D de Piezas Destacadas"
+                class="coverflow-stage relative w-full min-h-[560px] h-[580px] py-10 flex items-center justify-center overflow-x-clip overflow-y-visible select-none focus:outline-none"
+                style="min-height: 560px; height: 580px; perspective: 1200px; transform-style: preserve-3d;"
+            >
+                <!-- Degradado sutil en los bordes izquierdo y derecho -->
+                <div class="absolute left-0 top-0 bottom-0 w-16 sm:w-28 bg-gradient-to-r from-background dark:from-[#0d0714] to-transparent z-40 pointer-events-none"></div>
+                <div class="absolute right-0 top-0 bottom-0 w-16 sm:w-28 bg-gradient-to-l from-background dark:from-[#0d0714] to-transparent z-40 pointer-events-none"></div>
 
-                <!-- Fichas Curatoriales de Respaldo Limpias (Libros, Vinilos y Memorabilia) -->
-                <div class="vitrina-scroll-card shrink-0 w-[280px] sm:w-[320px] md:w-[340px]" style="scroll-snap-align: start;">
-                    <article
-                        data-product-details="{{ json_encode($fallbackDisco, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) }}"
-                        class="bg-white dark:bg-[#171024] border border-purple-200/80 dark:border-purple-500/30 rounded-2xl p-5 flex flex-col justify-between hover:border-primary hover:shadow-lg transition-all duration-200 group shadow-xs h-full"
+                <!-- Pista Central 3D -->
+                <div class="coverflow-track relative w-full h-full flex items-center justify-center overflow-visible" style="transform-style: preserve-3d;">
+                    @forelse ($coleccionCarrusel as $productoCarrusel)
+                        @php
+                            $initIdx = $loop->index;
+                            $totalCount = $coleccionCarrusel->count();
+                            $initDiff = $initIdx;
+                            if ($totalCount > 3) {
+                                if ($initDiff > $totalCount / 2) {
+                                    $initDiff -= $totalCount;
+                                }
+                            } elseif ($totalCount === 3) {
+                                if ($initDiff === 2) {
+                                    $initDiff = -1;
+                                }
+                            }
+                            $initTransform = match ($initDiff) {
+                                0 => 'translate3d(0px, 0, 40px) rotateY(0deg) scale(1)',
+                                -1 => 'translate3d(-335px, 0, -110px) rotateY(24deg) scale(0.86)',
+                                1 => 'translate3d(335px, 0, -110px) rotateY(-24deg) scale(0.86)',
+                                -2 => 'translate3d(-610px, 0, -210px) rotateY(30deg) scale(0.74)',
+                                2 => 'translate3d(610px, 0, -210px) rotateY(-30deg) scale(0.74)',
+                                default => 'translate3d(780px, 0, -300px) rotateY(-35deg) scale(0.65)',
+                            };
+                            $initOpacity = match ($initDiff) {
+                                0 => '1',
+                                -1, 1 => '0.85',
+                                -2, 2 => '0.55',
+                                default => '0',
+                            };
+                            $initZIndex = match ($initDiff) {
+                                0 => '30',
+                                -1, 1 => '20',
+                                -2, 2 => '10',
+                                default => '1',
+                            };
+                        @endphp
+                    <div
+                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[285px] sm:w-[325px] md:w-[340px] h-[460px] sm:h-[480px]"
+                        style="transform-style: preserve-3d; z-index: {{ $initZIndex }};"
+                        data-slide-index="{{ $initIdx }}"
                     >
-                        <div>
-                            <div onclick="abrirModalDetalleProducto(this)" class="w-full aspect-square rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-4 cursor-pointer">
-                                <span class="absolute top-2.5 left-2.5 bg-primary-container text-white text-[10px] font-label-sm font-semibold uppercase px-2.5 py-0.5 rounded shadow-2xs">VINILO LP 180G</span>
-                                <span class="absolute bottom-2.5 right-2.5 bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
-                                <span class="material-symbols-outlined text-purple-300 group-hover:text-primary transition-colors text-[64px]">album</span>
-                            </div>
-                            <div class="space-y-1">
-                                <h3 onclick="abrirModalDetalleProducto(this)" class="font-bold text-on-surface dark:text-white text-base group-hover:text-primary transition font-quicksand cursor-pointer leading-snug">Kind of Blue (Mono 1st Press)</h3>
-                                <p class="font-title-editorial text-xs text-on-surface-variant italic truncate">Miles Davis · Columbia Records CL 1355</p>
-                                <button type="button" onclick="abrirModalDetalleProducto(this)" class="pt-1.5 inline-flex items-center gap-1 text-[11px] font-label-code text-primary dark:text-purple-300 hover:underline font-semibold cursor-pointer">
-                                    <span class="material-symbols-outlined text-[14px]">info</span>
-                                    <span>Ver detalles &rarr;</span>
-                                </button>
+                        <div
+                            class="coverflow-slot w-full h-full"
+                            style="transform-style: preserve-3d; transform: {{ $initTransform }}; opacity: {{ $initOpacity }};"
+                        >
+                            <div class="coverflow-card h-full rounded-2xl {{ $initDiff === 0 ? 'coverflow-card-active' : '' }}">
+                                <x-public.product-card :producto="$productoCarrusel" />
                             </div>
                         </div>
-                        <div class="pt-4 mt-4 border-t border-purple-100 dark:border-purple-500/20 flex items-center justify-between">
-                            <span class="font-tabular-data font-bold text-on-surface dark:text-white text-base">$18,500 <span class="text-xs font-normal text-on-surface-variant">MXN</span></span>
-                            <a href="{{ route('public.vinilos') }}" class="btn-glass-purple px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider">Ver Sala</a>
-                        </div>
-                    </article>
-                </div>
+                    </div>
+                @empty
+                    @php
+                        $fallbackDisco = [
+                            'id' => 9991,
+                            'nombre' => 'Kind of Blue (Mono 1st Press)',
+                            'subtitulo' => 'Miles Davis · Columbia Records CL 1355',
+                            'descripcion' => 'Matriz original con etiqueta seis ojos («6-eye»). Sonido analógico sin reprocesar peritado con alta fidelidad.',
+                            'precio' => '18,500',
+                            'tipo' => 'disco',
+                            'icono' => 'album',
+                            'sku' => 'VIN-1959-COL',
+                            'graduacion' => 'MINT (M)',
+                            'badgeType' => 'mint',
+                            'stock' => 1,
+                            'sede' => 'Central Bellas Artes',
+                            'esPiezaUnica' => true,
+                            'numeroSerie' => 'COL-1959-CL1355',
+                            'estaAgotado' => false,
+                            'estaReservada' => false,
+                            'varianteSkuId' => null,
+                            'actionUrl' => route('public.vinilos'),
+                            'especificaciones' => [
+                                'Artista / Intérprete' => 'Miles Davis',
+                                'Sello Discográfico' => 'Columbia Records (CL 1355)',
+                                'Año de Lanzamiento' => '1959',
+                                'Formato' => 'Vinilo LP 180g (Mono Original)',
+                                'Velocidad' => '33 ⅓ RPM',
+                                'Pistas' => '5 temas magistrales',
+                                'Estado Funda / Vinilo' => 'Mint (M) / Mint (M)',
+                            ],
+                        ];
+                        $fallbackLibro = [
+                            'id' => 9992,
+                            'nombre' => 'Cien Años de Soledad',
+                            'subtitulo' => 'Gabriel García Márquez · Sudamericana',
+                            'descripcion' => 'Tiraje inicial de Buenos Aires (Mayo 1967). Cubierta original diseñada por Iris Alba.',
+                            'precio' => '32,000',
+                            'tipo' => 'libro',
+                            'icono' => 'auto_stories',
+                            'sku' => 'LIB-1967-SUD',
+                            'graduacion' => 'VERY FINE (VF)',
+                            'badgeType' => 'rare',
+                            'stock' => 1,
+                            'sede' => 'Coyoacán',
+                            'esPiezaUnica' => true,
+                            'numeroSerie' => 'SUD-1967-001',
+                            'estaAgotado' => false,
+                            'estaReservada' => false,
+                            'varianteSkuId' => null,
+                            'actionUrl' => route('public.libros'),
+                            'especificaciones' => [
+                                'Autor' => 'Gabriel García Márquez',
+                                'Editorial' => 'Editorial Sudamericana (Buenos Aires)',
+                                'Año de Publicación' => '1967',
+                                'Género Literario' => 'Novela · Realismo Mágico',
+                                'Páginas' => '471 págs.',
+                                'Encuadernación' => 'Rústica con solapas originales',
+                            ],
+                        ];
+                        $fallbackMemorabilia = [
+                            'id' => 9993,
+                            'nombre' => 'Carta Manuscrita Bellas Artes',
+                            'subtitulo' => 'Colección Diplomática · Archivo Notarial',
+                            'descripcion' => 'Pluma estilográfica con tinta ferrogálica original y dictamen caligráfico notariado.',
+                            'precio' => '9,400',
+                            'tipo' => 'coleccionable',
+                            'icono' => 'history_edu',
+                            'sku' => 'MEM-1928-AUT',
+                            'graduacion' => 'COA NOTARIADO',
+                            'badgeType' => 'coa',
+                            'stock' => 1,
+                            'sede' => 'Central Bellas Artes',
+                            'esPiezaUnica' => true,
+                            'numeroSerie' => 'COA-1928-AUT',
+                            'estaAgotado' => false,
+                            'estaReservada' => false,
+                            'varianteSkuId' => null,
+                            'actionUrl' => route('public.memorabilia'),
+                            'especificaciones' => [
+                                'Marca / Fabricante' => 'Archivo Notarial de Bellas Artes',
+                                'Material de Confección' => 'Papel vitela verjurado con tinta ferrogálica',
+                                'Categoría' => 'Manuscritos Históricos',
+                                'Año / Datación' => '1928',
+                                'Certificación COA' => 'Certamen Notarial con Dictamen Grafológico',
+                            ],
+                        ];
+                        $fallbackDisco2 = [
+                            'id' => 9994,
+                            'nombre' => 'The Dark Side of the Moon (1st Press UK)',
+                            'subtitulo' => 'Pink Floyd · Harvest SHVL 804 (1973)',
+                            'descripcion' => 'Prensado original británico con matriz sólida A-2 / B-2, doble póster original y sonido estéreo peritado.',
+                            'precio' => '24,500',
+                            'tipo' => 'disco',
+                            'icono' => 'album',
+                            'sku' => 'VIN-1973-HAR',
+                            'graduacion' => 'NEAR MINT (NM)',
+                            'badgeType' => 'mint',
+                            'stock' => 1,
+                            'sede' => 'Central Bellas Artes',
+                            'esPiezaUnica' => true,
+                            'numeroSerie' => 'HAR-1973-SHVL',
+                            'estaAgotado' => false,
+                            'estaReservada' => false,
+                            'varianteSkuId' => null,
+                            'actionUrl' => route('public.vinilos'),
+                            'especificaciones' => [
+                                'Artista / Intérprete' => 'Pink Floyd',
+                                'Sello Discográfico' => 'Harvest Records (SHVL 804)',
+                                'Año de Lanzamiento' => '1973',
+                                'Formato' => 'Vinilo LP 180g (UK Original)',
+                                'Velocidad' => '33 ⅓ RPM',
+                                'Pistas' => '10 temas conceptuales',
+                                'Estado Funda / Vinilo' => 'Near Mint (NM) / Mint (M)',
+                            ],
+                        ];
+                        $fallbackLibro2 = [
+                            'id' => 9995,
+                            'nombre' => 'El Aleph (1ª Edición Losada)',
+                            'subtitulo' => 'Jorge Luis Borges · Editorial Losada (1949)',
+                            'descripcion' => 'Tiraje histórico de Buenos Aires con encuadernación rústica original de época y sello curatorial de autenticidad.',
+                            'precio' => '28,000',
+                            'tipo' => 'libro',
+                            'icono' => 'auto_stories',
+                            'sku' => 'LIB-1949-LOS',
+                            'graduacion' => 'EXCELLENT (EX)',
+                            'badgeType' => 'rare',
+                            'stock' => 1,
+                            'sede' => 'Central Bellas Artes',
+                            'esPiezaUnica' => true,
+                            'numeroSerie' => 'LOS-1949-ALEPH',
+                            'estaAgotado' => false,
+                            'estaReservada' => false,
+                            'varianteSkuId' => null,
+                            'actionUrl' => route('public.libros'),
+                            'especificaciones' => [
+                                'Autor' => 'Jorge Luis Borges',
+                                'Editorial' => 'Editorial Losada (Buenos Aires)',
+                                'Año de Publicación' => '1949',
+                                'Género Literario' => 'Cuento Filosófico · Ficción Fantástica',
+                                'Páginas' => '146 págs.',
+                                'Encuadernación' => 'Rústica con cubierta ilustrada',
+                            ],
+                        ];
+                        $fallbackMemorabilia2 = [
+                            'id' => 9996,
+                            'nombre' => 'Centenario 50 Pesos Oro (1921)',
+                            'subtitulo' => 'Casa de Moneda de México · 1.20565 oz Oro Puro',
+                            'descripcion' => 'Acuñación del primer centenario de la consumación de la Independencia de México. Peritada con certificación numismática.',
+                            'precio' => '65,000',
+                            'tipo' => 'coleccionable',
+                            'icono' => 'history_edu',
+                            'sku' => 'NUM-1921-ORO',
+                            'graduacion' => 'UNC / BRILLIANT UNCIRCULATED',
+                            'badgeType' => 'coa',
+                            'stock' => 1,
+                            'sede' => 'Coyoacán',
+                            'esPiezaUnica' => true,
+                            'numeroSerie' => 'NUM-1921-CENT',
+                            'estaAgotado' => false,
+                            'estaReservada' => false,
+                            'varianteSkuId' => null,
+                            'actionUrl' => route('public.memorabilia'),
+                            'especificaciones' => [
+                                'Marca / Ceca' => 'Casa de Moneda de México (Mo)',
+                                'Material' => 'Oro Ley 0.900 (37.5 g oro fino)',
+                                'Categoría' => 'Numismática Histórica',
+                                'Año / Datación' => '1921 (Año Bicentenario)',
+                                'Certificación COA' => 'Certamen Notarial con Graduación Numismática',
+                            ],
+                        ];
+                    @endphp
 
-                <div class="vitrina-scroll-card shrink-0 w-[280px] sm:w-[320px] md:w-[340px]" style="scroll-snap-align: start;">
-                    <article
-                        data-product-details="{{ json_encode($fallbackLibro, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) }}"
-                        class="bg-white dark:bg-[#171024] border border-purple-200/80 dark:border-purple-500/30 rounded-2xl p-5 flex flex-col justify-between hover:border-primary hover:shadow-lg transition-all duration-200 group shadow-xs h-full"
+                    <!-- Fallback 1: Vinilo (Tarjeta Central Activa) -->
+                    <div
+                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[285px] sm:w-[325px] md:w-[340px] h-[460px] sm:h-[480px]"
+                        style="transform-style: preserve-3d; z-index: 30;"
+                        data-slide-index="0"
                     >
-                        <div>
-                            <div onclick="abrirModalDetalleProducto(this)" class="w-full aspect-square rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-4 cursor-pointer">
-                                <span class="absolute top-2.5 left-2.5 bg-primary-container text-white text-[10px] font-label-sm font-semibold uppercase px-2.5 py-0.5 rounded shadow-2xs">PRIMERA EDICIÓN</span>
-                                <span class="absolute bottom-2.5 right-2.5 bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
-                                <span class="material-symbols-outlined text-purple-300 group-hover:text-primary transition-colors text-[64px]">auto_stories</span>
-                            </div>
-                            <div class="space-y-1">
-                                <h3 onclick="abrirModalDetalleProducto(this)" class="font-bold text-on-surface dark:text-white text-base group-hover:text-primary transition font-quicksand cursor-pointer leading-snug">Cien Años de Soledad</h3>
-                                <p class="font-title-editorial text-xs text-on-surface-variant italic truncate">Gabriel García Márquez · Sudamericana</p>
-                                <button type="button" onclick="abrirModalDetalleProducto(this)" class="pt-1.5 inline-flex items-center gap-1 text-[11px] font-label-code text-primary dark:text-purple-300 hover:underline font-semibold cursor-pointer">
-                                    <span class="material-symbols-outlined text-[14px]">info</span>
-                                    <span>Ver detalles &rarr;</span>
-                                </button>
+                        <div
+                            class="coverflow-slot w-full h-full"
+                            style="transform-style: preserve-3d; transform: translate3d(0px, 0, 40px) rotateY(0deg) scale(1); opacity: 1;"
+                        >
+                            <div class="coverflow-card h-full rounded-2xl coverflow-card-active">
+                                <article
+                                    draggable="false"
+                                    data-product-details="{{ json_encode($fallbackDisco, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) }}"
+                                    class="bg-white dark:bg-[#171024] border-2 border-purple-600 dark:border-purple-500 ring-2 ring-purple-600/20 dark:ring-purple-500/20 rounded-2xl p-5 flex flex-col justify-between hover:border-purple-700 hover:shadow-xl transition-all duration-200 group relative h-full select-none"
+                                >
+                                    <div>
+                                        <div onclick="abrirModalDetalleProducto(this)" class="w-full aspect-square rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-4 cursor-pointer group-hover:shadow-inner">
+                                            <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 dark:via-white/5 dark:to-white/10 pointer-events-none rounded-xl z-20"></div>
+                                            <span class="absolute top-2.5 left-2.5 z-10 bg-purple-600 text-white text-[10px] font-label-sm font-bold uppercase px-2.5 py-0.5 rounded-md shadow-sm inline-flex items-center gap-1">
+                                                <span class="material-symbols-outlined text-[12px]">diamond</span>
+                                                <span>PIEZA ÚNICA 1/1</span>
+                                            </span>
+                                            <span class="absolute bottom-2.5 right-2.5 z-10 bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
+                                            <span class="material-symbols-outlined text-purple-400 dark:text-purple-300 group-hover:text-primary transition-colors text-[64px]">album</span>
+                                        </div>
+                                        <div class="space-y-1">
+                                            <h3 onclick="abrirModalDetalleProducto(this)" class="font-bold text-on-surface dark:text-white text-base group-hover:text-primary dark:group-hover:text-purple-300 transition font-quicksand cursor-pointer leading-snug">Kind of Blue (Mono 1st Press)</h3>
+                                            <p class="font-title-editorial text-xs text-on-surface-variant dark:text-purple-200/70 italic truncate">Miles Davis · Columbia Records CL 1355</p>
+                                            <button type="button" onclick="abrirModalDetalleProducto(this)" class="pt-1.5 inline-flex items-center gap-1 text-[11px] font-label-code text-primary dark:text-purple-300 hover:underline font-semibold cursor-pointer group-hover:translate-x-0.5 transition-transform">
+                                                <span class="material-symbols-outlined text-[14px]">info</span>
+                                                <span>Ver detalles &rarr;</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="pt-4 mt-4 border-t border-purple-100 dark:border-purple-500/20 flex items-center justify-between gap-2">
+                                        <div>
+                                            <span class="text-[10px] uppercase font-label-code text-outline dark:text-purple-300/60 block">Precio Tasado:</span>
+                                            <span class="font-tabular-data font-bold text-on-surface dark:text-white text-base">$18,500 <span class="text-xs font-normal text-on-surface-variant dark:text-purple-200/60">MXN</span></span>
+                                        </div>
+                                        <a draggable="false" href="{{ route('public.vinilos') }}" class="btn-glass-purple px-3.5 py-2.5 rounded-xl text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs cursor-pointer select-none">
+                                            <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+                                            <span>Reservar</span>
+                                        </a>
+                                    </div>
+                                </article>
                             </div>
                         </div>
-                        <div class="pt-4 mt-4 border-t border-purple-100 dark:border-purple-500/20 flex items-center justify-between">
-                            <span class="font-tabular-data font-bold text-on-surface dark:text-white text-base">$32,000 <span class="text-xs font-normal text-on-surface-variant">MXN</span></span>
-                            <a href="{{ route('public.libros') }}" class="btn-glass-purple px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider">Ver Sala</a>
-                        </div>
-                    </article>
-                </div>
+                    </div>
 
-                <div class="vitrina-scroll-card shrink-0 w-[280px] sm:w-[320px] md:w-[340px]" style="scroll-snap-align: start;">
-                    <article
-                        data-product-details="{{ json_encode($fallbackMemorabilia, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) }}"
-                        class="bg-white dark:bg-[#171024] border border-purple-200/80 dark:border-purple-500/30 rounded-2xl p-5 flex flex-col justify-between hover:border-primary hover:shadow-lg transition-all duration-200 group shadow-xs h-full"
+                    <!-- Fallback 2: Libro (Lateral Derecha) -->
+                    <div
+                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[285px] sm:w-[325px] md:w-[340px] h-[460px] sm:h-[480px]"
+                        style="transform-style: preserve-3d; z-index: 20;"
+                        data-slide-index="1"
                     >
-                        <div>
-                            <div onclick="abrirModalDetalleProducto(this)" class="w-full aspect-square rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-4 cursor-pointer">
-                                <span class="absolute top-2.5 left-2.5 bg-tertiary text-white text-[10px] font-label-sm font-semibold uppercase px-2.5 py-0.5 rounded shadow-2xs">MEMORABILIA</span>
-                                <span class="absolute bottom-2.5 right-2.5 bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
-                                <span class="material-symbols-outlined text-purple-300 group-hover:text-primary transition-colors text-[64px]">history_edu</span>
-                            </div>
-                            <div class="space-y-1">
-                                <h3 onclick="abrirModalDetalleProducto(this)" class="font-bold text-on-surface dark:text-white text-base group-hover:text-primary transition font-quicksand cursor-pointer leading-snug">Carta Manuscrita Bellas Artes</h3>
-                                <p class="font-title-editorial text-xs text-on-surface-variant italic truncate">Colección Diplomática · Archivo Notarial</p>
-                                <button type="button" onclick="abrirModalDetalleProducto(this)" class="pt-1.5 inline-flex items-center gap-1 text-[11px] font-label-code text-primary dark:text-purple-300 hover:underline font-semibold cursor-pointer">
-                                    <span class="material-symbols-outlined text-[14px]">info</span>
-                                    <span>Ver detalles &rarr;</span>
-                                </button>
+                        <div
+                            class="coverflow-slot w-full h-full"
+                            style="transform-style: preserve-3d; transform: translate3d(335px, 0, -110px) rotateY(-24deg) scale(0.86); opacity: 0.85;"
+                        >
+                            <div class="coverflow-card h-full rounded-2xl">
+                                <article
+                                    draggable="false"
+                                    data-product-details="{{ json_encode($fallbackLibro, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) }}"
+                                    class="bg-white dark:bg-[#171024] border-2 border-purple-600 dark:border-purple-500 ring-2 ring-purple-600/20 dark:ring-purple-500/20 rounded-2xl p-5 flex flex-col justify-between hover:border-purple-700 hover:shadow-xl transition-all duration-200 group relative h-full select-none"
+                                >
+                                    <div>
+                                        <div onclick="abrirModalDetalleProducto(this)" class="w-full aspect-square rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-4 cursor-pointer group-hover:shadow-inner">
+                                            <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 dark:via-white/5 dark:to-white/10 pointer-events-none rounded-xl z-20"></div>
+                                            <span class="absolute top-2.5 left-2.5 z-10 bg-purple-600 text-white text-[10px] font-label-sm font-bold uppercase px-2.5 py-0.5 rounded-md shadow-sm inline-flex items-center gap-1">
+                                                <span class="material-symbols-outlined text-[12px]">diamond</span>
+                                                <span>PIEZA ÚNICA 1/1</span>
+                                            </span>
+                                            <span class="absolute bottom-2.5 right-2.5 z-10 bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
+                                            <span class="material-symbols-outlined text-purple-400 dark:text-purple-300 group-hover:text-primary transition-colors text-[64px]">auto_stories</span>
+                                        </div>
+                                        <div class="space-y-1">
+                                            <h3 onclick="abrirModalDetalleProducto(this)" class="font-bold text-on-surface dark:text-white text-base group-hover:text-primary dark:group-hover:text-purple-300 transition font-quicksand cursor-pointer leading-snug">Cien Años de Soledad</h3>
+                                            <p class="font-title-editorial text-xs text-on-surface-variant dark:text-purple-200/70 italic truncate">Gabriel García Márquez · Sudamericana</p>
+                                            <button type="button" onclick="abrirModalDetalleProducto(this)" class="pt-1.5 inline-flex items-center gap-1 text-[11px] font-label-code text-primary dark:text-purple-300 hover:underline font-semibold cursor-pointer group-hover:translate-x-0.5 transition-transform">
+                                                <span class="material-symbols-outlined text-[14px]">info</span>
+                                                <span>Ver detalles &rarr;</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="pt-4 mt-4 border-t border-purple-100 dark:border-purple-500/20 flex items-center justify-between gap-2">
+                                        <div>
+                                            <span class="text-[10px] uppercase font-label-code text-outline dark:text-purple-300/60 block">Precio Tasado:</span>
+                                            <span class="font-tabular-data font-bold text-on-surface dark:text-white text-base">$32,000 <span class="text-xs font-normal text-on-surface-variant dark:text-purple-200/60">MXN</span></span>
+                                        </div>
+                                        <a draggable="false" href="{{ route('public.libros') }}" class="btn-glass-purple px-3.5 py-2.5 rounded-xl text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs cursor-pointer select-none">
+                                            <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+                                            <span>Reservar</span>
+                                        </a>
+                                    </div>
+                                </article>
                             </div>
                         </div>
-                        <div class="pt-4 mt-4 border-t border-purple-100 dark:border-purple-500/20 flex items-center justify-between">
-                            <span class="font-tabular-data font-bold text-on-surface dark:text-white text-base">$9,400 <span class="text-xs font-normal text-on-surface-variant">MXN</span></span>
-                            <a href="{{ route('public.memorabilia') }}" class="btn-glass-purple px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider">Ver Sala</a>
+                    </div>
+
+                    <!-- Fallback 3: Memorabilia 1 (Segunda Derecha) -->
+                    <div
+                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[285px] sm:w-[325px] md:w-[340px] h-[460px] sm:h-[480px]"
+                        style="transform-style: preserve-3d; z-index: 10;"
+                        data-slide-index="2"
+                    >
+                        <div
+                            class="coverflow-slot w-full h-full"
+                            style="transform-style: preserve-3d; transform: translate3d(610px, 0, -210px) rotateY(-30deg) scale(0.74); opacity: 0.55;"
+                        >
+                            <div class="coverflow-card h-full rounded-2xl">
+                                <article
+                                    draggable="false"
+                                    data-product-details="{{ json_encode($fallbackMemorabilia, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) }}"
+                                    class="bg-white dark:bg-[#171024] border-2 border-purple-600 dark:border-purple-500 ring-2 ring-purple-600/20 dark:ring-purple-500/20 rounded-2xl p-5 flex flex-col justify-between hover:border-purple-700 hover:shadow-xl transition-all duration-200 group relative h-full select-none"
+                                >
+                                    <div>
+                                        <div onclick="abrirModalDetalleProducto(this)" class="w-full aspect-square rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-4 cursor-pointer group-hover:shadow-inner">
+                                            <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 dark:via-white/5 dark:to-white/10 pointer-events-none rounded-xl z-20"></div>
+                                            <span class="absolute top-2.5 left-2.5 z-10 bg-purple-600 text-white text-[10px] font-label-sm font-bold uppercase px-2.5 py-0.5 rounded-md shadow-sm inline-flex items-center gap-1">
+                                                <span class="material-symbols-outlined text-[12px]">diamond</span>
+                                                <span>PIEZA ÚNICA 1/1</span>
+                                            </span>
+                                            <span class="absolute bottom-2.5 right-2.5 z-10 bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
+                                            <span class="material-symbols-outlined text-purple-400 dark:text-purple-300 group-hover:text-primary transition-colors text-[64px]">history_edu</span>
+                                        </div>
+                                        <div class="space-y-1">
+                                            <h3 onclick="abrirModalDetalleProducto(this)" class="font-bold text-on-surface dark:text-white text-base group-hover:text-primary dark:group-hover:text-purple-300 transition font-quicksand cursor-pointer leading-snug">Carta Manuscrita Bellas Artes</h3>
+                                            <p class="font-title-editorial text-xs text-on-surface-variant dark:text-purple-200/70 italic truncate">Colección Diplomática · Archivo Notarial</p>
+                                            <button type="button" onclick="abrirModalDetalleProducto(this)" class="pt-1.5 inline-flex items-center gap-1 text-[11px] font-label-code text-primary dark:text-purple-300 hover:underline font-semibold cursor-pointer group-hover:translate-x-0.5 transition-transform">
+                                                <span class="material-symbols-outlined text-[14px]">info</span>
+                                                <span>Ver detalles &rarr;</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="pt-4 mt-4 border-t border-purple-100 dark:border-purple-500/20 flex items-center justify-between gap-2">
+                                        <div>
+                                            <span class="text-[10px] uppercase font-label-code text-outline dark:text-purple-300/60 block">Precio Tasado:</span>
+                                            <span class="font-tabular-data font-bold text-on-surface dark:text-white text-base">$9,400 <span class="text-xs font-normal text-on-surface-variant dark:text-purple-200/60">MXN</span></span>
+                                        </div>
+                                        <a draggable="false" href="{{ route('public.memorabilia') }}" class="btn-glass-purple px-3.5 py-2.5 rounded-xl text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs cursor-pointer select-none">
+                                            <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+                                            <span>Reservar</span>
+                                        </a>
+                                    </div>
+                                </article>
+                            </div>
                         </div>
-                    </article>
-                </div>
-            @endforelse
+                    </div>
+
+                    <!-- Fallback 4: Disco 2 (Posterior Oculto) -->
+                    <div
+                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[285px] sm:w-[325px] md:w-[340px] h-[460px] sm:h-[480px]"
+                        style="transform-style: preserve-3d; z-index: 1;"
+                        data-slide-index="3"
+                    >
+                        <div
+                            class="coverflow-slot w-full h-full"
+                            style="transform-style: preserve-3d; transform: translate3d(780px, 0, -300px) rotateY(-35deg) scale(0.65); opacity: 0;"
+                        >
+                            <div class="coverflow-card h-full rounded-2xl">
+                                <article
+                                    draggable="false"
+                                    data-product-details="{{ json_encode($fallbackDisco2, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) }}"
+                                    class="bg-white dark:bg-[#171024] border-2 border-purple-600 dark:border-purple-500 ring-2 ring-purple-600/20 dark:ring-purple-500/20 rounded-2xl p-5 flex flex-col justify-between hover:border-purple-700 hover:shadow-xl transition-all duration-200 group relative h-full select-none"
+                                >
+                                    <div>
+                                        <div onclick="abrirModalDetalleProducto(this)" class="w-full aspect-square rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-4 cursor-pointer group-hover:shadow-inner">
+                                            <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 dark:via-white/5 dark:to-white/10 pointer-events-none rounded-xl z-20"></div>
+                                            <span class="absolute top-2.5 left-2.5 z-10 bg-purple-600 text-white text-[10px] font-label-sm font-bold uppercase px-2.5 py-0.5 rounded-md shadow-sm inline-flex items-center gap-1">
+                                                <span class="material-symbols-outlined text-[12px]">diamond</span>
+                                                <span>PIEZA ÚNICA 1/1</span>
+                                            </span>
+                                            <span class="absolute bottom-2.5 right-2.5 z-10 bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
+                                            <span class="material-symbols-outlined text-purple-400 dark:text-purple-300 group-hover:text-primary transition-colors text-[64px]">album</span>
+                                        </div>
+                                        <div class="space-y-1">
+                                            <h3 onclick="abrirModalDetalleProducto(this)" class="font-bold text-on-surface dark:text-white text-base group-hover:text-primary dark:group-hover:text-purple-300 transition font-quicksand cursor-pointer leading-snug">The Dark Side of the Moon (1st Press UK)</h3>
+                                            <p class="font-title-editorial text-xs text-on-surface-variant dark:text-purple-200/70 italic truncate">Pink Floyd · Harvest SHVL 804 (1973)</p>
+                                            <button type="button" onclick="abrirModalDetalleProducto(this)" class="pt-1.5 inline-flex items-center gap-1 text-[11px] font-label-code text-primary dark:text-purple-300 hover:underline font-semibold cursor-pointer group-hover:translate-x-0.5 transition-transform">
+                                                <span class="material-symbols-outlined text-[14px]">info</span>
+                                                <span>Ver detalles &rarr;</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="pt-4 mt-4 border-t border-purple-100 dark:border-purple-500/20 flex items-center justify-between gap-2">
+                                        <div>
+                                            <span class="text-[10px] uppercase font-label-code text-outline dark:text-purple-300/60 block">Precio Tasado:</span>
+                                            <span class="font-tabular-data font-bold text-on-surface dark:text-white text-base">$24,500 <span class="text-xs font-normal text-on-surface-variant dark:text-purple-200/60">MXN</span></span>
+                                        </div>
+                                        <a draggable="false" href="{{ route('public.vinilos') }}" class="btn-glass-purple px-3.5 py-2.5 rounded-xl text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs cursor-pointer select-none">
+                                            <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+                                            <span>Reservar</span>
+                                        </a>
+                                    </div>
+                                </article>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fallback 5: Libro 2 (Segunda Izquierda) -->
+                    <div
+                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[285px] sm:w-[325px] md:w-[340px] h-[460px] sm:h-[480px]"
+                        style="transform-style: preserve-3d; z-index: 10;"
+                        data-slide-index="4"
+                    >
+                        <div
+                            class="coverflow-slot w-full h-full"
+                            style="transform-style: preserve-3d; transform: translate3d(-610px, 0, -210px) rotateY(30deg) scale(0.74); opacity: 0.55;"
+                        >
+                            <div class="coverflow-card h-full rounded-2xl">
+                                <article
+                                    draggable="false"
+                                    data-product-details="{{ json_encode($fallbackLibro2, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) }}"
+                                    class="bg-white dark:bg-[#171024] border-2 border-purple-600 dark:border-purple-500 ring-2 ring-purple-600/20 dark:ring-purple-500/20 rounded-2xl p-5 flex flex-col justify-between hover:border-purple-700 hover:shadow-xl transition-all duration-200 group relative h-full select-none"
+                                >
+                                    <div>
+                                        <div onclick="abrirModalDetalleProducto(this)" class="w-full aspect-square rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-4 cursor-pointer group-hover:shadow-inner">
+                                            <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 dark:via-white/5 dark:to-white/10 pointer-events-none rounded-xl z-20"></div>
+                                            <span class="absolute top-2.5 left-2.5 z-10 bg-purple-600 text-white text-[10px] font-label-sm font-bold uppercase px-2.5 py-0.5 rounded-md shadow-sm inline-flex items-center gap-1">
+                                                <span class="material-symbols-outlined text-[12px]">diamond</span>
+                                                <span>PIEZA ÚNICA 1/1</span>
+                                            </span>
+                                            <span class="absolute bottom-2.5 right-2.5 z-10 bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
+                                            <span class="material-symbols-outlined text-purple-400 dark:text-purple-300 group-hover:text-primary transition-colors text-[64px]">auto_stories</span>
+                                        </div>
+                                        <div class="space-y-1">
+                                            <h3 onclick="abrirModalDetalleProducto(this)" class="font-bold text-on-surface dark:text-white text-base group-hover:text-primary dark:group-hover:text-purple-300 transition font-quicksand cursor-pointer leading-snug">El Aleph (1ª Edición Losada)</h3>
+                                            <p class="font-title-editorial text-xs text-on-surface-variant dark:text-purple-200/70 italic truncate">Jorge Luis Borges · Editorial Losada (1949)</p>
+                                            <button type="button" onclick="abrirModalDetalleProducto(this)" class="pt-1.5 inline-flex items-center gap-1 text-[11px] font-label-code text-primary dark:text-purple-300 hover:underline font-semibold cursor-pointer group-hover:translate-x-0.5 transition-transform">
+                                                <span class="material-symbols-outlined text-[14px]">info</span>
+                                                <span>Ver detalles &rarr;</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="pt-4 mt-4 border-t border-purple-100 dark:border-purple-500/20 flex items-center justify-between gap-2">
+                                        <div>
+                                            <span class="text-[10px] uppercase font-label-code text-outline dark:text-purple-300/60 block">Precio Tasado:</span>
+                                            <span class="font-tabular-data font-bold text-on-surface dark:text-white text-base">$28,000 <span class="text-xs font-normal text-on-surface-variant dark:text-purple-200/60">MXN</span></span>
+                                        </div>
+                                        <a draggable="false" href="{{ route('public.libros') }}" class="btn-glass-purple px-3.5 py-2.5 rounded-xl text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs cursor-pointer select-none">
+                                            <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+                                            <span>Reservar</span>
+                                        </a>
+                                    </div>
+                                </article>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fallback 6: Memorabilia 2 (Inmediata Izquierda) -->
+                    <div
+                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[285px] sm:w-[325px] md:w-[340px] h-[460px] sm:h-[480px]"
+                        style="transform-style: preserve-3d; z-index: 20;"
+                        data-slide-index="5"
+                    >
+                        <div
+                            class="coverflow-slot w-full h-full"
+                            style="transform-style: preserve-3d; transform: translate3d(-335px, 0, -110px) rotateY(24deg) scale(0.86); opacity: 0.85;"
+                        >
+                            <div class="coverflow-card h-full rounded-2xl">
+                                <article
+                                    draggable="false"
+                                    data-product-details="{{ json_encode($fallbackMemorabilia2, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) }}"
+                                    class="bg-white dark:bg-[#171024] border-2 border-purple-600 dark:border-purple-500 ring-2 ring-purple-600/20 dark:ring-purple-500/20 rounded-2xl p-5 flex flex-col justify-between hover:border-purple-700 hover:shadow-xl transition-all duration-200 group relative h-full select-none"
+                                >
+                                    <div>
+                                        <div onclick="abrirModalDetalleProducto(this)" class="w-full aspect-square rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-4 cursor-pointer group-hover:shadow-inner">
+                                            <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 dark:via-white/5 dark:to-white/10 pointer-events-none rounded-xl z-20"></div>
+                                            <span class="absolute top-2.5 left-2.5 z-10 bg-purple-600 text-white text-[10px] font-label-sm font-bold uppercase px-2.5 py-0.5 rounded-md shadow-sm inline-flex items-center gap-1">
+                                                <span class="material-symbols-outlined text-[12px]">diamond</span>
+                                                <span>PIEZA ÚNICA 1/1</span>
+                                            </span>
+                                            <span class="absolute bottom-2.5 right-2.5 z-10 bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
+                                            <span class="material-symbols-outlined text-purple-400 dark:text-purple-300 group-hover:text-primary transition-colors text-[64px]">history_edu</span>
+                                        </div>
+                                        <div class="space-y-1">
+                                            <h3 onclick="abrirModalDetalleProducto(this)" class="font-bold text-on-surface dark:text-white text-base group-hover:text-primary dark:group-hover:text-purple-300 transition font-quicksand cursor-pointer leading-snug">Centenario 50 Pesos Oro (1921)</h3>
+                                            <p class="font-title-editorial text-xs text-on-surface-variant dark:text-purple-200/70 italic truncate">Casa de Moneda de México · 1.20565 oz Oro Puro</p>
+                                            <button type="button" onclick="abrirModalDetalleProducto(this)" class="pt-1.5 inline-flex items-center gap-1 text-[11px] font-label-code text-primary dark:text-purple-300 hover:underline font-semibold cursor-pointer group-hover:translate-x-0.5 transition-transform">
+                                                <span class="material-symbols-outlined text-[14px]">info</span>
+                                                <span>Ver detalles &rarr;</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="pt-4 mt-4 border-t border-purple-100 dark:border-purple-500/20 flex items-center justify-between gap-2">
+                                        <div>
+                                            <span class="text-[10px] uppercase font-label-code text-outline dark:text-purple-300/60 block">Precio Tasado:</span>
+                                            <span class="font-tabular-data font-bold text-on-surface dark:text-white text-base">$65,000 <span class="text-xs font-normal text-on-surface-variant dark:text-purple-200/60">MXN</span></span>
+                                        </div>
+                                        <a draggable="false" href="{{ route('public.memorabilia') }}" class="btn-glass-purple px-3.5 py-2.5 rounded-xl text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs cursor-pointer select-none">
+                                            <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+                                            <span>Reservar</span>
+                                        </a>
+                                    </div>
+                                </article>
+                            </div>
+                        </div>
+                    </div>
+                @endforelse
+            </div>
         </div>
-    </section>
+    </div>
+</section>
 
     <!-- Barra de Filtros, Ordenación y Estado del Catálogo -->
     <div id="catalogo" class="flex flex-col md:flex-row md:items-center md:justify-between pb-6 border-b border-purple-200/80 gap-4 mb-8">
@@ -456,6 +834,351 @@
 
     @push('scripts')
         <script>
+            (function () {
+                /**
+                 * ==========================================================================
+                 * ARCHIVUM · CARRUSEL 3D COVERFLOW INTERACTIVO PURO
+                 * Soporte integral: Rueda/Trackpad, Arrastre Mouse/Touch y Clic Lateral
+                 * ==========================================================================
+                 */
+                function setupCoverflowCarousel() {
+                    const stage = document.getElementById('vitrina-coverflow-carousel');
+                    if (!stage) return;
+
+                    const anchors = Array.from(stage.querySelectorAll('.coverflow-slot-anchor'));
+                    const total = anchors.length;
+                    if (total === 0) return;
+
+                    let activeIndex = 0;
+
+                    function getSpacingX() {
+                        const w = window.innerWidth;
+                        if (w < 640) return 165; // Móvil
+                        if (w < 1024) return 260; // Tablet
+                        if (w < 1280) return 310; // Portátil
+                        return 335; // Escritorio amplio
+                    }
+
+                    function updatePositions() {
+                        const spacingX = getSpacingX();
+
+                        anchors.forEach((anchor, idx) => {
+                            const slot = anchor.querySelector('.coverflow-slot');
+                            const card = anchor.querySelector('.coverflow-card');
+                            if (!slot) return;
+
+                            let diff = idx - activeIndex;
+
+                            // Envoltura circular continua
+                            if (total > 3) {
+                                while (diff > total / 2) diff -= total;
+                                while (diff < -total / 2) diff += total;
+                            } else if (total === 3) {
+                                if (diff === 2) diff = -1;
+                                if (diff === -2) diff = 1;
+                            } else if (total === 2) {
+                                if (diff === -1) diff = 1;
+                            }
+
+                            let posX = 0;
+                            let posZ = 0;
+                            let rotY = 0;
+                            let scale = 1;
+                            let zIndex = 1;
+                            let opacity = 1;
+                            let isVisible = true;
+
+                            if (diff === 0) {
+                                // Tarjeta central activa: al frente, nítida, profundidad Z y glow
+                                posX = 0;
+                                posZ = 40;
+                                rotY = 0;
+                                scale = 1;
+                                zIndex = 30;
+                                opacity = 1;
+
+                                if (card) card.classList.add('coverflow-card-active');
+                                anchor.style.pointerEvents = 'auto';
+                                anchor.setAttribute('aria-hidden', 'false');
+                                slot.style.cursor = 'default';
+                            } else if (diff === -1) {
+                                // Inmediata izquierda: rotateY(24deg), scale(0.86), z-index 20
+                                posX = -spacingX;
+                                posZ = -110;
+                                rotY = 24;
+                                scale = 0.86;
+                                zIndex = 20;
+                                opacity = 0.85;
+
+                                if (card) card.classList.remove('coverflow-card-active');
+                                anchor.style.pointerEvents = 'auto';
+                                anchor.setAttribute('aria-hidden', 'true');
+                                slot.style.cursor = 'pointer';
+                            } else if (diff === 1) {
+                                // Inmediata derecha: rotateY(-24deg), scale(0.86), z-index 20
+                                posX = spacingX;
+                                posZ = -110;
+                                rotY = -24;
+                                scale = 0.86;
+                                zIndex = 20;
+                                opacity = 0.85;
+
+                                if (card) card.classList.remove('coverflow-card-active');
+                                anchor.style.pointerEvents = 'auto';
+                                anchor.setAttribute('aria-hidden', 'true');
+                                slot.style.cursor = 'pointer';
+                            } else if (diff === -2) {
+                                // Segunda izquierda: rotateY(30deg), scale(0.74), z-index 10
+                                posX = -Math.round(spacingX * 1.82);
+                                posZ = -210;
+                                rotY = 30;
+                                scale = 0.74;
+                                zIndex = 10;
+                                opacity = 0.55;
+
+                                if (card) card.classList.remove('coverflow-card-active');
+                                anchor.style.pointerEvents = 'auto';
+                                anchor.setAttribute('aria-hidden', 'true');
+                                slot.style.cursor = 'pointer';
+                            } else if (diff === 2) {
+                                // Segunda derecha: rotateY(-30deg), scale(0.74), z-index 10
+                                posX = Math.round(spacingX * 1.82);
+                                posZ = -210;
+                                rotY = -30;
+                                scale = 0.74;
+                                zIndex = 10;
+                                opacity = 0.55;
+
+                                if (card) card.classList.remove('coverflow-card-active');
+                                anchor.style.pointerEvents = 'auto';
+                                anchor.setAttribute('aria-hidden', 'true');
+                                slot.style.cursor = 'pointer';
+                            } else {
+                                // Lejanas ocultas fuera de la vista
+                                const dir = Math.sign(diff) || 1;
+                                posX = dir * Math.round(spacingX * 2.4);
+                                posZ = -300;
+                                rotY = -dir * 35;
+                                scale = 0.65;
+                                zIndex = 1;
+                                opacity = 0;
+                                isVisible = false;
+
+                                if (card) card.classList.remove('coverflow-card-active');
+                                anchor.style.pointerEvents = 'none';
+                                anchor.setAttribute('aria-hidden', 'true');
+                                slot.style.cursor = 'default';
+                            }
+
+                            anchor.style.zIndex = zIndex;
+                            slot.style.transform = `translate3d(${posX}px, 0, ${posZ}px) rotateY(${rotY}deg) scale(${scale})`;
+                            slot.style.opacity = opacity;
+                            slot.style.visibility = isVisible ? 'visible' : 'hidden';
+                        });
+                    }
+
+                    function goTo(index) {
+                        activeIndex = (index % total + total) % total;
+                        updatePositions();
+                    }
+
+                    function next() {
+                        goTo(activeIndex + 1);
+                    }
+
+                    function prev() {
+                        goTo(activeIndex - 1);
+                    }
+
+                    // Evitar listeners redundantes
+                    if (stage.dataset.coverflowBound === 'true') {
+                        updatePositions();
+                        return;
+                    }
+                    stage.dataset.coverflowBound = 'true';
+
+                    // 1. Rueda del Mouse & Trackpad (wheel):
+                    // Escucha tanto e.deltaY (rueda vertical normal) como e.deltaX (trackpad)
+                    let wheelLocked = false;
+                    stage.addEventListener('wheel', function (e) {
+                        let delta = 0;
+                        const absY = Math.abs(e.deltaY);
+                        const absX = Math.abs(e.deltaX);
+
+                        if (absY >= absX && absY > 5) {
+                            delta = e.deltaY;
+                        } else if (absX > 5) {
+                            delta = e.deltaX;
+                        }
+
+                        if (Math.abs(delta) > 5) {
+                            e.preventDefault();
+                            e.stopPropagation();
+
+                            if (wheelLocked) return;
+                            wheelLocked = true;
+
+                            if (delta > 0) {
+                                next();
+                            } else {
+                                prev();
+                            }
+
+                            setTimeout(function () {
+                                wheelLocked = false;
+                            }, 220); // Cooldown controlado ~220ms
+                        }
+                    }, { passive: false });
+
+                    // Prevenir arrastre fantasma de imágenes y enlaces nativo del navegador
+                    stage.addEventListener('dragstart', function (e) {
+                        e.preventDefault();
+                    });
+
+                    // 2. Arrastre con Pointer / Mouse / Touch
+                    let isDown = false;
+                    let startX = 0;
+                    let startY = 0;
+                    let currentDeltaX = 0;
+                    let dragMoved = false;
+                    let activePointerId = null;
+                    const DRAG_THRESHOLD = 8;
+                    const SWIPE_THRESHOLD = 35;
+
+                    function handleStart(clientX, clientY, pointerId = null) {
+                        isDown = true;
+                        dragMoved = false;
+                        startX = clientX;
+                        startY = clientY;
+                        currentDeltaX = 0;
+                        activePointerId = pointerId;
+                        if (pointerId !== null && stage.setPointerCapture) {
+                            try {
+                                stage.setPointerCapture(pointerId);
+                            } catch (err) {}
+                        }
+                    }
+
+                    function handleMove(clientX, clientY) {
+                        if (!isDown) return;
+                        currentDeltaX = clientX - startX;
+                        const dy = clientY - startY;
+
+                        if (Math.abs(currentDeltaX) > DRAG_THRESHOLD && Math.abs(currentDeltaX) > Math.abs(dy)) {
+                            dragMoved = true;
+                        }
+                    }
+
+                    function handleEnd() {
+                        if (!isDown) return;
+                        isDown = false;
+                        if (activePointerId !== null && stage.releasePointerCapture) {
+                            try {
+                                stage.releasePointerCapture(activePointerId);
+                            } catch (err) {}
+                        }
+                        activePointerId = null;
+
+                        if (dragMoved) {
+                            if (currentDeltaX < -SWIPE_THRESHOLD) {
+                                next();
+                            } else if (currentDeltaX > SWIPE_THRESHOLD) {
+                                prev();
+                            }
+                        }
+                    }
+
+                    stage.addEventListener('pointerdown', function (e) {
+                        if (e.button !== undefined && e.button !== 0) return;
+                        handleStart(e.clientX, e.clientY, e.pointerId);
+                    });
+
+                    stage.addEventListener('pointermove', function (e) {
+                        handleMove(e.clientX, e.clientY);
+                    });
+
+                    stage.addEventListener('pointerup', function () {
+                        handleEnd();
+                    });
+
+                    stage.addEventListener('pointercancel', function () {
+                        isDown = false;
+                        dragMoved = false;
+                        activePointerId = null;
+                    });
+
+                    // Soporte táctil móvil adicional
+                    stage.addEventListener('touchstart', function (e) {
+                        if (e.touches && e.touches[0]) {
+                            handleStart(e.touches[0].clientX, e.touches[0].clientY);
+                        }
+                    }, { passive: true });
+
+                    stage.addEventListener('touchmove', function (e) {
+                        if (e.touches && e.touches[0]) {
+                            handleMove(e.touches[0].clientX, e.touches[0].clientY);
+                        }
+                    }, { passive: true });
+
+                    stage.addEventListener('touchend', function () {
+                        handleEnd();
+                    });
+
+                    // 3. Clic Directo en Tarjetas Laterales (Fase de Captura):
+                    // Centra suavemente la tarjeta lateral y evita abrir enlaces hasta estar en el centro.
+                    // Solo la tarjeta central (diff === 0) ejecuta Ver detalles o Reservar.
+                    stage.addEventListener('click', function (e) {
+                        if (dragMoved) {
+                            e.preventDefault();
+                            e.stopImmediatePropagation();
+                            dragMoved = false;
+                            return;
+                        }
+
+                        const anchor = e.target.closest('.coverflow-slot-anchor');
+                        if (anchor) {
+                            const slideIdx = parseInt(anchor.dataset.slideIndex, 10);
+                            if (!isNaN(slideIdx) && slideIdx !== activeIndex) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                e.stopImmediatePropagation();
+                                goTo(slideIdx);
+                            }
+                        }
+                    }, true);
+
+                    // 4. Teclado Accesible
+                    stage.addEventListener('keydown', function (e) {
+                        if (e.key === 'ArrowLeft') {
+                            e.preventDefault();
+                            prev();
+                        } else if (e.key === 'ArrowRight') {
+                            e.preventDefault();
+                            next();
+                        }
+                    });
+
+                    // 5. Redimensionamiento Responsivo
+                    let resizeTimer = null;
+                    window.addEventListener('resize', function () {
+                        if (resizeTimer) clearTimeout(resizeTimer);
+                        resizeTimer = setTimeout(updatePositions, 80);
+                    });
+
+                    // Geometría inicial
+                    updatePositions();
+                }
+
+                window.initCoverflowCarousel = setupCoverflowCarousel;
+
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', setupCoverflowCarousel);
+                } else {
+                    setupCoverflowCarousel();
+                }
+                window.addEventListener('load', setupCoverflowCarousel);
+            })();
+
             document.addEventListener('DOMContentLoaded', function () {
                 // Inicializar contadores regresivos en tiempo real para Promociones y Preventas
                 const countdownNodes = document.querySelectorAll('[data-promo-countdown]');
@@ -486,47 +1209,8 @@
                     setInterval(actualizarContadoresPromo, 1000);
                 }
 
-                // Controlador de Desplazamiento Horizontal Nativo ("Scroll Drag") para la Vitrina Curatorial
-                const scrollContainer = document.getElementById('vitrina-scroll-horizontal');
-                if (scrollContainer) {
-                    let isDown = false;
-                    let startX = 0;
-                    let scrollLeft = 0;
-                    let hasMoved = false;
-
-                    scrollContainer.addEventListener('mousedown', function (e) {
-                        isDown = true;
-                        hasMoved = false;
-                        startX = e.pageX - scrollContainer.offsetLeft;
-                        scrollLeft = scrollContainer.scrollLeft;
-                    });
-
-                    scrollContainer.addEventListener('mouseleave', function () {
-                        isDown = false;
-                    });
-
-                    scrollContainer.addEventListener('mouseup', function () {
-                        isDown = false;
-                    });
-
-                    scrollContainer.addEventListener('mousemove', function (e) {
-                        if (!isDown) return;
-                        e.preventDefault();
-                        const x = e.pageX - scrollContainer.offsetLeft;
-                        const walk = (x - startX) * 1.5;
-                        if (Math.abs(walk) > 4) {
-                            hasMoved = true;
-                        }
-                        scrollContainer.scrollLeft = scrollLeft - walk;
-                    });
-
-                    // Prevenir que un clic de arrastre active un enlace accidentalmente
-                    scrollContainer.addEventListener('click', function (e) {
-                        if (hasMoved) {
-                            e.preventDefault();
-                            e.stopPropagation();
-                        }
-                    }, true);
+                if (typeof window.initCoverflowCarousel === 'function') {
+                    window.initCoverflowCarousel();
                 }
             });
         </script>

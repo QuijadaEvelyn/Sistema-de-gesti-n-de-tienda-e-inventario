@@ -1,4 +1,7 @@
 import './bootstrap';
+import { initCoverflowCarousel } from './coverflow-carousel';
+
+window.initCoverflowCarousel = initCoverflowCarousel;
 
 /**
  * ==========================================================================
@@ -345,11 +348,18 @@ export function initAdminSpaNavigation() {
 }
 
 // Inicialización automática al cargar el DOM inicial
-document.addEventListener('DOMContentLoaded', () => {
+function bootApp() {
     initCountUps();
     const mainContent = document.getElementById('admin-main-content');
     if (mainContent) {
         applyStaggerAnimations(mainContent);
     }
     initAdminSpaNavigation();
-});
+    initCoverflowCarousel();
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bootApp);
+} else {
+    bootApp();
+}

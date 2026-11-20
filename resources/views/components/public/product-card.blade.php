@@ -43,12 +43,12 @@
     $maxUnidadesCompra = $piezaUnica !== null ? 1 : max(1, min(10, $stockTotal));
 
     $clasesTarjeta = $esPiezaUnica
-        ? 'bg-white border-2 border-purple-600 ring-2 ring-purple-600/20 shadow-md shadow-purple-600/15 hover:border-purple-700 hover:shadow-xl hover:shadow-purple-600/25'
-        : 'bg-white border border-purple-200/80 shadow-xs hover:border-primary hover:shadow-lg';
+        ? 'bg-white dark:bg-[#171024] border-2 border-purple-600 dark:border-purple-500 ring-2 ring-purple-600/20 dark:ring-purple-500/20 shadow-md shadow-purple-600/15 hover:border-purple-700 hover:shadow-xl hover:shadow-purple-600/25'
+        : 'bg-white dark:bg-[#171024] border border-purple-200/80 dark:border-purple-500/30 shadow-xs hover:border-primary hover:shadow-lg';
 
     $clasesMiniatura = $esPiezaUnica
-        ? 'bg-purple-50/60 border-2 border-purple-600/80 ring-1 ring-purple-500/30 group-hover:bg-purple-100/60'
-        : 'bg-surface-container-low border border-purple-200/60 group-hover:bg-purple-50';
+        ? 'bg-purple-50/60 dark:bg-[#140d20] border-2 border-purple-600/80 dark:border-purple-500/40 ring-1 ring-purple-500/30 group-hover:bg-purple-100/60'
+        : 'bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 group-hover:bg-purple-50 dark:group-hover:bg-purple-900/20';
 
     $datosModal = [
         'id' => $producto->id,
@@ -102,9 +102,10 @@
 @endphp
 
 <article
+    draggable="false"
     data-unique-piece="{{ $esPiezaUnica ? 'true' : 'false' }}"
     data-product-details="{{ json_encode($datosModal, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) }}"
-    class="{{ $clasesTarjeta }} rounded-2xl p-5 flex flex-col justify-between transition-all duration-200 group relative"
+    class="{{ $clasesTarjeta }} rounded-2xl p-5 flex flex-col justify-between transition-all duration-200 group relative h-full select-none"
 >
     <div>
         <!-- Imagen / Miniatura con Indicador de Disponibilidad Limpio -->
@@ -113,6 +114,9 @@
             class="w-full aspect-square rounded-xl {{ $clasesMiniatura }} flex items-center justify-center relative overflow-hidden mb-4 transition-colors cursor-pointer group-hover:shadow-inner"
             title="Haz clic para ver la ficha curatorial de {{ $producto->nombre }}"
         >
+            <!-- Capa Glossy Curatorial Sutil -->
+            <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 dark:via-white/5 dark:to-white/10 pointer-events-none rounded-xl z-20"></div>
+
             @if ($esPiezaUnica)
                 <span class="absolute top-2.5 left-2.5 z-10 bg-purple-600 text-white border border-purple-400/60 text-[10px] font-label-sm font-bold uppercase px-2.5 py-0.5 rounded-md shadow-sm inline-flex items-center gap-1">
                     <span class="material-symbols-outlined text-[12px]">diamond</span>
@@ -136,7 +140,7 @@
             @endif
 
             @if (!empty($imagenUrl))
-                <img src="{{ $imagenUrl }}" alt="{{ $producto->nombre }}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+                <img draggable="false" src="{{ $imagenUrl }}" alt="{{ $producto->nombre }}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 pointer-events-none select-none">
             @else
                 <span class="material-symbols-outlined {{ $esPiezaUnica ? 'text-purple-600 group-hover:scale-105' : 'text-purple-300 group-hover:text-primary' }} transition-all text-[64px]">{{ $iconoCategoria }}</span>
             @endif
@@ -146,12 +150,12 @@
         <div class="space-y-1">
             <h3
                 onclick="abrirModalDetalleProducto(this)"
-                class="font-bold text-on-surface text-base group-hover:text-primary transition font-quicksand leading-snug cursor-pointer line-clamp-2"
+                class="font-bold text-on-surface dark:text-white text-base group-hover:text-primary dark:group-hover:text-purple-300 transition font-quicksand leading-snug cursor-pointer line-clamp-2"
                 title="Haz clic para ver detalles de {{ $producto->nombre }}"
             >
                 {{ $producto->nombre }}
             </h3>
-            <p class="font-title-editorial text-xs text-on-surface-variant italic truncate">
+            <p class="font-title-editorial text-xs text-on-surface-variant dark:text-purple-200/70 italic truncate">
                 {{ $subtituloCuratorial }}
             </p>
 
@@ -170,10 +174,10 @@
     <!-- Pie: Precio Tasado y Botón/Contador de Reserva -->
     <div class="pt-4 mt-4 border-t border-purple-100 dark:border-purple-500/20 flex items-center justify-between gap-2">
         <div>
-            <span class="text-[10px] uppercase font-label-code text-outline block">Precio Tasado:</span>
-            <span class="font-tabular-data font-bold text-on-surface text-base">
+            <span class="text-[10px] uppercase font-label-code text-outline dark:text-purple-300/60 block">Precio Tasado:</span>
+            <span class="font-tabular-data font-bold text-on-surface dark:text-white text-base">
                 ${{ number_format((float) $producto->precio, 0) }}
-                <span class="text-xs font-normal text-on-surface-variant">MXN</span>
+                <span class="text-xs font-normal text-on-surface-variant dark:text-purple-200/60">MXN</span>
             </span>
         </div>
 
@@ -185,7 +189,7 @@
                     <select
                         name="cantidad"
                         aria-label="Cantidad de unidades a adquirir"
-                        class="px-2 py-2 rounded-xl border border-purple-200 dark:border-purple-500/40 bg-surface-container-lowest dark:bg-[#140d20] text-xs font-tabular-data font-bold text-on-surface focus:outline-none focus:border-primary"
+                        class="px-2 py-2 rounded-xl border border-purple-200 dark:border-purple-500/40 bg-surface-container-lowest dark:bg-[#140d20] text-xs font-tabular-data font-bold text-on-surface dark:text-white focus:outline-none focus:border-primary"
                     >
                         @for ($u = 1; $u <= $maxUnidadesCompra; $u++)
                             <option value="{{ $u }}">{{ $u }} u.</option>

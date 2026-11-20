@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="es" translate="no">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="google" content="notranslate">
 
     <!-- Script de Inicialización Inmediata de Tema (Zero-FOUC Dark Mode) -->
     <script>
@@ -102,10 +103,9 @@
 
     <!-- Script de Modo Claro/Oscuro en Administración -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const adminThemeBtn = document.getElementById('admin-theme-toggle');
-
+        (function() {
             function syncAdminThemeUI(isDark) {
+                const adminThemeBtn = document.getElementById('admin-theme-toggle');
                 if (adminThemeBtn) {
                     const icon = adminThemeBtn.querySelector('.material-symbols-outlined');
                     if (icon) {
@@ -116,39 +116,65 @@
                 }
             }
 
-            if (adminThemeBtn) {
-                adminThemeBtn.addEventListener('click', () => {
+            window.syncAdminThemeUI = syncAdminThemeUI;
+
+            // Sincronizar inmediatamente el icono del botón según el estado actual de <html>
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', () => {
+                    syncAdminThemeUI(document.documentElement.classList.contains('dark'));
+                }, { once: true });
+            } else {
+                syncAdminThemeUI(document.documentElement.classList.contains('dark'));
+            }
+
+            // Delegación única global en document para evitar listeners duplicados en navegación SPA
+            if (!window.__adminThemeListenerAttached) {
+                window.__adminThemeListenerAttached = true;
+
+                document.addEventListener('click', (event) => {
+                    const btn = event.target.closest('#admin-theme-toggle');
+                    if (!btn) return;
+
+                    event.preventDefault();
                     const isDark = document.documentElement.classList.toggle('dark');
                     if (isDark) {
                         document.documentElement.classList.remove('light');
                         localStorage.setItem('theme', 'dark');
                     } else {
-                        document.documentElement.classList.add('light');
+                        document.documentElement.classList.remove('dark');
                         localStorage.setItem('theme', 'light');
                     }
+
                     syncAdminThemeUI(isDark);
+
+                    // Disparar ambos eventos para compatibilidad total con gráficas y componentes
+                    window.dispatchEvent(new CustomEvent('themeChanged', { detail: { isDark } }));
                     window.dispatchEvent(new CustomEvent('archivum-theme-change', { detail: { isDark } }));
                 });
-            }
 
-            syncAdminThemeUI(document.documentElement.classList.contains('dark'));
-
-            // Sincronización en tiempo real al cambiar entre pestañas del navegador
-            window.addEventListener('storage', (event) => {
-                if (event.key === 'theme') {
-                    const isDark = event.newValue === 'dark';
-                    if (isDark) {
-                        document.documentElement.classList.add('dark');
-                        document.documentElement.classList.remove('light');
-                    } else {
-                        document.documentElement.classList.remove('dark');
-                        document.documentElement.classList.add('light');
+                // Sincronización en tiempo real al cambiar entre pestañas del navegador
+                window.addEventListener('storage', (event) => {
+                    if (event.key === 'theme') {
+                        const isDark = event.newValue === 'dark';
+                        if (isDark) {
+                            document.documentElement.classList.add('dark');
+                            document.documentElement.classList.remove('light');
+                        } else {
+                            document.documentElement.classList.remove('dark');
+                            document.documentElement.classList.add('light');
+                        }
+                        syncAdminThemeUI(isDark);
+                        window.dispatchEvent(new CustomEvent('themeChanged', { detail: { isDark } }));
+                        window.dispatchEvent(new CustomEvent('archivum-theme-change', { detail: { isDark } }));
                     }
-                    syncAdminThemeUI(isDark);
-                    window.dispatchEvent(new CustomEvent('archivum-theme-change', { detail: { isDark } }));
-                }
-            });
-        });
+                });
+
+                // Sincronizar estado del conmutador tras cada transición SPA
+                window.addEventListener('admin-spa-navigated', () => {
+                    syncAdminThemeUI(document.documentElement.classList.contains('dark'));
+                });
+            }
+        })();
     </script>
 
     @stack('scripts')
