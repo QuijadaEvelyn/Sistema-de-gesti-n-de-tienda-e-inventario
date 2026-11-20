@@ -233,8 +233,8 @@
     @endif
 
     <!-- Vitrina Curatorial: Carrusel 3D Coverflow Interactivo Puro -->
-    <section class="mb-14 relative" aria-label="Vitrina Rotativa 3D de Piezas Destacadas">
-        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 mb-6">
+    <section class="relative block w-full py-10 mt-8 clear-both" aria-label="Vitrina Rotativa 3D de Piezas Destacadas">
+        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 mb-8 relative z-20">
             <div>
                 <span class="inline-flex items-center gap-1.5 text-[11px] font-label-code uppercase tracking-widest text-primary dark:text-purple-300">
                     <span class="material-symbols-outlined text-[15px]">view_in_ar</span>
@@ -250,15 +250,15 @@
         </div>
 
         <!-- Escenario 3D Coverflow Puro: Sin flechas, sin botones, sin barras, sin marco exterior -->
-        <div class="relative left-1/2 -translate-x-1/2 w-screen max-w-[1440px] px-4 sm:px-6 lg:px-8 overflow-x-clip overflow-y-visible">
+        <div class="relative w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
             <div
                 id="vitrina-coverflow-carousel"
                 tabindex="0"
                 role="region"
                 aria-roledescription="carousel"
                 aria-label="Vitrina Rotativa 3D de Piezas Destacadas"
-                class="coverflow-stage relative w-full min-h-[560px] h-[580px] py-10 flex items-center justify-center overflow-x-clip overflow-y-visible select-none focus:outline-none"
-                style="min-height: 560px; height: 580px; perspective: 1200px; transform-style: preserve-3d;"
+                class="coverflow-stage relative w-full h-[460px] sm:h-[520px] min-h-[460px] flex items-center justify-center overflow-hidden select-none focus:outline-none"
+                style="min-height: 460px; height: 520px; perspective: 1200px; transform-style: preserve-3d;"
             >
                 <!-- Degradado sutil en los bordes izquierdo y derecho -->
                 <div class="absolute left-0 top-0 bottom-0 w-16 sm:w-28 bg-gradient-to-r from-background dark:from-[#0d0714] to-transparent z-40 pointer-events-none"></div>
@@ -302,7 +302,7 @@
                             };
                         @endphp
                     <div
-                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[240px] sm:w-[290px] md:w-[310px] h-[480px] sm:h-[510px] md:h-[540px]"
+                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[240px] sm:w-[280px] md:w-[300px] h-[400px] sm:h-[440px] md:h-[460px]"
                         style="transform-style: preserve-3d; z-index: {{ $initZIndex }};"
                         data-slide-index="{{ $initIdx }}"
                     >
@@ -489,7 +489,7 @@
 
                     <!-- Fallback 1: Vinilo (Tarjeta Central Activa) -->
                     <div
-                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[240px] sm:w-[290px] md:w-[310px] h-[480px] sm:h-[510px] md:h-[540px]"
+                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[240px] sm:w-[280px] md:w-[300px] h-[400px] sm:h-[440px] md:h-[460px]"
                         style="transform-style: preserve-3d; z-index: 30;"
                         data-slide-index="0"
                     >
@@ -507,9 +507,10 @@
                                         <div onclick="abrirModalDetalleProducto(this)" class="w-full aspect-square rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-2.5 sm:mb-4 cursor-pointer group-hover:shadow-inner">
                                             <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 dark:via-white/5 dark:to-white/10 pointer-events-none rounded-xl z-20"></div>
                                             <div class="absolute top-2.5 inset-x-2.5 flex items-center justify-between gap-1.5 z-10 pointer-events-none">
-                                                <span class="inline-flex items-center gap-1 bg-purple-100 dark:bg-purple-600 text-purple-800 dark:text-white border border-purple-300 dark:border-purple-400/60 text-[9px] sm:text-[10px] font-label-sm font-bold uppercase px-2 sm:px-2.5 py-0.5 rounded-md shadow-2xs dark:shadow-sm">
+                                                <span class="inline-flex items-center gap-1 bg-purple-100 dark:bg-purple-600 text-purple-800 dark:text-white border border-purple-300 dark:border-purple-400/60 text-[9px] sm:text-[10px] font-label-sm font-bold uppercase px-1.5 sm:px-2 py-0.5 rounded-md shadow-2xs dark:shadow-sm">
                                                     <span class="material-symbols-outlined text-[11px] sm:text-[12px]">diamond</span>
-                                                    <span>PIEZA ÚNICA 1/1</span>
+                                                    <span class="hidden sm:inline">PIEZA ÚNICA</span>
+                                                    <span>1/1</span>
                                                 </span>
                                                 <span class="inline-flex items-center bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[9px] sm:text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
                                             </div>
@@ -541,7 +542,7 @@
 
                     <!-- Fallback 2: Libro (Lateral Derecha) -->
                     <div
-                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[240px] sm:w-[290px] md:w-[310px] h-[480px] sm:h-[510px] md:h-[540px]"
+                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[240px] sm:w-[280px] md:w-[300px] h-[400px] sm:h-[440px] md:h-[460px]"
                         style="transform-style: preserve-3d; z-index: 20;"
                         data-slide-index="1"
                     >
@@ -559,9 +560,10 @@
                                         <div onclick="abrirModalDetalleProducto(this)" class="w-full aspect-square rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-2.5 sm:mb-4 cursor-pointer group-hover:shadow-inner">
                                             <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 dark:via-white/5 dark:to-white/10 pointer-events-none rounded-xl z-20"></div>
                                             <div class="absolute top-2.5 inset-x-2.5 flex items-center justify-between gap-1.5 z-10 pointer-events-none">
-                                                <span class="inline-flex items-center gap-1 bg-purple-100 dark:bg-purple-600 text-purple-800 dark:text-white border border-purple-300 dark:border-purple-400/60 text-[9px] sm:text-[10px] font-label-sm font-bold uppercase px-2 sm:px-2.5 py-0.5 rounded-md shadow-2xs dark:shadow-sm">
+                                                <span class="inline-flex items-center gap-1 bg-purple-100 dark:bg-purple-600 text-purple-800 dark:text-white border border-purple-300 dark:border-purple-400/60 text-[9px] sm:text-[10px] font-label-sm font-bold uppercase px-1.5 sm:px-2 py-0.5 rounded-md shadow-2xs dark:shadow-sm">
                                                     <span class="material-symbols-outlined text-[11px] sm:text-[12px]">diamond</span>
-                                                    <span>PIEZA ÚNICA 1/1</span>
+                                                    <span class="hidden sm:inline">PIEZA ÚNICA</span>
+                                                    <span>1/1</span>
                                                 </span>
                                                 <span class="inline-flex items-center bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[9px] sm:text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
                                             </div>
@@ -593,7 +595,7 @@
 
                     <!-- Fallback 3: Memorabilia 1 (Segunda Derecha) -->
                     <div
-                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[240px] sm:w-[290px] md:w-[310px] h-[480px] sm:h-[510px] md:h-[540px]"
+                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[240px] sm:w-[280px] md:w-[300px] h-[400px] sm:h-[440px] md:h-[460px]"
                         style="transform-style: preserve-3d; z-index: 10;"
                         data-slide-index="2"
                     >
@@ -611,9 +613,10 @@
                                         <div onclick="abrirModalDetalleProducto(this)" class="w-full aspect-square rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-2.5 sm:mb-4 cursor-pointer group-hover:shadow-inner">
                                             <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 dark:via-white/5 dark:to-white/10 pointer-events-none rounded-xl z-20"></div>
                                             <div class="absolute top-2.5 inset-x-2.5 flex items-center justify-between gap-1.5 z-10 pointer-events-none">
-                                                <span class="inline-flex items-center gap-1 bg-purple-100 dark:bg-purple-600 text-purple-800 dark:text-white border border-purple-300 dark:border-purple-400/60 text-[9px] sm:text-[10px] font-label-sm font-bold uppercase px-2 sm:px-2.5 py-0.5 rounded-md shadow-2xs dark:shadow-sm">
+                                                <span class="inline-flex items-center gap-1 bg-purple-100 dark:bg-purple-600 text-purple-800 dark:text-white border border-purple-300 dark:border-purple-400/60 text-[9px] sm:text-[10px] font-label-sm font-bold uppercase px-1.5 sm:px-2 py-0.5 rounded-md shadow-2xs dark:shadow-sm">
                                                     <span class="material-symbols-outlined text-[11px] sm:text-[12px]">diamond</span>
-                                                    <span>PIEZA ÚNICA 1/1</span>
+                                                    <span class="hidden sm:inline">PIEZA ÚNICA</span>
+                                                    <span>1/1</span>
                                                 </span>
                                                 <span class="inline-flex items-center bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[9px] sm:text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
                                             </div>
@@ -645,7 +648,7 @@
 
                     <!-- Fallback 4: Disco 2 (Posterior Oculto) -->
                     <div
-                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[240px] sm:w-[290px] md:w-[310px] h-[480px] sm:h-[510px] md:h-[540px]"
+                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[240px] sm:w-[280px] md:w-[300px] h-[400px] sm:h-[440px] md:h-[460px]"
                         style="transform-style: preserve-3d; z-index: 1;"
                         data-slide-index="3"
                     >
@@ -663,9 +666,10 @@
                                         <div onclick="abrirModalDetalleProducto(this)" class="w-full aspect-square rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-2.5 sm:mb-4 cursor-pointer group-hover:shadow-inner">
                                             <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 dark:via-white/5 dark:to-white/10 pointer-events-none rounded-xl z-20"></div>
                                             <div class="absolute top-2.5 inset-x-2.5 flex items-center justify-between gap-1.5 z-10 pointer-events-none">
-                                                <span class="inline-flex items-center gap-1 bg-purple-100 dark:bg-purple-600 text-purple-800 dark:text-white border border-purple-300 dark:border-purple-400/60 text-[9px] sm:text-[10px] font-label-sm font-bold uppercase px-2 sm:px-2.5 py-0.5 rounded-md shadow-2xs dark:shadow-sm">
+                                                <span class="inline-flex items-center gap-1 bg-purple-100 dark:bg-purple-600 text-purple-800 dark:text-white border border-purple-300 dark:border-purple-400/60 text-[9px] sm:text-[10px] font-label-sm font-bold uppercase px-1.5 sm:px-2 py-0.5 rounded-md shadow-2xs dark:shadow-sm">
                                                     <span class="material-symbols-outlined text-[11px] sm:text-[12px]">diamond</span>
-                                                    <span>PIEZA ÚNICA 1/1</span>
+                                                    <span class="hidden sm:inline">PIEZA ÚNICA</span>
+                                                    <span>1/1</span>
                                                 </span>
                                                 <span class="inline-flex items-center bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[9px] sm:text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
                                             </div>
@@ -697,7 +701,7 @@
 
                     <!-- Fallback 5: Libro 2 (Segunda Izquierda) -->
                     <div
-                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[240px] sm:w-[290px] md:w-[310px] h-[480px] sm:h-[510px] md:h-[540px]"
+                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[240px] sm:w-[280px] md:w-[300px] h-[400px] sm:h-[440px] md:h-[460px]"
                         style="transform-style: preserve-3d; z-index: 10;"
                         data-slide-index="4"
                     >
@@ -715,9 +719,10 @@
                                         <div onclick="abrirModalDetalleProducto(this)" class="w-full aspect-square rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-2.5 sm:mb-4 cursor-pointer group-hover:shadow-inner">
                                             <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 dark:via-white/5 dark:to-white/10 pointer-events-none rounded-xl z-20"></div>
                                             <div class="absolute top-2.5 inset-x-2.5 flex items-center justify-between gap-1.5 z-10 pointer-events-none">
-                                                <span class="inline-flex items-center gap-1 bg-purple-100 dark:bg-purple-600 text-purple-800 dark:text-white border border-purple-300 dark:border-purple-400/60 text-[9px] sm:text-[10px] font-label-sm font-bold uppercase px-2 sm:px-2.5 py-0.5 rounded-md shadow-2xs dark:shadow-sm">
+                                                <span class="inline-flex items-center gap-1 bg-purple-100 dark:bg-purple-600 text-purple-800 dark:text-white border border-purple-300 dark:border-purple-400/60 text-[9px] sm:text-[10px] font-label-sm font-bold uppercase px-1.5 sm:px-2 py-0.5 rounded-md shadow-2xs dark:shadow-sm">
                                                     <span class="material-symbols-outlined text-[11px] sm:text-[12px]">diamond</span>
-                                                    <span>PIEZA ÚNICA 1/1</span>
+                                                    <span class="hidden sm:inline">PIEZA ÚNICA</span>
+                                                    <span>1/1</span>
                                                 </span>
                                                 <span class="inline-flex items-center bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[9px] sm:text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
                                             </div>
@@ -749,7 +754,7 @@
 
                     <!-- Fallback 6: Memorabilia 2 (Inmediata Izquierda) -->
                     <div
-                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[240px] sm:w-[290px] md:w-[310px] h-[480px] sm:h-[510px] md:h-[540px]"
+                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[240px] sm:w-[280px] md:w-[300px] h-[400px] sm:h-[440px] md:h-[460px]"
                         style="transform-style: preserve-3d; z-index: 20;"
                         data-slide-index="5"
                     >
@@ -767,9 +772,10 @@
                                         <div onclick="abrirModalDetalleProducto(this)" class="w-full aspect-square rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-2.5 sm:mb-4 cursor-pointer group-hover:shadow-inner">
                                             <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 dark:via-white/5 dark:to-white/10 pointer-events-none rounded-xl z-20"></div>
                                             <div class="absolute top-2.5 inset-x-2.5 flex items-center justify-between gap-1.5 z-10 pointer-events-none">
-                                                <span class="inline-flex items-center gap-1 bg-purple-100 dark:bg-purple-600 text-purple-800 dark:text-white border border-purple-300 dark:border-purple-400/60 text-[9px] sm:text-[10px] font-label-sm font-bold uppercase px-2 sm:px-2.5 py-0.5 rounded-md shadow-2xs dark:shadow-sm">
+                                                <span class="inline-flex items-center gap-1 bg-purple-100 dark:bg-purple-600 text-purple-800 dark:text-white border border-purple-300 dark:border-purple-400/60 text-[9px] sm:text-[10px] font-label-sm font-bold uppercase px-1.5 sm:px-2 py-0.5 rounded-md shadow-2xs dark:shadow-sm">
                                                     <span class="material-symbols-outlined text-[11px] sm:text-[12px]">diamond</span>
-                                                    <span>PIEZA ÚNICA 1/1</span>
+                                                    <span class="hidden sm:inline">PIEZA ÚNICA</span>
+                                                    <span>1/1</span>
                                                 </span>
                                                 <span class="inline-flex items-center bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[9px] sm:text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
                                             </div>
