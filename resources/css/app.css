@@ -867,12 +867,20 @@
     width: 100%;
     min-height: 280px;
     height: 300px;
+    overflow: visible;
+}
+
+@media (min-width: 640px) {
+    .disc-showcase-stage {
+        min-height: 340px;
+        height: 350px;
+    }
 }
 
 @media (min-width: 768px) {
     .disc-showcase-stage {
         min-height: 380px;
-        height: 390px;
+        height: 400px;
     }
 }
 
@@ -880,6 +888,8 @@
     position: absolute;
     inset: 0;
     margin: auto;
+    border-radius: 50%;
+    aspect-ratio: 1 / 1;
     transform-style: preserve-3d;
     transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.55s ease;
     will-change: transform, opacity;
@@ -889,6 +899,8 @@
     position: relative;
     width: 100%;
     height: 100%;
+    border-radius: 50%;
+    aspect-ratio: 1 / 1;
     transform-style: preserve-3d;
     transition: transform 0.18s ease-out;
     will-change: transform;
@@ -898,6 +910,8 @@
     position: relative;
     width: 100%;
     height: 100%;
+    border-radius: 50%;
+    aspect-ratio: 1 / 1;
     transform-style: preserve-3d;
     transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -911,10 +925,12 @@
     inset: 0;
     width: 100%;
     height: 100%;
-    border-radius: 9999px;
+    aspect-ratio: 1 / 1;
+    border-radius: 50% !important;
+    clip-path: circle(50% at 50% 50%) !important;
+    -webkit-clip-path: circle(50% at 50% 50%) !important;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
-    overflow: hidden;
 }
 
 .disc-face-front {
@@ -930,7 +946,10 @@
 .disc-spin-rotor {
     width: 100%;
     height: 100%;
-    border-radius: 9999px;
+    aspect-ratio: 1 / 1;
+    border-radius: 50% !important;
+    clip-path: circle(50% at 50% 50%) !important;
+    -webkit-clip-path: circle(50% at 50% 50%) !important;
     animation: archivumDiscSpin 9s linear infinite;
     will-change: transform;
 }
@@ -941,6 +960,9 @@
 
 /* Textura Fiel de Vinilo Analógico 180g: Surcos Concéntricos + Brillo Plástico Anisotrópico */
 .vinyl-surface {
+    border-radius: 50% !important;
+    clip-path: circle(50% at 50% 50%) !important;
+    -webkit-clip-path: circle(50% at 50% 50%) !important;
     background-color: #0b0910;
     background-image:
         conic-gradient(from 25deg at 50% 50%,
@@ -966,6 +988,9 @@
 
 /* Textura Fiel de CD / Disco Compacto: Acabado Plateado / Refractivo Iridiscente */
 .cd-surface {
+    border-radius: 50% !important;
+    clip-path: circle(50% at 50% 50%) !important;
+    -webkit-clip-path: circle(50% at 50% 50%) !important;
     background-color: #d4d8e2;
     background-image:
         conic-gradient(from 0deg at 50% 50%,

@@ -61,6 +61,8 @@ services:
     restart: always
     ports:
       - "8000:80"
+      - "8080:80"
+      - "8088:80"
     volumes:
       - .:/var/www
       - app_build:/var/www/public/build

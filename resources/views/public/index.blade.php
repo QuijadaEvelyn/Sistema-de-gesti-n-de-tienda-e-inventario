@@ -510,7 +510,7 @@
                                                 <span class="material-symbols-outlined text-[12px]">diamond</span>
                                                 <span>PIEZA ÚNICA 1/1</span>
                                             </span>
-                                            <span class="absolute bottom-2.5 right-2.5 z-10 bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
+                                            <span class="absolute top-2.5 right-2.5 z-10 bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
                                             <span class="material-symbols-outlined text-purple-400 dark:text-purple-300 group-hover:text-primary transition-colors text-[64px]">album</span>
                                         </div>
                                         <div class="space-y-1">
@@ -560,7 +560,7 @@
                                                 <span class="material-symbols-outlined text-[12px]">diamond</span>
                                                 <span>PIEZA ÚNICA 1/1</span>
                                             </span>
-                                            <span class="absolute bottom-2.5 right-2.5 z-10 bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
+                                            <span class="absolute top-2.5 right-2.5 z-10 bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
                                             <span class="material-symbols-outlined text-purple-400 dark:text-purple-300 group-hover:text-primary transition-colors text-[64px]">auto_stories</span>
                                         </div>
                                         <div class="space-y-1">
@@ -610,7 +610,7 @@
                                                 <span class="material-symbols-outlined text-[12px]">diamond</span>
                                                 <span>PIEZA ÚNICA 1/1</span>
                                             </span>
-                                            <span class="absolute bottom-2.5 right-2.5 z-10 bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
+                                            <span class="absolute top-2.5 right-2.5 z-10 bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
                                             <span class="material-symbols-outlined text-purple-400 dark:text-purple-300 group-hover:text-primary transition-colors text-[64px]">history_edu</span>
                                         </div>
                                         <div class="space-y-1">
@@ -660,7 +660,7 @@
                                                 <span class="material-symbols-outlined text-[12px]">diamond</span>
                                                 <span>PIEZA ÚNICA 1/1</span>
                                             </span>
-                                            <span class="absolute bottom-2.5 right-2.5 z-10 bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
+                                            <span class="absolute top-2.5 right-2.5 z-10 bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
                                             <span class="material-symbols-outlined text-purple-400 dark:text-purple-300 group-hover:text-primary transition-colors text-[64px]">album</span>
                                         </div>
                                         <div class="space-y-1">
@@ -710,7 +710,7 @@
                                                 <span class="material-symbols-outlined text-[12px]">diamond</span>
                                                 <span>PIEZA ÚNICA 1/1</span>
                                             </span>
-                                            <span class="absolute bottom-2.5 right-2.5 z-10 bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
+                                            <span class="absolute top-2.5 right-2.5 z-10 bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
                                             <span class="material-symbols-outlined text-purple-400 dark:text-purple-300 group-hover:text-primary transition-colors text-[64px]">auto_stories</span>
                                         </div>
                                         <div class="space-y-1">
@@ -760,7 +760,7 @@
                                                 <span class="material-symbols-outlined text-[12px]">diamond</span>
                                                 <span>PIEZA ÚNICA 1/1</span>
                                             </span>
-                                            <span class="absolute bottom-2.5 right-2.5 z-10 bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
+                                            <span class="absolute top-2.5 right-2.5 z-10 bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
                                             <span class="material-symbols-outlined text-purple-400 dark:text-purple-300 group-hover:text-primary transition-colors text-[64px]">history_edu</span>
                                         </div>
                                         <div class="space-y-1">

@@ -126,15 +126,15 @@
             @endif
 
             @if ($estaReservadaTemporalmente)
-                <span class="absolute bottom-2 right-2 sm:bottom-2.5 sm:right-2.5 z-10 bg-amber-600 text-white border border-amber-700 text-[9px] sm:text-[10px] font-label-code font-bold uppercase tracking-wider px-2 sm:px-2.5 py-0.5 rounded-full shadow-xs">
+                <span class="absolute top-2 right-2 sm:top-2.5 sm:right-2.5 z-10 bg-amber-600 text-white border border-amber-700 text-[9px] sm:text-[10px] font-label-code font-bold uppercase tracking-wider px-2 sm:px-2.5 py-0.5 rounded-full shadow-xs">
                     RESERVADA (5 MIN)
                 </span>
             @elseif ($estaAgotado)
-                <span class="absolute bottom-2 right-2 sm:bottom-2.5 sm:right-2.5 z-10 bg-red-600 text-white border border-red-700 text-[9px] sm:text-[10px] font-label-code font-bold uppercase tracking-wider px-2 sm:px-2.5 py-0.5 rounded-full shadow-xs">
+                <span class="absolute top-2 right-2 sm:top-2.5 sm:right-2.5 z-10 bg-red-600 text-white border border-red-700 text-[9px] sm:text-[10px] font-label-code font-bold uppercase tracking-wider px-2 sm:px-2.5 py-0.5 rounded-full shadow-xs">
                     AGOTADO
                 </span>
             @else
-                <span class="absolute bottom-2 right-2 sm:bottom-2.5 sm:right-2.5 z-10 bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[9px] sm:text-[10px] font-label-code font-semibold px-1.5 sm:px-2 py-0.5 rounded-full shadow-2xs">
+                <span class="absolute top-2 right-2 sm:top-2.5 sm:right-2.5 z-10 bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[9px] sm:text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">
                     {{ $stockTotal }} en bóveda
                 </span>
             @endif

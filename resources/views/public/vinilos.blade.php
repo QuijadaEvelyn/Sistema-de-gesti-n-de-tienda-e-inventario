@@ -127,12 +127,13 @@
             <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start py-6 sm:py-8">
 
                 <!-- COLUMNA IZQUIERDA (7 cols): Escenario 3D con Discos Circulares en Movimiento y Controles -->
-                <div class="lg:col-span-7 flex flex-col items-center">
+                <div class="lg:col-span-7 flex flex-col gap-6 w-full">
 
                     <!-- Escenario 3D de Discos -->
                     <div
                         id="disc-showcase-stage"
-                        class="disc-showcase-stage relative w-full max-w-full min-h-[280px] md:min-h-[380px] h-[300px] md:h-[390px] flex items-center justify-center select-none overflow-visible py-2"
+                        class="disc-showcase-stage relative w-full min-h-[280px] sm:min-h-[340px] md:min-h-[380px] h-[300px] sm:h-[350px] md:h-[400px] flex items-center justify-center select-none overflow-visible py-2"
+                        style="min-height: 280px; height: 380px;"
                     >
                         @foreach ($discosShowcase as $idx => $disco)
                             @php
@@ -148,23 +149,23 @@
                                 $initZIndex = $isInitial ? '30' : ($idx === 1 || $idx === count($discosShowcase) - 1 ? '20' : '10');
                             @endphp
                             <div
-                                class="disc-3d-slot absolute inset-0 m-auto w-56 h-56 sm:w-72 sm:h-72 md:w-80 md:h-80 flex items-center justify-center cursor-pointer transition-all duration-500 opacity-100 visible"
+                                class="disc-3d-slot absolute inset-0 m-auto w-56 h-56 sm:w-72 sm:h-72 md:w-80 md:h-80 aspect-square rounded-full flex items-center justify-center cursor-pointer transition-all duration-500 opacity-100 visible"
                                 data-disc-index="{{ $idx }}"
                                 role="button"
                                 tabindex="0"
                                 aria-label="Seleccionar {{ $disco['nombre'] }}"
-                                style="transform-style: preserve-3d; transform: {{ $initTransform }}; opacity: {{ $initOpacity }}; z-index: {{ $initZIndex }};"
+                                style="transform-style: preserve-3d; transform: {{ $initTransform }}; opacity: {{ $initOpacity }}; z-index: {{ $initZIndex }}; border-radius: 50%;"
                             >
                                 <!-- Capa de Inclinación 3D Interactiva al Pasar el Cursor (Tilt 3D) -->
-                                <div class="disc-3d-tilt w-full h-full">
+                                <div class="disc-3d-tilt w-full h-full rounded-full aspect-square" style="border-radius: 50%;">
                                     <!-- Capa de Volteo 3D (Flip Lado A / Lado B) -->
-                                    <div class="disc-3d-flipper w-full h-full">
+                                    <div class="disc-3d-flipper w-full h-full rounded-full aspect-square" style="border-radius: 50%;">
 
                                         <!-- =====================================================
                                              CARA FRONTAL (LADO A): FORMATO CIRCULAR FIEL DEL DISCO
                                              ===================================================== -->
-                                        <div class="disc-face disc-face-front w-full h-full">
-                                            <div class="disc-spin-rotor relative w-full h-full flex items-center justify-center {{ $disco['formato'] === 'CD' ? 'cd-surface' : 'vinyl-surface' }}">
+                                        <div class="disc-face disc-face-front w-full h-full rounded-full aspect-square" style="border-radius: 50%; clip-path: circle(50% at 50% 50%); -webkit-clip-path: circle(50% at 50% 50%);">
+                                            <div class="disc-spin-rotor relative w-full h-full rounded-full aspect-square flex items-center justify-center {{ $disco['formato'] === 'CD' ? 'cd-surface' : 'vinyl-surface' }}" style="border-radius: 50%; clip-path: circle(50% at 50% 50%); -webkit-clip-path: circle(50% at 50% 50%);">
 
                                                 @if ($disco['formato'] === 'CD')
                                                     <!-- Acabado Refractivo de CD Compact Disc + Arte Impreso Semitransparente -->
@@ -237,8 +238,8 @@
                                         <!-- =====================================================
                                              CARA POSTERIOR (LADO B): MATRIZ & CONTRAPORTADA
                                              ===================================================== -->
-                                        <div class="disc-face disc-face-back w-full h-full">
-                                            <div class="disc-spin-rotor relative w-full h-full flex items-center justify-center {{ $disco['formato'] === 'CD' ? 'cd-surface' : 'vinyl-surface' }}">
+                                        <div class="disc-face disc-face-back w-full h-full rounded-full aspect-square" style="border-radius: 50%; clip-path: circle(50% at 50% 50%); -webkit-clip-path: circle(50% at 50% 50%);">
+                                            <div class="disc-spin-rotor relative w-full h-full rounded-full aspect-square flex items-center justify-center {{ $disco['formato'] === 'CD' ? 'cd-surface' : 'vinyl-surface' }}" style="border-radius: 50%; clip-path: circle(50% at 50% 50%); -webkit-clip-path: circle(50% at 50% 50%);">
                                                 <!-- Anillo de Surco Muerto Grabado (Runout Matrix Groove) -->
                                                 <div class="absolute inset-6 rounded-full border border-dashed border-amber-300/35 pointer-events-none"></div>
                                                 <div class="absolute inset-12 rounded-full border border-purple-300/20 pointer-events-none"></div>
@@ -275,82 +276,85 @@
                         @endforeach
                     </div>
 
-                    <!-- =================================================================
-                         BARRA DE CONTROLES INTERACTIVOS (FLIP, PAUSE/PLAY, REPLAY, PREV/NEXT)
-                         ================================================================= -->
-                    <div class="mt-6 flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 bg-white/10 backdrop-blur-md border border-white/15 px-4 py-2.5 rounded-2xl shadow-lg">
-                        <!-- Botón Anterior (Prev) -->
-                        <button
-                            type="button"
-                            id="disc-prev-btn"
-                            class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1 transition cursor-pointer"
-                            title="Disco Anterior"
-                        >
-                            <span class="material-symbols-outlined text-[18px]">skip_previous</span>
-                            <span class="hidden sm:inline">Prev</span>
-                        </button>
-
-                        <!-- Botón Flip (Voltear Lado A / Lado B) -->
-                        <button
-                            type="button"
-                            id="disc-flip-btn"
-                            class="px-3.5 py-2 rounded-xl bg-purple-600/80 hover:bg-purple-500 text-white border border-purple-300/40 text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 transition cursor-pointer shadow-xs"
-                            title="Voltear disco para inspeccionar Lado B / Matriz"
-                        >
-                            <span class="material-symbols-outlined text-[18px]">flip_camera_android</span>
-                            <span id="disc-flip-text">Flip · Lado B</span>
-                        </button>
-
-                        <!-- Botón Pause / Play (Detener o Reanudar Rotación) -->
-                        <button
-                            type="button"
-                            id="disc-play-pause-btn"
-                            class="px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 transition cursor-pointer shadow-xs"
-                            title="Pausar o reanudar rotación del disco activo"
-                        >
-                            <span id="disc-play-pause-icon" class="material-symbols-outlined text-[18px]">pause</span>
-                            <span id="disc-play-pause-text">Pause</span>
-                        </button>
-
-                        <!-- Botón Replay (Reiniciar Giro y Vista Frontal) -->
-                        <button
-                            type="button"
-                            id="disc-replay-btn"
-                            class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/15 text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 transition cursor-pointer"
-                            title="Reiniciar rotación en Lado A"
-                        >
-                            <span class="material-symbols-outlined text-[18px]">replay</span>
-                            <span>Replay</span>
-                        </button>
-
-                        <!-- Botón Siguiente (Next) -->
-                        <button
-                            type="button"
-                            id="disc-next-btn"
-                            class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1 transition cursor-pointer"
-                            title="Siguiente Disco"
-                        >
-                            <span class="hidden sm:inline">Next</span>
-                            <span class="material-symbols-outlined text-[18px]">skip_next</span>
-                        </button>
-                    </div>
-
-                    <!-- Selector Rápido de Discos en la Galería -->
-                    <div class="mt-4 flex flex-wrap items-center justify-center gap-2">
-                        @foreach ($discosShowcase as $idx => $disco)
+                    <!-- Panel de Controles y Selector de Álbumes (en flujo normal debajo del escenario) -->
+                    <div class="relative z-10 w-full flex flex-col items-center gap-4">
+                        <!-- =================================================================
+                             BARRA DE CONTROLES INTERACTIVOS (FLIP, PAUSE/PLAY, REPLAY, PREV/NEXT)
+                             ================================================================= -->
+                        <div class="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 bg-white/10 backdrop-blur-md border border-white/15 px-4 py-2.5 rounded-2xl shadow-lg">
+                            <!-- Botón Anterior (Prev) -->
                             <button
                                 type="button"
-                                class="disc-selector-pill px-3 py-1.5 rounded-full text-[11px] font-label-code transition flex items-center gap-1.5 cursor-pointer {{ $disco['es_pieza_unica'] ? 'border-2 border-purple-600 shadow-sm shadow-purple-600/30' : 'border border-white/15' }} {{ $idx === 0 ? 'bg-white text-slate-950 font-bold' : 'bg-white/10 text-purple-200 hover:bg-white/20' }}"
-                                data-select-disc="{{ $idx }}"
-                                data-unique-piece="{{ $disco['es_pieza_unica'] ? '1' : '0' }}"
+                                id="disc-prev-btn"
+                                class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1 transition cursor-pointer"
+                                title="Disco Anterior"
                             >
-                                <span class="material-symbols-outlined text-[14px]">{{ $disco['formato'] === 'CD' ? 'disc_full' : 'album' }}</span>
-                                <span class="max-w-[130px] truncate">{{ $disco['nombre'] }}</span>
-                                @if ($disco['es_pieza_unica'])
-                                    <span class="px-1.5 py-0.5 rounded bg-purple-600 text-white text-[9px] font-bold uppercase">1/1</span>
-                                @endif
+                                <span class="material-symbols-outlined text-[18px]">skip_previous</span>
+                                <span class="hidden sm:inline">Prev</span>
                             </button>
-                        @endforeach
+
+                            <!-- Botón Flip (Voltear Lado A / Lado B) -->
+                            <button
+                                type="button"
+                                id="disc-flip-btn"
+                                class="px-3.5 py-2 rounded-xl bg-purple-600/80 hover:bg-purple-500 text-white border border-purple-300/40 text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 transition cursor-pointer shadow-xs"
+                                title="Voltear disco para inspeccionar Lado B / Matriz"
+                            >
+                                <span class="material-symbols-outlined text-[18px]">flip_camera_android</span>
+                                <span id="disc-flip-text">Flip · Lado B</span>
+                            </button>
+
+                            <!-- Botón Pause / Play (Detener o Reanudar Rotación) -->
+                            <button
+                                type="button"
+                                id="disc-play-pause-btn"
+                                class="px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 transition cursor-pointer shadow-xs"
+                                title="Pausar o reanudar rotación del disco activo"
+                            >
+                                <span id="disc-play-pause-icon" class="material-symbols-outlined text-[18px]">pause</span>
+                                <span id="disc-play-pause-text">Pause</span>
+                            </button>
+
+                            <!-- Botón Replay (Reiniciar Giro y Vista Frontal) -->
+                            <button
+                                type="button"
+                                id="disc-replay-btn"
+                                class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/15 text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 transition cursor-pointer"
+                                title="Reiniciar rotación en Lado A"
+                            >
+                                <span class="material-symbols-outlined text-[18px]">replay</span>
+                                <span>Replay</span>
+                            </button>
+
+                            <!-- Botón Siguiente (Next) -->
+                            <button
+                                type="button"
+                                id="disc-next-btn"
+                                class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1 transition cursor-pointer"
+                                title="Siguiente Disco"
+                            >
+                                <span class="hidden sm:inline">Next</span>
+                                <span class="material-symbols-outlined text-[18px]">skip_next</span>
+                            </button>
+                        </div>
+
+                        <!-- Selector Rápido de Discos en la Galería -->
+                        <div class="flex flex-wrap items-center justify-center gap-2">
+                            @foreach ($discosShowcase as $idx => $disco)
+                                <button
+                                    type="button"
+                                    class="disc-selector-pill px-3 py-1.5 rounded-full text-[11px] font-label-code transition flex items-center gap-1.5 cursor-pointer {{ $disco['es_pieza_unica'] ? 'border-2 border-purple-600 shadow-sm shadow-purple-600/30' : 'border border-white/15' }} {{ $idx === 0 ? 'bg-white text-slate-950 font-bold' : 'bg-white/10 text-purple-200 hover:bg-white/20' }}"
+                                    data-select-disc="{{ $idx }}"
+                                    data-unique-piece="{{ $disco['es_pieza_unica'] ? '1' : '0' }}"
+                                >
+                                    <span class="material-symbols-outlined text-[14px]">{{ $disco['formato'] === 'CD' ? 'disc_full' : 'album' }}</span>
+                                    <span class="max-w-[130px] truncate">{{ $disco['nombre'] }}</span>
+                                    @if ($disco['es_pieza_unica'])
+                                        <span class="px-1.5 py-0.5 rounded bg-purple-600 text-white text-[9px] font-bold uppercase">1/1</span>
+                                    @endif
+                                </button>
+                            @endforeach
+                        </div>
                     </div>
 
                 </div>
