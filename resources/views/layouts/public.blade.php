@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" translate="no">
+<html lang="es" translate="no" class="overflow-x-hidden max-w-full">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -43,13 +43,13 @@
 
     @stack('styles')
 </head>
-<body class="min-h-screen flex flex-col bg-background text-on-surface antialiased font-quicksand selection:bg-primary-container selection:text-white">
+<body class="min-h-screen flex flex-col bg-background text-on-surface antialiased font-quicksand selection:bg-primary-container selection:text-white overflow-x-hidden max-w-full w-full">
     
     <!-- Barra de Navegación Pública Global -->
     <x-public.header :active-branch="$activeBranch ?? 'Sucursal Central Bellas Artes'" />
 
     <!-- Contenedor Principal Dinámico -->
-    <main class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <main class="flex-1 w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8 overflow-x-clip">
         {{ $slot ?? '' }}
         @yield('content')
     </main>

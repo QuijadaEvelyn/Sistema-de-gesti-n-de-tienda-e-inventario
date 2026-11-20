@@ -1,2383 +1,2815 @@
 [
-    {
-        "nombre": "Cien Años de Soledad (1ª Edición Sudamericana)",
-        "catalogo_tipo": "libro",
-        "catalogo_nombre": "Libros",
-        "descripcion": "Pieza Única (1/1) custodiada en Almacén General: Tiraje inicial de Buenos Aires (Mayo 1967) con prueba de galera firmada. Cubierta original con galeón en la selva diseñada por Iris Alba.",
+  {
+    "nombre": "Cien Años de Soledad (1ª Edición Sudamericana)",
+    "catalogo_tipo": "libro",
+    "catalogo_nombre": "Libros",
+    "descripcion": "Pieza Única (1/1) custodiada en Almacén General: Tiraje inicial de Buenos Aires (Mayo 1967) con prueba de galera firmada. Cubierta original con galeón en la selva diseñada por Iris Alba.",
+    "precio": 32000,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "libro",
+      "isbn": "978-950-07-0010-1",
+      "autor": "Gabriel García Márquez",
+      "editorial": "Editorial Sudamericana",
+      "genero": "novela",
+      "anio_publicacion": 1967,
+      "paginas": 351
+    },
+    "variantes": [
+      {
+        "sku": "LIB-1967-SUD",
+        "descripcion": "VERY FINE (VF) · PIEZA ÚNICA 1/1",
         "precio": 32000,
-        "activo": true,
-        "imagen": null,
-        "metadata": {
-            "tipo": "libro",
-            "isbn": "978-950-07-0010-1",
-            "autor": "Gabriel García Márquez",
-            "editorial": "Editorial Sudamericana",
-            "genero": "novela",
-            "anio_publicacion": 1967,
-            "paginas": 351
-        },
-        "variantes": [
-            {
-                "sku": "LIB-1967-SUD",
-                "descripcion": "VERY FINE (VF) · PIEZA ÚNICA 1/1",
-                "precio": 32000,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 3,
-                        "sucursal_nombre": "Almacén General",
-                        "cantidad": 1,
-                        "stock_minimo": 1,
-                        "pieza_unica": {
-                            "numero_serie": "ARC-LIB-1967-001",
-                            "certificado": "COA-BIB-2026-014",
-                            "notas": "Ejemplar único 1/1 catalogado en bóveda climatizada (VERY FINE (VF) · PIEZA ÚNICA 1/1).",
-                            "estado": "disponible"
-                        }
-                    }
-                ]
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 3,
+            "sucursal_nombre": "Almacén General",
+            "cantidad": 1,
+            "stock_minimo": 1,
+            "pieza_unica": {
+              "numero_serie": "ARC-LIB-1967-001",
+              "certificado": "COA-BIB-2026-014",
+              "notas": "Ejemplar único 1/1 catalogado en bóveda climatizada (VERY FINE (VF) · PIEZA ÚNICA 1/1).",
+              "estado": "disponible"
             }
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Pedro Páramo (Edición Príncipe FCE)",
+    "catalogo_tipo": "libro",
+    "catalogo_nombre": "Libros",
+    "descripcion": "Pieza Única (1/1) custodiada en Sucursal Coyoacán: Primera edición de 1955 en la Colección Letras Mexicanas N.º 19 con firma autógrafa de Juan Rulfo en guarda anterior.",
+    "precio": 44500,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "libro",
+      "isbn": "978-968-16-0001-2",
+      "autor": "Juan Rulfo",
+      "editorial": "Fondo de Cultura Económica",
+      "genero": "novela",
+      "anio_publicacion": 1955,
+      "paginas": 155
     },
-    {
-        "nombre": "Pedro Páramo (Edición Príncipe FCE)",
-        "catalogo_tipo": "libro",
-        "catalogo_nombre": "Libros",
-        "descripcion": "Pieza Única (1/1) custodiada en Sucursal Coyoacán: Primera edición de 1955 en la Colección Letras Mexicanas N.º 19 con firma autógrafa de Juan Rulfo en guarda anterior.",
+    "variantes": [
+      {
+        "sku": "LIB-1955-FCE",
+        "descripcion": "NEAR MINT (NM) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA",
         "precio": 44500,
-        "activo": true,
-        "imagen": null,
-        "metadata": {
-            "tipo": "libro",
-            "isbn": "978-968-16-0001-2",
-            "autor": "Juan Rulfo",
-            "editorial": "Fondo de Cultura Económica",
-            "genero": "novela",
-            "anio_publicacion": 1955,
-            "paginas": 155
-        },
-        "variantes": [
-            {
-                "sku": "LIB-1955-FCE",
-                "descripcion": "NEAR MINT (NM) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA",
-                "precio": 44500,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 2,
-                        "sucursal_nombre": "Sucursal Coyoacán",
-                        "cantidad": 1,
-                        "stock_minimo": 1,
-                        "pieza_unica": {
-                            "numero_serie": "ARC-LIB-1955-002",
-                            "certificado": "COA-BIB-2026-019",
-                            "notas": "Ejemplar único 1/1 catalogado en bóveda climatizada (NEAR MINT (NM) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA).",
-                            "estado": "disponible"
-                        }
-                    }
-                ]
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 2,
+            "sucursal_nombre": "Sucursal Coyoacán",
+            "cantidad": 1,
+            "stock_minimo": 1,
+            "pieza_unica": {
+              "numero_serie": "ARC-LIB-1955-002",
+              "certificado": "COA-BIB-2026-019",
+              "notas": "Ejemplar único 1/1 catalogado en bóveda climatizada (NEAR MINT (NM) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA).",
+              "estado": "disponible"
             }
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "El Aleph (Ejemplar Dedicado por el Autor)",
+    "catalogo_tipo": "libro",
+    "catalogo_nombre": "Libros",
+    "descripcion": "Pieza Única (1/1) custodiada en Sucursal Central Bellas Artes: Primera edición impresa por Editorial Losada (1949) con dedicatoria manuscrita de Jorge Luis Borges.",
+    "precio": 58000,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "libro",
+      "isbn": "978-950-03-0049-8",
+      "autor": "Jorge Luis Borges",
+      "editorial": "Editorial Losada",
+      "genero": "fantasia",
+      "anio_publicacion": 1949,
+      "paginas": 146
     },
-    {
-        "nombre": "El Aleph (Ejemplar Dedicado por el Autor)",
-        "catalogo_tipo": "libro",
-        "catalogo_nombre": "Libros",
-        "descripcion": "Pieza Única (1/1) custodiada en Sucursal Central Bellas Artes: Primera edición impresa por Editorial Losada (1949) con dedicatoria manuscrita de Jorge Luis Borges.",
+    "variantes": [
+      {
+        "sku": "LIB-1949-LOS",
+        "descripcion": "MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA",
         "precio": 58000,
-        "activo": true,
-        "imagen": null,
-        "metadata": {
-            "tipo": "libro",
-            "isbn": "978-950-03-0049-8",
-            "autor": "Jorge Luis Borges",
-            "editorial": "Editorial Losada",
-            "genero": "novela",
-            "anio_publicacion": 1949,
-            "paginas": 146
-        },
-        "variantes": [
-            {
-                "sku": "LIB-1949-LOS",
-                "descripcion": "MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA",
-                "precio": 58000,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 1,
-                        "stock_minimo": 1,
-                        "pieza_unica": {
-                            "numero_serie": "ARC-LIB-1949-003",
-                            "certificado": "COA-BIB-2026-022",
-                            "notas": "Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA).",
-                            "estado": "disponible"
-                        }
-                    }
-                ]
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 1,
+            "stock_minimo": 1,
+            "pieza_unica": {
+              "numero_serie": "ARC-LIB-1949-003",
+              "certificado": "COA-BIB-2026-022",
+              "notas": "Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA).",
+              "estado": "disponible"
             }
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "El Laberinto de la Soledad (1ª Edición Cuadernos Americanos)",
+    "catalogo_tipo": "libro",
+    "catalogo_nombre": "Libros",
+    "descripcion": "Stock Masivo en Sucursal Central Bellas Artes: Edición de tiraje múltiple impresa en los talleres de Cuadernos Americanos en papel Chamois. Permite adquirir múltiples ejemplares.",
+    "precio": 16900,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "libro",
+      "isbn": "978-968-16-0050-0",
+      "autor": "Octavio Paz",
+      "editorial": "Cuadernos Americanos",
+      "genero": "ensayo",
+      "anio_publicacion": 1950,
+      "paginas": 195
     },
-    {
-        "nombre": "El Laberinto de la Soledad (1ª Edición Cuadernos Americanos)",
-        "catalogo_tipo": "libro",
-        "catalogo_nombre": "Libros",
-        "descripcion": "Stock Masivo en Sucursal Central Bellas Artes: Edición de tiraje múltiple impresa en los talleres de Cuadernos Americanos en papel Chamois. Permite adquirir múltiples ejemplares.",
+    "variantes": [
+      {
+        "sku": "LIB-1950-FCE",
+        "descripcion": "VERY FINE (VF) · TIRAJE MÚLTIPLE",
         "precio": 16900,
-        "activo": true,
-        "imagen": null,
-        "metadata": {
-            "tipo": "libro",
-            "isbn": "978-968-16-0050-0",
-            "autor": "Octavio Paz",
-            "editorial": "Cuadernos Americanos",
-            "genero": "ensayo",
-            "anio_publicacion": 1950,
-            "paginas": 195
-        },
-        "variantes": [
-            {
-                "sku": "LIB-1950-FCE",
-                "descripcion": "VERY FINE (VF) · TIRAJE MÚLTIPLE",
-                "precio": 16900,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 8,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 8,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Aura (Edición Conmemorativa Biblioteca Era Coyoacán)",
+    "catalogo_tipo": "libro",
+    "catalogo_nombre": "Libros",
+    "descripcion": "Stock Masivo en Sucursal Coyoacán: Tiraje regular encuadernado en tela editorial por Ediciones Era. Disponible para compra de varias unidades sin bloqueo exclusivo.",
+    "precio": 6800,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "libro",
+      "isbn": "978-968-411-062-5",
+      "autor": "Carlos Fuentes",
+      "editorial": "Ediciones Era",
+      "genero": "terror",
+      "anio_publicacion": 1962,
+      "paginas": 62
     },
-    {
-        "nombre": "Aura (Edición Conmemorativa Biblioteca Era Coyoacán)",
-        "catalogo_tipo": "libro",
-        "catalogo_nombre": "Libros",
-        "descripcion": "Stock Masivo en Sucursal Coyoacán: Tiraje regular encuadernado en tela editorial por Ediciones Era. Disponible para compra de varias unidades sin bloqueo exclusivo.",
+    "variantes": [
+      {
+        "sku": "LIB-1962-ERA",
+        "descripcion": "NEAR MINT (NM) · TIRAJE REGULAR",
         "precio": 6800,
-        "activo": true,
-        "imagen": null,
-        "metadata": {
-            "tipo": "libro",
-            "isbn": "978-968-411-062-5",
-            "autor": "Carlos Fuentes",
-            "editorial": "Ediciones Era",
-            "genero": "novela",
-            "anio_publicacion": 1962,
-            "paginas": 62
-        },
-        "variantes": [
-            {
-                "sku": "LIB-1962-ERA",
-                "descripcion": "NEAR MINT (NM) · TIRAJE REGULAR",
-                "precio": 6800,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 2,
-                        "sucursal_nombre": "Sucursal Coyoacán",
-                        "cantidad": 9,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 2,
+            "sucursal_nombre": "Sucursal Coyoacán",
+            "cantidad": 9,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Rayuela (Tiraje Clásico Editorial Sudamericana)",
+    "catalogo_tipo": "libro",
+    "catalogo_nombre": "Libros",
+    "descripcion": "Stock Masivo en Almacén General: Edición conmemorativa de tiraje amplio con tablero de dirección de lectura. Existencias múltiples disponibles para despacho inmediato.",
+    "precio": 8400,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "libro",
+      "isbn": "978-950-07-0063-7",
+      "autor": "Julio Cortázar",
+      "editorial": "Editorial Sudamericana",
+      "genero": "novela",
+      "anio_publicacion": 1963,
+      "paginas": 635
     },
-    {
-        "nombre": "Rayuela (Tiraje Clásico Editorial Sudamericana)",
-        "catalogo_tipo": "libro",
-        "catalogo_nombre": "Libros",
-        "descripcion": "Stock Masivo en Almacén General: Edición conmemorativa de tiraje amplio con tablero de dirección de lectura. Existencias múltiples disponibles para despacho inmediato.",
+    "variantes": [
+      {
+        "sku": "LIB-1963-SUD",
+        "descripcion": "MINT (M) · TIRAJE MÚLTIPLE",
         "precio": 8400,
-        "activo": true,
-        "imagen": null,
-        "metadata": {
-            "tipo": "libro",
-            "isbn": "978-950-07-0063-7",
-            "autor": "Julio Cortázar",
-            "editorial": "Editorial Sudamericana",
-            "genero": "novela",
-            "anio_publicacion": 1963,
-            "paginas": 635
-        },
-        "variantes": [
-            {
-                "sku": "LIB-1963-SUD",
-                "descripcion": "MINT (M) · TIRAJE MÚLTIPLE",
-                "precio": 8400,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 3,
-                        "sucursal_nombre": "Almacén General",
-                        "cantidad": 15,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 3,
+            "sucursal_nombre": "Almacén General",
+            "cantidad": 15,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Piedra de Sol y Obra Poética (Primera Edición 1957)",
+    "catalogo_tipo": "libro",
+    "catalogo_nombre": "Libros",
+    "descripcion": "Pieza de Poesía de Alto Valor Curatorial: Primera edición del poema circular de 584 versos endecasílabos numerados. Ejemplar de colección impreso en papel especial.",
+    "precio": 24500,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "libro",
+      "isbn": "978-968-16-0157-6",
+      "autor": "Octavio Paz",
+      "editorial": "Fondo de Cultura Económica",
+      "genero": "poesia",
+      "anio_publicacion": 1957,
+      "paginas": 112
     },
-    {
-        "nombre": "Piedra de Sol y Obra Poética (Primera Edición 1957)",
-        "catalogo_tipo": "libro",
-        "catalogo_nombre": "Libros",
-        "descripcion": "Pieza de Poesía de Alto Valor Curatorial: Primera edición del poema circular de 584 versos endecasílabos numerados. Ejemplar de colección impreso en papel especial.",
+    "variantes": [
+      {
+        "sku": "LIB-1957-FCE",
+        "descripcion": "MINT (M) · PRIMERA EDICIÓN · POESÍA",
         "precio": 24500,
-        "activo": true,
-        "imagen": null,
-        "metadata": {
-            "tipo": "libro",
-            "isbn": "978-968-16-0157-6",
-            "autor": "Octavio Paz",
-            "editorial": "Fondo de Cultura Económica",
-            "genero": "poesia",
-            "anio_publicacion": 1957,
-            "paginas": 112
-        },
-        "variantes": [
-            {
-                "sku": "LIB-1957-FCE",
-                "descripcion": "MINT (M) · PRIMERA EDICIÓN · POESÍA",
-                "precio": 24500,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 2,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 2,
-                        "sucursal_nombre": "Sucursal Coyoacán",
-                        "cantidad": 1,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 2,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 2,
+            "sucursal_nombre": "Sucursal Coyoacán",
+            "cantidad": 1,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Visión de los Vencidos: Relaciones Indígenas de la Conquista",
+    "catalogo_tipo": "libro",
+    "catalogo_nombre": "Libros",
+    "descripcion": "Obra Fundamental de Historia: Testimonios de los informantes de Sahagún traducidos del náhuatl por Ángel María Garibay con textos y notas de Miguel León-Portilla.",
+    "precio": 9800,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "libro",
+      "isbn": "978-970-32-4469-0",
+      "autor": "Miguel León-Portilla",
+      "editorial": "Universidad Nacional Autónoma de México",
+      "genero": "historia",
+      "anio_publicacion": 1959,
+      "paginas": 218
     },
-    {
-        "nombre": "Visión de los Vencidos: Relaciones Indígenas de la Conquista",
-        "catalogo_tipo": "libro",
-        "catalogo_nombre": "Libros",
-        "descripcion": "Obra Fundamental de Historia: Testimonios de los informantes de Sahagún traducidos del náhuatl por Ángel María Garibay con textos y notas de Miguel León-Portilla.",
+    "variantes": [
+      {
+        "sku": "LIB-1959-UNAM",
+        "descripcion": "NEAR MINT (NM) · HISTORIA · BIBLIOTECA DEL ESTUDIANTE",
         "precio": 9800,
-        "activo": true,
-        "imagen": null,
-        "metadata": {
-            "tipo": "libro",
-            "isbn": "978-970-32-4469-0",
-            "autor": "Miguel León-Portilla",
-            "editorial": "Universidad Nacional Autónoma de México",
-            "genero": "historia",
-            "anio_publicacion": 1959,
-            "paginas": 218
-        },
-        "variantes": [
-            {
-                "sku": "LIB-1959-UNAM",
-                "descripcion": "NEAR MINT (NM) · HISTORIA · BIBLIOTECA DEL ESTUDIANTE",
-                "precio": 9800,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 4,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 2,
-                        "sucursal_nombre": "Sucursal Coyoacán",
-                        "cantidad": 3,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 3,
-                        "sucursal_nombre": "Almacén General",
-                        "cantidad": 6,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 4,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 2,
+            "sucursal_nombre": "Sucursal Coyoacán",
+            "cantidad": 3,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 3,
+            "sucursal_nombre": "Almacén General",
+            "cantidad": 6,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "La Estructura de las Revoluciones Científicas (1ª Edición FCE)",
+    "catalogo_tipo": "libro",
+    "catalogo_nombre": "Libros",
+    "descripcion": "Obra Cumbre de Ciencia y Epistemología: Traducción clásica al español del tratado pionero de Thomas Kuhn sobre los cambios de paradigma en la investigación científica.",
+    "precio": 11200,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "libro",
+      "isbn": "978-968-16-0442-3",
+      "autor": "Thomas S. Kuhn",
+      "editorial": "Fondo de Cultura Económica",
+      "genero": "ciencia",
+      "anio_publicacion": 1971,
+      "paginas": 319
     },
-    {
-        "nombre": "La Estructura de las Revoluciones Científicas (1ª Edición FCE)",
-        "catalogo_tipo": "libro",
-        "catalogo_nombre": "Libros",
-        "descripcion": "Obra Cumbre de Ciencia y Epistemología: Traducción clásica al español del tratado pionero de Thomas Kuhn sobre los cambios de paradigma en la investigación científica.",
+    "variantes": [
+      {
+        "sku": "LIB-1971-FCE",
+        "descripcion": "VERY FINE (VF) · CIENCIA & FILOSOFÍA",
         "precio": 11200,
-        "activo": true,
-        "imagen": null,
-        "metadata": {
-            "tipo": "libro",
-            "isbn": "978-968-16-0442-3",
-            "autor": "Thomas S. Kuhn",
-            "editorial": "Fondo de Cultura Económica",
-            "genero": "ciencia",
-            "anio_publicacion": 1971,
-            "paginas": 319
-        },
-        "variantes": [
-            {
-                "sku": "LIB-1971-FCE",
-                "descripcion": "VERY FINE (VF) · CIENCIA & FILOSOFÍA",
-                "precio": 11200,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 3,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 3,
-                        "sucursal_nombre": "Almacén General",
-                        "cantidad": 5,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 3,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 3,
+            "sucursal_nombre": "Almacén General",
+            "cantidad": 5,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Kind of Blue (Mono 1st Press 6-Eye)",
+    "catalogo_tipo": "disco",
+    "catalogo_nombre": "Discos",
+    "descripcion": "Pieza Única (1/1) en Sucursal Central Bellas Artes: Matriz original XLP 47324-1A con etiqueta Columbia «6-eye» deep groove y firma certificada.",
+    "precio": 18500,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "disco",
+      "artista": "Miles Davis",
+      "sello": "Columbia Records CL 1355",
+      "genero": "Modal Jazz",
+      "formato": "vinilo",
+      "anio_lanzamiento": 1959
     },
-    {
-        "nombre": "Kind of Blue (Mono 1st Press 6-Eye)",
-        "catalogo_tipo": "disco",
-        "catalogo_nombre": "Discos",
-        "descripcion": "Pieza Única (1/1) en Sucursal Central Bellas Artes: Matriz original XLP 47324-1A con etiqueta Columbia «6-eye» deep groove y firma certificada.",
+    "variantes": [
+      {
+        "sku": "VIN-1959-COL",
+        "descripcion": "MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA",
         "precio": 18500,
-        "activo": true,
-        "imagen": null,
-        "metadata": {
-            "tipo": "disco",
-            "artista": "Miles Davis",
-            "sello": "Columbia Records CL 1355",
-            "genero": "Modal Jazz",
-            "formato": "vinilo",
-            "anio_lanzamiento": 1959
-        },
-        "variantes": [
-            {
-                "sku": "VIN-1959-COL",
-                "descripcion": "MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA",
-                "precio": 18500,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 1,
-                        "stock_minimo": 1,
-                        "pieza_unica": {
-                            "numero_serie": "ARC-VIN-1959-001",
-                            "certificado": "COA-AUD-2026-101",
-                            "notas": "Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA).",
-                            "estado": "disponible"
-                        }
-                    }
-                ]
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 1,
+            "stock_minimo": 1,
+            "pieza_unica": {
+              "numero_serie": "ARC-VIN-1959-001",
+              "certificado": "COA-AUD-2026-101",
+              "notas": "Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA).",
+              "estado": "disponible"
             }
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Blue Train (Plastylite RVG Ear Press)",
+    "catalogo_tipo": "disco",
+    "catalogo_nombre": "Discos",
+    "descripcion": "Pieza Única (1/1) en Sucursal Coyoacán: Grabado por Rudy Van Gelder con sello «ear» en surco muerto y dirección 47 West 63rd NYC.",
+    "precio": 27500,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "disco",
+      "artista": "John Coltrane",
+      "sello": "Blue Note BLP 1577",
+      "genero": "Hard Bop Jazz",
+      "formato": "vinilo",
+      "anio_lanzamiento": 1957
     },
-    {
-        "nombre": "Blue Train (Plastylite RVG Ear Press)",
-        "catalogo_tipo": "disco",
-        "catalogo_nombre": "Discos",
-        "descripcion": "Pieza Única (1/1) en Sucursal Coyoacán: Grabado por Rudy Van Gelder con sello «ear» en surco muerto y dirección 47 West 63rd NYC.",
+    "variantes": [
+      {
+        "sku": "VIN-1957-BN1577",
+        "descripcion": "NEAR MINT (NM) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA",
         "precio": 27500,
-        "activo": true,
-        "imagen": null,
-        "metadata": {
-            "tipo": "disco",
-            "artista": "John Coltrane",
-            "sello": "Blue Note BLP 1577",
-            "genero": "Hard Bop Jazz",
-            "formato": "vinilo",
-            "anio_lanzamiento": 1957
-        },
-        "variantes": [
-            {
-                "sku": "VIN-1957-BN1577",
-                "descripcion": "NEAR MINT (NM) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA",
-                "precio": 27500,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 2,
-                        "sucursal_nombre": "Sucursal Coyoacán",
-                        "cantidad": 1,
-                        "stock_minimo": 1,
-                        "pieza_unica": {
-                            "numero_serie": "ARC-VIN-1957-002",
-                            "certificado": "COA-AUD-2026-104",
-                            "notas": "Ejemplar único 1/1 catalogado en bóveda climatizada (NEAR MINT (NM) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA).",
-                            "estado": "disponible"
-                        }
-                    }
-                ]
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 2,
+            "sucursal_nombre": "Sucursal Coyoacán",
+            "cantidad": 1,
+            "stock_minimo": 1,
+            "pieza_unica": {
+              "numero_serie": "ARC-VIN-1957-002",
+              "certificado": "COA-AUD-2026-104",
+              "notas": "Ejemplar único 1/1 catalogado en bóveda climatizada (NEAR MINT (NM) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA).",
+              "estado": "disponible"
             }
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "A Love Supreme (Gatefold 1st Impulse! Mono)",
+    "catalogo_tipo": "disco",
+    "catalogo_nombre": "Discos",
+    "descripcion": "Stock Masivo en Sucursal Central Bellas Artes: Carpeta desplegable laminada con estampado VAN GELDER. Existencias múltiples disponibles.",
+    "precio": 16200,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "disco",
+      "artista": "John Coltrane Quartet",
+      "sello": "Impulse! A-77",
+      "genero": "Spiritual Jazz",
+      "formato": "vinilo",
+      "anio_lanzamiento": 1965
     },
-    {
-        "nombre": "A Love Supreme (Gatefold 1st Impulse! Mono)",
-        "catalogo_tipo": "disco",
-        "catalogo_nombre": "Discos",
-        "descripcion": "Stock Masivo en Sucursal Central Bellas Artes: Carpeta desplegable laminada con estampado VAN GELDER. Existencias múltiples disponibles.",
+    "variantes": [
+      {
+        "sku": "VIN-1965-IMP77",
+        "descripcion": "VERY FINE (VF) · VINILO LP 180G",
         "precio": 16200,
-        "activo": true,
-        "imagen": null,
-        "metadata": {
-            "tipo": "disco",
-            "artista": "John Coltrane Quartet",
-            "sello": "Impulse! A-77",
-            "genero": "Spiritual Jazz",
-            "formato": "vinilo",
-            "anio_lanzamiento": 1965
-        },
-        "variantes": [
-            {
-                "sku": "VIN-1965-IMP77",
-                "descripcion": "VERY FINE (VF) · VINILO LP 180G",
-                "precio": 16200,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 6,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 6,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Abbey Road (UK 1st Press Misaligned Apple)",
+    "catalogo_tipo": "disco",
+    "catalogo_nombre": "Discos",
+    "descripcion": "Pieza Única (1/1) en Almacén General: Prensado británico matriz YEX 749-2 / 750-1 con manzana desalineada en contraportada.",
+    "precio": 22900,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "disco",
+      "artista": "The Beatles",
+      "sello": "Apple Records PCS 7088",
+      "genero": "Rock Clásico",
+      "formato": "vinilo",
+      "anio_lanzamiento": 1969
     },
-    {
-        "nombre": "Abbey Road (UK 1st Press Misaligned Apple)",
-        "catalogo_tipo": "disco",
-        "catalogo_nombre": "Discos",
-        "descripcion": "Pieza Única (1/1) en Almacén General: Prensado británico matriz YEX 749-2 / 750-1 con manzana desalineada en contraportada.",
+    "variantes": [
+      {
+        "sku": "VIN-1969-PCS7088",
+        "descripcion": "MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA",
         "precio": 22900,
-        "activo": true,
-        "imagen": null,
-        "metadata": {
-            "tipo": "disco",
-            "artista": "The Beatles",
-            "sello": "Apple Records PCS 7088",
-            "genero": "Rock Clásico",
-            "formato": "vinilo",
-            "anio_lanzamiento": 1969
-        },
-        "variantes": [
-            {
-                "sku": "VIN-1969-PCS7088",
-                "descripcion": "MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA",
-                "precio": 22900,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 3,
-                        "sucursal_nombre": "Almacén General",
-                        "cantidad": 1,
-                        "stock_minimo": 1,
-                        "pieza_unica": {
-                            "numero_serie": "ARC-VIN-1969-004",
-                            "certificado": "COA-AUD-2026-112",
-                            "notas": "Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA).",
-                            "estado": "disponible"
-                        }
-                    }
-                ]
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 3,
+            "sucursal_nombre": "Almacén General",
+            "cantidad": 1,
+            "stock_minimo": 1,
+            "pieza_unica": {
+              "numero_serie": "ARC-VIN-1969-004",
+              "certificado": "COA-AUD-2026-112",
+              "notas": "Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA).",
+              "estado": "disponible"
             }
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "The Dark Side of the Moon (1st Japan Black Triangle CD)",
+    "catalogo_tipo": "disco",
+    "catalogo_nombre": "Discos",
+    "descripcion": "Stock Masivo en Sucursal Coyoacán: Edición en Disco Compacto prensada por Toshiba-EMI en Japón (CP35-3017). Permite adquirir múltiples unidades.",
+    "precio": 14800,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "disco",
+      "artista": "Pink Floyd",
+      "sello": "Harvest / Toshiba-EMI CP35-3017",
+      "genero": "Rock Progresivo",
+      "formato": "CD",
+      "anio_lanzamiento": 1983
     },
-    {
-        "nombre": "The Dark Side of the Moon (1st Japan Black Triangle CD)",
-        "catalogo_tipo": "disco",
-        "catalogo_nombre": "Discos",
-        "descripcion": "Stock Masivo en Sucursal Coyoacán: Edición en Disco Compacto prensada por Toshiba-EMI en Japón (CP35-3017). Permite adquirir múltiples unidades.",
+    "variantes": [
+      {
+        "sku": "CD-1983-CP35",
+        "descripcion": "MINT (M) · CD COMPACT DISC · ADQUISICIÓN SELECTA",
         "precio": 14800,
-        "activo": true,
-        "imagen": null,
-        "metadata": {
-            "tipo": "disco",
-            "artista": "Pink Floyd",
-            "sello": "Harvest / Toshiba-EMI CP35-3017",
-            "genero": "Rock Progresivo",
-            "formato": "CD",
-            "anio_lanzamiento": 1983
-        },
-        "variantes": [
-            {
-                "sku": "CD-1983-CP35",
-                "descripcion": "MINT (M) · CD COMPACT DISC · ADQUISICIÓN SELECTA",
-                "precio": 14800,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 2,
-                        "sucursal_nombre": "Sucursal Coyoacán",
-                        "cantidad": 7,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 2,
+            "sucursal_nombre": "Sucursal Coyoacán",
+            "cantidad": 7,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Led Zeppelin IV (Prensado Audiófilo Atlantic 180g)",
+    "catalogo_tipo": "disco",
+    "catalogo_nombre": "Discos",
+    "descripcion": "Stock Masivo en Almacén General: Reedición audiófila de tiraje regular en vinilo virgen de 180 gramos masterizado desde las cintas analógicas.",
+    "precio": 5900,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "disco",
+      "artista": "Led Zeppelin",
+      "sello": "Atlantic Records SD 7208",
+      "genero": "Hard Rock",
+      "formato": "vinilo",
+      "anio_lanzamiento": 1971
     },
-    {
-        "nombre": "Led Zeppelin IV (Prensado Audiófilo Atlantic 180g)",
-        "catalogo_tipo": "disco",
-        "catalogo_nombre": "Discos",
-        "descripcion": "Stock Masivo en Almacén General: Reedición audiófila de tiraje regular en vinilo virgen de 180 gramos masterizado desde las cintas analógicas.",
+    "variantes": [
+      {
+        "sku": "VIN-1971-LED4",
+        "descripcion": "MINT (M) · VINILO LP 180G",
         "precio": 5900,
-        "activo": true,
-        "imagen": null,
-        "metadata": {
-            "tipo": "disco",
-            "artista": "Led Zeppelin",
-            "sello": "Atlantic Records SD 7208",
-            "genero": "Hard Rock",
-            "formato": "vinilo",
-            "anio_lanzamiento": 1971
-        },
-        "variantes": [
-            {
-                "sku": "VIN-1971-LED4",
-                "descripcion": "MINT (M) · VINILO LP 180G",
-                "precio": 5900,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 3,
-                        "sucursal_nombre": "Almacén General",
-                        "cantidad": 14,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 3,
+            "sucursal_nombre": "Almacén General",
+            "cantidad": 14,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "OK Computer (Collector's Edition 2-CD Parlophone)",
+    "catalogo_tipo": "disco",
+    "catalogo_nombre": "Discos",
+    "descripcion": "Edición Maestra en Disco Compacto: Edición doble de 1997 con estuche digipak de colección, libreto con ilustraciones de Stanley Donwood y lados B masterizados.",
+    "precio": 4800,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "disco",
+      "artista": "Radiohead",
+      "sello": "Parlophone / EMI 7243 8 55229 2 4",
+      "genero": "Art Rock & Alternativo",
+      "formato": "CD",
+      "anio_lanzamiento": 1997
     },
-    {
-        "nombre": "OK Computer (Collector's Edition 2-CD Parlophone)",
-        "catalogo_tipo": "disco",
-        "catalogo_nombre": "Discos",
-        "descripcion": "Edición Maestra en Disco Compacto: Edición doble de 1997 con estuche digipak de colección, libreto con ilustraciones de Stanley Donwood y lados B masterizados.",
+    "variantes": [
+      {
+        "sku": "CD-1997-RAD1",
+        "descripcion": "MINT (M) · CD COMPACT DISC",
         "precio": 4800,
-        "activo": true,
-        "imagen": null,
-        "metadata": {
-            "tipo": "disco",
-            "artista": "Radiohead",
-            "sello": "Parlophone / EMI 7243 8 55229 2 4",
-            "genero": "Art Rock & Alternativo",
-            "formato": "CD",
-            "anio_lanzamiento": 1997
-        },
-        "variantes": [
-            {
-                "sku": "CD-1997-RAD1",
-                "descripcion": "MINT (M) · CD COMPACT DISC",
-                "precio": 4800,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 5,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 2,
-                        "sucursal_nombre": "Sucursal Coyoacán",
-                        "cantidad": 2,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 3,
-                        "sucursal_nombre": "Almacén General",
-                        "cantidad": 8,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 5,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 2,
+            "sucursal_nombre": "Sucursal Coyoacán",
+            "cantidad": 2,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 3,
+            "sucursal_nombre": "Almacén General",
+            "cantidad": 8,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Las Cabras Montañesas - Góticos (2 LP)",
+    "catalogo_tipo": "disco",
+    "catalogo_nombre": "Discos",
+    "descripcion": "Álbum doble de vinilo (2 LP) en edición de alta calidad.",
+    "precio": 521.5,
+    "activo": true,
+    "imagen": "images/productos/las-cabras-montañeras.jpg",
+    "metadata": {
+      "tipo": "disco",
+      "artista": "Las Cabras Montañesas",
+      "sello": "Independiente",
+      "genero": "Rock / Indie",
+      "formato": "vinilo",
+      "anio_lanzamiento": 2017
     },
-    {
-        "nombre": "Las Cabras Montañesas - Góticos (2 LP)",
-        "catalogo_tipo": "disco",
-        "catalogo_nombre": "Discos",
-        "descripcion": "Álbum doble de vinilo (2 LP) en edición de alta calidad.",
+    "variantes": [
+      {
+        "sku": "VIN-2017-GOT",
+        "descripcion": "MINT (M) · VINILO LP",
         "precio": 521.5,
-        "activo": true,
-        "imagen": "images/productos/las-cabras-montañeras.jpg",
-        "metadata": {
-            "tipo": "disco",
-            "artista": "Las Cabras Montañesas",
-            "sello": "Independiente",
-            "genero": "Rock / Indie",
-            "formato": "vinilo",
-            "anio_lanzamiento": 2017
-        },
-        "variantes": [
-            {
-                "sku": "VIN-2017-GOT",
-                "descripcion": "MINT (M) · VINILO LP",
-                "precio": 521.5,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 4,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 2,
-                        "sucursal_nombre": "Sucursal Coyoacán",
-                        "cantidad": 2,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 4,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 2,
+            "sucursal_nombre": "Sucursal Coyoacán",
+            "cantidad": 2,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Los Yaki – Los Grandes Años Del Rock",
+    "catalogo_tipo": "disco",
+    "catalogo_nombre": "Discos",
+    "descripcion": "Edición clásica de Latin Gold Records recuperada para coleccionistas de rock en español.",
+    "precio": 372.56,
+    "activo": true,
+    "imagen": "images/productos/Los-Yaki.jpg",
+    "metadata": {
+      "tipo": "disco",
+      "artista": "Los Yaki",
+      "sello": "Latin Gold Records",
+      "genero": "Rock and Roll / Go-Go",
+      "formato": "vinilo",
+      "anio_lanzamiento": 1970
     },
-    {
-        "nombre": "Los Yaki – Los Grandes Años Del Rock",
-        "catalogo_tipo": "disco",
-        "catalogo_nombre": "Discos",
-        "descripcion": "Edición clásica de Latin Gold Records recuperada para coleccionistas de rock en español.",
+    "variantes": [
+      {
+        "sku": "VIN-1970-YAK",
+        "descripcion": "VERY FINE (VF) · VINILO LP",
         "precio": 372.56,
-        "activo": true,
-        "imagen": "images/productos/Los-Yaki.jpg",
-        "metadata": {
-            "tipo": "disco",
-            "artista": "Los Yaki",
-            "sello": "Latin Gold Records",
-            "genero": "Rock and Roll / Go-Go",
-            "formato": "vinilo",
-            "anio_lanzamiento": 1970
-        },
-        "variantes": [
-            {
-                "sku": "VIN-1970-YAK",
-                "descripcion": "VERY FINE (VF) · VINILO LP",
-                "precio": 372.56,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 2,
-                        "sucursal_nombre": "Sucursal Coyoacán",
-                        "cantidad": 5,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 2,
+            "sucursal_nombre": "Sucursal Coyoacán",
+            "cantidad": 5,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Caifanes – Caifanes (LP, Edición Original Venezuela)",
+    "catalogo_tipo": "disco",
+    "catalogo_nombre": "Discos",
+    "descripcion": "Pieza Única (1/1) custodiada en Sucursal Coyoacán: Edición original de 1990 prensada en Venezuela bajo el sello RCA (102-02124).",
+    "precio": 7413.93,
+    "activo": true,
+    "imagen": "images/productos/Caifanes.jpg",
+    "metadata": {
+      "tipo": "disco",
+      "artista": "Caifanes",
+      "sello": "RCA Victor (102-02124)",
+      "genero": "Rock Pop Latino",
+      "formato": "vinilo",
+      "anio_lanzamiento": 1990
     },
-    {
-        "nombre": "Caifanes – Caifanes (LP, Edición Original Venezuela)",
-        "catalogo_tipo": "disco",
-        "catalogo_nombre": "Discos",
-        "descripcion": "Pieza Única (1/1) custodiada en Sucursal Coyoacán: Edición original de 1990 prensada en Venezuela bajo el sello RCA (102-02124).",
+    "variantes": [
+      {
+        "sku": "VIN-1990-CAI",
+        "descripcion": "NEAR MINT (NM) · PIEZA ÚNICA 1/1",
         "precio": 7413.93,
-        "activo": true,
-        "imagen": "images/productos/Caifanes.jpg",
-        "metadata": {
-            "tipo": "disco",
-            "artista": "Caifanes",
-            "sello": "RCA Victor (102-02124)",
-            "genero": "Rock Pop Latino",
-            "formato": "vinilo",
-            "anio_lanzamiento": 1990
-        },
-        "variantes": [
-            {
-                "sku": "VIN-1990-CAI",
-                "descripcion": "NEAR MINT (NM) · PIEZA ÚNICA 1/1",
-                "precio": 7413.93,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 2,
-                        "sucursal_nombre": "Sucursal Coyoacán",
-                        "cantidad": 1,
-                        "stock_minimo": 1,
-                        "pieza_unica": {
-                            "numero_serie": "ARC-VIN-1990-001",
-                            "certificado": "COA-MUS-2026-101",
-                            "notas": "Ejemplar único 1/1 catalogado en bóveda climatizada (NEAR MINT (NM) · PIEZA ÚNICA 1/1).",
-                            "estado": "disponible"
-                        }
-                    }
-                ]
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 2,
+            "sucursal_nombre": "Sucursal Coyoacán",
+            "cantidad": 1,
+            "stock_minimo": 1,
+            "pieza_unica": {
+              "numero_serie": "ARC-VIN-1990-001",
+              "certificado": "COA-MUS-2026-101",
+              "notas": "Ejemplar único 1/1 catalogado en bóveda climatizada (NEAR MINT (NM) · PIEZA ÚNICA 1/1).",
+              "estado": "disponible"
             }
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Mägo de Oz - La Ciudad de los Árboles (Lp Vinyl)",
+    "catalogo_tipo": "disco",
+    "catalogo_nombre": "Discos",
+    "descripcion": "Edición en LP de vinilo de la reconocida banda de folk metal.",
+    "precio": 1566.55,
+    "activo": true,
+    "imagen": "images/productos/Mago-de-oz-La-ciudad.jpg",
+    "metadata": {
+      "tipo": "disco",
+      "artista": "Mägo de Oz",
+      "sello": "Locomotive Music",
+      "genero": "Folk Metal",
+      "formato": "vinilo",
+      "anio_lanzamiento": 2007
     },
-    {
-        "nombre": "Mägo de Oz - La Ciudad de los Árboles (Lp Vinyl)",
-        "catalogo_tipo": "disco",
-        "catalogo_nombre": "Discos",
-        "descripcion": "Edición en LP de vinilo de la reconocida banda de folk metal.",
+    "variantes": [
+      {
+        "sku": "VIN-2007-MAG",
+        "descripcion": "MINT (M) · VINILO LP",
         "precio": 1566.55,
-        "activo": true,
-        "imagen": "images/productos/Mago-de-oz-La-ciudad.jpg",
-        "metadata": {
-            "tipo": "disco",
-            "artista": "Mägo de Oz",
-            "sello": "Locomotive Music",
-            "genero": "Folk Metal",
-            "formato": "vinilo",
-            "anio_lanzamiento": 2007
-        },
-        "variantes": [
-            {
-                "sku": "VIN-2007-MAG",
-                "descripcion": "MINT (M) · VINILO LP",
-                "precio": 1566.55,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 6,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 6,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Mägo de Oz - Alicia En El Pais Del Metalverso (Lp Vinyl)",
+    "catalogo_tipo": "disco",
+    "catalogo_nombre": "Discos",
+    "descripcion": "Edición especial en formato LP de vinilo.",
+    "precio": 864,
+    "activo": true,
+    "imagen": "images/productos/Mago-de-oz-Alicia.jpg",
+    "metadata": {
+      "tipo": "disco",
+      "artista": "Mägo de Oz",
+      "sello": "Warner Music Spain",
+      "genero": "Folk Metal",
+      "formato": "vinilo",
+      "anio_lanzamiento": 2024
     },
-    {
-        "nombre": "Mägo de Oz - Alicia En El Pais Del Metalverso (Lp Vinyl)",
-        "catalogo_tipo": "disco",
-        "catalogo_nombre": "Discos",
-        "descripcion": "Edición especial en formato LP de vinilo.",
+    "variantes": [
+      {
+        "sku": "VIN-2024-MAG",
+        "descripcion": "MINT (M) · VINILO LP",
         "precio": 864,
-        "activo": true,
-        "imagen": "images/productos/Mago-de-oz-Alicia.jpg",
-        "metadata": {
-            "tipo": "disco",
-            "artista": "Mägo de Oz",
-            "sello": "Warner Music Spain",
-            "genero": "Folk Metal",
-            "formato": "vinilo",
-            "anio_lanzamiento": 2024
-        },
-        "variantes": [
-            {
-                "sku": "VIN-2024-MAG",
-                "descripcion": "MINT (M) · VINILO LP",
-                "precio": 864,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 3,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 2,
-                        "sucursal_nombre": "Sucursal Coyoacán",
-                        "cantidad": 2,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 3,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 2,
+            "sucursal_nombre": "Sucursal Coyoacán",
+            "cantidad": 2,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Los Grandes Románticos de la Balada (3CDs)",
+    "catalogo_tipo": "disco",
+    "catalogo_nombre": "Discos",
+    "descripcion": "Compilación de colección con José José, Juan Gabriel, Rocío Dúrcal, entre otros.",
+    "precio": 179,
+    "activo": true,
+    "imagen": "images/productos/Los-Grandes-Romanticos.jpg",
+    "metadata": {
+      "tipo": "disco",
+      "artista": "Varios Artistas",
+      "sello": "Sony Music / BMG",
+      "genero": "Balada Romántica",
+      "formato": "CD",
+      "anio_lanzamiento": 2005
     },
-    {
-        "nombre": "Los Grandes Románticos de la Balada (3CDs)",
-        "catalogo_tipo": "disco",
-        "catalogo_nombre": "Discos",
-        "descripcion": "Compilación de colección con José José, Juan Gabriel, Rocío Dúrcal, entre otros.",
+    "variantes": [
+      {
+        "sku": "CD-2005-ROM",
+        "descripcion": "VERY FINE (VF) · BOX SET CD",
         "precio": 179,
-        "activo": true,
-        "imagen": "images/productos/Los-Grandes-Romanticos.jpg",
-        "metadata": {
-            "tipo": "disco",
-            "artista": "Varios Artistas",
-            "sello": "Sony Music / BMG",
-            "genero": "Balada Romántica",
-            "formato": "CD",
-            "anio_lanzamiento": 2005
-        },
-        "variantes": [
-            {
-                "sku": "CD-2005-ROM",
-                "descripcion": "VERY FINE (VF) · BOX SET CD",
-                "precio": 179,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 3,
-                        "sucursal_nombre": "Almacén General",
-                        "cantidad": 12,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 3,
+            "sucursal_nombre": "Almacén General",
+            "cantidad": 12,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "La Arrolladora Banda El Limón - Las Bandas Románticas",
+    "catalogo_tipo": "disco",
+    "catalogo_nombre": "Discos",
+    "descripcion": "CD con grandes éxitos románticos de banda sinaloense.",
+    "precio": 183,
+    "activo": true,
+    "imagen": "images/productos/Cd-la-arrolladora.jpg",
+    "metadata": {
+      "tipo": "disco",
+      "artista": "La Arrolladora Banda El Limón",
+      "sello": "Disa / Universal",
+      "genero": "Banda / Regional Mexicano",
+      "formato": "CD",
+      "anio_lanzamiento": 2012
     },
-    {
-        "nombre": "La Arrolladora Banda El Limón - Las Bandas Románticas",
-        "catalogo_tipo": "disco",
-        "catalogo_nombre": "Discos",
-        "descripcion": "CD con grandes éxitos románticos de banda sinaloense.",
+    "variantes": [
+      {
+        "sku": "CD-2012-ARR",
+        "descripcion": "VERY FINE (VF) · CD COMPACT DISC",
         "precio": 183,
-        "activo": true,
-        "imagen": "images/productos/Cd-la-arrolladora.jpg",
-        "metadata": {
-            "tipo": "disco",
-            "artista": "La Arrolladora Banda El Limón",
-            "sello": "Disa / Universal",
-            "genero": "Banda / Regional Mexicano",
-            "formato": "CD",
-            "anio_lanzamiento": 2012
-        },
-        "variantes": [
-            {
-                "sku": "CD-2012-ARR",
-                "descripcion": "VERY FINE (VF) · CD COMPACT DISC",
-                "precio": 183,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 5,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 2,
-                        "sucursal_nombre": "Sucursal Coyoacán",
-                        "cantidad": 3,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 5,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 2,
+            "sucursal_nombre": "Sucursal Coyoacán",
+            "cantidad": 3,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Juan Gabriel & Rocío Dúrcal - Juntos Otra Vez (2CD)",
+    "catalogo_tipo": "disco",
+    "catalogo_nombre": "Discos",
+    "descripcion": "Álbum doble en CD de dos grandes exponentes de la música ranchera y balada.",
+    "precio": 129,
+    "activo": true,
+    "imagen": "images/productos/Juan-Gabriel.jpg",
+    "metadata": {
+      "tipo": "disco",
+      "artista": "Juan Gabriel & Rocío Dúrcal",
+      "sello": "BMG Ariola",
+      "genero": "Ranchera / Balada",
+      "formato": "CD",
+      "anio_lanzamiento": 1997
     },
-    {
-        "nombre": "Juan Gabriel & Rocío Dúrcal - Juntos Otra Vez (2CD)",
-        "catalogo_tipo": "disco",
-        "catalogo_nombre": "Discos",
-        "descripcion": "Álbum doble en CD de dos grandes exponentes de la música ranchera y balada.",
+    "variantes": [
+      {
+        "sku": "CD-1997-JUA",
+        "descripcion": "VERY FINE (VF) · CD COMPACT DISC",
         "precio": 129,
-        "activo": true,
-        "imagen": "images/productos/Juan-Gabriel.jpg",
-        "metadata": {
-            "tipo": "disco",
-            "artista": "Juan Gabriel & Rocío Dúrcal",
-            "sello": "BMG Ariola",
-            "genero": "Ranchera / Balada",
-            "formato": "CD",
-            "anio_lanzamiento": 1997
-        },
-        "variantes": [
-            {
-                "sku": "CD-1997-JUA",
-                "descripcion": "VERY FINE (VF) · CD COMPACT DISC",
-                "precio": 129,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 2,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 2,
-                        "sucursal_nombre": "Sucursal Coyoacán",
-                        "cantidad": 4,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 2,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 2,
+            "sucursal_nombre": "Sucursal Coyoacán",
+            "cantidad": 4,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "La Sonora Santanera - Tesoros de Colección Vol. 3 (3 Discos)",
+    "catalogo_tipo": "disco",
+    "catalogo_nombre": "Discos",
+    "descripcion": "Edición especial de 3 discos originales en formato CD.",
+    "precio": 391.5,
+    "activo": true,
+    "imagen": "images/productos/3-cds-La-Sonora.jpg",
+    "metadata": {
+      "tipo": "disco",
+      "artista": "La Sonora Santanera",
+      "sello": "Sony Music",
+      "genero": "Tropical / Danzón / Bolero",
+      "formato": "CD",
+      "anio_lanzamiento": 2010
     },
-    {
-        "nombre": "La Sonora Santanera - Tesoros de Colección Vol. 3 (3 Discos)",
-        "catalogo_tipo": "disco",
-        "catalogo_nombre": "Discos",
-        "descripcion": "Edición especial de 3 discos originales en formato CD.",
+    "variantes": [
+      {
+        "sku": "CD-2010-SON",
+        "descripcion": "MINT (M) · CD COMPACT DISC",
         "precio": 391.5,
-        "activo": true,
-        "imagen": "images/productos/3-cds-La-Sonora.jpg",
-        "metadata": {
-            "tipo": "disco",
-            "artista": "La Sonora Santanera",
-            "sello": "Sony Music",
-            "genero": "Tropical / Danzón / Bolero",
-            "formato": "CD",
-            "anio_lanzamiento": 2010
-        },
-        "variantes": [
-            {
-                "sku": "CD-2010-SON",
-                "descripcion": "MINT (M) · CD COMPACT DISC",
-                "precio": 391.5,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 3,
-                        "sucursal_nombre": "Almacén General",
-                        "cantidad": 8,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 3,
+            "sucursal_nombre": "Almacén General",
+            "cantidad": 8,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Los Mejores Huapangos | CD Música",
+    "catalogo_tipo": "disco",
+    "catalogo_nombre": "Discos",
+    "descripcion": "CD con selección folklórica de los huapangos tradicionales más emblemáticos.",
+    "precio": 69,
+    "activo": true,
+    "imagen": "images/productos/Huapangos.jpg",
+    "metadata": {
+      "tipo": "disco",
+      "artista": "Varios Artistas",
+      "sello": "Discos Peerless",
+      "genero": "Folklor Mexicano / Huapango",
+      "formato": "CD",
+      "anio_lanzamiento": 2000
     },
-    {
-        "nombre": "Los Mejores Huapangos | CD Música",
-        "catalogo_tipo": "disco",
-        "catalogo_nombre": "Discos",
-        "descripcion": "CD con selección folklórica de los huapangos tradicionales más emblemáticos.",
+    "variantes": [
+      {
+        "sku": "CD-2000-HUA",
+        "descripcion": "VERY FINE (VF) · CD COMPACT DISC",
         "precio": 69,
-        "activo": true,
-        "imagen": "images/productos/Huapangos.jpg",
-        "metadata": {
-            "tipo": "disco",
-            "artista": "Varios Artistas",
-            "sello": "Discos Peerless",
-            "genero": "Folklor Mexicano / Huapango",
-            "formato": "CD",
-            "anio_lanzamiento": 2000
-        },
-        "variantes": [
-            {
-                "sku": "CD-2000-HUA",
-                "descripcion": "VERY FINE (VF) · CD COMPACT DISC",
-                "precio": 69,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 10,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 10,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Taylor Swift - Midnights (Korea Edition)",
+    "catalogo_tipo": "disco",
+    "catalogo_nombre": "Discos",
+    "descripcion": "Pieza Única (1/1) custodiada en Almacén General: Edición coleccionable de importación coreana.",
+    "precio": 641.68,
+    "activo": true,
+    "imagen": "images/productos/TAYLO.jpg",
+    "metadata": {
+      "tipo": "disco",
+      "artista": "Taylor Swift",
+      "sello": "Republic Records / Universal",
+      "genero": "Pop / Synth-Pop",
+      "formato": "vinilo",
+      "anio_lanzamiento": 2022
     },
-    {
-        "nombre": "Taylor Swift - Midnights (Korea Edition)",
-        "catalogo_tipo": "disco",
-        "catalogo_nombre": "Discos",
-        "descripcion": "Pieza Única (1/1) custodiada en Almacén General: Edición coleccionable de importación coreana.",
+    "variantes": [
+      {
+        "sku": "VIN-2022-MID",
+        "descripcion": "MINT (M) · PIEZA ÚNICA 1/1",
         "precio": 641.68,
-        "activo": true,
-        "imagen": "images/productos/TAYLO.jpg",
-        "metadata": {
-            "tipo": "disco",
-            "artista": "Taylor Swift",
-            "sello": "Republic Records / Universal",
-            "genero": "Pop / Synth-Pop",
-            "formato": "vinilo",
-            "anio_lanzamiento": 2022
-        },
-        "variantes": [
-            {
-                "sku": "VIN-2022-MID",
-                "descripcion": "MINT (M) · PIEZA ÚNICA 1/1",
-                "precio": 641.68,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 3,
-                        "sucursal_nombre": "Almacén General",
-                        "cantidad": 1,
-                        "stock_minimo": 1,
-                        "pieza_unica": {
-                            "numero_serie": "ARC-VIN-2024-002",
-                            "certificado": "COA-MUS-2026-102",
-                            "notas": "Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · PIEZA ÚNICA 1/1).",
-                            "estado": "disponible"
-                        }
-                    }
-                ]
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 3,
+            "sucursal_nombre": "Almacén General",
+            "cantidad": 1,
+            "stock_minimo": 1,
+            "pieza_unica": {
+              "numero_serie": "ARC-VIN-2024-002",
+              "certificado": "COA-MUS-2026-102",
+              "notas": "Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · PIEZA ÚNICA 1/1).",
+              "estado": "disponible"
             }
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Buena Vista Social Club (Edición CD Remasterizada World Circuit)",
+    "catalogo_tipo": "disco",
+    "catalogo_nombre": "Discos",
+    "descripcion": "Obra Fonográfica Esencial en Disco Compacto: Grabaciones de La Habana bajo la producción de Ry Cooder, masterizado digital con folleto historiográfico de 48 páginas.",
+    "precio": 3950,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "disco",
+      "artista": "Buena Vista Social Club",
+      "sello": "World Circuit WCD050",
+      "genero": "Son Cubano & Trova Tradicional",
+      "formato": "CD",
+      "anio_lanzamiento": 1997
     },
-    {
-        "nombre": "Buena Vista Social Club (Edición CD Remasterizada World Circuit)",
-        "catalogo_tipo": "disco",
-        "catalogo_nombre": "Discos",
-        "descripcion": "Obra Fonográfica Esencial en Disco Compacto: Grabaciones de La Habana bajo la producción de Ry Cooder, masterizado digital con folleto historiográfico de 48 páginas.",
+    "variantes": [
+      {
+        "sku": "CD-1997-BVSC",
+        "descripcion": "MINT (M) · CD COMPACT DISC",
         "precio": 3950,
-        "activo": true,
-        "imagen": null,
-        "metadata": {
-            "tipo": "disco",
-            "artista": "Buena Vista Social Club",
-            "sello": "World Circuit WCD050",
-            "genero": "Son Cubano & Trova Tradicional",
-            "formato": "CD",
-            "anio_lanzamiento": 1997
-        },
-        "variantes": [
-            {
-                "sku": "CD-1997-BVSC",
-                "descripcion": "MINT (M) · CD COMPACT DISC",
-                "precio": 3950,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 4,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 2,
-                        "sucursal_nombre": "Sucursal Coyoacán",
-                        "cantidad": 4,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 3,
-                        "sucursal_nombre": "Almacén General",
-                        "cantidad": 6,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 4,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 2,
+            "sucursal_nombre": "Sucursal Coyoacán",
+            "cantidad": 4,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 3,
+            "sucursal_nombre": "Almacén General",
+            "cantidad": 6,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Carta Manuscrita Bellas Artes (1928)",
+    "catalogo_tipo": "coleccionable",
+    "catalogo_nombre": "Coleccionables",
+    "descripcion": "Pieza Única (1/1) en Sucursal Central Bellas Artes: Pluma estilográfica con tinta ferrogálica original sobre papel membretado con COA notariado.",
+    "precio": 9400,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "coleccionable",
+      "marca": "Colección Diplomática",
+      "serie": "Archivo Histórico Bellas Artes",
+      "categoria": "historicos",
+      "material": "Papel Algodón & Tinta Ferrogálica",
+      "edicion_limitada": true
     },
-    {
-        "nombre": "Carta Manuscrita Bellas Artes (1928)",
-        "catalogo_tipo": "coleccionable",
-        "catalogo_nombre": "Coleccionables",
-        "descripcion": "Pieza Única (1/1) en Sucursal Central Bellas Artes: Pluma estilográfica con tinta ferrogálica original sobre papel membretado con COA notariado.",
+    "variantes": [
+      {
+        "sku": "MEM-1928-AUT",
+        "descripcion": "COA NOTARIADO · PIEZA ÚNICA 1/1",
         "precio": 9400,
-        "activo": true,
-        "imagen": null,
-        "metadata": {
-            "tipo": "coleccionable",
-            "marca": "Colección Diplomática",
-            "serie": "Archivo Histórico Bellas Artes",
-            "categoria": "historicos",
-            "material": "Papel Algodón & Tinta Ferrogálica",
-            "edicion_limitada": true
-        },
-        "variantes": [
-            {
-                "sku": "MEM-1928-AUT",
-                "descripcion": "COA NOTARIADO · PIEZA ÚNICA 1/1",
-                "precio": 9400,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 1,
-                        "stock_minimo": 1,
-                        "pieza_unica": {
-                            "numero_serie": "ARC-MEM-1928-001",
-                            "certificado": "COA-NOT-2026-301",
-                            "notas": "Ejemplar único 1/1 catalogado en bóveda climatizada (COA NOTARIADO · PIEZA ÚNICA 1/1).",
-                            "estado": "disponible"
-                        }
-                    }
-                ]
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 1,
+            "stock_minimo": 1,
+            "pieza_unica": {
+              "numero_serie": "ARC-MEM-1928-001",
+              "certificado": "COA-NOT-2026-301",
+              "notas": "Ejemplar único 1/1 catalogado en bóveda climatizada (COA NOTARIADO · PIEZA ÚNICA 1/1).",
+              "estado": "disponible"
             }
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Manuscrito Autógrafo Casa Azul Coyoacán (1940)",
+    "catalogo_tipo": "coleccionable",
+    "catalogo_nombre": "Coleccionables",
+    "descripcion": "Pieza Única (1/1) en Sucursal Coyoacán: Misiva autógrafa en papel de algodón fechada en Villa Coyoacán con sello lacrado original.",
+    "precio": 36800,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "coleccionable",
+      "marca": "Archivo Coyoacán",
+      "serie": "Correspondencia Muralista S. XX",
+      "categoria": "historicos",
+      "material": "Tinta Sepia sobre Papel Ingres",
+      "edicion_limitada": true
     },
-    {
-        "nombre": "Manuscrito Autógrafo Casa Azul Coyoacán (1940)",
-        "catalogo_tipo": "coleccionable",
-        "catalogo_nombre": "Coleccionables",
-        "descripcion": "Pieza Única (1/1) en Sucursal Coyoacán: Misiva autógrafa en papel de algodón fechada en Villa Coyoacán con sello lacrado original.",
+    "variantes": [
+      {
+        "sku": "MEM-1940-COY",
+        "descripcion": "MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA",
         "precio": 36800,
-        "activo": true,
-        "imagen": null,
-        "metadata": {
-            "tipo": "coleccionable",
-            "marca": "Archivo Coyoacán",
-            "serie": "Correspondencia Muralista S. XX",
-            "categoria": "historicos",
-            "material": "Tinta Sepia sobre Papel Ingres",
-            "edicion_limitada": true
-        },
-        "variantes": [
-            {
-                "sku": "MEM-1940-COY",
-                "descripcion": "MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA",
-                "precio": 36800,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 2,
-                        "sucursal_nombre": "Sucursal Coyoacán",
-                        "cantidad": 1,
-                        "stock_minimo": 1,
-                        "pieza_unica": {
-                            "numero_serie": "ARC-MEM-1940-004",
-                            "certificado": "COA-NOT-2026-320",
-                            "notas": "Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA).",
-                            "estado": "disponible"
-                        }
-                    }
-                ]
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 2,
+            "sucursal_nombre": "Sucursal Coyoacán",
+            "cantidad": 1,
+            "stock_minimo": 1,
+            "pieza_unica": {
+              "numero_serie": "ARC-MEM-1940-004",
+              "certificado": "COA-NOT-2026-320",
+              "notas": "Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA).",
+              "estado": "disponible"
             }
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Medalla Conmemorativa del Centenario (1910)",
+    "catalogo_tipo": "coleccionable",
+    "catalogo_nombre": "Coleccionables",
+    "descripcion": "Pieza Única (1/1) en Almacén General: Medalla oficial en plata ley .925 acuñada por la Casa de Moneda en 1910 con estuche de terciopelo original.",
+    "precio": 29500,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "coleccionable",
+      "marca": "Casa de Moneda de México",
+      "serie": "Numismática del Centenario",
+      "categoria": "numismatica",
+      "material": "Plata Ley .925 en Estuche de Época",
+      "edicion_limitada": true
     },
-    {
-        "nombre": "Medalla Conmemorativa del Centenario (1910)",
-        "catalogo_tipo": "coleccionable",
-        "catalogo_nombre": "Coleccionables",
-        "descripcion": "Pieza Única (1/1) en Almacén General: Medalla oficial en plata ley .925 acuñada por la Casa de Moneda en 1910 con estuche de terciopelo original.",
+    "variantes": [
+      {
+        "sku": "MEM-1910-ALM",
+        "descripcion": "MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA",
         "precio": 29500,
-        "activo": true,
-        "imagen": null,
-        "metadata": {
-            "tipo": "coleccionable",
-            "marca": "Casa de Moneda de México",
-            "serie": "Numismática del Centenario",
-            "categoria": "numismatica",
-            "material": "Plata Ley .925 en Estuche de Época",
-            "edicion_limitada": true
-        },
-        "variantes": [
-            {
-                "sku": "MEM-1910-ALM",
-                "descripcion": "MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA",
-                "precio": 29500,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 3,
-                        "sucursal_nombre": "Almacén General",
-                        "cantidad": 1,
-                        "stock_minimo": 1,
-                        "pieza_unica": {
-                            "numero_serie": "ARC-MEM-1910-005",
-                            "certificado": "COA-NOT-2026-335",
-                            "notas": "Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA).",
-                            "estado": "disponible"
-                        }
-                    }
-                ]
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 3,
+            "sucursal_nombre": "Almacén General",
+            "cantidad": 1,
+            "stock_minimo": 1,
+            "pieza_unica": {
+              "numero_serie": "ARC-MEM-1910-005",
+              "certificado": "COA-NOT-2026-335",
+              "notas": "Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA).",
+              "estado": "disponible"
             }
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Fotografía en Plata sobre Gelatina Firmada (1934)",
+    "catalogo_tipo": "coleccionable",
+    "catalogo_nombre": "Coleccionables",
+    "descripcion": "Copia de época (vintage print) revelada en cuarto oscuro por el estudio original, con sello húmedo al reverso y paspartú libre de ácido.",
+    "precio": 41000,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "coleccionable",
+      "marca": "Archivo Fotográfico Mexicano",
+      "serie": "Vanguardia Documental S. XX",
+      "categoria": "historicos",
+      "material": "Plata sobre Gelatina en Papel Fibra",
+      "edicion_limitada": true
     },
-    {
-        "nombre": "Fotografía en Plata sobre Gelatina Firmada (1934)",
-        "catalogo_tipo": "coleccionable",
-        "catalogo_nombre": "Coleccionables",
-        "descripcion": "Copia de época (vintage print) revelada en cuarto oscuro por el estudio original, con sello húmedo al reverso y paspartú libre de ácido.",
+    "variantes": [
+      {
+        "sku": "MEM-1934-FOT",
+        "descripcion": "MINT (M) · COA NOTARIADO · ADQUISICIÓN SELECTA",
         "precio": 41000,
-        "activo": true,
-        "imagen": null,
-        "metadata": {
-            "tipo": "coleccionable",
-            "marca": "Archivo Fotográfico Mexicano",
-            "serie": "Vanguardia Documental S. XX",
-            "categoria": "historicos",
-            "material": "Plata sobre Gelatina en Papel Fibra",
-            "edicion_limitada": true
-        },
-        "variantes": [
-            {
-                "sku": "MEM-1934-FOT",
-                "descripcion": "MINT (M) · COA NOTARIADO · ADQUISICIÓN SELECTA",
-                "precio": 41000,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 1,
-                        "stock_minimo": 1,
-                        "pieza_unica": {
-                            "numero_serie": "ARC-MEM-1934-002",
-                            "certificado": "COA-NOT-2026-309",
-                            "notas": "Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · COA NOTARIADO · ADQUISICIÓN SELECTA).",
-                            "estado": "vendida"
-                        }
-                    }
-                ]
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 1,
+            "stock_minimo": 1,
+            "pieza_unica": {
+              "numero_serie": "ARC-MEM-1934-002",
+              "certificado": "COA-NOT-2026-309",
+              "notas": "Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · COA NOTARIADO · ADQUISICIÓN SELECTA).",
+              "estado": "vendida"
             }
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Partitura Autógrafa de Estudio en Sol Menor (1912)",
+    "catalogo_tipo": "coleccionable",
+    "catalogo_nombre": "Coleccionables",
+    "descripcion": "Lote limitado en Sucursal Central Bellas Artes: 2 cuadernos musicales de 12 folios con anotaciones de dinámica a lápiz. Conservado en carpeta museográfica.",
+    "precio": 21500,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "coleccionable",
+      "marca": "Fondo Conservatorio Nacional",
+      "serie": "Manuscritos Musicales del Porfiriato",
+      "categoria": "historicos",
+      "material": "Papel Pautado de Lino",
+      "edicion_limitada": true
     },
-    {
-        "nombre": "Partitura Autógrafa de Estudio en Sol Menor (1912)",
-        "catalogo_tipo": "coleccionable",
-        "catalogo_nombre": "Coleccionables",
-        "descripcion": "Lote limitado en Sucursal Central Bellas Artes: 2 cuadernos musicales de 12 folios con anotaciones de dinámica a lápiz. Conservado en carpeta museográfica.",
+    "variantes": [
+      {
+        "sku": "MEM-1912-PAR",
+        "descripcion": "VERY FINE (VF) · ADQUISICIÓN SELECTA",
         "precio": 21500,
-        "activo": true,
-        "imagen": null,
-        "metadata": {
-            "tipo": "coleccionable",
-            "marca": "Fondo Conservatorio Nacional",
-            "serie": "Manuscritos Musicales del Porfiriato",
-            "categoria": "historicos",
-            "material": "Papel Pautado de Lino",
-            "edicion_limitada": true
-        },
-        "variantes": [
-            {
-                "sku": "MEM-1912-PAR",
-                "descripcion": "VERY FINE (VF) · ADQUISICIÓN SELECTA",
-                "precio": 21500,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 2,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 2,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Programa Inaugural Palacio de Bellas Artes (1934)",
+    "catalogo_tipo": "coleccionable",
+    "catalogo_nombre": "Coleccionables",
+    "descripcion": "Stock Masivo en Sucursal Central Bellas Artes: Folleto conmemorativo oficial de la inauguración del Palacio de Bellas Artes en septiembre de 1934.",
+    "precio": 7800,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "coleccionable",
+      "marca": "Imprenta Mundial / INBA",
+      "serie": "Efemérides Culturales de México",
+      "categoria": "historicos",
+      "material": "Papel Couché & Huecograbado",
+      "edicion_limitada": false
     },
-    {
-        "nombre": "Programa Inaugural Palacio de Bellas Artes (1934)",
-        "catalogo_tipo": "coleccionable",
-        "catalogo_nombre": "Coleccionables",
-        "descripcion": "Stock Masivo en Sucursal Central Bellas Artes: Folleto conmemorativo oficial de la inauguración del Palacio de Bellas Artes en septiembre de 1934.",
+    "variantes": [
+      {
+        "sku": "MEM-1934-PBA",
+        "descripcion": "VERY FINE (VF) · TIRAJE MÚLTIPLE",
         "precio": 7800,
-        "activo": true,
-        "imagen": null,
-        "metadata": {
-            "tipo": "coleccionable",
-            "marca": "Imprenta Mundial / INBA",
-            "serie": "Efemérides Culturales de México",
-            "categoria": "historicos",
-            "material": "Papel Couché & Huecograbado",
-            "edicion_limitada": false
-        },
-        "variantes": [
-            {
-                "sku": "MEM-1934-PBA",
-                "descripcion": "VERY FINE (VF) · TIRAJE MÚLTIPLE",
-                "precio": 7800,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 12,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 12,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Litografía Taller de Gráfica Popular Coyoacán (1954)",
+    "catalogo_tipo": "coleccionable",
+    "catalogo_nombre": "Coleccionables",
+    "descripcion": "Stock Masivo en Sucursal Coyoacán: Grabado en linóleo de tiraje amplio impreso sobre papel de algodón en Coyoacán. Disponible en múltiples unidades.",
+    "precio": 5400,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "coleccionable",
+      "marca": "Taller de Gráfica Popular",
+      "serie": "Gráfica Mexicana de Medio Siglo",
+      "categoria": "historicos",
+      "material": "Linóleo sobre Papel Fabriano",
+      "edicion_limitada": false
     },
-    {
-        "nombre": "Litografía Taller de Gráfica Popular Coyoacán (1954)",
-        "catalogo_tipo": "coleccionable",
-        "catalogo_nombre": "Coleccionables",
-        "descripcion": "Stock Masivo en Sucursal Coyoacán: Grabado en linóleo de tiraje amplio impreso sobre papel de algodón en Coyoacán. Disponible en múltiples unidades.",
+    "variantes": [
+      {
+        "sku": "MEM-1954-COY",
+        "descripcion": "NEAR MINT (NM) · TIRAJE MÚLTIPLE",
         "precio": 5400,
-        "activo": true,
-        "imagen": null,
-        "metadata": {
-            "tipo": "coleccionable",
-            "marca": "Taller de Gráfica Popular",
-            "serie": "Gráfica Mexicana de Medio Siglo",
-            "categoria": "historicos",
-            "material": "Linóleo sobre Papel Fabriano",
-            "edicion_limitada": false
-        },
-        "variantes": [
-            {
-                "sku": "MEM-1954-COY",
-                "descripcion": "NEAR MINT (NM) · TIRAJE MÚLTIPLE",
-                "precio": 5400,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 2,
-                        "sucursal_nombre": "Sucursal Coyoacán",
-                        "cantidad": 9,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 2,
+            "sucursal_nombre": "Sucursal Coyoacán",
+            "cantidad": 9,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Kit de Conservación Museográfica & Estuche Antiácido",
+    "catalogo_tipo": "coleccionable",
+    "catalogo_nombre": "Coleccionables",
+    "descripcion": "Stock Masivo en Almacén General: Set profesional de fundas de polipropileno grado archivo, guantes de nitrilo y caja libre de ácido para libros y vinilos.",
+    "precio": 3200,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "coleccionable",
+      "marca": "Archivum Conservation Lab",
+      "serie": "Insumos de Preservación Documental",
+      "categoria": "juguetes",
+      "material": "Cartón Libre de Ácido pH Neutro",
+      "edicion_limitada": false
     },
-    {
-        "nombre": "Kit de Conservación Museográfica & Estuche Antiácido",
-        "catalogo_tipo": "coleccionable",
-        "catalogo_nombre": "Coleccionables",
-        "descripcion": "Stock Masivo en Almacén General: Set profesional de fundas de polipropileno grado archivo, guantes de nitrilo y caja libre de ácido para libros y vinilos.",
+    "variantes": [
+      {
+        "sku": "MEM-1968-IMP",
+        "descripcion": "MINT (M) · ACCESORIO DE BÓVEDA",
         "precio": 3200,
-        "activo": true,
-        "imagen": null,
-        "metadata": {
-            "tipo": "coleccionable",
-            "marca": "Archivum Conservation Lab",
-            "serie": "Insumos de Preservación Documental",
-            "categoria": "juguetes",
-            "material": "Cartón Libre de Ácido pH Neutro",
-            "edicion_limitada": false
-        },
-        "variantes": [
-            {
-                "sku": "MEM-1968-IMP",
-                "descripcion": "MINT (M) · ACCESORIO DE BÓVEDA",
-                "precio": 3200,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 3,
-                        "sucursal_nombre": "Almacén General",
-                        "cantidad": 18,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 3,
+            "sucursal_nombre": "Almacén General",
+            "cantidad": 18,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Estatua Evangelion Test Type-01 (Edición Limitada Kaiyodo 1997)",
+    "catalogo_tipo": "coleccionable",
+    "catalogo_nombre": "Coleccionables",
+    "descripcion": "Figuras Coleccionables (Cultura Pop & Anime): Escultura en resina pintada a mano supervisada por Gainax Japón. Incluye pedestal con número de serie de tiraje.",
+    "precio": 18900,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "coleccionable",
+      "marca": "Kaiyodo / Gainax Japón",
+      "serie": "Neon Genesis Evangelion Masterpiece",
+      "categoria": "figuras",
+      "material": "Resina Polystone Pintada a Mano",
+      "edicion_limitada": true
     },
-    {
-        "nombre": "Estatua Evangelion Test Type-01 (Edición Limitada Kaiyodo 1997)",
-        "catalogo_tipo": "coleccionable",
-        "catalogo_nombre": "Coleccionables",
-        "descripcion": "Figuras Coleccionables (Cultura Pop & Anime): Escultura en resina pintada a mano supervisada por Gainax Japón. Incluye pedestal con número de serie de tiraje.",
+    "variantes": [
+      {
+        "sku": "COL-1997-EVA1",
+        "descripcion": "MINT (M) · FIGURA ANIME · EDICIÓN LIMITADA",
         "precio": 18900,
-        "activo": true,
-        "imagen": null,
-        "metadata": {
-            "tipo": "coleccionable",
-            "marca": "Kaiyodo / Gainax Japón",
-            "serie": "Neon Genesis Evangelion Masterpiece",
-            "categoria": "figuras",
-            "material": "Resina Polystone Pintada a Mano",
-            "edicion_limitada": true
-        },
-        "variantes": [
-            {
-                "sku": "COL-1997-EVA1",
-                "descripcion": "MINT (M) · FIGURA ANIME · EDICIÓN LIMITADA",
-                "precio": 18900,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 2,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 2,
-                        "sucursal_nombre": "Sucursal Coyoacán",
-                        "cantidad": 1,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 2,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 2,
+            "sucursal_nombre": "Sucursal Coyoacán",
+            "cantidad": 1,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Double Eagle de 1933 (EE. UU.)",
+    "catalogo_tipo": "coleccionable",
+    "catalogo_nombre": "Coleccionables",
+    "descripcion": "Moneda de oro de $20 que el gobierno ordenó fundir durante la Gran Depresión. Pieza de valor histórico incalculable.",
+    "precio": 18872250,
+    "activo": true,
+    "imagen": "images/productos/Double-Eagle-de-1933.jpg",
+    "metadata": {
+      "tipo": "coleccionable",
+      "marca": "United States Mint",
+      "serie": "Gold Bullion Series",
+      "categoria": "numismatica",
+      "material": "Oro Puro 900",
+      "edicion_limitada": true
     },
-    {
-        "nombre": "Double Eagle de 1933 (EE. UU.)",
-        "catalogo_tipo": "coleccionable",
-        "catalogo_nombre": "Coleccionables",
-        "descripcion": "Moneda de oro de $20 que el gobierno ordenó fundir durante la Gran Depresión. Pieza de valor histórico incalculable.",
+    "variantes": [
+      {
+        "sku": "COL-1933-DOU",
+        "descripcion": "MINT (M) · MONEDA HISTÓRICA RARA",
         "precio": 18872250,
-        "activo": true,
-        "imagen": "images/productos/Double-Eagle-de-1933.jpg",
-        "metadata": {
-            "tipo": "coleccionable",
-            "marca": "United States Mint",
-            "serie": "Gold Bullion Series",
-            "categoria": "numismatica",
-            "material": "Oro Puro 900",
-            "edicion_limitada": true
-        },
-        "variantes": [
-            {
-                "sku": "COL-1933-DOU",
-                "descripcion": "MINT (M) · MONEDA HISTÓRICA RARA",
-                "precio": 18872250,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 3,
-                        "sucursal_nombre": "Almacén General",
-                        "cantidad": 1,
-                        "stock_minimo": 1,
-                        "pieza_unica": {
-                            "numero_serie": "ARC-COL-1933-001",
-                            "certificado": "COA-COL-2026-001",
-                            "notas": "Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · MONEDA HISTÓRICA RARA).",
-                            "estado": "disponible"
-                        }
-                    }
-                ]
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 3,
+            "sucursal_nombre": "Almacén General",
+            "cantidad": 1,
+            "stock_minimo": 1,
+            "pieza_unica": {
+              "numero_serie": "ARC-COL-1933-001",
+              "certificado": "COA-COL-2026-001",
+              "notas": "Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · MONEDA HISTÓRICA RARA).",
+              "estado": "disponible"
             }
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Dólar Flowing Hair de 1794 (EE. UU.)",
+    "catalogo_tipo": "coleccionable",
+    "catalogo_nombre": "Coleccionables",
+    "descripcion": "El primer dólar de plata acuñado por el gobierno federal estadounidense.",
+    "precio": 175000,
+    "activo": true,
+    "imagen": "images/productos/Dolar-Flowing-Hair-de-1794.jpg",
+    "metadata": {
+      "tipo": "coleccionable",
+      "marca": "United States Mint",
+      "serie": "Early US Silver Dollars",
+      "categoria": "numismatica",
+      "material": "Plata Ley 892",
+      "edicion_limitada": true
     },
-    {
-        "nombre": "Dólar Flowing Hair de 1794 (EE. UU.)",
-        "catalogo_tipo": "coleccionable",
-        "catalogo_nombre": "Coleccionables",
-        "descripcion": "El primer dólar de plata acuñado por el gobierno federal estadounidense.",
+    "variantes": [
+      {
+        "sku": "COL-1794-FLO",
+        "descripcion": "VERY FINE (VF) · PRIMER DÓLAR FEDERAL",
         "precio": 175000,
-        "activo": true,
-        "imagen": "images/productos/Dolar-Flowing-Hair-de-1794.jpg",
-        "metadata": {
-            "tipo": "coleccionable",
-            "marca": "United States Mint",
-            "serie": "Early US Silver Dollars",
-            "categoria": "numismatica",
-            "material": "Plata Ley 892",
-            "edicion_limitada": true
-        },
-        "variantes": [
-            {
-                "sku": "COL-1794-FLO",
-                "descripcion": "VERY FINE (VF) · PRIMER DÓLAR FEDERAL",
-                "precio": 175000,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 1,
-                        "stock_minimo": 1,
-                        "pieza_unica": {
-                            "numero_serie": "ARC-COL-1794-002",
-                            "certificado": "COA-COL-2026-002",
-                            "notas": "Ejemplar único 1/1 catalogado en bóveda climatizada (VERY FINE (VF) · PRIMER DÓLAR FEDERAL).",
-                            "estado": "disponible"
-                        }
-                    }
-                ]
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 1,
+            "stock_minimo": 1,
+            "pieza_unica": {
+              "numero_serie": "ARC-COL-1794-002",
+              "certificado": "COA-COL-2026-002",
+              "notas": "Ejemplar único 1/1 catalogado en bóveda climatizada (VERY FINE (VF) · PRIMER DÓLAR FEDERAL).",
+              "estado": "disponible"
             }
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Florín de Eduardo III de 1344 (Inglaterra)",
+    "catalogo_tipo": "coleccionable",
+    "catalogo_nombre": "Coleccionables",
+    "descripcion": "Legendaria moneda de oro medieval de la cual solo se conocen tres ejemplares en todo el mundo.",
+    "precio": 7000000,
+    "activo": true,
+    "imagen": "images/productos/Florin-de-Eduardo-III-de-1344.jpg",
+    "metadata": {
+      "tipo": "coleccionable",
+      "marca": "Royal Mint UK",
+      "serie": "Medieval Gold Series",
+      "categoria": "numismatica",
+      "material": "Oro Medieval",
+      "edicion_limitada": true
     },
-    {
-        "nombre": "Florín de Eduardo III de 1344 (Inglaterra)",
-        "catalogo_tipo": "coleccionable",
-        "catalogo_nombre": "Coleccionables",
-        "descripcion": "Legendaria moneda de oro medieval de la cual solo se conocen tres ejemplares en todo el mundo.",
+    "variantes": [
+      {
+        "sku": "COL-1344-EDU",
+        "descripcion": "NEAR MINT (NM) · PIEZA ÚNICA MEDIEVAL",
         "precio": 7000000,
-        "activo": true,
-        "imagen": "images/productos/Florin-de-Eduardo-III-de-1344.jpg",
-        "metadata": {
-            "tipo": "coleccionable",
-            "marca": "Royal Mint UK",
-            "serie": "Medieval Gold Series",
-            "categoria": "numismatica",
-            "material": "Oro Medieval",
-            "edicion_limitada": true
-        },
-        "variantes": [
-            {
-                "sku": "COL-1344-EDU",
-                "descripcion": "NEAR MINT (NM) · PIEZA ÚNICA MEDIEVAL",
-                "precio": 7000000,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 2,
-                        "sucursal_nombre": "Sucursal Coyoacán",
-                        "cantidad": 1,
-                        "stock_minimo": 1,
-                        "pieza_unica": {
-                            "numero_serie": "ARC-COL-1344-003",
-                            "certificado": "COA-COL-2026-003",
-                            "notas": "Ejemplar único 1/1 catalogado en bóveda climatizada (NEAR MINT (NM) · PIEZA ÚNICA MEDIEVAL).",
-                            "estado": "disponible"
-                        }
-                    }
-                ]
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 2,
+            "sucursal_nombre": "Sucursal Coyoacán",
+            "cantidad": 1,
+            "stock_minimo": 1,
+            "pieza_unica": {
+              "numero_serie": "ARC-COL-1344-003",
+              "certificado": "COA-COL-2026-003",
+              "notas": "Ejemplar único 1/1 catalogado en bóveda climatizada (NEAR MINT (NM) · PIEZA ÚNICA MEDIEVAL).",
+              "estado": "disponible"
             }
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Dinar de Oro Omeya del año 723 d.C.",
+    "catalogo_tipo": "coleccionable",
+    "catalogo_nombre": "Coleccionables",
+    "descripcion": "Acuñada en la región de la actual Arabia Saudita con oro proveniente de una mina del propio Califa.",
+    "precio": 95600000,
+    "activo": true,
+    "imagen": "images/productos/Dinar-de-Oro-Omeya-del-año-723.jpg",
+    "metadata": {
+      "tipo": "coleccionable",
+      "marca": "Ceca Omeya",
+      "serie": "Ancient Islamic Coinage",
+      "categoria": "numismatica",
+      "material": "Oro Nativo",
+      "edicion_limitada": true
     },
-    {
-        "nombre": "Dinar de Oro Omeya del año 723 d.C.",
-        "catalogo_tipo": "coleccionable",
-        "catalogo_nombre": "Coleccionables",
-        "descripcion": "Acuñada en la región de la actual Arabia Saudita con oro proveniente de una mina del propio Califa.",
+    "variantes": [
+      {
+        "sku": "COL-0723-DIN",
+        "descripcion": "MINT (M) · CALIFATO OMEYA",
         "precio": 95600000,
-        "activo": true,
-        "imagen": "images/productos/Dinar-de-Oro-Omeya-del-año-723.jpg",
-        "metadata": {
-            "tipo": "coleccionable",
-            "marca": "Ceca Omeya",
-            "serie": "Ancient Islamic Coinage",
-            "categoria": "numismatica",
-            "material": "Oro Nativo",
-            "edicion_limitada": true
-        },
-        "variantes": [
-            {
-                "sku": "COL-0723-DIN",
-                "descripcion": "MINT (M) · CALIFATO OMEYA",
-                "precio": 95600000,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 3,
-                        "sucursal_nombre": "Almacén General",
-                        "cantidad": 1,
-                        "stock_minimo": 1,
-                        "pieza_unica": {
-                            "numero_serie": "ARC-COL-0723-004",
-                            "certificado": "COA-COL-2026-004",
-                            "notas": "Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · CALIFATO OMEYA).",
-                            "estado": "disponible"
-                        }
-                    }
-                ]
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 3,
+            "sucursal_nombre": "Almacén General",
+            "cantidad": 1,
+            "stock_minimo": 1,
+            "pieza_unica": {
+              "numero_serie": "ARC-COL-0723-004",
+              "certificado": "COA-COL-2026-004",
+              "notas": "Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · CALIFATO OMEYA).",
+              "estado": "disponible"
             }
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Monedas de 8 Reales (Época Colonial / Spanish Dollars)",
+    "catalogo_tipo": "coleccionable",
+    "catalogo_nombre": "Coleccionables",
+    "descripcion": "Conocidas mundialmente como columnarios o piezas de 8, fueron la primera moneda de uso internacional.",
+    "precio": 5500,
+    "activo": true,
+    "imagen": "images/productos/Monedas-Reales.jpg",
+    "metadata": {
+      "tipo": "coleccionable",
+      "marca": "Ceca de México (Mo)",
+      "serie": "Spanish Colonial Currency",
+      "categoria": "numismatica",
+      "material": "Plata Colonial",
+      "edicion_limitada": false
     },
-    {
-        "nombre": "Monedas de 8 Reales (Época Colonial / Spanish Dollars)",
-        "catalogo_tipo": "coleccionable",
-        "catalogo_nombre": "Coleccionables",
-        "descripcion": "Conocidas mundialmente como columnarios o piezas de 8, fueron la primera moneda de uso internacional.",
+    "variantes": [
+      {
+        "sku": "COL-1800-REA",
+        "descripcion": "VERY FINE (VF) · COLONIAL",
         "precio": 5500,
-        "activo": true,
-        "imagen": "images/productos/Monedas-Reales.jpg",
-        "metadata": {
-            "tipo": "coleccionable",
-            "marca": "Ceca de México (Mo)",
-            "serie": "Spanish Colonial Currency",
-            "categoria": "numismatica",
-            "material": "Plata Colonial",
-            "edicion_limitada": false
-        },
-        "variantes": [
-            {
-                "sku": "COL-1800-REA",
-                "descripcion": "VERY FINE (VF) · COLONIAL",
-                "precio": 5500,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 4,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 2,
-                        "sucursal_nombre": "Sucursal Coyoacán",
-                        "cantidad": 3,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 3,
-                        "sucursal_nombre": "Almacén General",
-                        "cantidad": 5,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 4,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 2,
+            "sucursal_nombre": "Sucursal Coyoacán",
+            "cantidad": 3,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 3,
+            "sucursal_nombre": "Almacén General",
+            "cantidad": 5,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Centenario de Oro (50 Pesos)",
+    "catalogo_tipo": "coleccionable",
+    "catalogo_nombre": "Coleccionables",
+    "descripcion": "Contiene 37.5 gramos de oro puro y presenta el clásico diseño del Ángel de la Independencia.",
+    "precio": 92250,
+    "activo": true,
+    "imagen": "images/productos/Centenario-de-Oro.jpg",
+    "metadata": {
+      "tipo": "coleccionable",
+      "marca": "Casa de Moneda de México",
+      "serie": "Monedas Bicentenario de Oro",
+      "categoria": "numismatica",
+      "material": "Oro Puro 0.900",
+      "edicion_limitada": false
     },
-    {
-        "nombre": "Centenario de Oro (50 Pesos)",
-        "catalogo_tipo": "coleccionable",
-        "catalogo_nombre": "Coleccionables",
-        "descripcion": "Contiene 37.5 gramos de oro puro y presenta el clásico diseño del Ángel de la Independencia.",
+    "variantes": [
+      {
+        "sku": "COL-1947-CEN",
+        "descripcion": "MINT (M) · BULLION MEXICANO",
         "precio": 92250,
-        "activo": true,
-        "imagen": "images/productos/Centenario-de-Oro.jpg",
-        "metadata": {
-            "tipo": "coleccionable",
-            "marca": "Casa de Moneda de México",
-            "serie": "Monedas Bicentenario de Oro",
-            "categoria": "numismatica",
-            "material": "Oro Puro 0.900",
-            "edicion_limitada": false
-        },
-        "variantes": [
-            {
-                "sku": "COL-1947-CEN",
-                "descripcion": "MINT (M) · BULLION MEXICANO",
-                "precio": 92250,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 2,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 2,
-                        "sucursal_nombre": "Sucursal Coyoacán",
-                        "cantidad": 1,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 3,
-                        "sucursal_nombre": "Almacén General",
-                        "cantidad": 2,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 2,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 2,
+            "sucursal_nombre": "Sucursal Coyoacán",
+            "cantidad": 1,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 3,
+            "sucursal_nombre": "Almacén General",
+            "cantidad": 2,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Moneda de Plata Libertad (Onza Troy)",
+    "catalogo_tipo": "coleccionable",
+    "catalogo_nombre": "Coleccionables",
+    "descripcion": "Una de las monedas de inversión (bullion) de plata más hermosas y cotizadas del mundo.",
+    "precio": 1250,
+    "activo": true,
+    "imagen": "images/productos/Moneda-Libertad.jpg",
+    "metadata": {
+      "tipo": "coleccionable",
+      "marca": "Casa de Moneda de México",
+      "serie": "Serie Libertad",
+      "categoria": "numismatica",
+      "material": "Plata Pura Ley .999",
+      "edicion_limitada": false
     },
-    {
-        "nombre": "Moneda de Plata Libertad (Onza Troy)",
-        "catalogo_tipo": "coleccionable",
-        "catalogo_nombre": "Coleccionables",
-        "descripcion": "Una de las monedas de inversión (bullion) de plata más hermosas y cotizadas del mundo.",
+    "variantes": [
+      {
+        "sku": "COL-2020-LIB",
+        "descripcion": "MINT (M) · ONZA PLATA PURA",
         "precio": 1250,
-        "activo": true,
-        "imagen": "images/productos/Moneda-Libertad.jpg",
-        "metadata": {
-            "tipo": "coleccionable",
-            "marca": "Casa de Moneda de México",
-            "serie": "Serie Libertad",
-            "categoria": "numismatica",
-            "material": "Plata Pura Ley .999",
-            "edicion_limitada": false
-        },
-        "variantes": [
-            {
-                "sku": "COL-2020-LIB",
-                "descripcion": "MINT (M) · ONZA PLATA PURA",
-                "precio": 1250,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 15,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 2,
-                        "sucursal_nombre": "Sucursal Coyoacán",
-                        "cantidad": 10,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 3,
-                        "sucursal_nombre": "Almacén General",
-                        "cantidad": 20,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 15,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 2,
+            "sucursal_nombre": "Sucursal Coyoacán",
+            "cantidad": 10,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 3,
+            "sucursal_nombre": "Almacén General",
+            "cantidad": 20,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Monedas Conmemorativas de 20 Pesos (Familia C y C1)",
+    "catalogo_tipo": "coleccionable",
+    "catalogo_nombre": "Coleccionables",
+    "descripcion": "Piezas recientes conmemorativas (como la Fundación de Veracruz o el Bicentenario de la Independencia).",
+    "precio": 100,
+    "activo": true,
+    "imagen": "images/productos/Monedas-Conmemorativas.jpg",
+    "metadata": {
+      "tipo": "coleccionable",
+      "marca": "Banco de México",
+      "serie": "Familia C1 Conmemorativa",
+      "categoria": "numismatica",
+      "material": "Aleación Bimetálica",
+      "edicion_limitada": false
     },
-    {
-        "nombre": "Monedas Conmemorativas de 20 Pesos (Familia C y C1)",
-        "catalogo_tipo": "coleccionable",
-        "catalogo_nombre": "Coleccionables",
-        "descripcion": "Piezas recientes conmemorativas (como la Fundación de Veracruz o el Bicentenario de la Independencia).",
+    "variantes": [
+      {
+        "sku": "COL-2023-20P",
+        "descripcion": "VERY FINE (VF) · COMMEMORATIVE",
         "precio": 100,
-        "activo": true,
-        "imagen": "images/productos/Monedas-Conmemorativas.jpg",
-        "metadata": {
-            "tipo": "coleccionable",
-            "marca": "Banco de México",
-            "serie": "Familia C1 Conmemorativa",
-            "categoria": "numismatica",
-            "material": "Aleación Bimetálica",
-            "edicion_limitada": false
-        },
-        "variantes": [
-            {
-                "sku": "COL-2023-20P",
-                "descripcion": "VERY FINE (VF) · COMMEMORATIVE",
-                "precio": 100,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 25,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 2,
-                        "sucursal_nombre": "Sucursal Coyoacán",
-                        "cantidad": 15,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 3,
-                        "sucursal_nombre": "Almacén General",
-                        "cantidad": 30,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 25,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 2,
+            "sucursal_nombre": "Sucursal Coyoacán",
+            "cantidad": 15,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 3,
+            "sucursal_nombre": "Almacén General",
+            "cantidad": 30,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Familia AA y A (Billetes Desmonetizados)",
+    "catalogo_tipo": "coleccionable",
+    "catalogo_nombre": "Coleccionables",
+    "descripcion": "Billetes antiguos impresos por la American Bank Note Company y de fabricación nacional.",
+    "precio": 325,
+    "activo": true,
+    "imagen": "images/productos/Familia-AAA.jpg",
+    "metadata": {
+      "tipo": "coleccionable",
+      "marca": "Banco de México / ABNC",
+      "serie": "Billetes Retirados",
+      "categoria": "numismatica",
+      "material": "Papel Seguridad Antiguo",
+      "edicion_limitada": false
     },
-    {
-        "nombre": "Familia AA y A (Billetes Desmonetizados)",
-        "catalogo_tipo": "coleccionable",
-        "catalogo_nombre": "Coleccionables",
-        "descripcion": "Billetes antiguos impresos por la American Bank Note Company y de fabricación nacional.",
+    "variantes": [
+      {
+        "sku": "COL-1975-BIL",
+        "descripcion": "FINE (F) · NOTAFILIA HISTÓRICA",
         "precio": 325,
-        "activo": true,
-        "imagen": "images/productos/Familia-AAA.jpg",
-        "metadata": {
-            "tipo": "coleccionable",
-            "marca": "Banco de México / ABNC",
-            "serie": "Billetes Retirados",
-            "categoria": "numismatica",
-            "material": "Papel Seguridad Antiguo",
-            "edicion_limitada": false
-        },
-        "variantes": [
-            {
-                "sku": "COL-1975-BIL",
-                "descripcion": "FINE (F) · NOTAFILIA HISTÓRICA",
-                "precio": 325,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 5,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 2,
-                        "sucursal_nombre": "Sucursal Coyoacán",
-                        "cantidad": 4,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 3,
-                        "sucursal_nombre": "Almacén General",
-                        "cantidad": 8,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 5,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 2,
+            "sucursal_nombre": "Sucursal Coyoacán",
+            "cantidad": 4,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 3,
+            "sucursal_nombre": "Almacén General",
+            "cantidad": 8,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Pop Mart Labubu (Designer Toy Coleccionable)",
+    "catalogo_tipo": "coleccionable",
+    "catalogo_nombre": "Coleccionables",
+    "descripcion": "Figura de diseñador caracterizada por orejas puntiagudas, cuerpo peludo, sonrisa traviesa con 9 dientes y rostro de vinilo.",
+    "precio": 1100,
+    "activo": true,
+    "imagen": "images/productos/Pop-Mart.jpg",
+    "metadata": {
+      "tipo": "coleccionable",
+      "marca": "Pop Mart",
+      "serie": "The Monsters Series",
+      "categoria": "juguetes",
+      "material": "Vinilo & Peluche Sintético",
+      "edicion_limitada": true
     },
-    {
-        "nombre": "Pop Mart Labubu (Designer Toy Coleccionable)",
-        "catalogo_tipo": "coleccionable",
-        "catalogo_nombre": "Coleccionables",
-        "descripcion": "Figura de diseñador caracterizada por orejas puntiagudas, cuerpo peludo, sonrisa traviesa con 9 dientes y rostro de vinilo.",
+    "variantes": [
+      {
+        "sku": "COL-2023-POP",
+        "descripcion": "MINT (M) · DESIGNER ART TOY",
         "precio": 1100,
-        "activo": true,
-        "imagen": "images/productos/Pop-Mart.jpg",
-        "metadata": {
-            "tipo": "coleccionable",
-            "marca": "Pop Mart",
-            "serie": "The Monsters Series",
-            "categoria": "juguetes",
-            "material": "Vinilo & Peluche Sintético",
-            "edicion_limitada": true
-        },
-        "variantes": [
-            {
-                "sku": "COL-2023-POP",
-                "descripcion": "MINT (M) · DESIGNER ART TOY",
-                "precio": 1100,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 3,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 2,
-                        "sucursal_nombre": "Sucursal Coyoacán",
-                        "cantidad": 4,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 3,
-                        "sucursal_nombre": "Almacén General",
-                        "cantidad": 6,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 3,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 2,
+            "sucursal_nombre": "Sucursal Coyoacán",
+            "cantidad": 4,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 3,
+            "sucursal_nombre": "Almacén General",
+            "cantidad": 6,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Funko Pop! Edición Especial Coleccionable",
+    "catalogo_tipo": "coleccionable",
+    "catalogo_nombre": "Coleccionables",
+    "descripcion": "Figura de vinilo con cabeza grande y diseño estilizado de cultura pop.",
+    "precio": 1075,
+    "activo": true,
+    "imagen": "images/productos/Funko-Pop.jpg",
+    "metadata": {
+      "tipo": "coleccionable",
+      "marca": "Funko",
+      "serie": "Pop! Animation & Movies",
+      "categoria": "juguetes",
+      "material": "Plástico Vinilo",
+      "edicion_limitada": false
     },
-    {
-        "nombre": "Funko Pop! Edición Especial Coleccionable",
-        "catalogo_tipo": "coleccionable",
-        "catalogo_nombre": "Coleccionables",
-        "descripcion": "Figura de vinilo con cabeza grande y diseño estilizado de cultura pop.",
+    "variantes": [
+      {
+        "sku": "COL-2022-FUN",
+        "descripcion": "MINT (M) · VINYL FIGURE",
         "precio": 1075,
-        "activo": true,
-        "imagen": "images/productos/Funko-Pop.jpg",
-        "metadata": {
-            "tipo": "coleccionable",
-            "marca": "Funko",
-            "serie": "Pop! Animation & Movies",
-            "categoria": "juguetes",
-            "material": "Plástico Vinilo",
-            "edicion_limitada": false
-        },
-        "variantes": [
-            {
-                "sku": "COL-2022-FUN",
-                "descripcion": "MINT (M) · VINYL FIGURE",
-                "precio": 1075,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 8,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 2,
-                        "sucursal_nombre": "Sucursal Coyoacán",
-                        "cantidad": 6,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 3,
-                        "sucursal_nombre": "Almacén General",
-                        "cantidad": 10,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 8,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 2,
+            "sucursal_nombre": "Sucursal Coyoacán",
+            "cantidad": 6,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 3,
+            "sucursal_nombre": "Almacén General",
+            "cantidad": 10,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Lego Sets Temáticos y de Colección (Edición Especial)",
+    "catalogo_tipo": "coleccionable",
+    "catalogo_nombre": "Coleccionables",
+    "descripcion": "Set de construcción de edición de coleccionista con miles de piezas y minifiguras exclusivas.",
+    "precio": 19999,
+    "activo": true,
+    "imagen": "images/productos/lego.jpg",
+    "metadata": {
+      "tipo": "coleccionable",
+      "marca": "LEGO Systems A/S",
+      "serie": "Collector Series / Harry Potter",
+      "categoria": "juguetes",
+      "material": "Plástico ABS de Alta Resistencia",
+      "edicion_limitada": true
     },
-    {
-        "nombre": "Lego Sets Temáticos y de Colección (Edición Especial)",
-        "catalogo_tipo": "coleccionable",
-        "catalogo_nombre": "Coleccionables",
-        "descripcion": "Set de construcción de edición de coleccionista con miles de piezas y minifiguras exclusivas.",
+    "variantes": [
+      {
+        "sku": "COL-2021-LEG",
+        "descripcion": "MINT (M) · MASTER BUILDER SET",
         "precio": 19999,
-        "activo": true,
-        "imagen": "images/productos/lego.jpg",
-        "metadata": {
-            "tipo": "coleccionable",
-            "marca": "LEGO Systems A/S",
-            "serie": "Collector Series / Harry Potter",
-            "categoria": "juguetes",
-            "material": "Plástico ABS de Alta Resistencia",
-            "edicion_limitada": true
-        },
-        "variantes": [
-            {
-                "sku": "COL-2021-LEG",
-                "descripcion": "MINT (M) · MASTER BUILDER SET",
-                "precio": 19999,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 1,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 3,
-                        "sucursal_nombre": "Almacén General",
-                        "cantidad": 2,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 1,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 3,
+            "sucursal_nombre": "Almacén General",
+            "cantidad": 2,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Estatua Anubis Egipcia con Recipiente Base",
+    "catalogo_tipo": "coleccionable",
+    "catalogo_nombre": "Coleccionables",
+    "descripcion": "Estatua decorativa de acabado negro con detalles dorados e iconografía del antiguo Egipto.",
+    "precio": 773.08,
+    "activo": true,
+    "imagen": "images/productos/Estatua-Anubis.jpg",
+    "metadata": {
+      "tipo": "coleccionable",
+      "marca": "Artesanías Temáticas",
+      "serie": "Egyptian Mythology Collection",
+      "categoria": "figuras",
+      "material": "Resina Poliéster Pintada a Mano",
+      "edicion_limitada": false
     },
-    {
-        "nombre": "Estatua Anubis Egipcia con Recipiente Base",
-        "catalogo_tipo": "coleccionable",
-        "catalogo_nombre": "Coleccionables",
-        "descripcion": "Estatua decorativa de acabado negro con detalles dorados e iconografía del antiguo Egipto.",
+    "variantes": [
+      {
+        "sku": "COL-2023-ANU",
+        "descripcion": "MINT (M) · FIGURA ORNAMENTAL",
         "precio": 773.08,
-        "activo": true,
-        "imagen": "images/productos/Estatua-Anubis.jpg",
-        "metadata": {
-            "tipo": "coleccionable",
-            "marca": "Artesanías Temáticas",
-            "serie": "Egyptian Mythology Collection",
-            "categoria": "figuras",
-            "material": "Resina Poliéster Pintada a Mano",
-            "edicion_limitada": false
-        },
-        "variantes": [
-            {
-                "sku": "COL-2023-ANU",
-                "descripcion": "MINT (M) · FIGURA ORNAMENTAL",
-                "precio": 773.08,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 3,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 2,
-                        "sucursal_nombre": "Sucursal Coyoacán",
-                        "cantidad": 2,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 3,
-                        "sucursal_nombre": "Almacén General",
-                        "cantidad": 4,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 3,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 2,
+            "sucursal_nombre": "Sucursal Coyoacán",
+            "cantidad": 2,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 3,
+            "sucursal_nombre": "Almacén General",
+            "cantidad": 4,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Figura de Cerámica \"Storyteller\" de Cochiti",
+    "catalogo_tipo": "coleccionable",
+    "catalogo_nombre": "Coleccionables",
+    "descripcion": "Pieza artesanal tradicional de Snowflake Flower, ca. 1992, narrativa tradicional en arcilla.",
+    "precio": 4914.54,
+    "activo": true,
+    "imagen": "images/productos/Figura-ceramica.jpg",
+    "metadata": {
+      "tipo": "coleccionable",
+      "marca": "Snowflake Flower (Cochiti Pueblo)",
+      "serie": "Native American Storyteller Series",
+      "categoria": "figuras",
+      "material": "Arcilla y Pigmentos Naturales",
+      "edicion_limitada": true
     },
-    {
-        "nombre": "Figura de Cerámica \"Storyteller\" de Cochiti",
-        "catalogo_tipo": "coleccionable",
-        "catalogo_nombre": "Coleccionables",
-        "descripcion": "Pieza artesanal tradicional de Snowflake Flower, ca. 1992, narrativa tradicional en arcilla.",
+    "variantes": [
+      {
+        "sku": "COL-1992-COC",
+        "descripcion": "VERY FINE (VF) · ARTE POPULAR INDÍGENA",
         "precio": 4914.54,
-        "activo": true,
-        "imagen": "images/productos/Figura-ceramica.jpg",
-        "metadata": {
-            "tipo": "coleccionable",
-            "marca": "Snowflake Flower (Cochiti Pueblo)",
-            "serie": "Native American Storyteller Series",
-            "categoria": "figuras",
-            "material": "Arcilla y Pigmentos Naturales",
-            "edicion_limitada": true
-        },
-        "variantes": [
-            {
-                "sku": "COL-1992-COC",
-                "descripcion": "VERY FINE (VF) · ARTE POPULAR INDÍGENA",
-                "precio": 4914.54,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 2,
-                        "sucursal_nombre": "Sucursal Coyoacán",
-                        "cantidad": 1,
-                        "stock_minimo": 1,
-                        "pieza_unica": {
-                            "numero_serie": "ARC-FIG-1992-005",
-                            "certificado": "COA-FIG-2026-005",
-                            "notas": "Ejemplar único 1/1 catalogado en bóveda climatizada (VERY FINE (VF) · ARTE POPULAR INDÍGENA).",
-                            "estado": "disponible"
-                        }
-                    }
-                ]
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 2,
+            "sucursal_nombre": "Sucursal Coyoacán",
+            "cantidad": 1,
+            "stock_minimo": 1,
+            "pieza_unica": {
+              "numero_serie": "ARC-FIG-1992-005",
+              "certificado": "COA-FIG-2026-005",
+              "notas": "Ejemplar único 1/1 catalogado en bóveda climatizada (VERY FINE (VF) · ARTE POPULAR INDÍGENA).",
+              "estado": "disponible"
             }
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Exquisito Joyero de Estilo Egipcio Decorado con Anubis",
+    "catalogo_tipo": "coleccionable",
+    "catalogo_nombre": "Coleccionables",
+    "descripcion": "Joyero ornamental decorado con motivos y deidades de la mitología egipcia antigua.",
+    "precio": 600.49,
+    "activo": true,
+    "imagen": "images/productos/Exquisito-Joyero.jpg",
+    "metadata": {
+      "tipo": "coleccionable",
+      "marca": "DecoArte Colección",
+      "serie": "Egyptian Artifacts",
+      "categoria": "figuras",
+      "material": "Resina Compuesta",
+      "edicion_limitada": false
     },
-    {
-        "nombre": "Exquisito Joyero de Estilo Egipcio Decorado con Anubis",
-        "catalogo_tipo": "coleccionable",
-        "catalogo_nombre": "Coleccionables",
-        "descripcion": "Joyero ornamental decorado con motivos y deidades de la mitología egipcia antigua.",
+    "variantes": [
+      {
+        "sku": "COL-2023-JOY",
+        "descripcion": "MINT (M) · ARTESANÍA DECORATIVA",
         "precio": 600.49,
-        "activo": true,
-        "imagen": "images/productos/Exquisito-Joyero.jpg",
-        "metadata": {
-            "tipo": "coleccionable",
-            "marca": "DecoArte Colección",
-            "serie": "Egyptian Artifacts",
-            "categoria": "figuras",
-            "material": "Resina Compuesta",
-            "edicion_limitada": false
-        },
-        "variantes": [
-            {
-                "sku": "COL-2023-JOY",
-                "descripcion": "MINT (M) · ARTESANÍA DECORATIVA",
-                "precio": 600.49,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 5,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 2,
-                        "sucursal_nombre": "Sucursal Coyoacán",
-                        "cantidad": 3,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 3,
-                        "sucursal_nombre": "Almacén General",
-                        "cantidad": 4,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 5,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 2,
+            "sucursal_nombre": "Sucursal Coyoacán",
+            "cantidad": 3,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 3,
+            "sucursal_nombre": "Almacén General",
+            "cantidad": 4,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Figura Dragon Ball Z Super Saiyan Goku (Banpresto Japón 1993)",
+    "catalogo_tipo": "coleccionable",
+    "catalogo_nombre": "Coleccionables",
+    "descripcion": "Figuras Coleccionables (Cultura Pop & Anime): Figura vintage con caja sellada original de Toei Animation Japón. Conservada en acrílico anti-UV de coleccionista.",
+    "precio": 14200,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "coleccionable",
+      "marca": "Banpresto / Bird Studio",
+      "serie": "Dragon Ball Z Vintage Series",
+      "categoria": "figuras",
+      "material": "PVC Grado Colección & Acrílico UV",
+      "edicion_limitada": true
     },
-    {
-        "nombre": "Figura Dragon Ball Z Super Saiyan Goku (Banpresto Japón 1993)",
-        "catalogo_tipo": "coleccionable",
-        "catalogo_nombre": "Coleccionables",
-        "descripcion": "Figuras Coleccionables (Cultura Pop & Anime): Figura vintage con caja sellada original de Toei Animation Japón. Conservada en acrílico anti-UV de coleccionista.",
+    "variantes": [
+      {
+        "sku": "COL-1993-DBZG",
+        "descripcion": "MINT (M) · CULTURA POP & ANIME · EN CAJA ORIGINAL",
         "precio": 14200,
-        "activo": true,
-        "imagen": null,
-        "metadata": {
-            "tipo": "coleccionable",
-            "marca": "Banpresto / Bird Studio",
-            "serie": "Dragon Ball Z Vintage Series",
-            "categoria": "figuras",
-            "material": "PVC Grado Colección & Acrílico UV",
-            "edicion_limitada": true
-        },
-        "variantes": [
-            {
-                "sku": "COL-1993-DBZG",
-                "descripcion": "MINT (M) · CULTURA POP & ANIME · EN CAJA ORIGINAL",
-                "precio": 14200,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 1,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 2,
-                        "sucursal_nombre": "Sucursal Coyoacán",
-                        "cantidad": 2,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 1,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 2,
+            "sucursal_nombre": "Sucursal Coyoacán",
+            "cantidad": 2,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Robot Mecánico de Hojalata Space Trooper (Japón Vintage 1965)",
+    "catalogo_tipo": "coleccionable",
+    "catalogo_nombre": "Coleccionables",
+    "descripcion": "Juguetes y Objetos Manufacturados: Juguete mecánico a cuerda en hojalata litografiada manufacturado por Yonezawa Toys Japón. Mecanismo de marcha y chispa plenamente funcional.",
+    "precio": 21800,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "coleccionable",
+      "marca": "Yonezawa Toys Japón",
+      "serie": "Space Age Tin Toy Series",
+      "categoria": "juguetes",
+      "material": "Hojalata Litografiada & Resorte de Acero",
+      "edicion_limitada": true
     },
-    {
-        "nombre": "Robot Mecánico de Hojalata Space Trooper (Japón Vintage 1965)",
-        "catalogo_tipo": "coleccionable",
-        "catalogo_nombre": "Coleccionables",
-        "descripcion": "Juguetes y Objetos Manufacturados: Juguete mecánico a cuerda en hojalata litografiada manufacturado por Yonezawa Toys Japón. Mecanismo de marcha y chispa plenamente funcional.",
+    "variantes": [
+      {
+        "sku": "COL-1965-ROB",
+        "descripcion": "VERY FINE (VF) · JUGUETE MECÁNICO VINTAGE",
         "precio": 21800,
-        "activo": true,
-        "imagen": null,
-        "metadata": {
-            "tipo": "coleccionable",
-            "marca": "Yonezawa Toys Japón",
-            "serie": "Space Age Tin Toy Series",
-            "categoria": "juguetes",
-            "material": "Hojalata Litografiada & Resorte de Acero",
-            "edicion_limitada": true
-        },
-        "variantes": [
-            {
-                "sku": "COL-1965-ROB",
-                "descripcion": "VERY FINE (VF) · JUGUETE MECÁNICO VINTAGE",
-                "precio": 21800,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 1,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 3,
-                        "sucursal_nombre": "Almacén General",
-                        "cantidad": 1,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 1,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 3,
+            "sucursal_nombre": "Almacén General",
+            "cantidad": 1,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Billete Revolucionario 10 Pesos Ejército Constitucionalista (1914)",
+    "catalogo_tipo": "coleccionable",
+    "catalogo_nombre": "Coleccionables",
+    "descripcion": "Monedas y Billetes Históricos: Emisión oficial del Gobierno Provisional de México firmada en Monclova. Papel moneda histórico en estado sin circular (UNC).",
+    "precio": 8900,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "coleccionable",
+      "marca": "Gobierno Constitucionalista de México",
+      "serie": "Papel Moneda de la Revolución Mexicana",
+      "categoria": "numismatica",
+      "material": "Papel Moneda de Seguridad",
+      "edicion_limitada": true
     },
-    {
-        "nombre": "Billete Revolucionario 10 Pesos Ejército Constitucionalista (1914)",
-        "catalogo_tipo": "coleccionable",
-        "catalogo_nombre": "Coleccionables",
-        "descripcion": "Monedas y Billetes Históricos: Emisión oficial del Gobierno Provisional de México firmada en Monclova. Papel moneda histórico en estado sin circular (UNC).",
+    "variantes": [
+      {
+        "sku": "COL-1914-BIL",
+        "descripcion": "MINT (M) · NUMISMÁTICA & NOTAFILIA REVOLUCIONARIA",
         "precio": 8900,
-        "activo": true,
-        "imagen": null,
-        "metadata": {
-            "tipo": "coleccionable",
-            "marca": "Gobierno Constitucionalista de México",
-            "serie": "Papel Moneda de la Revolución Mexicana",
-            "categoria": "numismatica",
-            "material": "Papel Moneda de Seguridad",
-            "edicion_limitada": true
-        },
-        "variantes": [
-            {
-                "sku": "COL-1914-BIL",
-                "descripcion": "MINT (M) · NUMISMÁTICA & NOTAFILIA REVOLUCIONARIA",
-                "precio": 8900,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 3,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 2,
-                        "sucursal_nombre": "Sucursal Coyoacán",
-                        "cantidad": 2,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 3,
-                        "sucursal_nombre": "Almacén General",
-                        "cantidad": 4,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 3,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 2,
+            "sucursal_nombre": "Sucursal Coyoacán",
+            "cantidad": 2,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 3,
+            "sucursal_nombre": "Almacén General",
+            "cantidad": 4,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Moneda Virreinal 8 Reales Columnario de Plata (1768)",
+    "catalogo_tipo": "coleccionable",
+    "catalogo_nombre": "Coleccionables",
+    "descripcion": "Monedas y Billetes Históricos: Moneda de 8 Reales acuñada a volante en la Real Casa de Moneda de México bajo Carlos III. Plata pura con pátina histórica intocada.",
+    "precio": 38500,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "coleccionable",
+      "marca": "Real Casa de Moneda de México",
+      "serie": "Numismática Virreinal Novohispana",
+      "categoria": "numismatica",
+      "material": "Plata Ley .903",
+      "edicion_limitada": true
     },
-    {
-        "nombre": "Moneda Virreinal 8 Reales Columnario de Plata (1768)",
-        "catalogo_tipo": "coleccionable",
-        "catalogo_nombre": "Coleccionables",
-        "descripcion": "Monedas y Billetes Históricos: Moneda de 8 Reales acuñada a volante en la Real Casa de Moneda de México bajo Carlos III. Plata pura con pátina histórica intocada.",
+    "variantes": [
+      {
+        "sku": "COL-1768-COL8",
+        "descripcion": "VERY FINE (VF) · MONEDAS & BILLETES HISTÓRICOS",
         "precio": 38500,
-        "activo": true,
-        "imagen": null,
-        "metadata": {
-            "tipo": "coleccionable",
-            "marca": "Real Casa de Moneda de México",
-            "serie": "Numismática Virreinal Novohispana",
-            "categoria": "numismatica",
-            "material": "Plata Ley .903",
-            "edicion_limitada": true
-        },
-        "variantes": [
-            {
-                "sku": "COL-1768-COL8",
-                "descripcion": "VERY FINE (VF) · MONEDAS & BILLETES HISTÓRICOS",
-                "precio": 38500,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 1,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 1,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Consola Nintendo Game & Watch Ball (Primera Edición Japón 1980)",
+    "catalogo_tipo": "coleccionable",
+    "catalogo_nombre": "Coleccionables",
+    "descripcion": "Coleccionables de Videojuegos: El primer sistema portátil creado por Gunpei Yokoi para Nintendo (Modelo AC-01). En caja de colección con manual y batería sellada.",
+    "precio": 26900,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "coleccionable",
+      "marca": "Nintendo Co., Ltd. Japón",
+      "serie": "Silver Series Game & Watch (AC-01)",
+      "categoria": "videojuegos",
+      "material": "Plástico ABS & Pantalla LCD Reflectiva",
+      "edicion_limitada": true
     },
-    {
-        "nombre": "Consola Nintendo Game & Watch Ball (Primera Edición Japón 1980)",
-        "catalogo_tipo": "coleccionable",
-        "catalogo_nombre": "Coleccionables",
-        "descripcion": "Coleccionables de Videojuegos: El primer sistema portátil creado por Gunpei Yokoi para Nintendo (Modelo AC-01). En caja de colección con manual y batería sellada.",
+    "variantes": [
+      {
+        "sku": "COL-1980-NIN",
+        "descripcion": "NEAR MINT (NM) · VIDEOJUEGOS RETRO EN CAJA",
         "precio": 26900,
-        "activo": true,
-        "imagen": null,
-        "metadata": {
-            "tipo": "coleccionable",
-            "marca": "Nintendo Co., Ltd. Japón",
-            "serie": "Silver Series Game & Watch (AC-01)",
-            "categoria": "videojuegos",
-            "material": "Plástico ABS & Pantalla LCD Reflectiva",
-            "edicion_limitada": true
-        },
-        "variantes": [
-            {
-                "sku": "COL-1980-NIN",
-                "descripcion": "NEAR MINT (NM) · VIDEOJUEGOS RETRO EN CAJA",
-                "precio": 26900,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 1,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 2,
-                        "sucursal_nombre": "Sucursal Coyoacán",
-                        "cantidad": 1,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 1,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 2,
+            "sucursal_nombre": "Sucursal Coyoacán",
+            "cantidad": 1,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Cartucho The Legend of Zelda (Gold Cartridge NES 1987 Sellado)",
+    "catalogo_tipo": "coleccionable",
+    "catalogo_nombre": "Coleccionables",
+    "descripcion": "Coleccionables de Videojuegos: Cartucho dorado original para Nintendo Entertainment System con batería de respaldo interna y sello pericial de graduación Wata/VGA.",
+    "precio": 34000,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "coleccionable",
+      "marca": "Nintendo of America",
+      "serie": "NES Classic Gold Series (NES-ZL-USA)",
+      "categoria": "videojuegos",
+      "material": "Carcasa Dorada Metalizada & Placa PCB",
+      "edicion_limitada": true
     },
-    {
-        "nombre": "Cartucho The Legend of Zelda (Gold Cartridge NES 1987 Sellado)",
-        "catalogo_tipo": "coleccionable",
-        "catalogo_nombre": "Coleccionables",
-        "descripcion": "Coleccionables de Videojuegos: Cartucho dorado original para Nintendo Entertainment System con batería de respaldo interna y sello pericial de graduación Wata/VGA.",
+    "variantes": [
+      {
+        "sku": "COL-1987-ZEL",
+        "descripcion": "MINT (M) · CARTUCHO DORADO DE COLECCIÓN · VIDEOJUEGOS",
         "precio": 34000,
-        "activo": true,
-        "imagen": null,
-        "metadata": {
-            "tipo": "coleccionable",
-            "marca": "Nintendo of America",
-            "serie": "NES Classic Gold Series (NES-ZL-USA)",
-            "categoria": "videojuegos",
-            "material": "Carcasa Dorada Metalizada & Placa PCB",
-            "edicion_limitada": true
-        },
-        "variantes": [
-            {
-                "sku": "COL-1987-ZEL",
-                "descripcion": "MINT (M) · CARTUCHO DORADO DE COLECCIÓN · VIDEOJUEGOS",
-                "precio": 34000,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 1,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 3,
-                        "sucursal_nombre": "Almacén General",
-                        "cantidad": 1,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 1,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 3,
+            "sucursal_nombre": "Almacén General",
+            "cantidad": 1,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
+      }
+    ]
+  },
+  {
+    "nombre": "Cielo purpura de roma",
+    "catalogo_tipo": "libro",
+    "catalogo_nombre": "Libros",
+    "descripcion": "Es un mundo de mafia en un grupo de adolecentes",
+    "precio": 510,
+    "activo": true,
+    "imagen": "images/productos/8vVD7HtQx0C6AxFFDPuR4oQUFYLyuPUiS25WdR4I.jpg",
+    "metadata": {
+      "tipo": "libro",
+      "isbn": "978-1097415496",
+      "autor": "Alessandra Neymar.",
+      "editorial": "pinguino",
+      "genero": "novela",
+      "anio_publicacion": 2000,
+      "paginas": 540
     },
-    {
-        "nombre": "Cielo purpura de roma",
-        "catalogo_tipo": "libro",
-        "catalogo_nombre": "Libros",
-        "descripcion": "Es un mundo de mafia en un grupo de adolecentes",
+    "variantes": [
+      {
+        "sku": "CIE-2000-123",
+        "descripcion": "Cielo purpura de roma",
         "precio": 510,
-        "activo": true,
-        "imagen": "images/productos/8vVD7HtQx0C6AxFFDPuR4oQUFYLyuPUiS25WdR4I.jpg",
-        "metadata": {
-            "tipo": "libro",
-            "isbn": "978-1097415496",
-            "autor": "Alessandra Neymar.",
-            "editorial": "pinguino",
-            "genero": "mafia/romance",
-            "anio_publicacion": 2000,
-            "paginas": 540
-        },
-        "variantes": [
-            {
-                "sku": "CIE-2000-123",
-                "descripcion": "Cielo purpura de roma",
-                "precio": 510,
-                "activa": true,
-                "existencias": [
-                    {
-                        "sucursal_id": 1,
-                        "sucursal_nombre": "Sucursal Central Bellas Artes",
-                        "cantidad": 1,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 2,
-                        "sucursal_nombre": "Sucursal Coyoacán",
-                        "cantidad": 2,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    },
-                    {
-                        "sucursal_id": 3,
-                        "sucursal_nombre": "Almacén General",
-                        "cantidad": 2,
-                        "stock_minimo": 1,
-                        "pieza_unica": null
-                    }
-                ]
-            }
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 1,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 2,
+            "sucursal_nombre": "Sucursal Coyoacán",
+            "cantidad": 2,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          },
+          {
+            "sucursal_id": 3,
+            "sucursal_nombre": "Almacén General",
+            "cantidad": 2,
+            "stock_minimo": 1,
+            "pieza_unica": null
+          }
         ]
-    }
+      }
+    ]
+  },
+  {
+    "nombre": "Narraciones Extraordinarias & El Cuervo (Edición Ilustrada 1945)",
+    "catalogo_tipo": "libro",
+    "catalogo_nombre": "Libros",
+    "descripcion": "Pieza de Terror Gótico en Bóveda Coyoacán: Traducción canónica de Charles Baudelaire y notas de Julio Cortázar. Encuadernación en tela con grabados xilográficos originales.",
+    "precio": 18500,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "libro",
+      "isbn": "978-950-04-0184-5",
+      "autor": "Edgar Allan Poe",
+      "editorial": "Editorial Poseidón",
+      "genero": "terror",
+      "anio_publicacion": 1945,
+      "paginas": 384
+    },
+    "variantes": [
+      {
+        "sku": "LIB-1845-POE",
+        "descripcion": "VERY FINE (VF) · TERROR GÓTICO · GRABADOS XILOGRÁFICOS",
+        "precio": 18500,
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 2,
+            "sucursal_nombre": "Sucursal Coyoacán",
+            "cantidad": 1,
+            "stock_minimo": 1,
+            "pieza_unica": {
+              "numero_serie": "ARC-LIB-1845-010",
+              "certificado": "COA-BIB-2026-031",
+              "notas": "Pieza única catalogada en bóveda.",
+              "estado": "disponible"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "nombre": "Fahrenheit 451 (Primera Edición en Español Minotauro 1955)",
+    "catalogo_tipo": "libro",
+    "catalogo_nombre": "Libros",
+    "descripcion": "Pieza Única (1/1) en Sucursal Central Bellas Artes: Primera edición hispanoamericana traducida por Francisco Porrúa con sobrecubierta tipográfica original intacta.",
+    "precio": 26000,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "libro",
+      "isbn": "978-84-450-7055-1",
+      "autor": "Ray Bradbury",
+      "editorial": "Ediciones Minotauro",
+      "genero": "ciencia_ficcion",
+      "anio_publicacion": 1955,
+      "paginas": 196
+    },
+    "variantes": [
+      {
+        "sku": "LIB-1955-MIN",
+        "descripcion": "MINT (M) · PIEZA ÚNICA 1/1 · CIENCIA FICCIÓN DISTÓPICA",
+        "precio": 26000,
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 1,
+            "stock_minimo": 1,
+            "pieza_unica": {
+              "numero_serie": "ARC-LIB-1955-011",
+              "certificado": "COA-BIB-2026-034",
+              "notas": "Primera edición de colección.",
+              "estado": "disponible"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "nombre": "Crónicas Marcianas (Edición Príncipe con Prólogo de Borges 1955)",
+    "catalogo_tipo": "libro",
+    "catalogo_nombre": "Libros",
+    "descripcion": "Stock Masivo en Almacén General: Célebre edición con prólogo de Jorge Luis Borges reflexionando sobre la soledad y la condición humana en el cosmos.",
+    "precio": 21500,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "libro",
+      "isbn": "978-84-450-7063-6",
+      "autor": "Ray Bradbury",
+      "editorial": "Ediciones Minotauro",
+      "genero": "ciencia_ficcion",
+      "anio_publicacion": 1955,
+      "paginas": 248
+    },
+    "variantes": [
+      {
+        "sku": "LIB-1955-BUE",
+        "descripcion": "NEAR MINT (NM) · CIENCIA FICCIÓN CLÁSICA",
+        "precio": 21500,
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 3,
+            "sucursal_nombre": "Almacén General",
+            "cantidad": 4,
+            "stock_minimo": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "nombre": "El Señor de los Anillos: La Comunidad del Anillo (1ª Edición Minotauro 1977)",
+    "catalogo_tipo": "libro",
+    "catalogo_nombre": "Libros",
+    "descripcion": "Obra Cumbre de Fantasía Épica: Primera traducción autorizada al español con sobrecubierta ilustrada y mapa desplegable de la Tierra Media en perfecto estado.",
+    "precio": 29800,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "libro",
+      "isbn": "978-84-450-7033-9",
+      "autor": "J.R.R. Tolkien",
+      "editorial": "Ediciones Minotauro",
+      "genero": "fantasia",
+      "anio_publicacion": 1977,
+      "paginas": 423
+    },
+    "variantes": [
+      {
+        "sku": "LIB-1977-TOL",
+        "descripcion": "VERY FINE (VF) · FANTASÍA ÉPICA · MAPAS DESPLEGABLES",
+        "precio": 29800,
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 2,
+            "stock_minimo": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "nombre": "El Nombre de la Rosa (1ª Edición en Castellano Lumen 1982)",
+    "catalogo_tipo": "libro",
+    "catalogo_nombre": "Libros",
+    "descripcion": "Pieza Selecta de Misterio & Semiótica: Primera tirada en castellano con sobrecubierta original de diseño medieval. Clásico del thriller histórico monástico.",
+    "precio": 14200,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "libro",
+      "isbn": "978-84-264-1182-2",
+      "autor": "Umberto Eco",
+      "editorial": "Editorial Lumen",
+      "genero": "misterio_thriller",
+      "anio_publicacion": 1982,
+      "paginas": 512
+    },
+    "variantes": [
+      {
+        "sku": "LIB-1982-LUM",
+        "descripcion": "NEAR MINT (NM) · MISTERIO MONÁSTICO & THRILLER",
+        "precio": 14200,
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 3,
+            "sucursal_nombre": "Almacén General",
+            "cantidad": 3,
+            "stock_minimo": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "nombre": "Estudio en Escarlata & El Sabueso de los Baskerville (Edición Anotada 1928)",
+    "catalogo_tipo": "libro",
+    "catalogo_nombre": "Libros",
+    "descripcion": "Clásico de Novela Policíaca y Misterio: Primera traducción de la Colección Misterio de Editorial Juventud con grabados e ilustraciones de época.",
+    "precio": 17800,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "libro",
+      "isbn": "978-84-261-0028-3",
+      "autor": "Arthur Conan Doyle",
+      "editorial": "Editorial Juventud",
+      "genero": "misterio_thriller",
+      "anio_publicacion": 1928,
+      "paginas": 318
+    },
+    "variantes": [
+      {
+        "sku": "LIB-1928-JUV",
+        "descripcion": "VERY FINE (VF) · POLICÍACO CLÁSICO SHERLOCK HOLMES",
+        "precio": 17800,
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 2,
+            "sucursal_nombre": "Sucursal Coyoacán",
+            "cantidad": 2,
+            "stock_minimo": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "nombre": "Así Habló Zaratustra: Un Libro para Todos y para Nadie (Edición Aguilar 1932)",
+    "catalogo_tipo": "libro",
+    "catalogo_nombre": "Libros",
+    "descripcion": "Encuadernación de Lujo en Piel: Edición de la célebre Colección Crisol con cantos dorados y papel biblia. Obra fundamental de la filosofía continental moderna.",
+    "precio": 19500,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "libro",
+      "isbn": "978-84-03-09320-1",
+      "autor": "Friedrich Nietzsche",
+      "editorial": "Editorial Aguilar",
+      "genero": "filosofia",
+      "anio_publicacion": 1932,
+      "paginas": 392
+    },
+    "variantes": [
+      {
+        "sku": "LIB-1932-AGU",
+        "descripcion": "MINT (M) · FILOSOFÍA MODERNA · ENCUADERNACIÓN EN PIEL",
+        "precio": 19500,
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 2,
+            "stock_minimo": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "nombre": "El Banquete y Fedón (Traducción Clásica Bibliotheca Scriptorum 1944)",
+    "catalogo_tipo": "libro",
+    "catalogo_nombre": "Libros",
+    "descripcion": "Filosofía Griega Clásica: Edición bilingüe griego-español en papel de hilo fabricado especialmente para la imprenta universitaria de la UNAM.",
+    "precio": 13400,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "libro",
+      "isbn": "978-968-36-0194-4",
+      "autor": "Platón",
+      "editorial": "Universidad Nacional Autónoma de México",
+      "genero": "filosofia",
+      "anio_publicacion": 1944,
+      "paginas": 286
+    },
+    "variantes": [
+      {
+        "sku": "LIB-1944-UNA",
+        "descripcion": "NEAR MINT (NM) · FILOSOFÍA CLÁSICA GRIEGA",
+        "precio": 13400,
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 3,
+            "stock_minimo": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "nombre": "Don Quijote de la Mancha (Edición Conmemorativa Facsimilar RAE 1947)",
+    "catalogo_tipo": "libro",
+    "catalogo_nombre": "Libros",
+    "descripcion": "Pieza Cumbre de Clásicos Universales: Edición monumental conmemorativa del IV Centenario de Cervantes en dos volúmenes en papel de tina con estuche de tela inglesa.",
+    "precio": 38000,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "libro",
+      "isbn": "978-84-249-1947-8",
+      "autor": "Miguel de Cervantes Saavedra",
+      "editorial": "Real Academia Española",
+      "genero": "clasicos",
+      "anio_publicacion": 1947,
+      "paginas": 720
+    },
+    "variantes": [
+      {
+        "sku": "LIB-1947-RAE",
+        "descripcion": "MINT (M) · CLÁSICOS UNIVERSALES · ESTUCHE DE TELA",
+        "precio": 38000,
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 1,
+            "stock_minimo": 1,
+            "pieza_unica": {
+              "numero_serie": "ARC-LIB-1605-015",
+              "certificado": "COA-BIB-2026-045",
+              "notas": "Edición facsimilar en estuche de tela.",
+              "estado": "disponible"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "nombre": "La Divina Comedia (Edición Bilingüe con Grabados de Gustave Doré 1921)",
+    "catalogo_tipo": "libro",
+    "catalogo_nombre": "Libros",
+    "descripcion": "Gran Folio Monumental: Encuadernado en piel gofrada con 135 láminas calcográficas de Gustave Doré sobre el Infierno, Purgatorio y Paraíso.",
+    "precio": 42000,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "libro",
+      "isbn": "978-84-376-0192-1",
+      "autor": "Dante Alighieri",
+      "editorial": "Montaner y Simón Editores",
+      "genero": "clasicos",
+      "anio_publicacion": 1921,
+      "paginas": 684
+    },
+    "variantes": [
+      {
+        "sku": "LIB-1921-DIV",
+        "descripcion": "NEAR MINT (NM) · PIEZA ÚNICA 1/1 · GRAN FOLIO DORÉ",
+        "precio": 42000,
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 3,
+            "sucursal_nombre": "Almacén General",
+            "cantidad": 1,
+            "stock_minimo": 1,
+            "pieza_unica": {
+              "numero_serie": "ARC-LIB-1320-016",
+              "certificado": "COA-BIB-2026-048",
+              "notas": "Gran folio con láminas calcográficas.",
+              "estado": "disponible"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "nombre": "Confieso que he Vivido: Memorias (Primera Edición Seix Barral 1974)",
+    "catalogo_tipo": "libro",
+    "catalogo_nombre": "Libros",
+    "descripcion": "Biografía & Crónica Esencial: Primera edición póstuma de las memorias de Pablo Neruda preparada por Matilde Urrutia. Colección Biblioteca Breve.",
+    "precio": 15600,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "libro",
+      "isbn": "978-84-322-0274-2",
+      "autor": "Pablo Neruda",
+      "editorial": "Editorial Seix Barral",
+      "genero": "biografia_cronica",
+      "anio_publicacion": 1974,
+      "paginas": 482
+    },
+    "variantes": [
+      {
+        "sku": "LIB-1974-NER",
+        "descripcion": "VERY FINE (VF) · MEMORIAS & BIOGRAFÍA · EDICIÓN PÓSTUMA",
+        "precio": 15600,
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 1,
+            "sucursal_nombre": "Sucursal Central Bellas Artes",
+            "cantidad": 3,
+            "stock_minimo": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "nombre": "Historia Verdadera de la Conquista de la Nueva España (Edición Crítica 1960)",
+    "catalogo_tipo": "libro",
+    "catalogo_nombre": "Libros",
+    "descripcion": "Crónica Fundamental de Indias: Edición canónica de la Colección Sepan Cuantos N.º 5 con estudio y mapas facsimilares de la ruta de Cortés.",
+    "precio": 8900,
+    "activo": true,
+    "imagen": null,
+    "metadata": {
+      "tipo": "libro",
+      "isbn": "978-968-432-005-5",
+      "autor": "Bernal Díaz del Castillo",
+      "editorial": "Editorial Porrúa",
+      "genero": "biografia_cronica",
+      "anio_publicacion": 1960,
+      "paginas": 712
+    },
+    "variantes": [
+      {
+        "sku": "LIB-1960-POR",
+        "descripcion": "MINT (M) · CRÓNICA DE INDIAS · EDICIÓN CRÍTICA",
+        "precio": 8900,
+        "activa": true,
+        "existencias": [
+          {
+            "sucursal_id": 3,
+            "sucursal_nombre": "Almacén General",
+            "cantidad": 5,
+            "stock_minimo": 1
+          }
+        ]
+      }
+    ]
+  }
 ]

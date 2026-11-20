@@ -95,7 +95,7 @@
              ========================================================================= -->
         <section
             id="disc-showcase-section"
-            class="relative rounded-3xl overflow-hidden bg-gradient-to-b from-[#130b24] via-[#1b1033] to-[#0d0718] text-white border border-purple-500/30 shadow-2xl mb-14 p-6 sm:p-10"
+            class="relative rounded-3xl overflow-hidden bg-gradient-to-b from-[#130b24] via-[#1b1033] to-[#0d0718] text-white border border-purple-500/30 shadow-2xl mb-14 p-4 sm:p-10 w-full max-w-full"
             aria-label="Reproductor y Galería Interactiva 3D de Discos y Vinilos"
         >
             <!-- Halo Ambiental Dinámico -->
@@ -132,26 +132,39 @@
                     <!-- Escenario 3D de Discos -->
                     <div
                         id="disc-showcase-stage"
-                        class="disc-showcase-stage relative w-full h-[330px] sm:h-[390px] flex items-center justify-center select-none overflow-visible py-2"
+                        class="disc-showcase-stage relative w-full max-w-full min-h-[260px] md:min-h-[360px] h-[280px] md:h-[380px] flex items-center justify-center select-none overflow-visible py-2"
                     >
                         @foreach ($discosShowcase as $idx => $disco)
+                            @php
+                                $isInitial = $idx === 0;
+                                $initTransform = $isInitial
+                                    ? 'translate3d(0px, 0px, 40px) rotateY(0deg) scale(1)'
+                                    : ($idx === 1
+                                        ? 'translate3d(210px, 8px, -120px) rotateY(-32deg) scale(0.72)'
+                                        : ($idx === count($discosShowcase) - 1
+                                            ? 'translate3d(-210px, 8px, -120px) rotateY(32deg) scale(0.72)'
+                                            : 'translate3d(310px, 20px, -240px) rotateY(-45deg) scale(0.5)'));
+                                $initOpacity = $isInitial ? '1' : ($idx === 1 || $idx === count($discosShowcase) - 1 ? '0.65' : '0');
+                                $initZIndex = $isInitial ? '30' : ($idx === 1 || $idx === count($discosShowcase) - 1 ? '20' : '10');
+                            @endphp
                             <div
-                                class="disc-3d-slot absolute w-[260px] h-[260px] sm:w-[320px] sm:h-[320px] cursor-pointer"
+                                class="disc-3d-slot absolute inset-0 m-auto w-56 h-56 sm:w-72 sm:h-72 md:w-80 md:h-80 flex items-center justify-center cursor-pointer transition-all duration-500 opacity-100 visible"
                                 data-disc-index="{{ $idx }}"
                                 role="button"
                                 tabindex="0"
                                 aria-label="Seleccionar {{ $disco['nombre'] }}"
+                                style="transform-style: preserve-3d; transform: {{ $initTransform }}; opacity: {{ $initOpacity }}; z-index: {{ $initZIndex }};"
                             >
                                 <!-- Capa de Inclinación 3D Interactiva al Pasar el Cursor (Tilt 3D) -->
                                 <div class="disc-3d-tilt w-full h-full">
                                     <!-- Capa de Volteo 3D (Flip Lado A / Lado B) -->
-                                    <div class="disc-3d-flipper">
+                                    <div class="disc-3d-flipper w-full h-full">
 
                                         <!-- =====================================================
                                              CARA FRONTAL (LADO A): FORMATO CIRCULAR FIEL DEL DISCO
                                              ===================================================== -->
-                                        <div class="disc-face disc-face-front">
-                                            <div class="disc-spin-rotor relative flex items-center justify-center {{ $disco['formato'] === 'CD' ? 'cd-surface' : 'vinyl-surface' }}">
+                                        <div class="disc-face disc-face-front w-full h-full">
+                                            <div class="disc-spin-rotor relative w-full h-full flex items-center justify-center {{ $disco['formato'] === 'CD' ? 'cd-surface' : 'vinyl-surface' }}">
 
                                                 @if ($disco['formato'] === 'CD')
                                                     <!-- Acabado Refractivo de CD Compact Disc + Arte Impreso Semitransparente -->
@@ -224,8 +237,8 @@
                                         <!-- =====================================================
                                              CARA POSTERIOR (LADO B): MATRIZ & CONTRAPORTADA
                                              ===================================================== -->
-                                        <div class="disc-face disc-face-back">
-                                            <div class="disc-spin-rotor relative flex items-center justify-center {{ $disco['formato'] === 'CD' ? 'cd-surface' : 'vinyl-surface' }}">
+                                        <div class="disc-face disc-face-back w-full h-full">
+                                            <div class="disc-spin-rotor relative w-full h-full flex items-center justify-center {{ $disco['formato'] === 'CD' ? 'cd-surface' : 'vinyl-surface' }}">
                                                 <!-- Anillo de Surco Muerto Grabado (Runout Matrix Groove) -->
                                                 <div class="absolute inset-6 rounded-full border border-dashed border-amber-300/35 pointer-events-none"></div>
                                                 <div class="absolute inset-12 rounded-full border border-purple-300/20 pointer-events-none"></div>
@@ -525,7 +538,7 @@
     </div>
 
     @if ($coleccionDiscos->isNotEmpty())
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-5 mb-12">
             @foreach ($coleccionDiscos as $producto)
                 <x-public.product-card :producto="$producto" />
             @endforeach
@@ -543,15 +556,16 @@
     @if (! empty($discosShowcase))
         @push('scripts')
             <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    const discos = @json($discosShowcase);
-                    if (!Array.isArray(discos) || discos.length === 0) {
-                        return;
-                    }
+                (function () {
+                    function setupDiscShowcase() {
+                        const discos = @json($discosShowcase);
+                        if (!Array.isArray(discos) || discos.length === 0) {
+                            return;
+                        }
 
-                    const stage = document.getElementById('disc-showcase-stage');
-                    const slots = Array.from(document.querySelectorAll('.disc-3d-slot'));
-                    const pills = Array.from(document.querySelectorAll('.disc-selector-pill'));
+                        const stage = document.getElementById('disc-showcase-stage');
+                        const slots = Array.from(document.querySelectorAll('.disc-3d-slot'));
+                        const pills = Array.from(document.querySelectorAll('.disc-selector-pill'));
 
                     const prevBtn = document.getElementById('disc-prev-btn');
                     const nextBtn = document.getElementById('disc-next-btn');
@@ -626,11 +640,14 @@
                                 tiltBox.style.transform = 'rotateX(0deg) rotateY(0deg) translateZ(0px)';
                             }
 
+                            const isMobile = window.innerWidth < 640;
+                            const spacing = isMobile ? 120 : (window.innerWidth >= 1024 ? 220 : 180);
+
                             if (idx === activeIndex) {
                                 slot.style.transform = 'translate3d(0px, 0px, 40px) rotateY(0deg) scale(1)';
                                 slot.style.opacity = '1';
                                 slot.style.zIndex = '30';
-                                slot.style.filter = ' none';
+                                slot.style.pointerEvents = 'auto';
 
                                 if (flipper) {
                                     flipper.classList.toggle('is-flipped', isFlipped);
@@ -639,29 +656,30 @@
                                     r.classList.toggle('is-paused', isPaused);
                                 });
                             } else if (diff === -1 || (total === 2 && diff !== 0)) {
-                                slot.style.transform = 'translate3d(-210px, 12px, -120px) rotateY(34deg) scale(0.74)';
-                                slot.style.opacity = '0.62';
+                                slot.style.transform = 'translate3d(-' + spacing + 'px, 8px, -120px) rotateY(32deg) scale(0.72)';
+                                slot.style.opacity = '0.65';
                                 slot.style.zIndex = '20';
-                                slot.style.filter = 'brightness(0.75)';
+                                slot.style.pointerEvents = 'auto';
                                 if (flipper) flipper.classList.remove('is-flipped');
                                 rotors.forEach(function (r) {
                                     r.classList.remove('is-paused');
                                 });
                             } else if (diff === 1) {
-                                slot.style.transform = 'translate3d(210px, 12px, -120px) rotateY(-34deg) scale(0.74)';
-                                slot.style.opacity = '0.62';
+                                slot.style.transform = 'translate3d(' + spacing + 'px, 8px, -120px) rotateY(-32deg) scale(0.72)';
+                                slot.style.opacity = '0.65';
                                 slot.style.zIndex = '20';
-                                slot.style.filter = 'brightness(0.75)';
+                                slot.style.pointerEvents = 'auto';
                                 if (flipper) flipper.classList.remove('is-flipped');
                                 rotors.forEach(function (r) {
                                     r.classList.remove('is-paused');
                                 });
                             } else {
                                 const dir = diff < 0 ? -1 : 1;
-                                slot.style.transform = 'translate3d(' + (dir * 310) + 'px, 28px, -240px) rotateY(' + (-dir * 45) + 'deg) scale(0.55)';
-                                slot.style.opacity = '0.22';
+                                const outerSpacing = spacing + (isMobile ? 60 : 100);
+                                slot.style.transform = 'translate3d(' + (dir * outerSpacing) + 'px, 20px, -240px) rotateY(' + (-dir * 45) + 'deg) scale(0.5)';
+                                slot.style.opacity = isMobile ? '0' : '0.22';
                                 slot.style.zIndex = '10';
-                                slot.style.filter = 'brightness(0.5)';
+                                slot.style.pointerEvents = isMobile ? 'none' : 'auto';
                                 if (flipper) flipper.classList.remove('is-flipped');
                             }
                         });
@@ -852,7 +870,17 @@
                     updateStatusBanner();
                     renderStagePositions();
                     updateCuratorialCard();
-                });
+
+                    window.addEventListener('resize', renderStagePositions);
+                }
+
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', setupDiscShowcase);
+                } else {
+                    setupDiscShowcase();
+                }
+                window.addEventListener('load', setupDiscShowcase);
+            })();
             </script>
         @endpush
     @endif

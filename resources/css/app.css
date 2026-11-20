@@ -867,11 +867,14 @@
 
 .disc-3d-slot {
     transform-style: preserve-3d;
-    transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.55s ease, filter 0.55s ease;
+    transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.55s ease;
     will-change: transform, opacity;
 }
 
 .disc-3d-tilt {
+    position: relative;
+    width: 100%;
+    height: 100%;
     transform-style: preserve-3d;
     transition: transform 0.18s ease-out;
     will-change: transform;
@@ -883,7 +886,6 @@
     height: 100%;
     transform-style: preserve-3d;
     transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-    filter: drop-shadow(0 22px 28px rgba(0, 0, 0, 0.85));
 }
 
 .disc-3d-flipper.is-flipped {
@@ -893,14 +895,22 @@
 .disc-face {
     position: absolute;
     inset: 0;
+    width: 100%;
+    height: 100%;
     border-radius: 9999px;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
     overflow: hidden;
 }
 
+.disc-face-front {
+    transform: rotateY(0deg) translateZ(1px);
+    z-index: 2;
+}
+
 .disc-face-back {
-    transform: rotateY(180deg);
+    transform: rotateY(180deg) translateZ(1px);
+    z-index: 1;
 }
 
 .disc-spin-rotor {

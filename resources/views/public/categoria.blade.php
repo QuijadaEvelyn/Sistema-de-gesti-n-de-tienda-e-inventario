@@ -1,13 +1,13 @@
 <x-layouts.public :title="'ARCHIVUM · ' . $meta['titulo']">
 
     <!-- Encabezado Curatorial de la Categoría -->
-    <section class="relative rounded-2xl overflow-hidden bg-gradient-to-r from-purple-900 to-indigo-950 text-white p-8 sm:p-10 mb-8 shadow-lg border border-purple-800/40">
+    <section class="relative rounded-2xl overflow-hidden bg-gradient-to-r from-purple-900 to-indigo-950 text-white p-6 sm:p-10 mb-8 shadow-lg border border-purple-800/40">
         <div class="relative z-10 max-w-3xl space-y-3">
             <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/20 border border-purple-300/30 text-purple-200 text-xs font-label-md tracking-wider">
                 <span class="material-symbols-outlined text-[15px] text-purple-300">{{ $meta['icono'] }}</span>
                 <span>{{ $meta['badge'] }}</span>
             </span>
-            <h1 class="text-3xl sm:text-4xl font-bold font-quicksand leading-tight text-white">
+            <h1 class="text-2xl sm:text-4xl font-bold font-quicksand leading-tight text-white">
                 {{ $meta['titulo'] }}
             </h1>
             <p class="font-title-editorial text-purple-100/90 text-base sm:text-lg leading-relaxed">
@@ -105,7 +105,7 @@
 
     <!-- Cuadrícula Exclusiva de la Categoría -->
     @if ($productos->isNotEmpty())
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-5 mb-12">
             @foreach ($productos as $producto)
                 <x-public.product-card :producto="$producto" />
             @endforeach

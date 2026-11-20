@@ -19,34 +19,34 @@
     @endphp
 
     <!-- Héroe Curatorial & Bienvenida al Archivo -->
-    <section class="relative rounded-2xl overflow-hidden bg-gradient-to-r from-purple-900 to-indigo-950 text-white p-8 sm:p-12 mb-10 shadow-lg border border-purple-800/40">
+    <section class="relative rounded-2xl overflow-hidden bg-gradient-to-r from-purple-900 to-indigo-950 text-white p-6 sm:p-12 mb-10 shadow-lg border border-purple-800/40">
         <div class="relative z-10 max-w-3xl">
             <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/20 border border-purple-300/30 text-purple-200 text-xs font-label-md tracking-wider mb-4">
                 <span class="material-symbols-outlined text-[14px] text-purple-300">verified</span>
                 CATÁLOGO DESCLASIFICADO · PRIMAVERA 2026
             </span>
-            <h1 class="text-3xl sm:text-5xl font-bold font-quicksand leading-tight tracking-tight text-white mb-4">
+            <h1 class="text-2xl sm:text-5xl font-bold font-quicksand leading-tight tracking-tight text-white mb-4">
                 Tesoros del Pensamiento &amp; Sonido Histórico
             </h1>
             <p class="font-title-editorial text-purple-100/90 text-lg sm:text-xl leading-relaxed mb-6">
                 «Un acervo protegido para bibliófilos y audiófilos: primeras ediciones autografiadas, matrices de prensado original y vestigios culturales autenticados con rigor notarial.»
             </p>
-            <div class="flex flex-wrap items-center gap-3 text-xs font-label-md">
-                <a href="{{ route('public.libros') }}" class="btn-glass-surface px-5 py-3 rounded-xl font-bold uppercase tracking-wider flex items-center gap-2 shadow-xs">
-                    <span class="material-symbols-outlined text-[18px]">auto_stories</span>
+            <div class="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2.5 text-xs sm:text-sm font-label-md">
+                <a href="{{ route('public.libros') }}" class="btn-glass-surface px-3 sm:px-5 py-2.5 sm:py-3 rounded-xl font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-xs text-center">
+                    <span class="material-symbols-outlined text-[16px] sm:text-[18px]">auto_stories</span>
                     <span>Libros</span>
                 </a>
-                <a href="{{ route('public.vinilos') }}" class="btn-glass-purple px-5 py-3 rounded-xl font-semibold uppercase tracking-wider flex items-center gap-2 shadow-xs">
-                    <span class="material-symbols-outlined text-[18px]">album</span>
+                <a href="{{ route('public.vinilos') }}" class="btn-glass-purple px-3 sm:px-5 py-2.5 sm:py-3 rounded-xl font-semibold uppercase tracking-wider flex items-center justify-center gap-2 shadow-xs text-center">
+                    <span class="material-symbols-outlined text-[16px] sm:text-[18px]">album</span>
                     <span>Discos</span>
                 </a>
-                <a href="{{ route('public.memorabilia') }}" class="btn-glass-purple px-5 py-3 rounded-xl font-semibold uppercase tracking-wider flex items-center gap-2 shadow-xs">
-                    <span class="material-symbols-outlined text-[18px]">history_edu</span>
+                <a href="{{ route('public.memorabilia') }}" class="btn-glass-purple px-3 sm:px-5 py-2.5 sm:py-3 rounded-xl font-semibold uppercase tracking-wider flex items-center justify-center gap-2 shadow-xs text-center">
+                    <span class="material-symbols-outlined text-[16px] sm:text-[18px]">history_edu</span>
                     <span>Coleccionables</span>
                 </a>
-                <a href="{{ route('public.adquisiciones') }}" class="btn-glass-surface px-5 py-3 rounded-xl font-semibold uppercase tracking-wider flex items-center gap-2 shadow-xs">
-                    <span class="material-symbols-outlined text-[18px]">auto_awesome</span>
-                    <span>Adquisiciones Selectas</span>
+                <a href="{{ route('public.adquisiciones') }}" class="btn-glass-surface px-3 sm:px-5 py-2.5 sm:py-3 rounded-xl font-semibold uppercase tracking-wider flex items-center justify-center gap-2 shadow-xs text-center">
+                    <span class="material-symbols-outlined text-[16px] sm:text-[18px]">auto_awesome</span>
+                    <span class="truncate">Adquisiciones</span>
                 </a>
             </div>
         </div>
@@ -302,7 +302,7 @@
                             };
                         @endphp
                     <div
-                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[285px] sm:w-[325px] md:w-[340px] h-[460px] sm:h-[480px]"
+                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[220px] sm:w-[290px] md:w-[310px] h-[460px] sm:h-[490px] md:h-[520px]"
                         style="transform-style: preserve-3d; z-index: {{ $initZIndex }};"
                         data-slide-index="{{ $initIdx }}"
                     >
@@ -489,7 +489,7 @@
 
                     <!-- Fallback 1: Vinilo (Tarjeta Central Activa) -->
                     <div
-                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[285px] sm:w-[325px] md:w-[340px] h-[460px] sm:h-[480px]"
+                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[220px] sm:w-[290px] md:w-[310px] h-[460px] sm:h-[490px] md:h-[520px]"
                         style="transform-style: preserve-3d; z-index: 30;"
                         data-slide-index="0"
                     >
@@ -501,10 +501,10 @@
                                 <article
                                     draggable="false"
                                     data-product-details="{{ json_encode($fallbackDisco, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) }}"
-                                    class="bg-white dark:bg-[#171024] border-2 border-purple-600 dark:border-purple-500 ring-2 ring-purple-600/20 dark:ring-purple-500/20 rounded-2xl p-5 flex flex-col justify-between hover:border-purple-700 hover:shadow-xl transition-all duration-200 group relative h-full select-none"
+                                    class="bg-white dark:bg-[#171024] border-2 border-purple-600 dark:border-purple-500 ring-2 ring-purple-600/20 dark:ring-purple-500/20 rounded-2xl p-3 sm:p-5 flex flex-col justify-between hover:border-purple-700 hover:shadow-xl transition-all duration-200 group relative h-full select-none"
                                 >
                                     <div>
-                                        <div onclick="abrirModalDetalleProducto(this)" class="w-full aspect-square rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-4 cursor-pointer group-hover:shadow-inner">
+                                        <div onclick="abrirModalDetalleProducto(this)" class="w-full h-36 sm:h-52 md:h-60 rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-2.5 sm:mb-4 cursor-pointer group-hover:shadow-inner">
                                             <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 dark:via-white/5 dark:to-white/10 pointer-events-none rounded-xl z-20"></div>
                                             <span class="absolute top-2.5 left-2.5 z-10 bg-purple-600 text-white text-[10px] font-label-sm font-bold uppercase px-2.5 py-0.5 rounded-md shadow-sm inline-flex items-center gap-1">
                                                 <span class="material-symbols-outlined text-[12px]">diamond</span>
@@ -522,7 +522,7 @@
                                             </button>
                                         </div>
                                     </div>
-                                    <div class="pt-4 mt-4 border-t border-purple-100 dark:border-purple-500/20 flex items-center justify-between gap-2">
+                                    <div class="pt-2.5 sm:pt-4 mt-2.5 sm:mt-4 border-t border-purple-100 dark:border-purple-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                                         <div>
                                             <span class="text-[10px] uppercase font-label-code text-outline dark:text-purple-300/60 block">Precio Tasado:</span>
                                             <span class="font-tabular-data font-bold text-on-surface dark:text-white text-base">$18,500 <span class="text-xs font-normal text-on-surface-variant dark:text-purple-200/60">MXN</span></span>
@@ -539,7 +539,7 @@
 
                     <!-- Fallback 2: Libro (Lateral Derecha) -->
                     <div
-                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[285px] sm:w-[325px] md:w-[340px] h-[460px] sm:h-[480px]"
+                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[220px] sm:w-[290px] md:w-[310px] h-[460px] sm:h-[490px] md:h-[520px]"
                         style="transform-style: preserve-3d; z-index: 20;"
                         data-slide-index="1"
                     >
@@ -551,10 +551,10 @@
                                 <article
                                     draggable="false"
                                     data-product-details="{{ json_encode($fallbackLibro, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) }}"
-                                    class="bg-white dark:bg-[#171024] border-2 border-purple-600 dark:border-purple-500 ring-2 ring-purple-600/20 dark:ring-purple-500/20 rounded-2xl p-5 flex flex-col justify-between hover:border-purple-700 hover:shadow-xl transition-all duration-200 group relative h-full select-none"
+                                    class="bg-white dark:bg-[#171024] border-2 border-purple-600 dark:border-purple-500 ring-2 ring-purple-600/20 dark:ring-purple-500/20 rounded-2xl p-3 sm:p-5 flex flex-col justify-between hover:border-purple-700 hover:shadow-xl transition-all duration-200 group relative h-full select-none"
                                 >
                                     <div>
-                                        <div onclick="abrirModalDetalleProducto(this)" class="w-full aspect-square rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-4 cursor-pointer group-hover:shadow-inner">
+                                        <div onclick="abrirModalDetalleProducto(this)" class="w-full h-36 sm:h-52 md:h-60 rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-2.5 sm:mb-4 cursor-pointer group-hover:shadow-inner">
                                             <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 dark:via-white/5 dark:to-white/10 pointer-events-none rounded-xl z-20"></div>
                                             <span class="absolute top-2.5 left-2.5 z-10 bg-purple-600 text-white text-[10px] font-label-sm font-bold uppercase px-2.5 py-0.5 rounded-md shadow-sm inline-flex items-center gap-1">
                                                 <span class="material-symbols-outlined text-[12px]">diamond</span>
@@ -572,7 +572,7 @@
                                             </button>
                                         </div>
                                     </div>
-                                    <div class="pt-4 mt-4 border-t border-purple-100 dark:border-purple-500/20 flex items-center justify-between gap-2">
+                                    <div class="pt-2.5 sm:pt-4 mt-2.5 sm:mt-4 border-t border-purple-100 dark:border-purple-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                                         <div>
                                             <span class="text-[10px] uppercase font-label-code text-outline dark:text-purple-300/60 block">Precio Tasado:</span>
                                             <span class="font-tabular-data font-bold text-on-surface dark:text-white text-base">$32,000 <span class="text-xs font-normal text-on-surface-variant dark:text-purple-200/60">MXN</span></span>
@@ -589,7 +589,7 @@
 
                     <!-- Fallback 3: Memorabilia 1 (Segunda Derecha) -->
                     <div
-                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[285px] sm:w-[325px] md:w-[340px] h-[460px] sm:h-[480px]"
+                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[220px] sm:w-[290px] md:w-[310px] h-[460px] sm:h-[490px] md:h-[520px]"
                         style="transform-style: preserve-3d; z-index: 10;"
                         data-slide-index="2"
                     >
@@ -601,10 +601,10 @@
                                 <article
                                     draggable="false"
                                     data-product-details="{{ json_encode($fallbackMemorabilia, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) }}"
-                                    class="bg-white dark:bg-[#171024] border-2 border-purple-600 dark:border-purple-500 ring-2 ring-purple-600/20 dark:ring-purple-500/20 rounded-2xl p-5 flex flex-col justify-between hover:border-purple-700 hover:shadow-xl transition-all duration-200 group relative h-full select-none"
+                                    class="bg-white dark:bg-[#171024] border-2 border-purple-600 dark:border-purple-500 ring-2 ring-purple-600/20 dark:ring-purple-500/20 rounded-2xl p-3 sm:p-5 flex flex-col justify-between hover:border-purple-700 hover:shadow-xl transition-all duration-200 group relative h-full select-none"
                                 >
                                     <div>
-                                        <div onclick="abrirModalDetalleProducto(this)" class="w-full aspect-square rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-4 cursor-pointer group-hover:shadow-inner">
+                                        <div onclick="abrirModalDetalleProducto(this)" class="w-full h-36 sm:h-52 md:h-60 rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-2.5 sm:mb-4 cursor-pointer group-hover:shadow-inner">
                                             <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 dark:via-white/5 dark:to-white/10 pointer-events-none rounded-xl z-20"></div>
                                             <span class="absolute top-2.5 left-2.5 z-10 bg-purple-600 text-white text-[10px] font-label-sm font-bold uppercase px-2.5 py-0.5 rounded-md shadow-sm inline-flex items-center gap-1">
                                                 <span class="material-symbols-outlined text-[12px]">diamond</span>
@@ -622,7 +622,7 @@
                                             </button>
                                         </div>
                                     </div>
-                                    <div class="pt-4 mt-4 border-t border-purple-100 dark:border-purple-500/20 flex items-center justify-between gap-2">
+                                    <div class="pt-2.5 sm:pt-4 mt-2.5 sm:mt-4 border-t border-purple-100 dark:border-purple-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                                         <div>
                                             <span class="text-[10px] uppercase font-label-code text-outline dark:text-purple-300/60 block">Precio Tasado:</span>
                                             <span class="font-tabular-data font-bold text-on-surface dark:text-white text-base">$9,400 <span class="text-xs font-normal text-on-surface-variant dark:text-purple-200/60">MXN</span></span>
@@ -639,7 +639,7 @@
 
                     <!-- Fallback 4: Disco 2 (Posterior Oculto) -->
                     <div
-                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[285px] sm:w-[325px] md:w-[340px] h-[460px] sm:h-[480px]"
+                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[220px] sm:w-[290px] md:w-[310px] h-[460px] sm:h-[490px] md:h-[520px]"
                         style="transform-style: preserve-3d; z-index: 1;"
                         data-slide-index="3"
                     >
@@ -651,10 +651,10 @@
                                 <article
                                     draggable="false"
                                     data-product-details="{{ json_encode($fallbackDisco2, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) }}"
-                                    class="bg-white dark:bg-[#171024] border-2 border-purple-600 dark:border-purple-500 ring-2 ring-purple-600/20 dark:ring-purple-500/20 rounded-2xl p-5 flex flex-col justify-between hover:border-purple-700 hover:shadow-xl transition-all duration-200 group relative h-full select-none"
+                                    class="bg-white dark:bg-[#171024] border-2 border-purple-600 dark:border-purple-500 ring-2 ring-purple-600/20 dark:ring-purple-500/20 rounded-2xl p-3 sm:p-5 flex flex-col justify-between hover:border-purple-700 hover:shadow-xl transition-all duration-200 group relative h-full select-none"
                                 >
                                     <div>
-                                        <div onclick="abrirModalDetalleProducto(this)" class="w-full aspect-square rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-4 cursor-pointer group-hover:shadow-inner">
+                                        <div onclick="abrirModalDetalleProducto(this)" class="w-full h-36 sm:h-52 md:h-60 rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-2.5 sm:mb-4 cursor-pointer group-hover:shadow-inner">
                                             <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 dark:via-white/5 dark:to-white/10 pointer-events-none rounded-xl z-20"></div>
                                             <span class="absolute top-2.5 left-2.5 z-10 bg-purple-600 text-white text-[10px] font-label-sm font-bold uppercase px-2.5 py-0.5 rounded-md shadow-sm inline-flex items-center gap-1">
                                                 <span class="material-symbols-outlined text-[12px]">diamond</span>
@@ -672,7 +672,7 @@
                                             </button>
                                         </div>
                                     </div>
-                                    <div class="pt-4 mt-4 border-t border-purple-100 dark:border-purple-500/20 flex items-center justify-between gap-2">
+                                    <div class="pt-2.5 sm:pt-4 mt-2.5 sm:mt-4 border-t border-purple-100 dark:border-purple-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                                         <div>
                                             <span class="text-[10px] uppercase font-label-code text-outline dark:text-purple-300/60 block">Precio Tasado:</span>
                                             <span class="font-tabular-data font-bold text-on-surface dark:text-white text-base">$24,500 <span class="text-xs font-normal text-on-surface-variant dark:text-purple-200/60">MXN</span></span>
@@ -689,7 +689,7 @@
 
                     <!-- Fallback 5: Libro 2 (Segunda Izquierda) -->
                     <div
-                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[285px] sm:w-[325px] md:w-[340px] h-[460px] sm:h-[480px]"
+                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[220px] sm:w-[290px] md:w-[310px] h-[460px] sm:h-[490px] md:h-[520px]"
                         style="transform-style: preserve-3d; z-index: 10;"
                         data-slide-index="4"
                     >
@@ -701,10 +701,10 @@
                                 <article
                                     draggable="false"
                                     data-product-details="{{ json_encode($fallbackLibro2, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) }}"
-                                    class="bg-white dark:bg-[#171024] border-2 border-purple-600 dark:border-purple-500 ring-2 ring-purple-600/20 dark:ring-purple-500/20 rounded-2xl p-5 flex flex-col justify-between hover:border-purple-700 hover:shadow-xl transition-all duration-200 group relative h-full select-none"
+                                    class="bg-white dark:bg-[#171024] border-2 border-purple-600 dark:border-purple-500 ring-2 ring-purple-600/20 dark:ring-purple-500/20 rounded-2xl p-3 sm:p-5 flex flex-col justify-between hover:border-purple-700 hover:shadow-xl transition-all duration-200 group relative h-full select-none"
                                 >
                                     <div>
-                                        <div onclick="abrirModalDetalleProducto(this)" class="w-full aspect-square rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-4 cursor-pointer group-hover:shadow-inner">
+                                        <div onclick="abrirModalDetalleProducto(this)" class="w-full h-36 sm:h-52 md:h-60 rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-2.5 sm:mb-4 cursor-pointer group-hover:shadow-inner">
                                             <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 dark:via-white/5 dark:to-white/10 pointer-events-none rounded-xl z-20"></div>
                                             <span class="absolute top-2.5 left-2.5 z-10 bg-purple-600 text-white text-[10px] font-label-sm font-bold uppercase px-2.5 py-0.5 rounded-md shadow-sm inline-flex items-center gap-1">
                                                 <span class="material-symbols-outlined text-[12px]">diamond</span>
@@ -722,7 +722,7 @@
                                             </button>
                                         </div>
                                     </div>
-                                    <div class="pt-4 mt-4 border-t border-purple-100 dark:border-purple-500/20 flex items-center justify-between gap-2">
+                                    <div class="pt-2.5 sm:pt-4 mt-2.5 sm:mt-4 border-t border-purple-100 dark:border-purple-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                                         <div>
                                             <span class="text-[10px] uppercase font-label-code text-outline dark:text-purple-300/60 block">Precio Tasado:</span>
                                             <span class="font-tabular-data font-bold text-on-surface dark:text-white text-base">$28,000 <span class="text-xs font-normal text-on-surface-variant dark:text-purple-200/60">MXN</span></span>
@@ -739,7 +739,7 @@
 
                     <!-- Fallback 6: Memorabilia 2 (Inmediata Izquierda) -->
                     <div
-                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[285px] sm:w-[325px] md:w-[340px] h-[460px] sm:h-[480px]"
+                        class="coverflow-slot-anchor absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[220px] sm:w-[290px] md:w-[310px] h-[460px] sm:h-[490px] md:h-[520px]"
                         style="transform-style: preserve-3d; z-index: 20;"
                         data-slide-index="5"
                     >
@@ -751,10 +751,10 @@
                                 <article
                                     draggable="false"
                                     data-product-details="{{ json_encode($fallbackMemorabilia2, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) }}"
-                                    class="bg-white dark:bg-[#171024] border-2 border-purple-600 dark:border-purple-500 ring-2 ring-purple-600/20 dark:ring-purple-500/20 rounded-2xl p-5 flex flex-col justify-between hover:border-purple-700 hover:shadow-xl transition-all duration-200 group relative h-full select-none"
+                                    class="bg-white dark:bg-[#171024] border-2 border-purple-600 dark:border-purple-500 ring-2 ring-purple-600/20 dark:ring-purple-500/20 rounded-2xl p-3 sm:p-5 flex flex-col justify-between hover:border-purple-700 hover:shadow-xl transition-all duration-200 group relative h-full select-none"
                                 >
                                     <div>
-                                        <div onclick="abrirModalDetalleProducto(this)" class="w-full aspect-square rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-4 cursor-pointer group-hover:shadow-inner">
+                                        <div onclick="abrirModalDetalleProducto(this)" class="w-full h-36 sm:h-52 md:h-60 rounded-xl bg-surface-container-low dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30 flex items-center justify-center relative overflow-hidden mb-2.5 sm:mb-4 cursor-pointer group-hover:shadow-inner">
                                             <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 dark:via-white/5 dark:to-white/10 pointer-events-none rounded-xl z-20"></div>
                                             <span class="absolute top-2.5 left-2.5 z-10 bg-purple-600 text-white text-[10px] font-label-sm font-bold uppercase px-2.5 py-0.5 rounded-md shadow-sm inline-flex items-center gap-1">
                                                 <span class="material-symbols-outlined text-[12px]">diamond</span>
@@ -772,7 +772,7 @@
                                             </button>
                                         </div>
                                     </div>
-                                    <div class="pt-4 mt-4 border-t border-purple-100 dark:border-purple-500/20 flex items-center justify-between gap-2">
+                                    <div class="pt-2.5 sm:pt-4 mt-2.5 sm:mt-4 border-t border-purple-100 dark:border-purple-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                                         <div>
                                             <span class="text-[10px] uppercase font-label-code text-outline dark:text-purple-300/60 block">Precio Tasado:</span>
                                             <span class="font-tabular-data font-bold text-on-surface dark:text-white text-base">$65,000 <span class="text-xs font-normal text-on-surface-variant dark:text-purple-200/60">MXN</span></span>
@@ -820,7 +820,7 @@
 
     <!-- Cuadrícula Dinámica de Productos del Catálogo -->
     @if ($coleccionProductos->isNotEmpty())
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-5 mb-12">
             @foreach ($coleccionProductos as $producto)
                 <x-public.product-card :producto="$producto" />
             @endforeach
@@ -853,10 +853,11 @@
 
                     function getSpacingX() {
                         const w = window.innerWidth;
-                        if (w < 640) return 165; // Móvil
-                        if (w < 1024) return 260; // Tablet
-                        if (w < 1280) return 310; // Portátil
-                        return 335; // Escritorio amplio
+                        if (w < 640) return 120; // Celular compacto y proporcionado
+                        if (w < 768) return 160; // Móvil amplio
+                        if (w < 1024) return 240; // Tablet amplia (>= 768 ? 240)
+                        if (w < 1280) return 280; // Portátil
+                        return 320; // Escritorio amplio
                     }
 
                     function updatePositions() {

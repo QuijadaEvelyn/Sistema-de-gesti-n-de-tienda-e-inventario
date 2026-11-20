@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Schema;
  */
 class CatalogoCuradoSeeder extends Seeder
 {
-    public const TOTAL_PRODUCTOS = 59;
+    public const TOTAL_PRODUCTOS = 71;
     public const EXPORTADO_EN = '2026-11-18 05:28:33';
 
     /**

@@ -59,6 +59,128 @@ class CatalogoPublicoController extends Controller
     ];
 
     /**
+     * Catálogo exhaustivo de géneros literarios clasificados en ARCHIVUM.
+     *
+     * @var array<string, string>
+     */
+    public const GENEROS_LIBROS = [
+        'todos' => 'Todos los Géneros',
+        'novela' => 'Novela',
+        'ensayo' => 'Ensayo',
+        'poesia' => 'Poesía',
+        'historia' => 'Historia',
+        'ciencia' => 'Ciencia',
+        'terror' => 'Terror',
+        'ciencia_ficcion' => 'Ciencia Ficción',
+        'fantasia' => 'Fantasía',
+        'misterio_thriller' => 'Misterio & Thriller',
+        'filosofia' => 'Filosofía',
+        'clasicos' => 'Clásicos Universales',
+        'biografia_cronica' => 'Biografía & Crónica',
+    ];
+
+    /**
+     * Iconos de Google Material Symbols asignados a cada género literario.
+     *
+     * @var array<string, string>
+     */
+    public const ICONOS_GENEROS = [
+        'todos' => 'auto_stories',
+        'novela' => 'menu_book',
+        'ensayo' => 'history_edu',
+        'poesia' => 'draw',
+        'historia' => 'account_balance',
+        'ciencia' => 'psychology',
+        'terror' => 'skull',
+        'ciencia_ficcion' => 'rocket_launch',
+        'fantasia' => 'magic_button',
+        'misterio_thriller' => 'fingerprint',
+        'filosofia' => 'lightbulb',
+        'clasicos' => 'hotel_class',
+        'biografia_cronica' => 'person_book',
+    ];
+
+    /**
+     * Paletas visuales editoriales de encuadernación en piel y tela de archivo (para el Estante 3D).
+     *
+     * @var array<int, array{bg: string, bg_hex: string, border: string, accent: string, text_gold: string, textura: string, relieve: string}>
+     */
+    public const PALETAS_EDITORIALES = [
+        [
+            'bg' => 'from-[#4a0e17] via-[#5c131e] to-[#2d080e]',
+            'bg_hex' => '#4a0e17',
+            'border' => 'border-purple-400/40',
+            'accent' => '#c084fc',
+            'text_gold' => 'text-purple-200',
+            'textura' => 'Guaflex Borgoña Imperial',
+            'relieve' => 'Estampación notarial en pan púrpura y plata',
+        ],
+        [
+            'bg' => 'from-[#0f172a] via-[#1e1b4b] to-[#090b14]',
+            'bg_hex' => '#0f172a',
+            'border' => 'border-indigo-400/40',
+            'accent' => '#818cf8',
+            'text_gold' => 'text-purple-200',
+            'textura' => 'Tela Editorial Azul Noche & Índigo',
+            'relieve' => 'Nervios estampados al agua',
+        ],
+        [
+            'bg' => 'from-[#1e1333] via-[#2d1b4d] to-[#120a21]',
+            'bg_hex' => '#1e1333',
+            'border' => 'border-purple-400/40',
+            'accent' => '#a855f7',
+            'text_gold' => 'text-purple-200',
+            'textura' => 'Piel Marroquinería Amatista Profundo',
+            'relieve' => 'Fileteado con rueda gofrada violeta',
+        ],
+        [
+            'bg' => 'from-[#231238] via-[#351b54] to-[#150a24]',
+            'bg_hex' => '#231238',
+            'border' => 'border-violet-400/40',
+            'accent' => '#8b5cf6',
+            'text_gold' => 'text-purple-200',
+            'textura' => 'Badana Clásica Violeta Imperial',
+            'relieve' => 'Tejuelo grabado a fuego',
+        ],
+        [
+            'bg' => 'from-[#251d2e] via-[#332540] to-[#140e1b]',
+            'bg_hex' => '#251d2e',
+            'border' => 'border-purple-400/40',
+            'accent' => '#c084fc',
+            'text_gold' => 'text-purple-200',
+            'textura' => 'Terciopelo Carmesí & Piel Noche',
+            'relieve' => 'Orla ornamental gótica estampada',
+        ],
+        [
+            'bg' => 'from-[#1c142b] via-[#2a1c42] to-[#100a1c]',
+            'bg_hex' => '#1c142b',
+            'border' => 'border-purple-400/50',
+            'accent' => '#a78bfa',
+            'text_gold' => 'text-purple-200',
+            'textura' => 'Pergamino & Seda Púrpura Nocturna',
+            'relieve' => 'Letras capitulares gofradas en relieve',
+        ],
+        [
+            'bg' => 'from-[#2a133d] via-[#3c1b56] to-[#190a25]',
+            'bg_hex' => '#2a133d',
+            'border' => 'border-violet-400/40',
+            'accent' => '#a855f7',
+            'text_gold' => 'text-purple-200',
+            'textura' => 'Bucarán Eclesiástico Violeta',
+            'relieve' => 'Motivo arabesco gofrado bruñido',
+        ],
+        [
+            'bg' => 'from-[#180f26] via-[#25163d] to-[#0e0717]',
+            'bg_hex' => '#180f26',
+            'border' => 'border-purple-400/40',
+            'accent' => '#9333ea',
+            'text_gold' => 'text-purple-200',
+            'textura' => 'Tafilete Obsidiana & Violeta',
+            'relieve' => 'Costillas marcadas y cantoneras bruñidas',
+        ],
+    ];
+
+    /**
      * Página principal de la tienda pública (Catálogo General, Galería y Promociones Exclusivas).
      */
     public function home(Request $request): View
@@ -86,29 +208,166 @@ class CatalogoPublicoController extends Controller
     }
 
     /**
-     * Sección: Libros (clasificación por Géneros Literarios: novela, ensayo, poesía, historia, ciencia, etc.).
+     * Sección: Libros (Fondo Bibliográfico con Estante 3D Interactivo y Filtro de 12 Géneros).
      */
     public function libros(Request $request): View
     {
         $productos = $this->consultarProductos($request, 'libros');
 
-        $generosDisponibles = [
-            'todos' => 'Todos los Géneros',
-            'novela' => 'Novela',
-            'ensayo' => 'Ensayo',
-            'poesia' => 'Poesía',
-            'historia' => 'Historia',
-            'ciencia' => 'Ciencia',
-        ];
+        $filtroActivoRaw = $request->string('genero')->lower()->toString();
+        $filtroActivoSlug = $filtroActivoRaw ? str_replace(['-', ' '], '_', $filtroActivoRaw) : 'todos';
+        $filtroActivo = array_key_exists($filtroActivoSlug, self::GENEROS_LIBROS) ? $filtroActivoSlug : 'todos';
 
-        return view('public.categoria', [
+        // Obtener todos los libros activos para el contador de géneros y el Estante 3D
+        $todosLibros = Producto::query()
+            ->with([
+                'catalogo',
+                'libro',
+                'variantesSku.existencias.piezasUnicas',
+                'variantesSku.existencias.sucursal',
+            ])
+            ->where('activo', true)
+            ->whereHas('catalogo', fn (Builder $q) => $q->where('tipo', 'libro'))
+            ->get();
+
+        $conteoGeneros = ['todos' => $todosLibros->count()];
+        foreach (self::GENEROS_LIBROS as $slug => $nombre) {
+            if ($slug === 'todos') {
+                continue;
+            }
+            $conteoGeneros[$slug] = $todosLibros->filter(function (Producto $p) use ($slug): bool {
+                $gen = str_replace(['-', ' '], '_', strtolower((string) ($p->libro?->genero ?? '')));
+
+                return $gen === $slug;
+            })->count();
+        }
+
+        // Selección curatorial balanceada para el Estante 3D de Libros (hasta 8 libros destacados de géneros variados)
+        $librosCandidatos = $todosLibros->sortByDesc(function (Producto $p): float {
+            $variante = $p->variantesSku->first();
+            $esUnica = $variante && $variante->existencias->flatMap->piezasUnicas->isNotEmpty();
+
+            return ($esUnica ? 500000.0 : 0.0) + (float) $p->precio;
+        })->values();
+
+        $seleccionados = collect();
+        $generosIncluidos = [];
+        foreach ($librosCandidatos as $cand) {
+            $g = str_replace(['-', ' '], '_', strtolower((string) ($cand->libro?->genero ?? 'novela')));
+            if (! in_array($g, $generosIncluidos, true) || $seleccionados->count() < 4) {
+                $seleccionados->push($cand);
+                $generosIncluidos[] = $g;
+                if ($seleccionados->count() >= 8) {
+                    break;
+                }
+            }
+        }
+
+        if ($seleccionados->count() < 6) {
+            $seleccionados = $librosCandidatos->take(8);
+        }
+
+        $librosEstante = [];
+        foreach ($seleccionados->values() as $idx => $prod) {
+            /** @var \App\Models\Producto $prod */
+            $variante = $prod->variantesSku->first();
+            $sku = $variante?->sku ?? 'LIB-ARC-'.$prod->id;
+            $graduacionRaw = $variante?->descripcion ?? 'MINT (M) · PRIMERA EDICIÓN';
+            $partesGrad = array_map('trim', explode('·', $graduacionRaw));
+            $graduacionCorta = $partesGrad[0] ?? 'MINT (M)';
+            $stockTotal = $variante ? (int) $variante->existencias->sum('cantidad') : 0;
+            $piezaUnica = $variante
+                ? CheckoutSimuladoController::obtenerPiezaUnicaDeVariante((int) $variante->id)
+                : null;
+            $esPiezaUnica = $piezaUnica !== null;
+            $sedeCustodia = $piezaUnica?->existencia?->sucursal?->nombre
+                ?? $variante?->existencias?->first()?->sucursal?->nombre
+                ?? 'Bóveda Central Bellas Artes';
+
+            $generoSlug = str_replace(['-', ' '], '_', strtolower((string) ($prod->libro?->genero ?? 'novela')));
+            $paleta = self::PALETAS_EDITORIALES[$idx % count(self::PALETAS_EDITORIALES)];
+
+            $badgeType = str_contains($graduacionCorta, 'COA')
+                ? 'coa'
+                : (str_contains($graduacionCorta, 'VERY FINE') ? 'rare' : 'mint');
+
+            $subtituloCuratorial = ($prod->libro?->autor ?? 'Autor Histórico').' · '.($prod->libro?->editorial ?? 'Edición Histórica').($prod->libro?->anio_publicacion ? ' ('.$prod->libro->anio_publicacion.')' : '');
+
+            $datosModal = [
+                'id' => $prod->id,
+                'nombre' => $prod->nombre,
+                'subtitulo' => $subtituloCuratorial,
+                'descripcion' => $prod->descripcion,
+                'precio' => number_format((float) $prod->precio, 0),
+                'tipo' => 'libro',
+                'icono' => self::ICONOS_GENEROS[$generoSlug] ?? 'menu_book',
+                'sku' => $sku,
+                'graduacion' => $graduacionCorta,
+                'badgeType' => $badgeType,
+                'stock' => $stockTotal,
+                'sede' => str_replace('Sucursal ', '', $sedeCustodia),
+                'esPiezaUnica' => $esPiezaUnica,
+                'numeroSerie' => $piezaUnica?->numero_serie,
+                'imagen' => $prod->imagen_url,
+                'estaAgotado' => $stockTotal <= 0 || ($esPiezaUnica && in_array($piezaUnica->estado, ['reservada', 'vendida'], true)),
+                'estaReservada' => $piezaUnica !== null && $piezaUnica->estado === 'reservada',
+                'varianteSkuId' => $variante?->id,
+                'actionUrl' => route('carrito.agregar'),
+                'especificaciones' => [
+                    'Autor' => $prod->libro?->autor ?? 'Autor Histórico',
+                    'Editorial' => $prod->libro?->editorial ?? 'Edición Histórica',
+                    'Año de Publicación' => (string) ($prod->libro?->anio_publicacion ?? 'N/D'),
+                    'Género Literario' => self::GENEROS_LIBROS[$generoSlug] ?? ucfirst($generoSlug),
+                    'Páginas' => $prod->libro?->paginas ? $prod->libro->paginas.' págs.' : 'Edición íntegra peritada',
+                    'Encuadernación' => $paleta['textura'].' · '.$paleta['relieve'],
+                    'ISBN' => $prod->libro?->isbn ?? '978-ARCHIVUM-00',
+                    'Graduación' => $graduacionRaw,
+                    'Certificado' => 'COA-BIB-'.substr(md5($sku), 0, 8),
+                ],
+            ];
+
+            $librosEstante[] = [
+                'index' => $idx,
+                'producto_id' => $prod->id,
+                'variante_sku_id' => $variante?->id,
+                'sku' => $sku,
+                'nombre' => $prod->nombre,
+                'autor' => $prod->libro?->autor ?? 'Autor Histórico',
+                'editorial' => $prod->libro?->editorial ?? 'Edición Histórica',
+                'anio' => $prod->libro?->anio_publicacion ?? 'Época Clásica',
+                'paginas' => $prod->libro?->paginas ?? 320,
+                'isbn' => $prod->libro?->isbn ?? '978-ARCHIVUM-00',
+                'genero' => $generoSlug,
+                'genero_nombre' => self::GENEROS_LIBROS[$generoSlug] ?? 'Novela',
+                'genero_icono' => self::ICONOS_GENEROS[$generoSlug] ?? 'menu_book',
+                'graduacion' => $graduacionCorta,
+                'graduacion_completa' => $graduacionRaw,
+                'certificado' => 'COA-BIB-'.substr(md5($sku), 0, 8),
+                'descripcion' => $prod->descripcion,
+                'precio' => (float) $prod->precio,
+                'precio_formateado' => '$'.number_format((float) $prod->precio, 0),
+                'stock' => $stockTotal,
+                'agotado' => $stockTotal <= 0 || ($esPiezaUnica && in_array($piezaUnica->estado, ['reservada', 'vendida'], true)),
+                'es_pieza_unica' => $esPiezaUnica,
+                'numero_serie' => $piezaUnica?->numero_serie,
+                'sede' => $sedeCustodia,
+                'paleta' => $paleta,
+                'imagen' => $prod->imagen_url,
+                'datos_modal' => $datosModal,
+            ];
+        }
+
+        return view('public.libros', [
             'categoriaSlug' => 'libros',
             'meta' => self::CATEGORIAS['libros'],
             'productos' => $productos,
             'categoriaActiva' => 'libros',
             'filtroTipo' => 'genero',
-            'filtros' => $generosDisponibles,
-            'filtroActivo' => $request->string('genero')->lower()->toString() ?: 'todos',
+            'filtros' => self::GENEROS_LIBROS,
+            'filtroActivo' => $filtroActivo,
+            'conteoGeneros' => $conteoGeneros,
+            'iconosGeneros' => self::ICONOS_GENEROS,
+            'librosEstante' => $librosEstante,
         ]);
     }
 
@@ -302,6 +561,16 @@ class CatalogoPublicoController extends Controller
         // Si estamos en entorno web interactivo y aún no se han sembrado los productos, poblar automáticamente
         if (! app()->runningUnitTests() && Producto::count() === 0) {
             app(CatalogoProductoSeeder::class)->run();
+        } elseif (! app()->runningUnitTests() && Schema::hasTable('libros')) {
+            // Asegurar que los 12 géneros literarios del catálogo curado estén sembrados en la base de datos
+            static $librosSincronizados = false;
+            if (! $librosSincronizados) {
+                $librosSincronizados = true;
+                $tieneNuevosGeneros = \App\Models\Libro::whereIn('genero', ['terror', 'ciencia_ficcion', 'fantasia'])->exists();
+                if (! $tieneNuevosGeneros) {
+                    app(CatalogoProductoSeeder::class)->run();
+                }
+            }
         } elseif (Schema::hasTable('discos') && Schema::hasColumn('discos', 'imagen')) {
             // Asegurar que los vinilos existentes tengan su imagen asignada en la base de datos
             static $imagenesSincronizadas = false;
@@ -350,9 +619,10 @@ class CatalogoPublicoController extends Controller
             $query->whereHas('catalogo', fn (Builder $q) => $q->where('tipo', 'libro'));
 
             if ($request->filled('genero') && $request->string('genero')->lower()->toString() !== 'todos') {
-                $generoFiltro = $request->string('genero')->lower()->toString();
-                $query->whereHas('libro', function (Builder $l) use ($generoFiltro): void {
-                    $l->where('genero', $generoFiltro);
+                $generoRaw = $request->string('genero')->lower()->toString();
+                $generoSlug = str_replace(['-', ' '], '_', $generoRaw);
+                $query->whereHas('libro', function (Builder $l) use ($generoSlug, $generoRaw): void {
+                    $l->where('genero', $generoSlug)->orWhere('genero', $generoRaw);
                 });
             }
         } elseif ($categoria === 'vinilos') {
