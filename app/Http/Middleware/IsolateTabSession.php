@@ -39,9 +39,16 @@ class IsolateTabSession
             return null;
         }
 
+        // Las rutas de recuperación de contraseña (/forgot-password y /reset-password/*) siempre se acceden
+        // libremente como invitado cuando el usuario abre el enlace desde su correo Gmail en una pestaña nueva,
+        // sin redirigir en bucle ni exigir sesión iniciada.
+        if ($request->is('forgot-password', 'forgot-password/*', 'reset-password', 'reset-password/*')) {
+            return null;
+        }
+
         // En peticiones GET a vistas de login/registro sin `_tab` explícito en la URL,
         // no usar tokens implícitos para que /login siempre renderice el formulario sin redirigir en bucle.
-        $isAuthFormGet = $request->isMethod('GET') && $request->is('login', 'register', 'admin/login');
+        $isAuthFormGet = $request->isMethod('GET') && $request->is('login', 'register', 'admin/login', 'forgot-password', 'reset-password', 'reset-password/*');
 
         $raw = $request->input('tab_token')
             ?: $request->header('X-Tab-Token')
@@ -307,12 +314,13 @@ class IsolateTabSession
             ]);
         }
 
-        // Si la respuesta es una redirección 302 dentro de una pestaña autenticada (y no redirige a login/logout),
+        // Si la respuesta es una redirección 302 dentro de una pestaña autenticada (y no redirige a login/logout/password),
         // anexar automáticamente `_tab` a la URL de destino para mantener su sesión sin usar cookies globales
-        if ($response->isRedirection() && $activeTabId !== '' && ! $request->is('logout')) {
+        if ($response->isRedirection() && $activeTabId !== '' && ! $request->is('logout', 'forgot-password', 'reset-password', 'reset-password/*')) {
             $location = (string) $response->headers->get('Location', '');
             $locationPath = (string) parse_url($location, PHP_URL_PATH);
-            $isRedirectToAuthForm = in_array($locationPath, ['/login', '/register', '/admin/login'], true);
+            $isRedirectToAuthForm = in_array($locationPath, ['/login', '/register', '/admin/login', '/forgot-password'], true)
+                || str_starts_with($locationPath, '/reset-password');
 
             if ($location !== '' && ! $isRedirectToAuthForm) {
                 $response->headers->set('Location', self::appendTabQueryToUrl($location, $activeTabId));

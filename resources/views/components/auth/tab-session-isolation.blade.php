@@ -261,7 +261,17 @@
                     return;
                 }
 
-                // Navegación normal dentro de la misma pestaña autenticada: anexar _tab
+                // Navegación normal dentro de la misma pestaña autenticada: anexar _tab (excepto rutas de invitado de recuperación de contraseña)
+                var targetPath = targetUrl.pathname || '';
+                var isPasswordResetRoute = targetPath === '/forgot-password' || targetPath.indexOf('/reset-password') === 0;
+                if (isPasswordResetRoute) {
+                    if (targetUrl.searchParams.has('_tab')) {
+                        targetUrl.searchParams.delete('_tab');
+                        link.href = targetUrl.toString();
+                    }
+                    return;
+                }
+
                 if (isServerAuth || sessionStorage.getItem('tab_authenticated') === '1') {
                     var activeToken = window.getArchivumTabToken();
                     if (activeToken) {

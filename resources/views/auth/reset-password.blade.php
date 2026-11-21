@@ -3,7 +3,7 @@
 @section('content')
 <div class="bg-white/95 dark:bg-[#171024]/95 backdrop-blur-md rounded-3xl p-6 sm:p-8 shadow-xl border border-purple-200/80 dark:border-purple-500/30 space-y-6 transition-all duration-300">
     
-    <!-- Encabezado con Icono y Tipografía Curatorial -->
+    <!-- Encabezado con Icono y Tipografía -->
     <div class="text-center space-y-2">
         <div class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-primary-container text-white shadow-xs mb-1">
             <span class="material-symbols-outlined text-[26px]">vpn_key</span>
@@ -12,7 +12,7 @@
             Restablecer Contraseña
         </h1>
         <p class="text-xs text-on-surface-variant font-quicksand max-w-sm mx-auto leading-relaxed">
-            Ingresa tu correo, el código o token de verificación recibido y define tu nueva contraseña segura para acceder a la bóveda.
+            Verifica tu correo electrónico y escribe tu nueva contraseña para recuperar el acceso a tu cuenta en ARCHIVUM.
         </p>
     </div>
 
@@ -134,19 +134,52 @@
         <!-- Botón de Envío Glossy Glassmorphism -->
         <button
             type="submit"
-            class="btn-glass-purple w-full py-3.5 px-4 rounded-2xl text-white font-bold uppercase tracking-wider text-xs transition shadow-md flex items-center justify-center gap-2 mt-2"
+            class="btn-glass-purple w-full py-3.5 px-4 rounded-2xl text-white font-bold uppercase tracking-wider text-xs transition shadow-md flex items-center justify-center gap-2 mt-2 cursor-pointer"
         >
             <span class="material-symbols-outlined text-[18px]">verified_user</span>
-            <span>Actualizar Contraseña e Iniciar Sesión</span>
+            <span>Restablecer Contraseña</span>
         </button>
     </form>
 
-    <div class="pt-4 border-t border-purple-200/60 dark:border-purple-500/30 text-center">
-        <a href="{{ route('login') }}" class="btn-glass-surface inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold font-quicksand">
+    <div class="pt-4 border-t border-purple-200/60 dark:border-purple-500/30 flex flex-col sm:flex-row items-center justify-between gap-2 text-center">
+        <a href="{{ route('password.request') }}" class="text-xs text-primary hover:underline font-quicksand font-semibold">
+            ¿No recibiste el correo? Solicitar nuevo enlace
+        </a>
+        <a href="{{ route('login') }}" class="btn-glass-surface inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold font-quicksand">
             <span class="material-symbols-outlined text-[16px]">arrow_back</span>
-            <span>Cancelar y volver al inicio de sesión</span>
+            <span>Volver al login</span>
         </a>
     </div>
 
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Asegurar que al enviar el formulario de nueva contraseña se incluya el tab_token de esta pestaña
+    var resetForm = document.querySelector('form[action*="reset-password"]');
+    if (!resetForm) return;
+    resetForm.addEventListener('submit', function () {
+        try {
+            var token = sessionStorage.getItem('archivum_tab_token')
+                || sessionStorage.getItem('tab_token')
+                || ('tab_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 14));
+            sessionStorage.setItem('archivum_tab_token', token);
+            sessionStorage.setItem('tab_token', token);
+            sessionStorage.setItem('tab_session_id', token);
+            sessionStorage.setItem('tab_authenticated', '1');
+            sessionStorage.setItem('archivum_tab_ok', '1');
+            window.name = token;
+
+            var input = resetForm.querySelector('input[name="tab_token"]');
+            if (!input) {
+                input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'tab_token';
+                resetForm.appendChild(input);
+            }
+            input.value = token;
+        } catch (e) {}
+    });
+});
+</script>
 @endsection

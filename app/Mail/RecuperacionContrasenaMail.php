@@ -30,7 +30,7 @@ class RecuperacionContrasenaMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'ARCHIVUM · Código y Enlace de Recuperación de Contraseña',
+            subject: 'ARCHIVUM · Restablecer tu Contraseña',
         );
     }
 

@@ -199,21 +199,24 @@
                     </div>
                 @endauth
 
-                <!-- Disparador del Carrito Desplegable con Contador de Reserva (Nunca cortado en móvil) -->
-                <button
-                    type="button"
-                    id="open-cart-btn"
-                    class="btn-glass-purple relative w-9 h-9 sm:w-11 sm:h-11 p-0 sm:p-2.5 rounded-xl shadow-xs flex items-center justify-center focus:outline-none cursor-pointer shrink-0"
-                    aria-label="Abrir Carrito de Compras"
-                >
-                    <span class="material-symbols-outlined text-[18px] sm:text-[20px]">shopping_bag</span>
+                <!-- Disparador del Carrito Desplegable con Contador de Reserva (Nunca cortado por overflow) -->
+                <div class="relative inline-flex shrink-0">
+                    <button
+                        type="button"
+                        id="open-cart-btn"
+                        class="btn-glass-purple relative w-9 h-9 sm:w-11 sm:h-11 p-0 sm:p-2.5 rounded-xl shadow-xs flex items-center justify-center focus:outline-none cursor-pointer shrink-0 overflow-hidden"
+                        aria-label="Abrir Carrito de Compras"
+                    >
+                        <span class="material-symbols-outlined text-[18px] sm:text-[20px]">shopping_bag</span>
+                    </button>
                     <span
                         id="cart-counter-badge"
-                        class="absolute -top-1 -right-1 sm:-top-1.5 sm:-right-1.5 w-4 h-4 sm:w-5 sm:h-5 bg-surface-container-high text-on-surface font-tabular-data font-bold text-[9px] sm:text-xs rounded-full flex items-center justify-center shadow-xs border border-primary/40 {{ $contadorCarrito > 0 ? '' : 'hidden' }}"
+                        data-cart-count="{{ $contadorCarrito }}"
+                        class="pointer-events-none absolute -top-1.5 -right-1.5 z-20 min-w-[20px] h-5 px-1.5 rounded-full bg-white text-purple-900 dark:bg-white dark:text-purple-950 font-tabular-data font-bold text-xs flex items-center justify-center shadow-md border border-purple-300 {{ $contadorCarrito > 0 ? '' : 'hidden' }}"
                     >
                         {{ $contadorCarrito }}
                     </span>
-                </button>
+                </div>
             </div>
         </div>
 

@@ -66,6 +66,18 @@
     <div class="flex-1 overflow-y-auto p-6 sm:p-10 space-y-6">
         <div class="max-w-lg mx-auto space-y-6">
 
+            <!-- Contenedor de Confirmación Exitosa Dinámico (AJAX + Sesión Laravel) -->
+            <div
+                id="login-drawer-success"
+                class="hidden p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-900 dark:text-emerald-200 text-sm font-label-md flex items-start gap-2.5"
+                role="status"
+            >
+                <span class="material-symbols-outlined text-emerald-600 dark:text-emerald-400 text-[20px] shrink-0 mt-0.5">check_circle</span>
+                <div class="space-y-1">
+                    <p id="login-drawer-success-text" class="text-xs font-semibold leading-relaxed"></p>
+                </div>
+            </div>
+
             <!-- Contenedor de Errores Dinámico (AJAX + Sesión Laravel) -->
             <div
                 id="login-drawer-alert"
@@ -145,7 +157,12 @@
                             <label for="drawer-login-password" class="block text-xs font-semibold uppercase tracking-wider text-on-surface font-label-code">
                                 Contraseña
                             </label>
-                            <a href="{{ route('password.request') }}" class="text-xs text-primary hover:underline font-label-md">
+                            <a
+                                href="{{ route('password.request') }}"
+                                id="open-forgot-password-panel-btn"
+                                data-open-login-drawer="forgot"
+                                class="text-xs text-primary hover:underline font-label-md"
+                            >
                                 ¿Olvidaste tu contraseña?
                             </a>
                         </div>
@@ -296,6 +313,61 @@
                 </form>
             </div>
 
+            <!-- Panel 3: Formulario de Recuperación de Contraseña por Correo Electrónico (SMTP Gmail) -->
+            <div id="drawer-panel-forgot" class="hidden space-y-5">
+                <div class="space-y-1">
+                    <h3 class="text-xl font-bold font-quicksand text-on-surface">¿Olvidaste tu contraseña?</h3>
+                    <p class="text-xs text-on-surface-variant dark:text-stone-300 font-label-md leading-relaxed">
+                        Ingresa el correo electrónico de tu cuenta y te enviaremos un enlace seguro (válido por 60 minutos) para restablecer tu contraseña.
+                    </p>
+                </div>
+
+                <form id="drawer-forgot-form" method="POST" action="{{ route('password.email') }}" class="space-y-4">
+                    @csrf
+                    <div class="space-y-1.5">
+                        <label for="drawer-forgot-email" class="block text-xs font-semibold uppercase tracking-wider text-on-surface font-label-code">
+                            Correo Electrónico Registrado
+                        </label>
+                        <div class="relative">
+                            <span class="material-symbols-outlined text-[18px] text-outline absolute left-3.5 top-1/2 -translate-y-1/2">mail</span>
+                            <input
+                                id="drawer-forgot-email"
+                                type="email"
+                                name="email"
+                                value="{{ old('email') }}"
+                                required
+                                autocomplete="email"
+                                class="w-full pl-10 pr-4 py-3 rounded-xl border border-purple-200/90 dark:border-purple-500/40 bg-white dark:bg-[#140d20] text-on-surface dark:text-stone-100 placeholder:text-outline/70 dark:placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary focus:dark:bg-[#1a1228] focus:dark:border-purple-400 text-sm font-quicksand"
+                                placeholder="tu-correo@gmail.com"
+                            />
+                        </div>
+                    </div>
+
+                    <button
+                        type="submit"
+                        id="drawer-forgot-submit"
+                        class="btn-glass-purple w-full py-3.5 px-5 rounded-xl font-bold uppercase tracking-wider text-xs shadow-md font-quicksand flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                        <span class="material-symbols-outlined text-[18px]">send</span>
+                        <span id="drawer-forgot-submit-text">Enviar Enlace de Recuperación</span>
+                    </button>
+                </form>
+
+                <div class="flex items-center justify-between pt-2 text-xs">
+                    <button
+                        type="button"
+                        data-open-login-drawer="login"
+                        class="text-primary hover:underline font-semibold inline-flex items-center gap-1 cursor-pointer"
+                    >
+                        <span class="material-symbols-outlined text-[15px]">arrow_back</span>
+                        <span>Volver a Iniciar Sesión</span>
+                    </button>
+                    <a href="{{ route('password.request') }}" class="text-on-surface-variant hover:text-primary hover:underline">
+                        Abrir en pantalla completa &rarr;
+                    </a>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -323,8 +395,11 @@
         const tabRegisterBtn = document.getElementById('tab-register-btn');
         const panelLogin = document.getElementById('drawer-panel-login');
         const panelRegister = document.getElementById('drawer-panel-register');
+        const panelForgot = document.getElementById('drawer-panel-forgot');
         const alertBox = document.getElementById('login-drawer-alert');
         const errorList = document.getElementById('login-drawer-error-list');
+        const successBox = document.getElementById('login-drawer-success');
+        const successText = document.getElementById('login-drawer-success-text');
 
         if (!drawer || !overlay) {
             return;
@@ -334,15 +409,36 @@
             if (!panelLogin || !panelRegister || !tabLoginBtn || !tabRegisterBtn) {
                 return;
             }
+            if (alertBox) {
+                alertBox.classList.add('hidden');
+            }
+            if (successBox && tab !== 'forgot') {
+                successBox.classList.add('hidden');
+            }
             if (tab === 'register') {
                 panelLogin.classList.add('hidden');
+                if (panelForgot) panelForgot.classList.add('hidden');
                 panelRegister.classList.remove('hidden');
                 tabRegisterBtn.classList.add('btn-glass-purple');
                 tabRegisterBtn.classList.remove('btn-glass-surface');
                 tabLoginBtn.classList.remove('btn-glass-purple');
                 tabLoginBtn.classList.add('btn-glass-surface');
+            } else if (tab === 'forgot') {
+                panelLogin.classList.add('hidden');
+                panelRegister.classList.add('hidden');
+                if (panelForgot) panelForgot.classList.remove('hidden');
+                tabLoginBtn.classList.add('btn-glass-surface');
+                tabLoginBtn.classList.remove('btn-glass-purple');
+                tabRegisterBtn.classList.add('btn-glass-surface');
+                tabRegisterBtn.classList.remove('btn-glass-purple');
+                const loginEmailVal = document.getElementById('drawer-login-email')?.value || '';
+                const forgotEmailEl = document.getElementById('drawer-forgot-email');
+                if (forgotEmailEl && loginEmailVal && !forgotEmailEl.value) {
+                    forgotEmailEl.value = loginEmailVal;
+                }
             } else {
                 panelRegister.classList.add('hidden');
+                if (panelForgot) panelForgot.classList.add('hidden');
                 panelLogin.classList.remove('hidden');
                 tabLoginBtn.classList.add('btn-glass-purple');
                 tabLoginBtn.classList.remove('btn-glass-surface');
@@ -582,6 +678,72 @@
 
         bindAjaxForm('drawer-login-form', 'drawer-login-submit', 'drawer-login-submit-text', 'Iniciar Sesión');
         bindAjaxForm('drawer-register-form', 'drawer-register-submit', 'drawer-register-submit-text', 'Crear mi Cuenta de Cliente');
+
+        // Formulario AJAX de Recuperación de Contraseña en el Drawer
+        const forgotForm = document.getElementById('drawer-forgot-form');
+        const forgotSubmitBtn = document.getElementById('drawer-forgot-submit');
+        const forgotSubmitText = document.getElementById('drawer-forgot-submit-text');
+
+        if (forgotForm) {
+            forgotForm.addEventListener('submit', async function (e) {
+                e.preventDefault();
+                if (alertBox) alertBox.classList.add('hidden');
+                if (errorList) errorList.innerHTML = '';
+                if (successBox) successBox.classList.add('hidden');
+                if (forgotSubmitBtn) forgotSubmitBtn.disabled = true;
+                if (forgotSubmitText) forgotSubmitText.textContent = 'Enviando enlace...';
+
+                try {
+                    const formData = new FormData(forgotForm);
+                    const response = await fetch(forgotForm.action, {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+                        },
+                        body: formData
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok && data.status === 'success') {
+                        if (successBox && successText) {
+                            successText.textContent = data.message || 'Te enviamos un enlace a tu correo para restablecer tu contraseña.';
+                            successBox.classList.remove('hidden');
+                        }
+                        return;
+                    }
+
+                    const messages = [];
+                    if (data.errors) {
+                        Object.values(data.errors).forEach(function (errArr) {
+                            errArr.forEach(function (msg) {
+                                messages.push(msg);
+                            });
+                        });
+                    } else if (data.message) {
+                        messages.push(data.message);
+                    } else {
+                        messages.push('No pudimos enviar el correo de recuperación en este momento.');
+                    }
+
+                    if (errorList && alertBox) {
+                        messages.forEach(function (msg) {
+                            const li = document.createElement('li');
+                            li.textContent = msg;
+                            errorList.appendChild(li);
+                        });
+                        alertBox.classList.remove('hidden');
+                    }
+                } catch (err) {
+                    forgotForm.submit();
+                } finally {
+                    if (forgotSubmitBtn) forgotSubmitBtn.disabled = false;
+                    if (forgotSubmitText) forgotSubmitText.textContent = 'Enviar Enlace de Recuperación';
+                }
+            });
+        }
 
         // Si estamos en /login, /register, /admin/login, ?login=1 o existen errores de validación, abrir el drawer automáticamente
         const params = new URLSearchParams(window.location.search);

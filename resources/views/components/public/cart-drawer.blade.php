@@ -350,6 +350,31 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        // Función global para actualizar inmediatamente el badge contador del carrito en la barra superior
+        window.updateArchivumCartBadge = function (count) {
+            const parsedCount = Math.max(0, parseInt(count || 0, 10) || 0);
+            const cartCounterBadge = document.getElementById('cart-counter-badge');
+            if (cartCounterBadge) {
+                cartCounterBadge.textContent = parsedCount;
+                cartCounterBadge.setAttribute('data-cart-count', String(parsedCount));
+                if (parsedCount > 0) {
+                    cartCounterBadge.classList.remove('hidden');
+                } else {
+                    cartCounterBadge.classList.add('hidden');
+                }
+            }
+            const piecesCountEl = document.getElementById('cart-drawer-pieces-count');
+            if (piecesCountEl) {
+                piecesCountEl.textContent = `${parsedCount} ${parsedCount === 1 ? 'producto en carrito' : 'productos reservados'}`;
+            }
+        };
+
+        window.addEventListener('archivum:cart-updated', function (ev) {
+            if (ev && ev.detail && ev.detail.cantidad_total !== undefined) {
+                window.updateArchivumCartBadge(ev.detail.cantidad_total);
+            }
+        });
+
         @if (session('abrir_carrito'))
             const openBtn = document.getElementById('open-cart-btn');
             if (openBtn) {
@@ -455,19 +480,23 @@
                             totalEl.textContent = `$${Number(carrito.total).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MXN`;
                         }
 
-                        const piecesCountEl = document.getElementById('cart-drawer-pieces-count');
-                        if (piecesCountEl) {
-                            piecesCountEl.textContent = `${carrito.cantidad_total} ${carrito.cantidad_total === 1 ? 'producto en carrito' : 'productos reservados'}`;
-                        }
+                        if (typeof window.updateArchivumCartBadge === 'function') {
+                            window.updateArchivumCartBadge(carrito.cantidad_total || 0);
+                        } else {
+                            const piecesCountEl = document.getElementById('cart-drawer-pieces-count');
+                            if (piecesCountEl) {
+                                piecesCountEl.textContent = `${carrito.cantidad_total} ${carrito.cantidad_total === 1 ? 'producto en carrito' : 'productos reservados'}`;
+                            }
 
-                        const cartCounterBadge = document.getElementById('cart-counter-badge');
-                        if (cartCounterBadge) {
-                            const cantidadNum = parseInt(carrito.cantidad_total || 0, 10);
-                            cartCounterBadge.textContent = cantidadNum;
-                            if (cantidadNum > 0) {
-                                cartCounterBadge.classList.remove('hidden');
-                            } else {
-                                cartCounterBadge.classList.add('hidden');
+                            const cartCounterBadge = document.getElementById('cart-counter-badge');
+                            if (cartCounterBadge) {
+                                const cantidadNum = parseInt(carrito.cantidad_total || 0, 10);
+                                cartCounterBadge.textContent = cantidadNum;
+                                if (cantidadNum > 0) {
+                                    cartCounterBadge.classList.remove('hidden');
+                                } else {
+                                    cartCounterBadge.classList.add('hidden');
+                                }
                             }
                         }
 

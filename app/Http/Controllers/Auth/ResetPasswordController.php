@@ -5,15 +5,19 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\IsolateTabSession;
 use App\Models\Bitacora;
 use App\Models\RecuperacionContrasena;
 use App\Models\Usuario;
+use Carbon\Carbon;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
@@ -78,15 +82,31 @@ class ResetPasswordController extends Controller
         }
 
         /** @var RecuperacionContrasena|null $recuperacion */
-        $recuperacion = RecuperacionContrasena::where('usuario_id', $usuario->id)
-            ->where('token_hash', $tokenHash)
-            ->whereNull('usado_en')
-            ->where('expira_en', '>', now())
-            ->first();
+        $recuperacion = Schema::hasTable('recuperacion_contrasenas')
+            ? RecuperacionContrasena::where('usuario_id', $usuario->id)
+                ->where('token_hash', $tokenHash)
+                ->whereNull('usado_en')
+                ->where('expira_en', '>', now())
+                ->first()
+            : null;
 
-        if (! $recuperacion) {
+        // Verificar también en la tabla nativa de Laravel `password_reset_tokens` (con vigencia de 60 minutos)
+        $tokenNativoValido = false;
+        if (Schema::hasTable('password_reset_tokens')) {
+            $registroBroker = DB::table('password_reset_tokens')->where('email', $email)->first();
+            if ($registroBroker !== null) {
+                $creadoEn = $registroBroker->created_at ? Carbon::parse((string) $registroBroker->created_at) : null;
+                $noExpirado = $creadoEn === null || $creadoEn->addMinutes((int) config('auth.passwords.users.expire', 60))->isFuture();
+
+                if ($noExpirado && (Hash::check($token, (string) $registroBroker->token) || hash_equals((string) $registroBroker->token, $token))) {
+                    $tokenNativoValido = true;
+                }
+            }
+        }
+
+        if (! $recuperacion && ! $tokenNativoValido) {
             throw ValidationException::withMessages([
-                'token' => 'El código o token de verificación es inválido, ha expirado o ya ha sido utilizado.',
+                'token' => 'El código o enlace de recuperación es inválido, ha expirado (vigencia de 60 minutos) o ya fue utilizado.',
                 'email' => 'El enlace de recuperación de contraseña es inválido o ha expirado.',
             ]);
         }
@@ -98,65 +118,84 @@ class ResetPasswordController extends Controller
                 'remember_token' => Str::random(60),
             ]);
 
-            // 2. Marcar token actual como consumido
-            $recuperacion->update([
-                'usado_en' => now(),
-            ]);
+            // 2. Eliminar el token usado de la tabla estándar de Laravel `password_reset_tokens`
+            if (Schema::hasTable('password_reset_tokens')) {
+                DB::table('password_reset_tokens')->where('email', $email)->delete();
+            }
 
-            // 3. Invalidar cualquier otro token pendiente del usuario para impedir reutilización
-            RecuperacionContrasena::where('usuario_id', $usuario->id)
-                ->where('id', '!=', $recuperacion->id)
-                ->whereNull('usado_en')
-                ->delete();
+            // 3. Marcar token actual como consumido e invalidar tokens pendientes en `recuperacion_contrasenas`
+            if ($recuperacion) {
+                $recuperacion->update([
+                    'usado_en' => now(),
+                ]);
+
+                RecuperacionContrasena::where('usuario_id', $usuario->id)
+                    ->where('id', '!=', $recuperacion->id)
+                    ->whereNull('usado_en')
+                    ->delete();
+            } elseif (Schema::hasTable('recuperacion_contrasenas')) {
+                RecuperacionContrasena::where('usuario_id', $usuario->id)
+                    ->whereNull('usado_en')
+                    ->delete();
+            }
 
             // 4. Registro de auditoría en Bitácora: Contraseña restablecida
-            Bitacora::create([
-                'usuario_id' => $usuario->id,
-                'accion' => 'CONTRASENA_RESTABLECIDA',
-                'tabla_afectada' => 'usuarios',
-                'registro_id' => $usuario->id,
-                'detalle' => [
-                    'email' => $email,
-                    'ip' => $request->ip(),
-                    'token_id' => $recuperacion->id,
-                ],
-                'ip' => $request->ip() ?? '127.0.0.1',
-                'created_at' => now(),
-            ]);
+            if (Schema::hasTable('bitacoras')) {
+                Bitacora::create([
+                    'usuario_id' => $usuario->id,
+                    'accion' => 'CONTRASENA_RESTABLECIDA',
+                    'tabla_afectada' => 'usuarios',
+                    'registro_id' => $usuario->id,
+                    'detalle' => [
+                        'email' => $email,
+                        'ip' => $request->ip(),
+                        'token_id' => $recuperacion?->id,
+                    ],
+                    'ip' => $request->ip() ?? '127.0.0.1',
+                    'created_at' => now(),
+                ]);
 
-            // 5. Registro de auditoría en Bitácora: Acceso automático seguro post-recuperación
-            Bitacora::create([
-                'usuario_id' => $usuario->id,
-                'accion' => 'ACCESO_AUTOMATICO_POST_RECUPERACION',
-                'tabla_afectada' => 'usuarios',
-                'registro_id' => $usuario->id,
-                'detalle' => [
-                    'email' => $email,
-                    'ip' => $request->ip(),
-                    'roles' => $usuario->roles->pluck('nombre')->all(),
-                ],
-                'ip' => $request->ip() ?? '127.0.0.1',
-                'created_at' => now(),
-            ]);
+                // 5. Registro de auditoría en Bitácora: Acceso automático seguro post-recuperación
+                Bitacora::create([
+                    'usuario_id' => $usuario->id,
+                    'accion' => 'ACCESO_AUTOMATICO_POST_RECUPERACION',
+                    'tabla_afectada' => 'usuarios',
+                    'registro_id' => $usuario->id,
+                    'detalle' => [
+                        'email' => $email,
+                        'ip' => $request->ip(),
+                        'roles' => $usuario->roles->pluck('nombre')->all(),
+                    ],
+                    'ip' => $request->ip() ?? '127.0.0.1',
+                    'created_at' => now(),
+                ]);
+            }
         });
 
-        // 6. Autenticación automática continua (sin solicitar re-login)
+        event(new PasswordReset($usuario));
+
+        // 6. Autenticación automática continua y vinculación con el aislamiento por pestaña (tab_token)
         Auth::login($usuario, true);
         $request->session()->regenerate();
+        $tabId = IsolateTabSession::bindAuthenticatedTab($request, $usuario);
 
         // 7. Determinar redirección inmediata por rol de usuario
         $destino = $this->determinarRedireccionPorRol($usuario);
-        $mensajeExito = 'Tu contraseña ha sido actualizada con éxito y has iniciado sesión de forma segura en ARCHIVUM.';
+        $destinoConTab = $tabId !== ''
+            ? IsolateTabSession::appendTabQueryToUrl($destino, $tabId)
+            : $destino;
+        $mensajeExito = 'Tu contraseña ha sido actualizada con éxito. Ya puedes usar tu cuenta en ARCHIVUM.';
 
         if ($request->expectsJson()) {
             return response()->json([
                 'status' => 'success',
                 'message' => $mensajeExito,
-                'redirect' => $destino,
+                'tab_token' => $tabId,
+                'redirect' => $destinoConTab,
             ]);
         }
 
-        return redirect()->to($destino)->with('status', $mensajeExito);
+        return redirect()->to($destinoConTab)->with('status', $mensajeExito);
     }
 
     /**

@@ -14,12 +14,16 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
+use Throwable;
 
 class ForgotPasswordController extends Controller
 {
@@ -76,54 +80,91 @@ class ForgotPasswordController extends Controller
         /** @var Usuario|null $usuario */
         $usuario = Usuario::where('email', $email)->first();
 
-        // Si el usuario existe y está activo, generamos el token temporal y despachamos el correo real
+        // Si el usuario existe y está activo, generamos el token temporal (en password_reset_tokens y recuperacion_contrasenas) y despachamos el correo real vía SMTP
         if ($usuario && $usuario->activo) {
-            $plainToken = Str::random(64);
-            $tokenHash = hash('sha256', $plainToken);
-            $expiraEn = Carbon::now()->addMinutes(60);
+            try {
+                // Generar token de 64 caracteres compatible con el Password Broker nativo de Laravel (password_reset_tokens)
+                // y con la tabla de auditoría recuperacion_contrasenas
+                $plainToken = Str::random(64);
+                $tokenHash = hash('sha256', $plainToken);
+                $expiraEn = Carbon::now()->addMinutes(60);
 
-            $resetUrl = route('password.reset', [
-                'token' => $plainToken,
-                'email' => $email,
-            ]);
-
-            DB::transaction(function () use ($usuario, $request, $email, $tokenHash, $expiraEn): void {
-                // Invalidar tokens previos no consumidos para este usuario
-                RecuperacionContrasena::where('usuario_id', $usuario->id)
-                    ->whereNull('usado_en')
-                    ->delete();
-
-                RecuperacionContrasena::create([
-                    'usuario_id' => $usuario->id,
-                    'token_hash' => $tokenHash,
-                    'expira_en' => $expiraEn,
+                $resetUrl = route('password.reset', [
+                    'token' => $plainToken,
+                    'email' => $email,
                 ]);
 
-                // Auditoría de seguridad en Bitácora
-                Bitacora::create([
+                DB::transaction(function () use ($usuario, $request, $email, $plainToken, $tokenHash, $expiraEn): void {
+                    // 1. Registrar el token en la tabla estándar de Laravel `password_reset_tokens`
+                    if (Schema::hasTable('password_reset_tokens')) {
+                        DB::table('password_reset_tokens')->updateOrInsert(
+                            ['email' => $email],
+                            [
+                                'token' => Hash::make($plainToken),
+                                'created_at' => now(),
+                            ]
+                        );
+                    }
+
+                    // 2. Sincronizar en la tabla `recuperacion_contrasenas` del sistema
+                    if (Schema::hasTable('recuperacion_contrasenas')) {
+                        RecuperacionContrasena::where('usuario_id', $usuario->id)
+                            ->whereNull('usado_en')
+                            ->delete();
+
+                        RecuperacionContrasena::create([
+                            'usuario_id' => $usuario->id,
+                            'token_hash' => $tokenHash,
+                            'expira_en' => $expiraEn,
+                        ]);
+                    }
+
+                    // 3. Auditoría de seguridad en Bitácora
+                    if (Schema::hasTable('bitacoras')) {
+                        Bitacora::create([
+                            'usuario_id' => $usuario->id,
+                            'accion' => 'SOLICITUD_RECUPERACION_CONTRASENA',
+                            'tabla_afectada' => 'recuperacion_contrasenas',
+                            'registro_id' => $usuario->id,
+                            'detalle' => [
+                                'email' => $email,
+                                'ip' => $request->ip(),
+                                'expira_en' => $expiraEn->toDateTimeString(),
+                            ],
+                            'ip' => $request->ip() ?? '127.0.0.1',
+                            'created_at' => now(),
+                        ]);
+                    }
+                });
+
+                // Envío real del correo electrónico vía SMTP configurando el Mailable RecuperacionContrasenaMail
+                Mail::to($usuario->email)->send(new RecuperacionContrasenaMail($usuario, $plainToken, $resetUrl));
+
+                Log::info("[ForgotPasswordController] Correo de recuperación despachado a {$email}.", [
                     'usuario_id' => $usuario->id,
-                    'accion' => 'SOLICITUD_RECUPERACION_CONTRASENA',
-                    'tabla_afectada' => 'recuperacion_contrasenas',
-                    'registro_id' => $usuario->id,
-                    'detalle' => [
-                        'email' => $email,
-                        'ip' => $request->ip(),
-                        'expira_en' => $expiraEn->toDateTimeString(),
-                    ],
-                    'ip' => $request->ip() ?? '127.0.0.1',
-                    'created_at' => now(),
+                    'expira_en' => $expiraEn->toDateTimeString(),
                 ]);
-            });
+            } catch (Throwable $e) {
+                Log::error('[ForgotPasswordController] Error al enviar correo SMTP de recuperación: '.$e->getMessage(), [
+                    'email' => $email,
+                    'exception' => $e,
+                ]);
 
-            // Envío real del correo electrónico vía Mailable
-            Mail::to($usuario->email)->send(new RecuperacionContrasenaMail($usuario, $plainToken, $resetUrl));
+                $mensajeErrorSmtp = 'No pudimos enviar el correo de recuperación en este momento por un problema de conexión con el servidor de correo (SMTP). Por favor verifica tu conexión o intenta de nuevo en unos momentos.';
 
-            Log::info("[ForgotPasswordController] Correo de recuperación despachado a {$email}.", [
-                'usuario_id' => $usuario->id,
-                'expira_en' => $expiraEn->toDateTimeString(),
-            ]);
+                if ($request->expectsJson()) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => $mensajeErrorSmtp,
+                    ], 500);
+                }
 
-            $mensajeExito = 'Hemos enviado un código y enlace de verificación a tu correo electrónico. Por favor revisa tu bandeja de entrada (o carpeta de spam) e ingresa el token recibido para continuar.';
+                return back()
+                    ->withInput($request->only('email'))
+                    ->withErrors(['email' => $mensajeErrorSmtp]);
+            }
+
+            $mensajeExito = 'Te enviamos un enlace a tu correo para restablecer tu contraseña. Revisa tu bandeja de entrada o la carpeta de spam.';
 
             if ($request->expectsJson()) {
                 return response()->json([
@@ -133,11 +174,15 @@ class ForgotPasswordController extends Controller
                 ]);
             }
 
+            if ($request->boolean('stay_on_request')) {
+                return back()->with('status', $mensajeExito);
+            }
+
             return redirect()->route('password.reset', ['email' => $email])->with('status', $mensajeExito);
         }
 
-        // Si el usuario no existe o está inactivo, responder genéricamente sin filtrar existencia de cuentas
-        $mensajeSeguro = 'Si el correo electrónico está registrado en ARCHIVUM, recibirás las instrucciones de recuperación en breve. Revisa tu bandeja de entrada o spam.';
+        // Si el usuario no existe o está inactivo, responder sin filtrar existencia de cuentas o notificar según validación
+        $mensajeSeguro = 'Te enviamos un enlace a tu correo para restablecer tu contraseña si la dirección está registrada en ARCHIVUM. Revisa tu bandeja de entrada o spam.';
 
         if ($request->expectsJson()) {
             return response()->json([

@@ -45,12 +45,12 @@
             <x-ui.archivum-logo size="md" />
             <div class="flex flex-col">
                 <span class="text-lg font-bold font-brand-serif tracking-[0.2em] uppercase text-on-surface transition-colors group-hover:text-primary">ARCHIVUM</span>
-                <span class="font-label-code text-primary uppercase tracking-widest text-[10px]">Autenticación de Bóveda</span>
+                <span class="font-label-code text-primary uppercase tracking-widest text-[10px]">Acceso a tu Cuenta</span>
             </div>
         </a>
         <a href="{{ url('/') }}" class="flex items-center gap-1 text-xs font-label-md text-on-surface-variant hover:text-primary transition">
             <span class="material-symbols-outlined text-[16px]">arrow_back</span>
-            <span>Volver a la Galería</span>
+            <span>Volver a la Tienda</span>
         </a>
     </div>
 
@@ -60,9 +60,9 @@
         @yield('content')
     </div>
 
-    <!-- Pie Mínimo de Seguridad Notarial -->
+    <!-- Pie de Seguridad -->
     <div class="max-w-md w-full mx-auto text-center text-xs text-outline font-label-code space-y-1">
-        <p>&copy; {{ date('Y') }} ARCHIVUM · Conexión Cifrada SSL / TLS 1.3 con Auditoría Notarial</p>
+        <p>&copy; {{ date('Y') }} ARCHIVUM · Conexión Segura Cifrada SSL / TLS 1.3</p>
     </div>
 
 </body>

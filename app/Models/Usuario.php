@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Mail\RecuperacionContrasenaMail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -9,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Mail;
 
 class Usuario extends Authenticatable
 {
@@ -219,6 +221,20 @@ class Usuario extends Authenticatable
         $this->roles()->syncWithoutDetaching([$rolModel->id]);
 
         return $this;
+    }
+
+    /**
+     * Envía la notificación de restablecimiento de contraseña utilizando el correo HTML en español de ARCHIVUM.
+     */
+    public function sendPasswordResetNotification($token): void
+    {
+        $resetUrl = route('password.reset', [
+            'token' => (string) $token,
+            'email' => $this->getEmailForPasswordReset(),
+        ]);
+
+        Mail::to($this->getEmailForPasswordReset())
+            ->send(new RecuperacionContrasenaMail($this, (string) $token, $resetUrl));
     }
 
     /**

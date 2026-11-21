@@ -68,10 +68,19 @@ Route::middleware('reservas.liberar')->group(function (): void {
 // =========================================================================
 // 2. Rutas de Invitados (Autenticación y Recuperación de Contraseña)
 // =========================================================================
-// POST /login y POST /register permiten autenticar y vincular el tab_token de la pestaña actual
-// sin ser interceptados por el middleware guest si otra pestaña tenía sesión activa.
+// POST /login, POST /register y las rutas de recuperación (/forgot-password y /reset-password/*)
+// están disponibles directamente sin bloqueo por middleware guest cuando el usuario abre el enlace
+// desde Gmail en una pestaña nueva mientras otra pestaña tiene sesión activa.
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/register', [RegisterController::class, 'register']);
+
+// Recuperación de contraseña vía correo electrónico con token temporal (60 min)
+Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+
+// Restablecimiento de contraseña mediante token
+Route::get('/reset-password/{token?}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
 
 Route::middleware('guest')->group(function (): void {
     // Portal público de clientes: /login y /register
@@ -82,14 +91,6 @@ Route::middleware('guest')->group(function (): void {
 
     // Portal exclusivo para personal interno: /admin/login
     Route::get('/admin/login', [LoginController::class, 'showAdminLoginForm'])->name('admin.login');
-
-    // Recuperación de contraseña vía correo electrónico con token temporal
-    Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
-    Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
-
-    // Restablecimiento de contraseña mediante token
-    Route::get('/reset-password/{token?}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
-    Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
 });
 
 // =========================================================================

@@ -38,7 +38,7 @@ class RecuperacionContrasenaTest extends TestCase
         $response = $this->get(route('password.request'));
 
         $response->assertOk()
-            ->assertSee('Recuperar Contraseña')
+            ->assertSee('¿Olvidaste tu Contraseña?')
             ->assertSee('Correo Electrónico');
     }
 

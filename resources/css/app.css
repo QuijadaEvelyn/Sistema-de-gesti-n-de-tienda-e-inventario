@@ -293,7 +293,13 @@
     border-color: #c084fc !important;
 }
 
-/* Preservar contraste en botones de acción sobre banners oscuros */
+/* Badge contador del carrito en la barra de navegación: pastilla circular blanca legible en modo claro y oscuro */
+#cart-counter-badge,
+.dark #cart-counter-badge {
+    background-color: #ffffff !important;
+    color: #581c87 !important; /* text-purple-900 */
+    border-color: #d8b4fe !important; /* border-purple-300 */
+}
 .dark section.bg-gradient-to-r a.bg-white,
 .dark section.bg-gradient-to-br a.bg-white {
     background-color: #f5f5f4;

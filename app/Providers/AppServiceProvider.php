@@ -9,6 +9,8 @@ use App\Listeners\RegistrarSalidaDefinitivaInventario;
 use App\Models\Carrito;
 use App\Models\Pedido;
 use App\Models\Usuario;
+use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -73,6 +75,42 @@ class AppServiceProvider extends ServiceProvider
 
         Gate::define('gestionar-carrito-propio', function (Usuario $user, Carrito $carrito): bool {
             return $user->cliente !== null && (int) $carrito->cliente_id === (int) $user->cliente->id;
+        });
+
+        // ---------------------------------------------------------------------
+        // Personalización de la Notificación Nativa de Restablecimiento de Contraseña en Español
+        // ---------------------------------------------------------------------
+        ResetPassword::createUrlUsing(function (object $notifiable, string $token): string {
+            return route('password.reset', [
+                'token' => $token,
+                'email' => $notifiable->getEmailForPasswordReset(),
+            ]);
+        });
+
+        ResetPassword::toMailUsing(function (object $notifiable, string $token): MailMessage {
+            $email = method_exists($notifiable, 'getEmailForPasswordReset')
+                ? $notifiable->getEmailForPasswordReset()
+                : ($notifiable->email ?? '');
+
+            $resetUrl = route('password.reset', [
+                'token' => $token,
+                'email' => $email,
+            ]);
+
+            $usuarioModel = $notifiable instanceof Usuario
+                ? $notifiable
+                : new Usuario([
+                    'nombre' => $notifiable->nombre ?? $notifiable->name ?? 'Cliente ARCHIVUM',
+                    'email' => $email,
+                ]);
+
+            return (new MailMessage)
+                ->subject('ARCHIVUM · Restablecer tu Contraseña')
+                ->view('emails.recuperacion-contrasena', [
+                    'usuario' => $usuarioModel,
+                    'token' => $token,
+                    'resetUrl' => $resetUrl,
+                ]);
         });
     }
 }

@@ -3,16 +3,16 @@
 @section('content')
 <div class="bg-white/95 dark:bg-[#171024]/95 backdrop-blur-md rounded-3xl p-6 sm:p-8 shadow-xl border border-purple-200/80 dark:border-purple-500/30 space-y-6 transition-all duration-300">
     
-    <!-- Encabezado con Icono y Tipografía Curatorial -->
+    <!-- Encabezado con Icono y Tipografía -->
     <div class="text-center space-y-2">
         <div class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-primary-container text-white shadow-xs mb-1">
             <span class="material-symbols-outlined text-[26px]">lock_reset</span>
         </div>
         <h1 class="text-2xl font-bold font-brand-serif tracking-[0.1em] text-on-surface uppercase">
-            Recuperar Contraseña
+            ¿Olvidaste tu Contraseña?
         </h1>
         <p class="text-xs text-on-surface-variant font-quicksand max-w-sm mx-auto leading-relaxed">
-            Ingresa tu dirección de correo electrónico registrada para enviarte un código y enlace temporal de verificación.
+            Ingresa el correo electrónico de tu cuenta y te enviaremos un enlace seguro (válido por 60 minutos) para restablecer tu contraseña.
         </p>
     </div>
 
@@ -63,10 +63,10 @@
 
         <button
             type="submit"
-            class="btn-glass-purple w-full py-3.5 px-4 rounded-2xl text-white font-bold uppercase tracking-wider text-xs transition shadow-md flex items-center justify-center gap-2 mt-2"
+            class="btn-glass-purple w-full py-3.5 px-4 rounded-2xl text-white font-bold uppercase tracking-wider text-xs transition shadow-md flex items-center justify-center gap-2 mt-2 cursor-pointer"
         >
             <span class="material-symbols-outlined text-[18px]">send</span>
-            <span>Enviar Código y Enlace de Recuperación</span>
+            <span>Enviar Enlace de Recuperación</span>
         </button>
     </form>
 
