@@ -115,12 +115,24 @@ class RegisterController extends Controller
             return $usuario;
         });
 
-        // 6. Inicio de sesión automático, sincronización de carrito persistente y regeneración de sesión
+        // 6. Inicio de sesión automático y vinculación exclusiva con el tab_token de la pestaña actual
         Auth::login($usuario);
-        $request->session()->regenerate();
+        $existingTabs = (array) $request->session()->get(IsolateTabSession::SESSION_MAP_KEY, []);
+        if (empty($existingTabs)) {
+            $request->session()->regenerate();
+        }
 
         CheckoutSimuladoController::sincronizarCarritoTrasLogin($usuario);
-        $tabSessionId = IsolateTabSession::bindAuthenticatedTab($request, $usuario);
+
+        $incomingTabToken = $request->input('tab_token')
+            ?: $request->header('X-Tab-Token')
+            ?: IsolateTabSession::resolveTabId($request);
+
+        $tabSessionId = IsolateTabSession::bindAuthenticatedTab(
+            $request,
+            $usuario,
+            is_string($incomingTabToken) ? trim($incomingTabToken) : null
+        );
 
         $intended = $request->input('intended') ?? session('url.intended');
         $redirectUrl = route('public.home');
@@ -134,11 +146,13 @@ class RegisterController extends Controller
         }
 
         $request->session()->forget('url.intended');
+        $redirectUrl = IsolateTabSession::appendTabQueryToUrl($redirectUrl, $tabSessionId);
 
         if ($request->expectsJson()) {
             return response()->json([
                 'status' => 'success',
                 'message' => 'Registro completado exitosamente. ¡Bienvenido a ARCHIVUM!',
+                'tab_token' => $tabSessionId,
                 'tab_session_id' => $tabSessionId,
                 'user' => [
                     'id' => $usuario->id,

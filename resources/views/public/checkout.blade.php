@@ -50,11 +50,19 @@
                         <span class="material-symbols-outlined text-[14px]">verified_user</span>
                         <span>Pasarela de Prueba / Simulación Activa</span>
                     </span>
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 border border-amber-300 text-amber-900 text-xs font-label-code font-bold uppercase tracking-wider">
-                        <span class="material-symbols-outlined text-[14px] text-amber-700 animate-pulse">timer</span>
-                        <span>Reserva Expira en:</span>
-                        <span id="checkout-reservation-timer" class="font-tabular-data">{{ $carrito['tiempo_formateado'] ?? '05:00 min' }}</span>
-                    </span>
+                    @if (! empty($carrito['tiene_piezas_unicas']))
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 border border-amber-300 text-amber-900 text-xs font-label-code font-bold uppercase tracking-wider">
+                            <span class="material-symbols-outlined text-[14px] text-amber-700 animate-pulse">timer</span>
+                            <span>Reserva Piezas Únicas Expira en:</span>
+                            <span id="checkout-reservation-timer" class="font-tabular-data">{{ $carrito['tiempo_formateado'] ?? '05:00 min' }}</span>
+                        </span>
+                    @endif
+                    @if (! empty($carrito['tiene_productos_regulares']))
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs font-label-code font-bold uppercase tracking-wider">
+                            <span class="material-symbols-outlined text-[14px] text-emerald-600">event_available</span>
+                            <span>Productos Regulares: Guardado por 7 días</span>
+                        </span>
+                    @endif
                 </div>
                 <h1 class="text-2xl sm:text-3xl font-bold text-on-surface font-quicksand">Checkout &amp; Formalización de Adquisición</h1>
                 <p class="text-xs text-on-surface-variant mt-1">
@@ -173,37 +181,95 @@
                 </form>
             </div>
 
-            <!-- Resumen de Lotes en Custodia -->
+            <!-- Resumen de Lotes en Custodia con División entre Piezas Únicas (5 min) y Productos Regulares (7 días) -->
             <div class="lg:col-span-5 space-y-4">
-                <div class="bg-white rounded-2xl border border-purple-200/80 p-6 shadow-xs space-y-4">
+                <div class="bg-white rounded-2xl border border-purple-200/80 p-6 shadow-xs space-y-5">
                     <h2 class="text-base font-bold text-on-surface font-quicksand border-b border-purple-100 pb-3">
                         Resumen de Lotes a Adquirir ({{ $carrito['cantidad_total'] }})
                     </h2>
 
-                    <div class="divide-y divide-purple-100">
-                        @foreach ($carrito['items'] as $item)
-                            <div class="py-3 flex items-start justify-between gap-3">
-                                <div>
-                                    <span class="text-[10px] font-label-code text-primary font-bold">SKU: #{{ $item['sku'] }}</span>
-                                    <h3 class="text-sm font-bold text-on-surface font-quicksand">{{ $item['nombre'] }}</h3>
-                                    <p class="text-xs text-on-surface-variant">{{ $item['subtitulo'] }} &middot; Cantidad: {{ $item['cantidad'] }}</p>
-                                </div>
-                                <div class="text-right">
-                                    <span class="font-tabular-data font-bold text-sm text-on-surface">${{ number_format($item['subtotal'], 2) }}</span>
-                                    <form method="POST" action="{{ route('carrito.remover', $item['variante_sku_id']) }}">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-[11px] text-error hover:underline">Quitar</button>
-                                    </form>
-                                </div>
+                    @if (! empty($carrito['tiene_piezas_unicas']))
+                        <div class="space-y-2.5">
+                            <div class="flex items-center justify-between px-3 py-2 rounded-xl bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-500/30">
+                                <span class="text-[11px] font-label-code font-bold uppercase text-primary flex items-center gap-1.5">
+                                    <span class="material-symbols-outlined text-[15px]">diamond</span>
+                                    <span>Piezas Únicas (Reserva de 5 min)</span>
+                                </span>
+                                <span class="text-[11px] font-tabular-data font-bold text-primary unique-timer-readout">{{ $carrito['tiempo_formateado'] ?? '05:00 min' }}</span>
                             </div>
-                        @endforeach
-                    </div>
+
+                            <div class="divide-y divide-purple-100">
+                                @foreach ($carrito['items_piezas_unicas'] as $item)
+                                    <div class="py-3 flex items-start justify-between gap-3">
+                                        <div>
+                                            <span class="text-[10px] font-label-code text-primary font-bold">SKU: #{{ $item['sku'] }} &middot; PIEZA ÚNICA 1/1</span>
+                                            <h3 class="text-sm font-bold text-on-surface font-quicksand">{{ $item['nombre'] }}</h3>
+                                            <p class="text-xs text-on-surface-variant">{{ $item['subtitulo'] }} &middot; Cantidad: {{ $item['cantidad'] }}</p>
+                                        </div>
+                                        <div class="text-right">
+                                            <span class="font-tabular-data font-bold text-sm text-on-surface">${{ number_format($item['subtotal'], 2) }}</span>
+                                            <form method="POST" action="{{ route('carrito.remover', $item['variante_sku_id']) }}">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-[11px] text-error hover:underline">Quitar</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+
+                    @if (! empty($carrito['tiene_ambos_tipos']))
+                        <div class="border-t-2 border-dashed border-purple-200"></div>
+                    @endif
+
+                    @if (! empty($carrito['tiene_productos_regulares']))
+                        <div class="space-y-2.5">
+                            <div class="flex items-center justify-between px-3 py-2 rounded-xl bg-emerald-50/80 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-500/30">
+                                <span class="text-[11px] font-label-code font-bold uppercase text-emerald-800 dark:text-emerald-300 flex items-center gap-1.5">
+                                    <span class="material-symbols-outlined text-[15px]">inventory_2</span>
+                                    <span>Productos Regulares (Vigencia de 7 días)</span>
+                                </span>
+                                <span class="text-[10px] font-label-code font-bold uppercase text-emerald-700 dark:text-emerald-300">Guardado por 7 días</span>
+                            </div>
+
+                            <div class="divide-y divide-purple-100">
+                                @foreach ($carrito['items_regulares'] as $item)
+                                    <div class="py-3 flex items-start justify-between gap-3">
+                                        <div>
+                                            <span class="text-[10px] font-label-code text-primary font-bold">SKU: #{{ $item['sku'] }} &middot; GUARDADO POR 7 DÍAS</span>
+                                            <h3 class="text-sm font-bold text-on-surface font-quicksand">{{ $item['nombre'] }}</h3>
+                                            <p class="text-xs text-on-surface-variant">{{ $item['subtitulo'] }} &middot; Cantidad: {{ $item['cantidad'] }}</p>
+                                        </div>
+                                        <div class="text-right">
+                                            <span class="font-tabular-data font-bold text-sm text-on-surface">${{ number_format($item['subtotal'], 2) }}</span>
+                                            <form method="POST" action="{{ route('carrito.remover', $item['variante_sku_id']) }}">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-[11px] text-error hover:underline">Quitar</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
 
                     <div class="pt-3 border-t border-purple-200/70 space-y-2 text-xs">
+                        @if (! empty($carrito['tiene_ambos_tipos']))
+                            <div class="flex justify-between text-on-surface-variant">
+                                <span>Subtotal Piezas Únicas (5 min):</span>
+                                <span class="font-tabular-data">${{ number_format($carrito['subtotal_piezas_unicas'], 2) }} MXN</span>
+                            </div>
+                            <div class="flex justify-between text-on-surface-variant">
+                                <span>Subtotal Productos Regulares (7 días):</span>
+                                <span class="font-tabular-data">${{ number_format($carrito['subtotal_regulares'], 2) }} MXN</span>
+                            </div>
+                        @endif
                         <div class="flex justify-between text-on-surface-variant">
                             <span>Subtotal Tasado:</span>
-                            <span class="font-tabular-data">${{ number_format($carrito['subtotal'], 2) }} MXN</span>
+                            <span id="checkout-subtotal" class="font-tabular-data">${{ number_format($carrito['subtotal'], 2) }} MXN</span>
                         </div>
                         <div class="flex justify-between text-on-surface-variant">
                             <span>Custodia Climatizada &amp; Embalaje Antiácido:</span>
@@ -211,7 +277,7 @@
                         </div>
                         <div class="flex justify-between text-base font-bold text-on-surface pt-2 border-t border-purple-100">
                             <span>Total a Pagar:</span>
-                            <span class="font-tabular-data text-primary">${{ number_format($carrito['total'], 2) }} MXN</span>
+                            <span id="checkout-total" class="font-tabular-data text-primary">${{ number_format($carrito['total'], 2) }} MXN</span>
                         </div>
                     </div>
                 </div>

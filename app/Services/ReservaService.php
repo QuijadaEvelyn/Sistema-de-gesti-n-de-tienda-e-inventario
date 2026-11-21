@@ -19,9 +19,19 @@ use RuntimeException;
 class ReservaService
 {
     /**
-     * Duración predeterminada (en minutos) de una reserva temporal de carrito (5 minutos).
+     * Duración predeterminada (en minutos) de una reserva temporal de Pieza Única (5 minutos).
      */
     public const MINUTOS_RESERVA_CARRITO = 5;
+
+    /**
+     * Duración en minutos para Piezas Únicas (5 minutos).
+     */
+    public const MINUTOS_RESERVA_PIEZA_UNICA = 5;
+
+    /**
+     * Vigencia en días para Productos Comunes / Regulares en el carrito (7 días = 1 semana).
+     */
+    public const DIAS_VIGENCIA_PRODUCTO_COMUN = 7;
 
     /**
      * Crea una reserva de stock vinculada a un pedido.

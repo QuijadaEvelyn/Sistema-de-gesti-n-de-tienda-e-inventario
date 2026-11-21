@@ -45,9 +45,14 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 class CheckoutSimuladoController extends Controller
 {
     /**
-     * Duración estricta del temporizador de reserva temporal en carrito (5 minutos).
+     * Duración estricta del temporizador de reserva temporal para Piezas Únicas en carrito (5 minutos).
      */
     public const MINUTOS_EXPIRACION_RESERVA = 5;
+
+    /**
+     * Vigencia en el carrito para Productos Comunes / Regulares con stock > 1 (7 días / 1 semana).
+     */
+    public const DIAS_VIGENCIA_PRODUCTO_COMUN = 7;
 
     /**
      * Etapas del rastreo interactivo de paquete de ARCHIVUM.
@@ -86,9 +91,10 @@ class CheckoutSimuladoController extends Controller
     ];
 
     /**
-     * Libera automáticamente cualquier reserva de stock cuyo temporizador de 5 minutos
-     * haya expirado, retornando las cantidades a la tabla `existencias` y limpiando
-     * el carrito en sesión y base de datos si corresponde.
+     * Libera automáticamente cualquier reserva de stock cuyo tiempo de vigencia haya expirado
+     * (5 minutos para Piezas Únicas, 7 días para Productos Comunes), retornando las cantidades
+     * a la tabla `existencias` y eliminando del carrito únicamente los artículos vencidos
+     * sin afectar los productos comunes vigentes.
      */
     public static function liberarReservasExpiradas(): int
     {
@@ -98,64 +104,167 @@ class CheckoutSimuladoController extends Controller
 
         $liberadas = app(ReservaService::class)->liberarReservasVencidas();
 
-        // Sincronizar la sesión actual si tenía reservas que acaban de expirar
+        // Sincronizar la sesión actual conservando intactos los artículos cuyas reservas siguen activas
         /** @var list<int> $idsReservasSesion */
         $idsReservasSesion = array_values(array_map('intval', (array) session('carrito_reservas_ids', [])));
-        $expiraSesionStr = session('carrito_expira_en');
+        /** @var array<int|string, int> $carritoActual */
+        $carritoActual = (array) session('carrito_archivum', []);
 
         if (! empty($idsReservasSesion)) {
-            $reservasActivas = ReservaStock::with('existencia')
+            $reservasSesion = ReservaStock::with('existencia')
                 ->whereIn('id', $idsReservasSesion)
-                ->where('estado', 'activa')
                 ->get();
+
+            $reservasActivas = $reservasSesion->where('estado', 'activa');
+            $reservasExpiradas = $reservasSesion->whereIn('estado', ['expirada', 'liberada']);
 
             if ($reservasActivas->isEmpty()) {
                 session()->forget(['carrito_archivum', 'carrito_reservas_ids', 'carrito_expira_en']);
-                session()->flash(
-                    'warning',
-                    'El temporizador de reserva de 5 minutos ha expirado por inactividad. Las piezas han sido liberadas y devueltas a la bóveda.'
-                );
-            } elseif ($reservasActivas->count() < count($idsReservasSesion)) {
+                if ($reservasExpiradas->isNotEmpty()) {
+                    session()->flash(
+                        'warning',
+                        'El tiempo de reserva de tus piezas en custodia ha expirado por inactividad y fueron devueltas a la bóveda.'
+                    );
+                }
+            } elseif ($reservasActivas->count() < count($idsReservasSesion) || $reservasExpiradas->isNotEmpty()) {
                 $nuevoMapa = [];
                 $nuevosIds = [];
+                $expiraUnicaMasReciente = null;
+
                 foreach ($reservasActivas as $resActiva) {
                     if ($resActiva->existencia) {
                         $varId = (int) $resActiva->existencia->variante_sku_id;
                         $nuevoMapa[$varId] = ($nuevoMapa[$varId] ?? 0) + (int) $resActiva->cantidad;
                         $nuevosIds[] = (int) $resActiva->id;
+
+                        // Si la reserva activa vence en <= 15 minutos, corresponde a una Pieza Única (5 min)
+                        if ($resActiva->expira_en instanceof Carbon && $resActiva->expira_en->lte(now()->addMinutes(15))) {
+                            if ($expiraUnicaMasReciente === null || $resActiva->expira_en->gt($expiraUnicaMasReciente)) {
+                                $expiraUnicaMasReciente = $resActiva->expira_en;
+                            }
+                        }
                     }
                 }
+
                 session([
                     'carrito_archivum' => $nuevoMapa,
-                    'carrito_reservas_ids' => $nuevosIds,
+                    'carrito_reservas_ids' => array_values(array_unique($nuevosIds)),
                 ]);
+
+                if ($expiraUnicaMasReciente !== null) {
+                    session(['carrito_expira_en' => $expiraUnicaMasReciente->toIso8601String()]);
+                } else {
+                    session()->forget('carrito_expira_en');
+                }
+
+                if ($reservasExpiradas->isNotEmpty()) {
+                    session()->flash(
+                        'warning',
+                        'El temporizador de 5 minutos para tus Piezas Únicas ha expirado. Las piezas únicas regresaron a la bóveda, mientras que tus productos regulares se conservan guardados por 7 días.'
+                    );
+                }
             }
-        } elseif (is_string($expiraSesionStr) && Carbon::parse($expiraSesionStr)->lte(now())) {
-            session()->forget(['carrito_archivum', 'carrito_reservas_ids', 'carrito_expira_en']);
+        } elseif (! empty($carritoActual)) {
+            $expiraSesionStr = session('carrito_expira_en');
+            if (is_string($expiraSesionStr) && Carbon::parse($expiraSesionStr)->lte(now())) {
+                // Si no había IDs de reserva pero expiró el timestamp de piezas únicas, retirar solo piezas únicas
+                $variantesEnSesion = VarianteSku::with(['producto.coleccionable', 'existencias'])
+                    ->whereIn('id', array_map('intval', array_keys($carritoActual)))
+                    ->get();
+
+                foreach ($variantesEnSesion as $varSesion) {
+                    $cant = (int) ($carritoActual[$varSesion->id] ?? 0);
+                    if (self::esVariantePiezaUnica($varSesion, $cant)) {
+                        unset($carritoActual[$varSesion->id]);
+                    }
+                }
+
+                session()->forget('carrito_expira_en');
+                if (empty($carritoActual)) {
+                    session()->forget(['carrito_archivum', 'carrito_reservas_ids']);
+                } else {
+                    session(['carrito_archivum' => $carritoActual]);
+                }
+            }
         }
 
         return $liberadas;
     }
 
     /**
-     * Obtiene el estado actual del carrito (combinando sesión, reservas activas y temporizador de 5 minutos).
+     * Determina si una variante SKU corresponde a una Pieza Única (registro en `piezas_unicas`,
+     * marcada como `edicion_limitada`, o pieza con stock total igual a 1).
+     * Las Piezas Únicas tienen reserva temporal de 5 minutos; los Productos Comunes tienen vigencia de 7 días.
+     */
+    public static function esVariantePiezaUnica(VarianteSku $variante, int $cantidadReservadaEnCarrito = 0): bool
+    {
+        if (self::obtenerPiezaUnicaDeVariante((int) $variante->id) !== null) {
+            return true;
+        }
+
+        $producto = $variante->relationLoaded('producto')
+            ? $variante->producto
+            : $variante->producto()->with('coleccionable')->first();
+
+        if ($producto !== null) {
+            $coleccionable = $producto->relationLoaded('coleccionable')
+                ? $producto->coleccionable
+                : $producto->coleccionable()->first();
+
+            if ((bool) ($coleccionable?->edicion_limitada ?? false)) {
+                return true;
+            }
+        }
+
+        $stockLibre = (int) ($variante->relationLoaded('existencias')
+            ? $variante->existencias->sum('cantidad')
+            : $variante->existencias()->sum('cantidad'));
+
+        $stockTotal = $stockLibre + max(0, $cantidadReservadaEnCarrito);
+
+        return $stockTotal === 1 && $cantidadReservadaEnCarrito <= 1;
+    }
+
+    /**
+     * Estructura vacía normalizada del estado del carrito.
      *
-     * @return array{items: list<array{variante_sku_id: int, sku: string, nombre: string, subtitulo: string, graduacion: string, tipo: string, es_preventa: bool, limite_preventa: int|null, precio: float, cantidad: int, subtotal: float, stock_libre: int, disponibles_adicionales: int, es_pieza_unica: bool, max_disponible: int}>, subtotal: float, total: float, cantidad_total: int, expira_en_iso: string|null, expira_en_ms: int, segundos_restantes: int, tiempo_formateado: string}
+     * @return array<string, mixed>
+     */
+    private static function estadoCarritoVacio(): array
+    {
+        return [
+            'items' => [],
+            'items_piezas_unicas' => [],
+            'items_regulares' => [],
+            'tiene_piezas_unicas' => false,
+            'tiene_productos_regulares' => false,
+            'tiene_ambos_tipos' => false,
+            'cantidad_piezas_unicas' => 0,
+            'cantidad_regulares' => 0,
+            'subtotal_piezas_unicas' => 0.0,
+            'subtotal_regulares' => 0.0,
+            'subtotal' => 0.0,
+            'total' => 0.0,
+            'cantidad_total' => 0,
+            'expira_en_iso' => null,
+            'expira_en_ms' => 0,
+            'segundos_restantes' => 0,
+            'tiempo_formateado' => '05:00 min',
+            'vigencia_regulares_dias' => self::DIAS_VIGENCIA_PRODUCTO_COMUN,
+        ];
+    }
+
+    /**
+     * Obtiene el estado actual del carrito separando entre Piezas Únicas (reserva de 5 minutos)
+     * y Productos Comunes / Regulares (vigencia de 7 días), manteniendo el Total general unificado.
+     *
+     * @return array<string, mixed>
      */
     public static function obtenerEstadoCarrito(): array
     {
         // Un visitante sin sesión iniciada jamás puede tener artículos precargados o activos en el carrito (0)
         if (! auth()->check() || ! Schema::hasTable('variantes_sku')) {
-            return [
-                'items' => [],
-                'subtotal' => 0.0,
-                'total' => 0.0,
-                'cantidad_total' => 0,
-                'expira_en_iso' => null,
-                'expira_en_ms' => 0,
-                'segundos_restantes' => 0,
-                'tiempo_formateado' => '05:00 min',
-            ];
+            return self::estadoCarritoVacio();
         }
 
         self::liberarReservasExpiradas();
@@ -174,22 +283,23 @@ class CheckoutSimuladoController extends Controller
                     }
                     if (! empty($mapaCantidades)) {
                         session(['carrito_archivum' => $mapaCantidades]);
+                        if (Schema::hasTable('reservas_stock')) {
+                            $reservasBdIds = ReservaStock::where('carrito_id', $carritoBd->id)
+                                ->where('estado', 'activa')
+                                ->pluck('id')
+                                ->map(fn ($id) => (int) $id)
+                                ->all();
+                            if (! empty($reservasBdIds)) {
+                                session(['carrito_reservas_ids' => $reservasBdIds]);
+                            }
+                        }
                     }
                 }
             }
         }
 
         if (empty($mapaCantidades)) {
-            return [
-                'items' => [],
-                'subtotal' => 0.0,
-                'total' => 0.0,
-                'cantidad_total' => 0,
-                'expira_en_iso' => null,
-                'expira_en_ms' => 0,
-                'segundos_restantes' => 0,
-                'tiempo_formateado' => '05:00 min',
-            ];
+            return self::estadoCarritoVacio();
         }
 
         $variantes = VarianteSku::with(['producto.catalogo', 'producto.libro', 'producto.disco', 'producto.coleccionable', 'existencias'])
@@ -197,9 +307,27 @@ class CheckoutSimuladoController extends Controller
             ->get()
             ->keyBy('id');
 
+        /** @var list<int> $idsReservasSesion */
+        $idsReservasSesion = array_values(array_map('intval', (array) session('carrito_reservas_ids', [])));
+        $reservasPorVariante = collect();
+        if (! empty($idsReservasSesion) && Schema::hasTable('reservas_stock')) {
+            $reservasPorVariante = ReservaStock::with('existencia')
+                ->whereIn('id', $idsReservasSesion)
+                ->where('estado', 'activa')
+                ->get()
+                ->groupBy(fn (ReservaStock $r) => (int) ($r->existencia?->variante_sku_id ?? 0));
+        }
+
         $items = [];
+        $itemsPiezasUnicas = [];
+        $itemsRegulares = [];
         $subtotal = 0.0;
+        $subtotalPiezasUnicas = 0.0;
+        $subtotalRegulares = 0.0;
         $cantidadTotal = 0;
+        $cantidadPiezasUnicas = 0;
+        $cantidadRegulares = 0;
+        $expiraUnicaCarbon = null;
 
         foreach ($mapaCantidades as $varianteId => $cantidad) {
             /** @var VarianteSku|null $variante */
@@ -210,9 +338,10 @@ class CheckoutSimuladoController extends Controller
 
             $producto = $variante->producto;
             $precio = (float) ($variante->precio ?? $producto->precio);
-            $lineaSubtotal = $precio * (int) $cantidad;
+            $cantidadInt = (int) $cantidad;
+            $lineaSubtotal = $precio * $cantidadInt;
             $subtotal += $lineaSubtotal;
-            $cantidadTotal += (int) $cantidad;
+            $cantidadTotal += $cantidadInt;
 
             $subtitulo = $producto->libro?->autor
                 ?? $producto->disco?->artista
@@ -220,16 +349,36 @@ class CheckoutSimuladoController extends Controller
                 ?? 'Acervo Certificado ARCHIVUM';
 
             $esPreventa = self::esPiezaPreventa($producto, $variante);
-            $piezaUnica = self::obtenerPiezaUnicaDeVariante((int) $variante->id);
-            $esPiezaUnica = $piezaUnica !== null || (bool) ($producto->coleccionable?->edicion_limitada ?? false);
+            $esPiezaUnica = self::esVariantePiezaUnica($variante, $cantidadInt);
             $stockLibre = (int) $variante->existencias->sum('cantidad');
-            $maxPosible = (int) $cantidad + $stockLibre;
+            $maxPosible = $cantidadInt + $stockLibre;
             if ($esPreventa && $producto->limite_preventa) {
                 $maxPosible = min($maxPosible, (int) $producto->limite_preventa);
             }
-            $maxDisponible = $esPiezaUnica ? 1 : max((int) $cantidad, min(20, $maxPosible));
+            $maxDisponible = $esPiezaUnica ? 1 : max($cantidadInt, min(20, $maxPosible));
 
-            $items[] = [
+            // Determinar expiración específica de esta línea
+            /** @var \Illuminate\Support\Collection<int, ReservaStock> $reservasLinea */
+            $reservasLinea = $reservasPorVariante->get((int) $variante->id, collect());
+            $expiraLineaCarbon = $reservasLinea
+                ->pluck('expira_en')
+                ->filter(fn ($d) => $d instanceof Carbon)
+                ->sortByDesc(fn (Carbon $d) => $d->getTimestamp())
+                ->first();
+
+            if (! $expiraLineaCarbon instanceof Carbon) {
+                $expiraLineaCarbon = $esPiezaUnica
+                    ? (is_string(session('carrito_expira_en')) ? Carbon::parse((string) session('carrito_expira_en')) : now()->addMinutes(self::MINUTOS_EXPIRACION_RESERVA))
+                    : now()->addDays(self::DIAS_VIGENCIA_PRODUCTO_COMUN);
+            }
+
+            if ($esPiezaUnica) {
+                if ($expiraUnicaCarbon === null || $expiraLineaCarbon->gt($expiraUnicaCarbon)) {
+                    $expiraUnicaCarbon = $expiraLineaCarbon;
+                }
+            }
+
+            $itemData = [
                 'variante_sku_id' => (int) $variante->id,
                 'sku' => $variante->sku,
                 'nombre' => $producto->nombre,
@@ -239,35 +388,75 @@ class CheckoutSimuladoController extends Controller
                 'es_preventa' => $esPreventa,
                 'limite_preventa' => $producto->limite_preventa,
                 'precio' => $precio,
-                'cantidad' => (int) $cantidad,
+                'cantidad' => $cantidadInt,
                 'subtotal' => $lineaSubtotal,
                 'stock_libre' => $stockLibre,
                 'disponibles_adicionales' => $stockLibre,
                 'es_pieza_unica' => $esPiezaUnica,
+                'vigencia_tipo' => $esPiezaUnica ? '5_minutos' : '7_dias',
+                'vigencia_etiqueta' => $esPiezaUnica ? 'Reserva de 5 min' : 'Guardado por 7 días',
+                'expira_en_iso' => $expiraLineaCarbon->toIso8601String(),
                 'max_disponible' => $maxDisponible,
                 'imagen' => $producto->imagen,
             ];
+
+            $items[] = $itemData;
+
+            if ($esPiezaUnica) {
+                $itemsPiezasUnicas[] = $itemData;
+                $subtotalPiezasUnicas += $lineaSubtotal;
+                $cantidadPiezasUnicas += $cantidadInt;
+            } else {
+                $itemsRegulares[] = $itemData;
+                $subtotalRegulares += $lineaSubtotal;
+                $cantidadRegulares += $cantidadInt;
+            }
         }
 
-        $expiraEnIso = session('carrito_expira_en');
-        $expiraCarbon = is_string($expiraEnIso)
-            ? Carbon::parse($expiraEnIso)
-            : now()->addMinutes(self::MINUTOS_EXPIRACION_RESERVA);
+        $tienePiezasUnicas = ! empty($itemsPiezasUnicas);
+        $tieneProductosRegulares = ! empty($itemsRegulares);
 
-        $segundosRestantes = max(0, (int) now()->diffInSeconds($expiraCarbon, false));
-        $minutos = intdiv($segundosRestantes, 60);
-        $segundos = $segundosRestantes % 60;
-        $tiempoFormateado = sprintf('%02d:%02d min', $minutos, $segundos);
+        if ($tienePiezasUnicas) {
+            if (! $expiraUnicaCarbon instanceof Carbon) {
+                $expiraEnIso = session('carrito_expira_en');
+                $expiraUnicaCarbon = is_string($expiraEnIso)
+                    ? Carbon::parse($expiraEnIso)
+                    : now()->addMinutes(self::MINUTOS_EXPIRACION_RESERVA);
+            }
+
+            $segundosRestantes = max(0, (int) now()->diffInSeconds($expiraUnicaCarbon, false));
+            $minutos = intdiv($segundosRestantes, 60);
+            $segundos = $segundosRestantes % 60;
+            $tiempoFormateado = sprintf('%02d:%02d min', $minutos, $segundos);
+            $expiraIsoFinal = $expiraUnicaCarbon->toIso8601String();
+            $expiraMsFinal = $expiraUnicaCarbon->getTimestamp() * 1000;
+        } else {
+            // Solo hay productos comunes: no aplica temporizador de 5 minutos
+            $segundosRestantes = 0;
+            $tiempoFormateado = '05:00 min';
+            $expiraIsoFinal = null;
+            $expiraMsFinal = 0;
+        }
 
         return [
             'items' => $items,
+            'items_piezas_unicas' => $itemsPiezasUnicas,
+            'items_regulares' => $itemsRegulares,
+            'tiene_piezas_unicas' => $tienePiezasUnicas,
+            'tiene_productos_regulares' => $tieneProductosRegulares,
+            'tiene_ambos_tipos' => $tienePiezasUnicas && $tieneProductosRegulares,
+            'cantidad_piezas_unicas' => $cantidadPiezasUnicas,
+            'cantidad_regulares' => $cantidadRegulares,
+            'subtotal_piezas_unicas' => $subtotalPiezasUnicas,
+            'subtotal_regulares' => $subtotalRegulares,
             'subtotal' => $subtotal,
             'total' => $subtotal,
             'cantidad_total' => $cantidadTotal,
-            'expira_en_iso' => $expiraCarbon->toIso8601String(),
-            'expira_en_ms' => $expiraCarbon->getTimestamp() * 1000,
+            'expira_en_iso' => $expiraIsoFinal,
+            'expira_en_ms' => $expiraMsFinal,
             'segundos_restantes' => $segundosRestantes,
             'tiempo_formateado' => $tiempoFormateado,
+            'vigencia_regulares_dias' => self::DIAS_VIGENCIA_PRODUCTO_COMUN,
         ];
     }
 
@@ -350,7 +539,8 @@ class CheckoutSimuladoController extends Controller
             session(['url.intended' => url()->previous() ?: route('public.home')]);
 
             return redirect()->route('login')
-                ->with('warning', 'Inicia sesión o regístrate para reservar piezas en la bóveda.');
+                ->with('status', 'Inicia sesión o regístrate para reservar piezas en la bóveda.')
+                ->with('auth_notice', 'Inicia sesión o regístrate para reservar piezas en la bóveda.');
         }
 
         self::liberarReservasExpiradas();
@@ -561,12 +751,17 @@ class CheckoutSimuladoController extends Controller
                 ->withErrors(['stock' => $mensajeInsuficiente]);
         }
 
-        $expiraEn = now()->addMinutes(self::MINUTOS_EXPIRACION_RESERVA);
+        $esPiezaUnicaVariante = self::esVariantePiezaUnica($variante, $cantidadActualEnCarrito);
+        $expiraEn = $esPiezaUnicaVariante
+            ? now()->addMinutes(self::MINUTOS_EXPIRACION_RESERVA)
+            : now()->addDays(self::DIAS_VIGENCIA_PRODUCTO_COMUN);
+
         /** @var list<int> $idsReservasSesion */
         $idsReservasSesion = array_values(array_map('intval', (array) session('carrito_reservas_ids', [])));
 
-        // 3. Disminución inmediata del stock en base de datos y creación de ReservaStock por 5 minutos
-        DB::transaction(function () use ($varianteId, $cantidad, $expiraEn, &$idsReservasSesion): void {
+        // 3. Disminución inmediata del stock en base de datos y creación de ReservaStock
+        //    (5 minutos para Piezas Únicas; 7 días para Productos Comunes / Regulares)
+        DB::transaction(function () use ($varianteId, $cantidad, $expiraEn, $esPiezaUnicaVariante, &$idsReservasSesion): void {
             $carritoBd = $this->obtenerOCrearCarritoBaseDatos();
             $porDescontar = $cantidad;
 
@@ -611,33 +806,43 @@ class CheckoutSimuladoController extends Controller
                 $idsReservasSesion[] = (int) $reserva->id;
             }
 
-            // Actualizar la vigencia de todas las reservas activas de este carrito a los nuevos 5 minutos
-            if (! empty($idsReservasSesion)) {
+            // Si se agregó una Pieza Única, actualizar únicamente las reservas de 5 minutos (sin alterar las de 7 días)
+            if ($esPiezaUnicaVariante && ! empty($idsReservasSesion)) {
                 ReservaStock::whereIn('id', $idsReservasSesion)
                     ->where('estado', 'activa')
+                    ->where('expira_en', '<=', now()->addMinutes(15))
                     ->update(['expira_en' => $expiraEn]);
             }
         });
 
         $carrito[$varianteId] = $cantidadActualEnCarrito + $cantidad;
-        session([
+        $datosSesion = [
             'carrito_archivum' => $carrito,
             'carrito_reservas_ids' => array_values(array_unique($idsReservasSesion)),
-            'carrito_expira_en' => $expiraEn->toIso8601String(),
-        ]);
+        ];
+
+        if ($esPiezaUnicaVariante) {
+            $datosSesion['carrito_expira_en'] = $expiraEn->toIso8601String();
+        }
+
+        session($datosSesion);
 
         $this->sincronizarCarritoBaseDatos($carrito);
+
+        $mensajeExito = $esPiezaUnicaVariante
+            ? "«{$nombrePieza}» reservada temporalmente por 5 minutos en tu Bóveda de Adquisición."
+            : "«{$nombrePieza}» agregada a tu Bóveda de Adquisición (guardada por 7 días).";
 
         if ($request->expectsJson()) {
             return response()->json([
                 'status' => 'success',
-                'message' => "«{$nombrePieza}» reservada temporalmente por 5 minutos en tu Bóveda de Adquisición.",
+                'message' => $mensajeExito,
                 'carrito' => self::obtenerEstadoCarrito(),
             ]);
         }
 
         return back()
-            ->with('status', "«{$nombrePieza}» se reservó en tu Bóveda de Adquisición (reserva activa por 5:00 min).")
+            ->with('status', $mensajeExito)
             ->with('abrir_carrito', true);
     }
 
@@ -660,7 +865,8 @@ class CheckoutSimuladoController extends Controller
             session(['url.intended' => url()->previous() ?: route('public.home')]);
 
             return redirect()->route('login')
-                ->with('warning', 'Inicia sesión o regístrate para reservar piezas en la bóveda.');
+                ->with('status', 'Inicia sesión o regístrate para reservar piezas en la bóveda.')
+                ->with('auth_notice', 'Inicia sesión o regístrate para reservar piezas en la bóveda.');
         }
 
         self::liberarReservasExpiradas();
@@ -720,9 +926,12 @@ class CheckoutSimuladoController extends Controller
         $diferencia = $nuevaCantidad - $cantidadActual;
         /** @var list<int> $idsReservasSesion */
         $idsReservasSesion = array_values(array_map('intval', (array) session('carrito_reservas_ids', [])));
-        $expiraEn = is_string(session('carrito_expira_en'))
-            ? Carbon::parse((string) session('carrito_expira_en'))
-            : now()->addMinutes(self::MINUTOS_EXPIRACION_RESERVA);
+        $esPiezaUnicaVariante = self::esVariantePiezaUnica($variante, $cantidadActual);
+        $expiraEn = $esPiezaUnicaVariante
+            ? (is_string(session('carrito_expira_en'))
+                ? Carbon::parse((string) session('carrito_expira_en'))
+                : now()->addMinutes(self::MINUTOS_EXPIRACION_RESERVA))
+            : now()->addDays(self::DIAS_VIGENCIA_PRODUCTO_COMUN);
 
         if ($diferencia > 0) {
             // Validar cupo de preventa si aplica
@@ -880,7 +1089,8 @@ class CheckoutSimuladoController extends Controller
             session(['url.intended' => url()->previous() ?: route('public.home')]);
 
             return redirect()->route('login')
-                ->with('warning', 'Inicia sesión o regístrate para reservar piezas en la bóveda.');
+                ->with('status', 'Inicia sesión o regístrate para reservar piezas en la bóveda.')
+                ->with('auth_notice', 'Inicia sesión o regístrate para reservar piezas en la bóveda.');
         }
 
         self::liberarReservasExpiradas();
@@ -958,19 +1168,39 @@ class CheckoutSimuladoController extends Controller
     }
 
     /**
-     * Libera de forma inmediata todas las reservas activas del carrito cuando el
-     * temporizador de 5 minutos llega a cero por inactividad.
+     * Libera de forma inmediata únicamente las reservas de Piezas Únicas (5 minutos)
+     * cuando su temporizador llega a cero, conservando intactos los Productos Comunes
+     * que tienen vigencia de 7 días en el carrito.
      */
     public function expirarReservas(Request $request): RedirectResponse|JsonResponse
     {
         /** @var list<int> $idsReservasSesion */
         $idsReservasSesion = array_values(array_map('intval', (array) session('carrito_reservas_ids', [])));
+        /** @var array<int, int> $carritoActual */
+        $carritoActual = (array) session('carrito_archivum', []);
 
-        DB::transaction(function () use ($idsReservasSesion): void {
+        $variantesUnicasIds = [];
+        if (! empty($carritoActual)) {
+            $variantesEnCarrito = VarianteSku::with(['producto.coleccionable', 'existencias'])
+                ->whereIn('id', array_map('intval', array_keys($carritoActual)))
+                ->get();
+
+            foreach ($variantesEnCarrito as $varItem) {
+                $cant = (int) ($carritoActual[$varItem->id] ?? 0);
+                if (self::esVariantePiezaUnica($varItem, $cant)) {
+                    $variantesUnicasIds[] = (int) $varItem->id;
+                }
+            }
+        }
+
+        $idsReservasExpiradas = [];
+
+        DB::transaction(function () use ($idsReservasSesion, $variantesUnicasIds, &$idsReservasExpiradas): void {
             $carritoBd = $this->obtenerOCrearCarritoBaseDatos();
 
             if (! empty($idsReservasSesion) || $carritoBd) {
-                $reservas = ReservaStock::where('estado', 'activa')
+                $reservas = ReservaStock::with('existencia')
+                    ->where('estado', 'activa')
                     ->where(function ($q) use ($idsReservasSesion, $carritoBd): void {
                         if (! empty($idsReservasSesion)) {
                             $q->whereIn('id', $idsReservasSesion);
@@ -983,9 +1213,23 @@ class CheckoutSimuladoController extends Controller
                     ->get();
 
                 foreach ($reservas as $reserva) {
-                    $existencia = Existencia::lockForUpdate()->find($reserva->existencia_id);
+                    $existencia = $reserva->existencia ?? Existencia::lockForUpdate()->find($reserva->existencia_id);
+                    $varId = (int) ($existencia?->variante_sku_id ?? 0);
+
+                    // Expirar únicamente si es una Pieza Única (5 min) o si su fecha de expiración ya venció
+                    $esReservaDePiezaUnica = in_array($varId, $variantesUnicasIds, true)
+                        || ($reserva->expira_en instanceof Carbon && $reserva->expira_en->lte(now()->addMinutes(15)));
+                    $yaVencio = $reserva->expira_en instanceof Carbon && $reserva->expira_en->lte(now());
+
+                    if (! $esReservaDePiezaUnica && ! $yaVencio) {
+                        continue;
+                    }
+
                     if ($existencia) {
-                        $existencia->increment('cantidad', $reserva->cantidad);
+                        $existenciaLocked = Existencia::lockForUpdate()->find($existencia->id);
+                        if ($existenciaLocked) {
+                            $existenciaLocked->increment('cantidad', $reserva->cantidad);
+                        }
 
                         $piezaUnica = PiezaUnica::where('existencia_id', $existencia->id)
                             ->where('estado', 'reservada')
@@ -998,16 +1242,35 @@ class CheckoutSimuladoController extends Controller
                     }
 
                     $reserva->update(['estado' => 'expirada']);
+                    $idsReservasExpiradas[] = (int) $reserva->id;
                 }
             }
         });
 
+        // Retirar del carrito en sesión únicamente las Piezas Únicas expiradas, conservando los Productos Comunes (7 días)
+        foreach ($variantesUnicasIds as $varUnicaId) {
+            unset($carritoActual[$varUnicaId]);
+        }
+
+        $idsReservasRestantes = array_values(array_diff($idsReservasSesion, $idsReservasExpiradas));
+        session()->forget('carrito_expira_en');
+
+        if (empty($carritoActual)) {
+            session()->forget(['carrito_archivum', 'carrito_reservas_ids']);
+            $this->sincronizarCarritoBaseDatos([]);
+        } else {
+            session([
+                'carrito_archivum' => $carritoActual,
+                'carrito_reservas_ids' => $idsReservasRestantes,
+            ]);
+            $this->sincronizarCarritoBaseDatos($carritoActual);
+        }
+
         self::liberarReservasExpiradas();
 
-        session()->forget(['carrito_archivum', 'carrito_reservas_ids', 'carrito_expira_en']);
-        $this->sincronizarCarritoBaseDatos([]);
-
-        $mensaje = 'El temporizador de 5 minutos ha expirado por inactividad. El stock reservado fue liberado y devuelto al catálogo.';
+        $mensaje = empty($carritoActual)
+            ? 'El temporizador de 5 minutos ha expirado por inactividad. Las piezas únicas fueron liberadas y devueltas a la bóveda.'
+            : 'El temporizador de 5 minutos para tus Piezas Únicas ha expirado y regresaron a la bóveda. Tus Productos Regulares continúan guardados por 7 días.';
 
         if ($request->expectsJson()) {
             return response()->json([

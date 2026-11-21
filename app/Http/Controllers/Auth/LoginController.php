@@ -184,15 +184,27 @@ class LoginController extends Controller
             ]);
         }
 
-        // 4. Limpieza del limitador y regeneración de sesión contra Session Fixation
+        // 4. Limpieza del limitador; si no hay otras pestañas activas, regenerar ID de sesión
         RateLimiter::clear($throttleKey);
-        $request->session()->regenerate();
+        $existingTabs = (array) $request->session()->get(IsolateTabSession::SESSION_MAP_KEY, []);
+        if (empty($existingTabs)) {
+            $request->session()->regenerate();
+        }
 
         // 5. Vincular y sincronizar carrito de sesión y reservas activas al cliente autenticado
         CheckoutSimuladoController::sincronizarCarritoTrasLogin($user);
 
-        // 6. Vincular la sesión autenticada exclusivamente con el tab_session_id de esta pestaña
-        $tabSessionId = IsolateTabSession::bindAuthenticatedTab($request, $user);
+        // 6. Leer el tab_token enviado por el formulario (input 'tab_token', header 'X-Tab-Token' o cookie)
+        //    y registrarlo de inmediato en el almacenamiento de sesiones activas por pestaña vinculado a Auth::id()
+        $incomingTabToken = $request->input('tab_token')
+            ?: $request->header('X-Tab-Token')
+            ?: IsolateTabSession::resolveTabId($request);
+
+        $tabSessionId = IsolateTabSession::bindAuthenticatedTab(
+            $request,
+            $user,
+            is_string($incomingTabToken) ? trim($incomingTabToken) : null
+        );
 
         Bitacora::create([
             'usuario_id' => $user->id,
@@ -224,11 +236,13 @@ class LoginController extends Controller
             }
 
             $request->session()->forget('url.intended');
+            $redirectUrl = IsolateTabSession::appendTabQueryToUrl($redirectUrl, $tabSessionId);
 
             if ($request->expectsJson()) {
                 return response()->json([
                     'status' => 'success',
                     'message' => 'Sesión iniciada correctamente.',
+                    'tab_token' => $tabSessionId,
                     'tab_session_id' => $tabSessionId,
                     'user' => [
                         'id' => $user->id,
@@ -247,12 +261,18 @@ class LoginController extends Controller
         // que apunte al Dashboard Financiero (/admin) para redirigirlo directamente a su panel operativo de sede.
         if (! $user->esAdmin()) {
             $request->session()->forget('url.intended');
+        } elseif (is_string($intended) && Str::startsWith((string) parse_url($intended, PHP_URL_PATH), '/admin')) {
+            $redirectUrl = $intended;
+            $request->session()->forget('url.intended');
         }
+
+        $redirectUrl = IsolateTabSession::appendTabQueryToUrl($redirectUrl, $tabSessionId);
 
         if ($request->expectsJson()) {
             return response()->json([
                 'status' => 'success',
                 'message' => 'Sesión iniciada correctamente.',
+                'tab_token' => $tabSessionId,
                 'tab_session_id' => $tabSessionId,
                 'user' => [
                     'id' => $user->id,
@@ -264,9 +284,7 @@ class LoginController extends Controller
             ]);
         }
 
-        return $user->esAdmin()
-            ? redirect()->intended($redirectUrl)
-            : redirect()->to($redirectUrl);
+        return redirect()->to($redirectUrl);
     }
 
     /**
@@ -290,23 +308,19 @@ class LoginController extends Controller
             ]);
         }
 
-        $quedanOtrasPestanasActivas = IsolateTabSession::unbindTab($request);
+        // Desvincular únicamente el tab_token de la pestaña que solicitó cerrar sesión,
+        // sin invalidar la sesión compartida ni afectar las demás pestañas abiertas.
+        IsolateTabSession::unbindTab($request);
 
-        if ($quedanOtrasPestanasActivas) {
-            $guard = Auth::guard('web');
-            $request->session()->forget([
-                $guard->getName(),
-                'carrito_archivum',
-                'carrito_reservas_ids',
-                'carrito_expira_en',
-            ]);
-            if (method_exists($guard, 'forgetUser')) {
-                $guard->forgetUser();
-            }
-        } else {
-            Auth::logout();
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
+        $guard = Auth::guard('web');
+        $request->session()->forget([
+            $guard->getName(),
+            'carrito_archivum',
+            'carrito_reservas_ids',
+            'carrito_expira_en',
+        ]);
+        if (method_exists($guard, 'forgetUser')) {
+            $guard->forgetUser();
         }
 
         if ($request->expectsJson()) {

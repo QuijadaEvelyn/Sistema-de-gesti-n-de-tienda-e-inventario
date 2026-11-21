@@ -177,6 +177,19 @@ export async function navigateToAdminUrl(url, isPopState = false) {
         return;
     }
 
+    try {
+        const activeTabToken = typeof window.getArchivumTabToken === 'function'
+            ? window.getArchivumTabToken()
+            : (sessionStorage.getItem('tab_token') || sessionStorage.getItem('tab_session_id') || '');
+        if (activeTabToken) {
+            const parsedNavUrl = new URL(url, window.location.origin);
+            if (parsedNavUrl.origin === window.location.origin) {
+                parsedNavUrl.searchParams.set('_tab', activeTabToken);
+                url = parsedNavUrl.toString();
+            }
+        }
+    } catch (e) {}
+
     const mainContent = document.getElementById('admin-main-content');
     if (!mainContent) {
         window.location.href = url;

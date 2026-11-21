@@ -6,10 +6,15 @@ use App\Http\Middleware\IsolateTabSession;
 use App\Http\Middleware\ReleaseExpiredReservations;
 use App\Http\Middleware\VerifyBranchAccess;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Auth\Middleware\Authenticate;
+use Illuminate\Auth\Middleware\RedirectIfAuthenticated;
+use Illuminate\Contracts\Auth\Middleware\AuthenticatesRequests;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Middleware\SubstituteBindings;
+use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -18,35 +23,49 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        // Aislamiento estricto de sesión por pestaña del navegador (sessionStorage + tab_session_id)
+        // Aislamiento estricto de sesión por pestaña del navegador (sessionStorage + tab_token).
+        // Debe ejecutarse SIEMPRE después de StartSession y ANTES de guest (RedirectIfAuthenticated),
+        // auth (Authenticate / AuthenticatesRequests), ShareErrorsFromSession y SubstituteBindings.
         $middleware->web(append: [
             IsolateTabSession::class,
         ]);
 
-        // Redirección condicional para usuarios con sesión activa que intenten acceder a /login o /register
+        $middleware->prependToPriorityList(
+            before: [
+                ShareErrorsFromSession::class,
+                AuthenticatesRequests::class,
+                Authenticate::class,
+                RedirectIfAuthenticated::class,
+                SubstituteBindings::class,
+                CheckRole::class,
+            ],
+            prepend: IsolateTabSession::class,
+        );
+
+        // Redirección condicional para usuarios con sesión activa en la pestaña actual que intenten acceder a /login o /register
         $middleware->redirectUsersTo(function (Request $request): string {
             $user = $request->user();
+            $activeTabId = (string) $request->attributes->get('archivum_resolved_tab_id', '');
+
             if (! $user) {
                 return route('public.home');
             }
 
+            $targetUrl = route('public.home');
+
             if ($user->esAdmin()) {
-                return route('admin.dashboard');
+                $targetUrl = route('admin.dashboard');
+            } elseif ($user->tieneRol('almacen', 'encargado')) {
+                $targetUrl = route('almacen.dashboard');
+            } elseif ($user->esVentas()) {
+                $targetUrl = route('ventas.dashboard');
+            } elseif ($user->esCompras()) {
+                $targetUrl = route('compras.dashboard');
             }
 
-            if ($user->tieneRol('almacen', 'encargado')) {
-                return route('almacen.dashboard');
-            }
-
-            if ($user->esVentas()) {
-                return route('ventas.dashboard');
-            }
-
-            if ($user->esCompras()) {
-                return route('compras.dashboard');
-            }
-
-            return route('public.home');
+            return $activeTabId !== ''
+                ? IsolateTabSession::appendTabQueryToUrl($targetUrl, $activeTabId)
+                : $targetUrl;
         });
 
         $middleware->alias([
@@ -85,6 +104,7 @@ return Application::configure(basePath: dirname(__DIR__))
             session(['url.intended' => $intendedUrl]);
 
             return redirect()->to(route('login'))
-                ->with('warning', 'Inicia sesión o regístrate para reservar piezas en la bóveda.');
+                ->with('status', 'Inicia sesión o regístrate para reservar piezas en la bóveda.')
+                ->with('auth_notice', 'Inicia sesión o regístrate para reservar piezas en la bóveda.');
         });
     })->create();

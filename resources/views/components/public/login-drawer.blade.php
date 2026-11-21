@@ -84,9 +84,16 @@
             </div>
 
             <!-- Banner Informativo de Acceso Obligatorio para Reserva en Bóveda / Pasarela Notariada -->
+            @php
+                $avisoAutenticacion = session('auth_notice') ?: session('status') ?: session('warning');
+                $mostrarBannerInformativo = request()->filled('intended')
+                    || request('login') === '1'
+                    || session()->has('url.intended')
+                    || ! empty($avisoAutenticacion);
+            @endphp
             <div
                 id="checkout-auth-banner"
-                class="{{ (request()->filled('intended') || request('login') === '1' || session()->has('url.intended') || session()->has('warning')) ? '' : 'hidden' }} p-4 rounded-xl bg-primary/10 border border-primary/30 flex items-start gap-3 text-xs text-on-surface"
+                class="{{ $mostrarBannerInformativo ? '' : 'hidden' }} p-4 rounded-xl bg-primary/10 border border-primary/30 flex items-start gap-3 text-xs text-on-surface"
             >
                 <div class="w-8 h-8 rounded-lg bg-primary-container text-white flex items-center justify-center shrink-0 mt-0.5">
                     <span class="material-symbols-outlined text-[18px]">verified_user</span>
@@ -94,7 +101,7 @@
                 <div class="space-y-0.5">
                     <p id="checkout-auth-banner-title" class="font-bold font-quicksand text-primary text-sm">Autenticación Requerida en Bóveda</p>
                     <p id="checkout-auth-banner-text" class="text-on-surface-variant text-[11px] leading-relaxed font-semibold">
-                        {{ session('warning') ?: 'Inicia sesión o regístrate para reservar piezas en la bóveda' }}
+                        {{ $avisoAutenticacion ?: 'Inicia sesión o regístrate para reservar piezas en la bóveda' }}
                     </p>
                 </div>
             </div>
@@ -111,6 +118,7 @@
                 <form id="drawer-login-form" method="POST" action="{{ route('login') }}" class="space-y-4">
                     @csrf
                     <input type="hidden" name="intended" id="drawer-login-intended" value="{{ request('intended') ?? session('url.intended') }}" />
+                    <input type="hidden" name="tab_token" id="drawer-login-tab-token" value="" />
                     <input type="hidden" name="tab_session_id" id="drawer-login-tab-id" value="" />
 
                     <div class="space-y-1.5">
@@ -196,6 +204,7 @@
                 <form id="drawer-register-form" method="POST" action="{{ route('register') }}" class="space-y-4">
                     @csrf
                     <input type="hidden" name="intended" id="drawer-register-intended" value="{{ request('intended') ?? session('url.intended') }}" />
+                    <input type="hidden" name="tab_token" id="drawer-register-tab-token" value="" />
                     <input type="hidden" name="tab_session_id" id="drawer-register-tab-id" value="" />
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -450,15 +459,38 @@
                 }
 
                 try {
-                    const currentTabId = window.getArchivumTabSessionId
-                        ? window.getArchivumTabSessionId()
-                        : (sessionStorage.getItem('tab_session_id') || '');
-                    const tabInput = form.querySelector('input[name="tab_session_id"]');
-                    if (tabInput && currentTabId) {
-                        tabInput.value = currentTabId;
+                    let currentTabId = '';
+                    if (typeof window.ensureArchivumTabToken === 'function') {
+                        currentTabId = window.ensureArchivumTabToken();
+                    } else if (typeof window.getArchivumTabToken === 'function') {
+                        currentTabId = window.getArchivumTabToken();
+                    } else {
+                        currentTabId = sessionStorage.getItem('archivum_tab_token')
+                            || sessionStorage.getItem('tab_token')
+                            || sessionStorage.getItem('tab_session_id')
+                            || '';
+                        if (!currentTabId) {
+                            currentTabId = 'tab_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 14);
+                        }
+                        sessionStorage.setItem('archivum_tab_token', currentTabId);
+                        sessionStorage.setItem('tab_token', currentTabId);
+                        sessionStorage.setItem('tab_session_id', currentTabId);
                     }
+
+                    ['tab_token', 'tab_session_id'].forEach(function (fieldName) {
+                        let hiddenInput = form.querySelector('input[name="' + fieldName + '"]');
+                        if (!hiddenInput) {
+                            hiddenInput = document.createElement('input');
+                            hiddenInput.type = 'hidden';
+                            hiddenInput.name = fieldName;
+                            form.appendChild(hiddenInput);
+                        }
+                        hiddenInput.value = currentTabId;
+                    });
+
                     const formData = new FormData(form);
-                    if (currentTabId && !formData.get('tab_session_id')) {
+                    if (currentTabId) {
+                        formData.set('tab_token', currentTabId);
                         formData.set('tab_session_id', currentTabId);
                     }
                     const response = await fetch(form.action, {
@@ -466,6 +498,7 @@
                         headers: {
                             'Accept': 'application/json',
                             'X-Requested-With': 'XMLHttpRequest',
+                            'X-Tab-Token': currentTabId,
                             'X-Tab-Session-Id': currentTabId,
                             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
                         },
@@ -475,12 +508,40 @@
                     const data = await response.json();
 
                     if (response.ok && data.status === 'success') {
+                        const boundTabId = data.tab_token || data.tab_session_id || currentTabId;
+                        let targetRedirect = data.redirect || '{{ route('public.home') }}';
                         try {
+                            if (boundTabId) {
+                                sessionStorage.setItem('archivum_tab_token', boundTabId);
+                                sessionStorage.setItem('tab_token', boundTabId);
+                                sessionStorage.setItem('tab_session_id', boundTabId);
+                                window.name = boundTabId;
+                            }
+                            sessionStorage.setItem('tab_authenticated', '1');
                             sessionStorage.setItem('archivum_tab_ok', '1');
-                            sessionStorage.removeItem('archivum_tab_logout_done');
                             sessionStorage.removeItem('intended_after_auth');
+
+                            if (boundTabId) {
+                                const redirectUrlObj = new URL(targetRedirect, window.location.origin);
+                                redirectUrlObj.searchParams.set('_tab', boundTabId);
+                                targetRedirect = redirectUrlObj.toString();
+                            }
                         } catch (err) {}
-                        window.location.href = data.redirect || '{{ route('public.home') }}';
+                        window.location.href = targetRedirect;
+                        return;
+                    }
+
+                    // Si el backend responde con aviso informativo de sesión requerida (401 unauthenticated),
+                    // mostrarlo en el banner informativo azul/púrpura y NUNCA en el cuadro rojo de credenciales incorrectas
+                    if (response.status === 401 || data.status === 'unauthenticated') {
+                        const banner = document.getElementById('checkout-auth-banner');
+                        const bannerText = document.getElementById('checkout-auth-banner-text');
+                        if (banner) {
+                            banner.classList.remove('hidden');
+                        }
+                        if (bannerText && data.message) {
+                            bannerText.textContent = data.message;
+                        }
                         return;
                     }
 

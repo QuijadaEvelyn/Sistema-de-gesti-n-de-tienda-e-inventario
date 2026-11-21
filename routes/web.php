@@ -68,14 +68,17 @@ Route::middleware('reservas.liberar')->group(function (): void {
 // =========================================================================
 // 2. Rutas de Invitados (Autenticación y Recuperación de Contraseña)
 // =========================================================================
+// POST /login y POST /register permiten autenticar y vincular el tab_token de la pestaña actual
+// sin ser interceptados por el middleware guest si otra pestaña tenía sesión activa.
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/register', [RegisterController::class, 'register']);
+
 Route::middleware('guest')->group(function (): void {
     // Portal público de clientes: /login y /register
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [LoginController::class, 'login']);
 
     // Registro público de clientes (rol 'cliente' por defecto)
     Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-    Route::post('/register', [RegisterController::class, 'register']);
 
     // Portal exclusivo para personal interno: /admin/login
     Route::get('/admin/login', [LoginController::class, 'showAdminLoginForm'])->name('admin.login');

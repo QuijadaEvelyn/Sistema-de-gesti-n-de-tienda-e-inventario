@@ -1034,4 +1034,68 @@ class CatalogoCheckoutRastreoTest extends TestCase
             $responseTrasRemover->getContent()
         );
     }
+
+    public function test_carrito_separa_piezas_unicas_5_min_y_productos_regulares_7_dias_y_expiran_independientemente(): void
+    {
+        $cliente = Usuario::whereHas('roles', fn ($q) => $q->where('nombre', 'cliente'))->firstOrFail();
+
+        // 1. Obtener una Pieza Única (1/1) y un Producto Común (stock > 1)
+        $piezaUnica = PiezaUnica::with('existencia.varianteSku.producto')->where('estado', 'disponible')->firstOrFail();
+        $varianteUnica = $piezaUnica->existencia->varianteSku;
+
+        $productoComun = Producto::with('variantesSku.existencias')
+            ->where('nombre', 'Aura (Edición Conmemorativa Biblioteca Era Coyoacán)')
+            ->firstOrFail();
+        $varianteComun = $productoComun->variantesSku->firstOrFail();
+        $stockComunInicial = (int) $varianteComun->existencias()->sum('cantidad');
+
+        // 2. Agregar ambos al carrito del cliente
+        $this->actingAs($cliente)->post(route('carrito.agregar'), [
+            'variante_sku_id' => $varianteUnica->id,
+            'cantidad' => 1,
+        ])->assertRedirect();
+
+        $this->actingAs($cliente)->post(route('carrito.agregar'), [
+            'variante_sku_id' => $varianteComun->id,
+            'cantidad' => 2,
+        ])->assertRedirect();
+
+        // 3. Verificar división visual en dos secciones dentro del Carrito y suma del Total general
+        $resAmbos = $this->actingAs($cliente)->get(route('public.home'));
+        $resAmbos->assertOk()
+            ->assertSee('id="cart-section-unique-pieces"', false)
+            ->assertSee('Piezas Únicas (Reserva de 5 min)')
+            ->assertSee('id="reservation-timer"', false)
+            ->assertSee('id="cart-section-regular-products"', false)
+            ->assertSee('Productos Regulares (Vigencia de 7 días)')
+            ->assertSee('Guardado por 7 días')
+            ->assertSee('Subtotal Piezas Únicas (5 min):')
+            ->assertSee('Subtotal Productos Regulares (7 días):');
+
+        // 4. Transcurren 6 minutos: SOLO expira la Pieza Única y regresa al stock; el Producto Común permanece en el carrito
+        $this->travel(6)->minutes();
+
+        $resTras5Min = $this->actingAs($cliente)->get(route('public.home'));
+        $resTras5Min->assertOk()
+            ->assertDontSee('id="cart-section-unique-pieces"', false)
+            ->assertDontSee('id="reservation-timer-box"', false)
+            ->assertSee('id="cart-section-regular-products"', false)
+            ->assertSee('Guardado por 7 días');
+
+        $piezaUnica->refresh();
+        $this->assertSame('disponible', $piezaUnica->estado);
+        $this->assertSame(1, (int) $varianteUnica->existencias()->sum('cantidad'));
+        $this->assertSame($stockComunInicial - 2, (int) $varianteComun->existencias()->sum('cantidad'));
+
+        // 5. Transcurren 8 días (más de 1 semana): el Producto Común expira automáticamente y regresa al stock disponible
+        $this->travel(8)->days();
+
+        $resTras7Dias = $this->actingAs($cliente)->get(route('public.home'));
+        $resTras7Dias->assertOk()
+            ->assertDontSee('id="cart-section-regular-products"', false)
+            ->assertSee('Tu Bóveda de Adquisición está vacía');
+
+        $this->assertSame($stockComunInicial, (int) $varianteComun->existencias()->sum('cantidad'));
+        $this->assertEmpty(session('carrito_archivum', []));
+    }
 }
