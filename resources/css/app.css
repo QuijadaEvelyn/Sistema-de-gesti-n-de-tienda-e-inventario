@@ -958,6 +958,175 @@
 }
 
 /* ==========================================================================
+   COLECCIONABLES — GRADIENT & EDGE-BLUR CAROUSEL (ESTILO REACT BITS)
+   Carrusel Horizontal con Desenfoque Lateral, Escala Focal y Máscara de Bordes
+   ========================================================================== */
+.edge-blur-carousel-viewport {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 1.75rem;
+    mask-image: linear-gradient(
+        to right,
+        transparent 0%,
+        rgba(0, 0, 0, 0.35) 6%,
+        #000000 16%,
+        #000000 84%,
+        rgba(0, 0, 0, 0.35) 94%,
+        transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+        to right,
+        transparent 0%,
+        rgba(0, 0, 0, 0.35) 6%,
+        #000000 16%,
+        #000000 84%,
+        rgba(0, 0, 0, 0.35) 94%,
+        transparent 100%
+    );
+}
+
+@media (max-width: 639px) {
+    .edge-blur-carousel-viewport {
+        mask-image: linear-gradient(
+            to right,
+            transparent 0%,
+            rgba(0, 0, 0, 0.55) 4%,
+            #000000 11%,
+            #000000 89%,
+            rgba(0, 0, 0, 0.55) 96%,
+            transparent 100%
+        );
+        -webkit-mask-image: linear-gradient(
+            to right,
+            transparent 0%,
+            rgba(0, 0, 0, 0.55) 4%,
+            #000000 11%,
+            #000000 89%,
+            rgba(0, 0, 0, 0.55) 96%,
+            transparent 100%
+        );
+    }
+}
+
+.edge-blur-carousel-track {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    overflow-x: auto;
+    overflow-y: visible;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 1.5rem calc(50% - 170px);
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+@media (max-width: 639px) {
+    .edge-blur-carousel-track {
+        gap: 1rem;
+        padding: 1.15rem calc(50% - 140px);
+    }
+}
+
+.edge-blur-carousel-track.is-dragging {
+    cursor: grabbing;
+    scroll-snap-type: none;
+    scroll-behavior: auto;
+}
+
+.edge-blur-carousel-track::-webkit-scrollbar {
+    display: none;
+}
+
+.edge-blur-card {
+    position: relative;
+    flex: 0 0 340px;
+    width: 340px;
+    height: 360px;
+    border-radius: 1.5rem; /* rounded-3xl */
+    overflow: hidden;
+    scroll-snap-align: center;
+    scroll-snap-stop: normal;
+    transform: scale(0.92);
+    opacity: 0.62;
+    filter: blur(2px);
+    transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+                opacity 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+                filter 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+                border-color 0.38s ease;
+    background-color: #f8f4ff;
+    border: 2px solid #e9d5ff; /* lavanda suave en modo claro */
+    box-shadow: 0 8px 20px -6px rgba(107, 33, 168, 0.10);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+@media (max-width: 639px) {
+    .edge-blur-card {
+        flex: 0 0 280px;
+        width: 280px;
+        height: 320px;
+    }
+}
+
+.dark .edge-blur-card {
+    background-color: #171024;
+    border-color: rgba(168, 85, 247, 0.28);
+    box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.55);
+}
+
+.edge-blur-card.is-center {
+    transform: scale(1) !important;
+    opacity: 1 !important;
+    filter: blur(0px) !important;
+    z-index: 20;
+    border-color: #a855f7;
+    box-shadow: 0 18px 38px -10px rgba(139, 92, 246, 0.28),
+                0 0 0 3px rgba(216, 180, 254, 0.55);
+}
+
+.dark .edge-blur-card.is-center {
+    border-color: #c084fc;
+    box-shadow: 0 22px 46px -10px rgba(147, 51, 234, 0.52),
+                0 0 0 2px rgba(192, 132, 252, 0.75);
+}
+
+.edge-blur-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    image-rendering: auto;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.edge-blur-card.is-center:hover img {
+    transform: scale(1.04);
+}
+
+.edge-blur-card-caption {
+    transition: opacity 0.32s ease, transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.edge-blur-card:not(.is-center) .edge-blur-card-caption {
+    opacity: 0.75;
+    transform: translateY(4px);
+}
+
+.edge-blur-card.is-center .edge-blur-card-caption {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ==========================================================================
    DISCOS & VINILOS 3D INTERACTIVE SHOWCASE (Spin, Tilt 3D, Flip & Grooves)
    ========================================================================== */
 @keyframes archivumDiscSpin {

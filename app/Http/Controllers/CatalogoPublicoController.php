@@ -403,6 +403,26 @@ class CatalogoPublicoController extends Controller
     {
         $productos = $this->consultarProductos($request, 'memorabilia');
 
+        // Seleccionar los coleccionables destacados / piezas únicas para el Carrusel Horizontal con Desenfoque Lateral
+        $coleccionablesDestacados = Schema::hasTable('productos') && Schema::hasTable('catalogos')
+            ? Producto::query()
+                ->with([
+                    'catalogo',
+                    'coleccionable',
+                    'variantesSku.existencias.piezasUnicas',
+                    'variantesSku.existencias.sucursal',
+                ])
+                ->where('activo', true)
+                ->whereHas('catalogo', fn (Builder $q) => $q->where('tipo', 'coleccionable'))
+                ->orderByDesc('precio')
+                ->limit(10)
+                ->get()
+            : $productos->take(10);
+
+        if ($coleccionablesDestacados->isEmpty()) {
+            $coleccionablesDestacados = $productos->take(10);
+        }
+
         $subcategoriasDisponibles = [
             'todos' => 'Todos los Coleccionables',
             'figuras' => 'Figuras coleccionables (cultura pop y anime)',
@@ -416,6 +436,7 @@ class CatalogoPublicoController extends Controller
             'categoriaSlug' => 'memorabilia',
             'meta' => self::CATEGORIAS['memorabilia'],
             'productos' => $productos,
+            'coleccionablesDestacados' => $coleccionablesDestacados,
             'categoriaActiva' => 'memorabilia',
             'filtroTipo' => 'categoria',
             'filtros' => $subcategoriasDisponibles,
