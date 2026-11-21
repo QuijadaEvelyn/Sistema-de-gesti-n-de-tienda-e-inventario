@@ -104,12 +104,22 @@
                     @php
                         /** @var \App\Models\Usuario $authUser */
                         $authUser   = auth()->user();
-                        $esPersonal = $authUser->tieneRol('administrador', 'encargado', 'ventas', 'almacen', 'compras');
+                        $esPersonal = $authUser->esEmpleado();
                         $esCliente  = $authUser->esCliente() && ! $esPersonal;
                         $iniciales  = collect(explode(' ', $authUser->nombre))
                             ->map(fn ($parte) => strtoupper(substr($parte, 0, 1)))
                             ->take(2)
                             ->implode('');
+
+                        $tabIdActualHeader = (string) (request()->attributes->get('archivum_resolved_tab_id')
+                            ?: request()->query('_tab')
+                            ?: '');
+
+                        $anexarTabUrl = fn (string $url): string => $tabIdActualHeader !== ''
+                            ? \App\Http\Middleware\IsolateTabSession::appendTabQueryToUrl($url, $tabIdActualHeader)
+                            : $url;
+
+                        $urlPanelRol = $anexarTabUrl($authUser->rutaPanelPorRol());
                     @endphp
 
                     {{-- Usuario autenticado: avatar + menú contextual por rol --}}
@@ -155,31 +165,31 @@
 
                             {{-- Opciones exclusivas para Clientes --}}
                             @if ($esCliente)
-                                <a href="{{ route('cliente.dashboard') }}" role="menuitem" class="flex items-center gap-3 px-4 py-2.5 text-sm font-label-md text-on-surface hover:bg-surface-container-low hover:text-primary transition group">
+                                <a href="{{ $anexarTabUrl(route('cliente.dashboard')) }}" role="menuitem" class="flex items-center gap-3 px-4 py-2.5 text-sm font-label-md text-on-surface hover:bg-surface-container-low hover:text-primary transition group">
                                     <span class="material-symbols-outlined text-[18px] text-secondary group-hover:text-primary">manage_accounts</span>
                                     <span>Mi Cuenta</span>
                                 </a>
-                                <a href="{{ route('cliente.pedidos') }}" role="menuitem" class="flex items-center gap-3 px-4 py-2.5 text-sm font-label-md text-on-surface hover:bg-surface-container-low hover:text-primary transition group">
+                                <a href="{{ $anexarTabUrl(route('cliente.pedidos')) }}" role="menuitem" class="flex items-center gap-3 px-4 py-2.5 text-sm font-label-md text-on-surface hover:bg-surface-container-low hover:text-primary transition group">
                                     <span class="material-symbols-outlined text-[18px] text-secondary group-hover:text-primary">package_2</span>
                                     <span>Mis Pedidos</span>
                                 </a>
-                                <a href="{{ route('profile.edit') }}" role="menuitem" class="flex items-center gap-3 px-4 py-2.5 text-sm font-label-md text-on-surface hover:bg-surface-container-low hover:text-primary transition group">
+                                <a href="{{ $anexarTabUrl(route('profile.edit')) }}" role="menuitem" class="flex items-center gap-3 px-4 py-2.5 text-sm font-label-md text-on-surface hover:bg-surface-container-low hover:text-primary transition group">
                                     <span class="material-symbols-outlined text-[18px] text-secondary group-hover:text-primary">edit</span>
                                     <span>Editar Perfil</span>
                                 </a>
                             @endif
 
-                            {{-- Opciones exclusivas para Personal / Staff --}}
+                            {{-- Opciones exclusivas para Personal / Staff (Redirección Inteligente según su Rol) --}}
                             @if ($esPersonal)
-                                <a href="{{ route('admin.dashboard') }}" role="menuitem" class="flex items-center gap-3 px-4 py-2.5 text-sm font-label-md text-on-surface hover:bg-surface-container-low hover:text-primary transition group">
+                                <a href="{{ $urlPanelRol }}" role="menuitem" class="flex items-center gap-3 px-4 py-2.5 text-sm font-label-md text-on-surface hover:bg-surface-container-low hover:text-primary transition group">
                                     <span class="material-symbols-outlined text-[18px] text-secondary group-hover:text-primary">dashboard</span>
                                     <span>Panel de Administración</span>
                                 </a>
-                                <a href="{{ url('/') }}" role="menuitem" class="flex items-center gap-3 px-4 py-2.5 text-sm font-label-md text-on-surface hover:bg-surface-container-low hover:text-primary transition group">
+                                <a href="{{ $anexarTabUrl(url('/')) }}" role="menuitem" class="flex items-center gap-3 px-4 py-2.5 text-sm font-label-md text-on-surface hover:bg-surface-container-low hover:text-primary transition group">
                                     <span class="material-symbols-outlined text-[18px] text-secondary group-hover:text-primary">storefront</span>
                                     <span>Ver Tienda Pública</span>
                                 </a>
-                                <a href="{{ route('profile.edit') }}" role="menuitem" class="flex items-center gap-3 px-4 py-2.5 text-sm font-label-md text-on-surface hover:bg-surface-container-low hover:text-primary transition group">
+                                <a href="{{ $anexarTabUrl(route('profile.edit')) }}" role="menuitem" class="flex items-center gap-3 px-4 py-2.5 text-sm font-label-md text-on-surface hover:bg-surface-container-low hover:text-primary transition group">
                                     <span class="material-symbols-outlined text-[18px] text-secondary group-hover:text-primary">settings</span>
                                     <span>Mi Perfil</span>
                                 </a>

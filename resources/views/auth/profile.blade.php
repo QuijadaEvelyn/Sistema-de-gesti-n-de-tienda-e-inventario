@@ -9,9 +9,15 @@
                 <p class="text-sm text-on-surface-variant font-label-md">Actualiza tus datos personales y credenciales de acceso</p>
             </div>
             <div class="flex items-center gap-2 flex-wrap">
-                <a href="{{ route('cliente.mis-pedidos') }}" class="px-3.5 py-1.5 rounded-xl bg-primary-container text-white text-xs font-bold uppercase tracking-wider hover:bg-primary transition">
-                    Mis Pedidos &amp; Devoluciones
-                </a>
+                @if ($usuario->esEmpleado())
+                    <a href="{{ $usuario->rutaPanelPorRol() }}" class="px-3.5 py-1.5 rounded-xl bg-primary-container text-white text-xs font-bold uppercase tracking-wider hover:bg-primary transition">
+                        Volver a mi Panel Operativo
+                    </a>
+                @else
+                    <a href="{{ route('cliente.mis-pedidos') }}" class="px-3.5 py-1.5 rounded-xl bg-primary-container text-white text-xs font-bold uppercase tracking-wider hover:bg-primary transition">
+                        Mis Pedidos &amp; Devoluciones
+                    </a>
+                @endif
                 @foreach ($usuario->roles as $rol)
                     <span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-primary/10 text-primary font-label-code">
                         {{ $rol->nombre }}

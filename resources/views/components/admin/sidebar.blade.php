@@ -10,13 +10,7 @@
     $esAlmacen = $authUser?->hasRole('almacen', 'encargado') ?? false;
     $esCompras = $authUser?->hasRole('compras') ?? false;
 
-    $rutaInicioRol = match (true) {
-        $esAdmin => route('admin.dashboard'),
-        $esAlmacen => route('almacen.dashboard'),
-        $esVentas => route('ventas.dashboard'),
-        $esCompras => route('compras.ordenes'),
-        default => route('public.home'),
-    };
+    $rutaInicioRol = $authUser?->rutaPanelPorRol() ?? route('public.home');
 
     $mensajesPendientesCount = \Illuminate\Support\Facades\Schema::hasTable('mensajes_contacto')
         ? \App\Models\MensajeContacto::where('estatus', 'pendiente')->count()
@@ -57,9 +51,9 @@
                         <span class="material-symbols-outlined text-[20px]">analytics</span>
                         <span>Reportes &amp; Exportación</span>
                     </a>
-                @elseif ($esAlmacen || $esVentas)
+                @elseif ($esAlmacen || $esVentas || $esCompras || $authUser?->esEmpleado())
                     <a href="{{ $rutaInicioRol }}"
-                       class="flex items-center gap-space-sm px-space-md py-2.5 rounded-xl transition-all duration-200 active:scale-95 {{ request()->routeIs('almacen.dashboard', 'ventas.dashboard') ? 'sidebar-link-glossy-active font-label-md shadow-xs' : 'sidebar-link-glossy-idle font-body-md text-sm' }}">
+                       class="flex items-center gap-space-sm px-space-md py-2.5 rounded-xl transition-all duration-200 active:scale-95 {{ request()->routeIs('almacen.dashboard', 'ventas.dashboard', 'compras.dashboard') ? 'sidebar-link-glossy-active font-label-md shadow-xs' : 'sidebar-link-glossy-idle font-body-md text-sm' }}">
                         <span class="material-symbols-outlined text-[20px]">storefront</span>
                         <span>Panel Operativo de Sede</span>
                     </a>

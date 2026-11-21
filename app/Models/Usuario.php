@@ -210,6 +210,40 @@ class Usuario extends Authenticatable
     }
 
     /**
+     * Determina la URL de destino del panel operativo según el rol del usuario:
+     * - Administrador -> /admin (admin.dashboard)
+     * - Almacén / Encargado -> /almacen (almacen.dashboard)
+     * - Ventas -> /ventas (ventas.dashboard)
+     * - Compras -> /compras (compras.dashboard)
+     * - Otros empleados -> /admin/inventario (admin.inventario)
+     * - Cliente -> / (public.home)
+     */
+    public function rutaPanelPorRol(): string
+    {
+        if ($this->esAdmin()) {
+            return route('admin.dashboard');
+        }
+
+        if ($this->tieneRol('almacen', 'encargado')) {
+            return route('almacen.dashboard');
+        }
+
+        if ($this->esVentas()) {
+            return route('ventas.dashboard');
+        }
+
+        if ($this->esCompras()) {
+            return route('compras.dashboard');
+        }
+
+        if ($this->esEmpleado()) {
+            return route('admin.inventario');
+        }
+
+        return route('public.home');
+    }
+
+    /**
      * Asigna un rol al usuario por nombre de rol o modelo Rol.
      */
     public function asignarRol(string|Rol $rol): self

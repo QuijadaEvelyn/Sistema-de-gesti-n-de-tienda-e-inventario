@@ -20,6 +20,9 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\CatalogoPublicoController;
 use App\Http\Controllers\CheckoutSimuladoController;
+use App\Http\Middleware\IsolateTabSession;
+use App\Models\Usuario;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -109,6 +112,31 @@ Route::middleware('auth')->group(function (): void {
 
     // Alias en español /perfil para acceso directo desde el header de cliente
     Route::get('/perfil', [ProfileController::class, 'edit'])->name('cliente.perfil');
+
+    // Rutas centrales /panel y /dashboard que redirigen inteligentemente al panel operativo correspondiente según el rol
+    // conservando el parámetro `_tab` de aislamiento de pestaña sin lanzar 403.
+    $redireccionPanelPorRol = function (Request $request) {
+        /** @var Usuario|null $user */
+        $user = $request->user();
+        if (! $user) {
+            return redirect()->route('login');
+        }
+
+        $destino = $user->rutaPanelPorRol();
+        $tabId = (string) ($request->attributes->get('archivum_resolved_tab_id')
+            ?: $request->query('_tab')
+            ?: IsolateTabSession::resolveTabId($request)
+            ?: '');
+
+        if ($tabId !== '') {
+            $destino = IsolateTabSession::appendTabQueryToUrl($destino, $tabId);
+        }
+
+        return redirect()->to($destino);
+    };
+
+    Route::get('/panel', $redireccionPanelPorRol)->name('panel.redirect');
+    Route::get('/dashboard', $redireccionPanelPorRol)->name('dashboard');
 });
 
 // =========================================================================

@@ -17,7 +17,7 @@
                     <span class="material-symbols-outlined text-[16px]">storefront</span>
                     <span>Ver Tienda Pública</span>
                 </a>
-                <a href="{{ route('admin.dashboard') }}" class="px-4 py-2 rounded-xl bg-primary-container hover:bg-primary text-white text-xs font-label-md flex items-center gap-1.5 transition">
+                <a href="{{ auth()->user()?->rutaPanelPorRol() ?? route('admin.dashboard') }}" class="px-4 py-2 rounded-xl bg-primary-container hover:bg-primary text-white text-xs font-label-md flex items-center gap-1.5 transition">
                     <span class="material-symbols-outlined text-[16px]">dashboard</span>
                     <span>Volver al Panel</span>
                 </a>
