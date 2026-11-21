@@ -5,13 +5,13 @@
             <div>
                 <div class="flex items-center gap-2 mb-1">
                     <span class="px-2.5 py-0.5 rounded-full bg-purple-100 text-primary text-[11px] font-label-code font-bold uppercase tracking-wider">
-                        {{ $sucursalActiva ? 'Bóveda de Despacho: '.$sucursalActiva->nombre : 'Todas las Sedes (Consolidado)' }}
+                        {{ $sucursalActiva ? 'Sucursal de Despacho: '.$sucursalActiva->nombre : 'Todas las Sucursales (Consolidado)' }}
                     </span>
-                    <span class="text-xs text-outline font-label-code">· Logística Blindada</span>
+                    <span class="text-xs text-outline font-label-code">· Gestión de Envíos</span>
                 </div>
                 <h1 class="text-2xl font-bold text-on-surface font-quicksand">Envíos y Despacho de Pedidos</h1>
                 <p class="text-xs text-on-surface-variant font-label-code uppercase tracking-wider mt-1">
-                    Control de embalaje curatorial, guías de transporte especializado y confirmación de entrega
+                    Control de empaque, guías de envío y confirmación de entrega
                 </p>
             </div>
             <a href="{{ route('admin.inventario') }}"
@@ -31,7 +31,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div class="bg-surface-container-lowest p-4 rounded-2xl border border-purple-200/70 flex items-center justify-between">
                 <div>
-                    <span class="text-[11px] font-label-code uppercase text-secondary tracking-wider">En Preparación / Bóveda</span>
+                    <span class="text-[11px] font-label-code uppercase text-secondary tracking-wider">En Preparación</span>
                     <div class="text-2xl font-bold text-amber-700 font-tabular-data mt-1">{{ $resumenEnvios['preparacion'] ?? 0 }}</div>
                 </div>
                 <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
@@ -40,7 +40,7 @@
             </div>
             <div class="bg-surface-container-lowest p-4 rounded-2xl border border-purple-200/70 flex items-center justify-between">
                 <div>
-                    <span class="text-[11px] font-label-code uppercase text-secondary tracking-wider">En Tránsito / Custodia</span>
+                    <span class="text-[11px] font-label-code uppercase text-secondary tracking-wider">En Tránsito</span>
                     <div class="text-2xl font-bold text-primary font-tabular-data mt-1">{{ $resumenEnvios['en_transito'] ?? 0 }}</div>
                 </div>
                 <div class="w-10 h-10 rounded-xl bg-purple-50 text-primary flex items-center justify-center">
@@ -49,7 +49,7 @@
             </div>
             <div class="bg-surface-container-lowest p-4 rounded-2xl border border-purple-200/70 flex items-center justify-between">
                 <div>
-                    <span class="text-[11px] font-label-code uppercase text-secondary tracking-wider">Entregados / Certificados</span>
+                    <span class="text-[11px] font-label-code uppercase text-secondary tracking-wider">Entregados</span>
                     <div class="text-2xl font-bold text-emerald-700 font-tabular-data mt-1">{{ $resumenEnvios['entregados'] ?? 0 }}</div>
                 </div>
                 <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
@@ -114,7 +114,7 @@
                                         </button>
                                     </form>
                                 @else
-                                    <span class="text-xs font-label-code text-emerald-700 font-semibold">Custodia Concluida</span>
+                                    <span class="text-xs font-label-code text-emerald-700 font-semibold">Entrega Completada</span>
                                 @endif
                             </td>
                         </tr>

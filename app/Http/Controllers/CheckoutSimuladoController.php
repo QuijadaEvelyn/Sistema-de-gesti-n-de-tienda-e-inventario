@@ -33,6 +33,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
@@ -62,30 +63,30 @@ class CheckoutSimuladoController extends Controller
     public const ETAPAS_RASTREO = [
         'en_preparacion' => [
             'paso' => 1,
-            'titulo' => 'Bóveda Preparando Lote',
-            'ubicacion' => 'Bóveda Central Bellas Artes, CDMX',
-            'descripcion' => 'Bóveda Preparando Lote: Verificación pericial de autenticidad, control higrométrico y liberación de custodia física.',
+            'titulo' => 'Preparando Pedido',
+            'ubicacion' => 'Sucursal Central Bellas Artes, CDMX',
+            'descripcion' => 'Preparando Pedido: Verificación de calidad, certificado de autenticidad y preparación en almacén.',
             'icono' => 'inventory_2',
         ],
         'en_transito' => [
             'paso' => 2,
-            'titulo' => 'Empaque Notariado',
-            'ubicacion' => 'Cámara de Sellado Antiácido ARCHIVUM, CDMX',
-            'descripcion' => 'Empaque Notariado: Encapsulado libre de ácido con lacre de seguridad y acta de integridad física firmada.',
+            'titulo' => 'Empaque Protegido',
+            'ubicacion' => 'Centro de Empaque ARCHIVUM, CDMX',
+            'descripcion' => 'Empaque Protegido: Embalaje de alta protección con sello de seguridad e inspección física completada.',
             'icono' => 'verified',
         ],
         'en_camino' => [
             'paso' => 3,
-            'titulo' => 'En Tránsito con Custodia',
-            'ubicacion' => 'Unidad de Transporte Climatizado en Ruta',
-            'descripcion' => 'En Tránsito con Custodia: Traslado monitoreado por GPS con temperatura controlada (18 °C / 45 % HR) hacia el destino.',
+            'titulo' => 'En Camino',
+            'ubicacion' => 'Unidad de Envío en Ruta',
+            'descripcion' => 'En Camino: Traslado monitoreado hacia la dirección de entrega indicada en tu pedido.',
             'icono' => 'local_shipping',
         ],
         'entregado' => [
             'paso' => 4,
-            'titulo' => 'Entregado en Sede / Domicilio',
-            'ubicacion' => 'Domicilio / Sede del Coleccionista',
-            'descripcion' => 'Entregado en Sede / Domicilio: Recepción directa confirmada con verificación de sellos intactos y entrega de COA.',
+            'titulo' => 'Entregado en Domicilio',
+            'ubicacion' => 'Domicilio del Cliente',
+            'descripcion' => 'Entregado en Domicilio: Recepción confirmada con entrega de tu producto y Certificado de Autenticidad.',
             'icono' => 'where_to_vote',
         ],
     ];
@@ -123,7 +124,7 @@ class CheckoutSimuladoController extends Controller
                 if ($reservasExpiradas->isNotEmpty()) {
                     session()->flash(
                         'warning',
-                        'El tiempo de reserva de tus piezas en custodia ha expirado por inactividad y fueron devueltas a la bóveda.'
+                        'El tiempo de reserva de tus productos reservados ha expirado por inactividad y fueron devueltos al catálogo.'
                     );
                 }
             } elseif ($reservasActivas->count() < count($idsReservasSesion) || $reservasExpiradas->isNotEmpty()) {
@@ -160,7 +161,7 @@ class CheckoutSimuladoController extends Controller
                 if ($reservasExpiradas->isNotEmpty()) {
                     session()->flash(
                         'warning',
-                        'El temporizador de 5 minutos para tus Piezas Únicas ha expirado. Las piezas únicas regresaron a la bóveda, mientras que tus productos regulares se conservan guardados por 7 días.'
+                        'El temporizador de 5 minutos para tus Piezas Únicas ha expirado. Las piezas únicas regresaron al catálogo, mientras que tus productos regulares se conservan guardados por 7 días.'
                     );
                 }
             }
@@ -271,18 +272,30 @@ class CheckoutSimuladoController extends Controller
 
         /** @var array<int|string, int> $mapaCantidades */
         $mapaCantidades = session('carrito_archivum', []);
+        /** @var array<int|string, float> $preciosCongelados */
+        $preciosCongelados = (array) session('carrito_precios_congelados', []);
 
-        // Si el usuario autenticado tiene un carrito en BD y la sesión está vacía, hidratar desde BD
-        if (empty($mapaCantidades) && auth()->check()) {
+        // Sincronizar con la tabla carrito_items (hidratar si la sesión está vacía o recuperar precios congelados en BD)
+        if (auth()->check() && Schema::hasTable('clientes') && Schema::hasTable('carritos') && Schema::hasTable('carrito_items')) {
             $cliente = Cliente::where('usuario_id', auth()->id())->first();
             if ($cliente) {
                 $carritoBd = Carrito::where('cliente_id', $cliente->id)->first();
                 if ($carritoBd) {
+                    $hidratarCantidades = empty($mapaCantidades);
                     foreach ($carritoBd->items as $dbItem) {
-                        $mapaCantidades[(int) $dbItem->variante_sku_id] = (int) $dbItem->cantidad;
+                        $varIdBd = (int) $dbItem->variante_sku_id;
+                        if ($hidratarCantidades) {
+                            $mapaCantidades[$varIdBd] = (int) $dbItem->cantidad;
+                        }
+                        if ($dbItem->precio_unitario_congelado !== null && ! isset($preciosCongelados[$varIdBd])) {
+                            $preciosCongelados[$varIdBd] = (float) $dbItem->precio_unitario_congelado;
+                        }
                     }
-                    if (! empty($mapaCantidades)) {
-                        session(['carrito_archivum' => $mapaCantidades]);
+                    if ($hidratarCantidades && ! empty($mapaCantidades)) {
+                        session([
+                            'carrito_archivum' => $mapaCantidades,
+                            'carrito_precios_congelados' => $preciosCongelados,
+                        ]);
                         if (Schema::hasTable('reservas_stock')) {
                             $reservasBdIds = ReservaStock::where('carrito_id', $carritoBd->id)
                                 ->where('estado', 'activa')
@@ -293,6 +306,8 @@ class CheckoutSimuladoController extends Controller
                                 session(['carrito_reservas_ids' => $reservasBdIds]);
                             }
                         }
+                    } elseif (! empty($preciosCongelados)) {
+                        session(['carrito_precios_congelados' => $preciosCongelados]);
                     }
                 }
             }
@@ -337,8 +352,28 @@ class CheckoutSimuladoController extends Controller
             }
 
             $producto = $variante->producto;
-            $precio = (float) ($variante->precio ?? $producto->precio);
             $cantidadInt = (int) $cantidad;
+            $esPreventa = self::esPiezaPreventa($producto, $variante);
+            $esPiezaUnica = self::esVariantePiezaUnica($variante, $cantidadInt);
+
+            // Regla de congelamiento de precio por tipo de producto:
+            // - Piezas Únicas: NUNCA llevan precio congelado; siempre reflejan el precio actual ($variante->precio ?? $producto->precio).
+            // - Productos Comunes (stock > 1 / catálogo regular): Respetan su `precio_unitario_congelado` guardado al momento de agregarse.
+            $precioCatalogoActual = (float) ($variante->precio ?? $producto->precio);
+            if ($esPiezaUnica) {
+                $precioUnitarioCongelado = null;
+                $precio = $precioCatalogoActual;
+                unset($preciosCongelados[(int) $variante->id]);
+            } else {
+                if (isset($preciosCongelados[(int) $variante->id]) && (float) $preciosCongelados[(int) $variante->id] > 0) {
+                    $precioUnitarioCongelado = (float) $preciosCongelados[(int) $variante->id];
+                } else {
+                    $precioUnitarioCongelado = $precioCatalogoActual;
+                    $preciosCongelados[(int) $variante->id] = $precioUnitarioCongelado;
+                }
+                $precio = $precioUnitarioCongelado;
+            }
+
             $lineaSubtotal = $precio * $cantidadInt;
             $subtotal += $lineaSubtotal;
             $cantidadTotal += $cantidadInt;
@@ -348,8 +383,6 @@ class CheckoutSimuladoController extends Controller
                 ?? $producto->coleccionable?->marca
                 ?? 'Acervo Certificado ARCHIVUM';
 
-            $esPreventa = self::esPiezaPreventa($producto, $variante);
-            $esPiezaUnica = self::esVariantePiezaUnica($variante, $cantidadInt);
             $stockLibre = (int) $variante->existencias->sum('cantidad');
             $maxPosible = $cantidadInt + $stockLibre;
             if ($esPreventa && $producto->limite_preventa) {
@@ -358,7 +391,7 @@ class CheckoutSimuladoController extends Controller
             $maxDisponible = $esPiezaUnica ? 1 : max($cantidadInt, min(20, $maxPosible));
 
             // Determinar expiración específica de esta línea
-            /** @var \Illuminate\Support\Collection<int, ReservaStock> $reservasLinea */
+            /** @var Collection<int, ReservaStock> $reservasLinea */
             $reservasLinea = $reservasPorVariante->get((int) $variante->id, collect());
             $expiraLineaCarbon = $reservasLinea
                 ->pluck('expira_en')
@@ -388,6 +421,10 @@ class CheckoutSimuladoController extends Controller
                 'es_preventa' => $esPreventa,
                 'limite_preventa' => $producto->limite_preventa,
                 'precio' => $precio,
+                'precio_unitario_congelado' => $precioUnitarioCongelado,
+                'precio_catalogo_actual' => $precioCatalogoActual,
+                'tiene_precio_congelado' => ! $esPiezaUnica,
+                'cambio_precio_catalogo' => ! $esPiezaUnica && abs($precioCatalogoActual - $precio) >= 0.01,
                 'cantidad' => $cantidadInt,
                 'subtotal' => $lineaSubtotal,
                 'stock_libre' => $stockLibre,
@@ -530,7 +567,7 @@ class CheckoutSimuladoController extends Controller
             if ($request->expectsJson() || $request->ajax()) {
                 return response()->json([
                     'status' => 'unauthenticated',
-                    'message' => 'Inicia sesión o regístrate para reservar piezas en la bóveda.',
+                    'message' => 'Inicia sesión o regístrate para agregar productos al carrito.',
                     'login_url' => route('login'),
                     'redirect' => route('login'),
                 ], 401);
@@ -539,8 +576,8 @@ class CheckoutSimuladoController extends Controller
             session(['url.intended' => url()->previous() ?: route('public.home')]);
 
             return redirect()->route('login')
-                ->with('status', 'Inicia sesión o regístrate para reservar piezas en la bóveda.')
-                ->with('auth_notice', 'Inicia sesión o regístrate para reservar piezas en la bóveda.');
+                ->with('status', 'Inicia sesión o regístrate para agregar productos al carrito.')
+                ->with('auth_notice', 'Inicia sesión o regístrate para agregar productos al carrito.');
         }
 
         self::liberarReservasExpiradas();
@@ -816,8 +853,20 @@ class CheckoutSimuladoController extends Controller
         });
 
         $carrito[$varianteId] = $cantidadActualEnCarrito + $cantidad;
+
+        // Congelar el precio unitario vigente EXCLUSIVAMENTE para Productos Comunes (no aplica a Piezas Únicas).
+        // Si el cliente ya tenía este producto común en el carrito y agrega más unidades, se conserva el precio congelado original.
+        /** @var array<int, float> $preciosCongelados */
+        $preciosCongelados = (array) session('carrito_precios_congelados', []);
+        if ($esPiezaUnicaVariante) {
+            unset($preciosCongelados[$varianteId]);
+        } elseif (! isset($preciosCongelados[$varianteId]) || (float) $preciosCongelados[$varianteId] <= 0) {
+            $preciosCongelados[$varianteId] = (float) ($variante->precio ?? $producto?->precio ?? 0.0);
+        }
+
         $datosSesion = [
             'carrito_archivum' => $carrito,
+            'carrito_precios_congelados' => $preciosCongelados,
             'carrito_reservas_ids' => array_values(array_unique($idsReservasSesion)),
         ];
 
@@ -830,8 +879,8 @@ class CheckoutSimuladoController extends Controller
         $this->sincronizarCarritoBaseDatos($carrito);
 
         $mensajeExito = $esPiezaUnicaVariante
-            ? "«{$nombrePieza}» reservada temporalmente por 5 minutos en tu Bóveda de Adquisición."
-            : "«{$nombrePieza}» agregada a tu Bóveda de Adquisición (guardada por 7 días).";
+            ? "«{$nombrePieza}» reservada temporalmente por 5 minutos en tu Carrito de Compras."
+            : "«{$nombrePieza}» agregada a tu Carrito de Compras (guardada por 7 días).";
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -856,7 +905,7 @@ class CheckoutSimuladoController extends Controller
             if ($request->expectsJson() || $request->ajax()) {
                 return response()->json([
                     'status' => 'unauthenticated',
-                    'message' => 'Inicia sesión o regístrate para reservar piezas en la bóveda.',
+                    'message' => 'Inicia sesión o regístrate para agregar productos al carrito.',
                     'login_url' => route('login'),
                     'redirect' => route('login'),
                 ], 401);
@@ -865,8 +914,8 @@ class CheckoutSimuladoController extends Controller
             session(['url.intended' => url()->previous() ?: route('public.home')]);
 
             return redirect()->route('login')
-                ->with('status', 'Inicia sesión o regístrate para reservar piezas en la bóveda.')
-                ->with('auth_notice', 'Inicia sesión o regístrate para reservar piezas en la bóveda.');
+                ->with('status', 'Inicia sesión o regístrate para agregar productos al carrito.')
+                ->with('auth_notice', 'Inicia sesión o regístrate para agregar productos al carrito.');
         }
 
         self::liberarReservasExpiradas();
@@ -884,7 +933,7 @@ class CheckoutSimuladoController extends Controller
             if ($request->expectsJson()) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'El artículo no se encuentra en tu Bóveda de Adquisición.',
+                    'message' => 'El artículo no se encuentra en tu Carrito de Compras.',
                 ], 404);
             }
 
@@ -1080,7 +1129,7 @@ class CheckoutSimuladoController extends Controller
             if ($request->expectsJson() || $request->ajax()) {
                 return response()->json([
                     'status' => 'unauthenticated',
-                    'message' => 'Inicia sesión o regístrate para reservar piezas en la bóveda.',
+                    'message' => 'Inicia sesión o regístrate para agregar productos al carrito.',
                     'login_url' => route('login'),
                     'redirect' => route('login'),
                 ], 401);
@@ -1089,8 +1138,8 @@ class CheckoutSimuladoController extends Controller
             session(['url.intended' => url()->previous() ?: route('public.home')]);
 
             return redirect()->route('login')
-                ->with('status', 'Inicia sesión o regístrate para reservar piezas en la bóveda.')
-                ->with('auth_notice', 'Inicia sesión o regístrate para reservar piezas en la bóveda.');
+                ->with('status', 'Inicia sesión o regístrate para agregar productos al carrito.')
+                ->with('auth_notice', 'Inicia sesión o regístrate para agregar productos al carrito.');
         }
 
         self::liberarReservasExpiradas();
@@ -1144,13 +1193,18 @@ class CheckoutSimuladoController extends Controller
         });
 
         unset($carrito[$varianteSkuId]);
+        /** @var array<int, float> $preciosCongelados */
+        $preciosCongelados = (array) session('carrito_precios_congelados', []);
+        unset($preciosCongelados[$varianteSkuId]);
+
         session([
             'carrito_archivum' => $carrito,
+            'carrito_precios_congelados' => $preciosCongelados,
             'carrito_reservas_ids' => $idsReservasSesion,
         ]);
 
         if (empty($carrito)) {
-            session()->forget(['carrito_expira_en', 'carrito_reservas_ids']);
+            session()->forget(['carrito_expira_en', 'carrito_reservas_ids', 'carrito_precios_congelados']);
         }
 
         $this->sincronizarCarritoBaseDatos($carrito);
@@ -1163,7 +1217,7 @@ class CheckoutSimuladoController extends Controller
         }
 
         return back()
-            ->with('status', 'Pieza liberada de la Bóveda de Adquisición y stock restaurado en catálogo.')
+            ->with('status', 'Producto eliminado de tu Carrito de Compras y stock restaurado en el catálogo.')
             ->with('abrir_carrito', true);
     }
 
@@ -1269,8 +1323,8 @@ class CheckoutSimuladoController extends Controller
         self::liberarReservasExpiradas();
 
         $mensaje = empty($carritoActual)
-            ? 'El temporizador de 5 minutos ha expirado por inactividad. Las piezas únicas fueron liberadas y devueltas a la bóveda.'
-            : 'El temporizador de 5 minutos para tus Piezas Únicas ha expirado y regresaron a la bóveda. Tus Productos Regulares continúan guardados por 7 días.';
+            ? 'El temporizador de 5 minutos ha expirado por inactividad. Las piezas únicas fueron liberadas y devueltas al catálogo.'
+            : 'El temporizador de 5 minutos para tus Piezas Únicas ha expirado y regresaron al catálogo. Tus Productos Regulares continúan guardados por 7 días.';
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -1331,7 +1385,7 @@ class CheckoutSimuladoController extends Controller
 
         if (empty($estadoCarrito['items'])) {
             if ($teniaItemsEnSesion) {
-                $mensajeExpirado = 'Transacción bloqueada: Tu reserva temporal de 5 minutos ha expirado por inactividad y el stock fue devuelto a la bóveda.';
+                $mensajeExpirado = 'Transacción bloqueada: Tu reserva temporal de 5 minutos ha expirado por inactividad y el stock fue devuelto al catálogo.';
 
                 return back()
                     ->withInput()
@@ -1339,7 +1393,7 @@ class CheckoutSimuladoController extends Controller
                     ->withErrors(['stock' => $mensajeExpirado]);
             }
 
-            return redirect()->route('public.home')->with('warning', 'Tu Bóveda de Adquisición está vacía. Selecciona al menos una pieza antes de continuar.');
+            return redirect()->route('public.home')->with('warning', 'Tu Carrito de Compras está vacío. Selecciona al menos un producto antes de continuar.');
         }
 
         $validated = $request->validate([
@@ -1616,7 +1670,7 @@ class CheckoutSimuladoController extends Controller
         }
 
         // 7. Limpiar el carrito y las referencias de reserva temporal en la sesión del cliente
-        session()->forget(['carrito_archivum', 'carrito_reservas_ids', 'carrito_expira_en']);
+        session()->forget(['carrito_archivum', 'carrito_precios_congelados', 'carrito_reservas_ids', 'carrito_expira_en']);
         $this->sincronizarCarritoBaseDatos([]);
 
         $pedidosRecientes = session('pedidos_recientes', []);
@@ -1886,15 +1940,64 @@ class CheckoutSimuladoController extends Controller
             return;
         }
 
+        /** @var array<int, float> $preciosCongelados */
+        $preciosCongelados = (array) session('carrito_precios_congelados', []);
+        $tieneColumnaPrecioCongelado = Schema::hasTable('carrito_items')
+            && Schema::hasColumn('carrito_items', 'precio_unitario_congelado');
+
+        // Conservar cualquier precio congelado que ya existiera en BD para productos comunes vigentes
+        if ($tieneColumnaPrecioCongelado) {
+            $existentesBd = CarritoItem::where('carrito_id', $carritoBd->id)->get();
+            foreach ($existentesBd as $itemExistente) {
+                $varIdExistente = (int) $itemExistente->variante_sku_id;
+                if ($itemExistente->precio_unitario_congelado !== null && ! isset($preciosCongelados[$varIdExistente])) {
+                    $preciosCongelados[$varIdExistente] = (float) $itemExistente->precio_unitario_congelado;
+                }
+            }
+        }
+
         CarritoItem::where('carrito_id', $carritoBd->id)->delete();
 
-        foreach ($carritoSesion as $varianteSkuId => $cantidad) {
-            CarritoItem::create([
-                'carrito_id' => $carritoBd->id,
-                'variante_sku_id' => (int) $varianteSkuId,
-                'cantidad' => (int) $cantidad,
-            ]);
+        if (empty($carritoSesion)) {
+            return;
         }
+
+        $variantesMap = VarianteSku::with(['producto.coleccionable', 'existencias'])
+            ->whereIn('id', array_map('intval', array_keys($carritoSesion)))
+            ->get()
+            ->keyBy('id');
+
+        foreach ($carritoSesion as $varianteSkuId => $cantidad) {
+            $varId = (int) $varianteSkuId;
+            $cantInt = (int) $cantidad;
+            /** @var VarianteSku|null $variante */
+            $variante = $variantesMap->get($varId);
+            $esPiezaUnica = $variante !== null && self::esVariantePiezaUnica($variante, $cantInt);
+
+            $precioCongelado = null;
+            if (! $esPiezaUnica) {
+                $precioCongelado = isset($preciosCongelados[$varId]) && (float) $preciosCongelados[$varId] > 0
+                    ? (float) $preciosCongelados[$varId]
+                    : (float) ($variante?->precio ?? $variante?->producto?->precio ?? 0.0);
+                $preciosCongelados[$varId] = $precioCongelado;
+            } else {
+                unset($preciosCongelados[$varId]);
+            }
+
+            $atributosItem = [
+                'carrito_id' => $carritoBd->id,
+                'variante_sku_id' => $varId,
+                'cantidad' => $cantInt,
+            ];
+
+            if ($tieneColumnaPrecioCongelado) {
+                $atributosItem['precio_unitario_congelado'] = $precioCongelado;
+            }
+
+            CarritoItem::create($atributosItem);
+        }
+
+        session(['carrito_precios_congelados' => $preciosCongelados]);
     }
 
     /**
@@ -1921,6 +2024,10 @@ class CheckoutSimuladoController extends Controller
 
         /** @var array<int, int> $carritoSesion */
         $carritoSesion = session('carrito_archivum', []);
+        /** @var array<int, float> $preciosCongelados */
+        $preciosCongelados = (array) session('carrito_precios_congelados', []);
+        $tieneColumnaPrecioCongelado = Schema::hasTable('carrito_items')
+            && Schema::hasColumn('carrito_items', 'precio_unitario_congelado');
 
         /** @var list<int> $idsReservasSesion */
         $idsReservasSesion = array_values(array_map('intval', (array) session('carrito_reservas_ids', [])));
@@ -1937,22 +2044,55 @@ class CheckoutSimuladoController extends Controller
         if (! empty($carritoSesion) && Schema::hasTable('carrito_items')) {
             CarritoItem::where('carrito_id', $carritoBd->id)->delete();
 
+            $variantesMap = VarianteSku::with(['producto.coleccionable', 'existencias'])
+                ->whereIn('id', array_map('intval', array_keys($carritoSesion)))
+                ->get()
+                ->keyBy('id');
+
             foreach ($carritoSesion as $varianteSkuId => $cantidad) {
-                CarritoItem::create([
+                $varId = (int) $varianteSkuId;
+                $cantInt = (int) $cantidad;
+                /** @var VarianteSku|null $variante */
+                $variante = $variantesMap->get($varId);
+                $esPiezaUnica = $variante !== null && self::esVariantePiezaUnica($variante, $cantInt);
+
+                $precioCongelado = null;
+                if (! $esPiezaUnica) {
+                    $precioCongelado = isset($preciosCongelados[$varId]) && (float) $preciosCongelados[$varId] > 0
+                        ? (float) $preciosCongelados[$varId]
+                        : (float) ($variante?->precio ?? $variante?->producto?->precio ?? 0.0);
+                    $preciosCongelados[$varId] = $precioCongelado;
+                }
+
+                $atributosItem = [
                     'carrito_id' => $carritoBd->id,
-                    'variante_sku_id' => (int) $varianteSkuId,
-                    'cantidad' => (int) $cantidad,
-                ]);
+                    'variante_sku_id' => $varId,
+                    'cantidad' => $cantInt,
+                ];
+
+                if ($tieneColumnaPrecioCongelado) {
+                    $atributosItem['precio_unitario_congelado'] = $precioCongelado;
+                }
+
+                CarritoItem::create($atributosItem);
             }
+            session(['carrito_precios_congelados' => $preciosCongelados]);
         } elseif (empty($carritoSesion) && Schema::hasTable('carrito_items')) {
-            // Si la sesión no tenía nada pero la BD sí, cargar desde la BD a la sesión
+            // Si la sesión no tenía nada pero la BD sí, cargar desde la BD a la sesión (incluyendo precios congelados)
             $itemsBd = CarritoItem::where('carrito_id', $carritoBd->id)->get();
             if ($itemsBd->isNotEmpty()) {
                 $nuevoMapa = [];
                 foreach ($itemsBd as $itemBd) {
-                    $nuevoMapa[(int) $itemBd->variante_sku_id] = (int) $itemBd->cantidad;
+                    $varId = (int) $itemBd->variante_sku_id;
+                    $nuevoMapa[$varId] = (int) $itemBd->cantidad;
+                    if ($itemBd->precio_unitario_congelado !== null) {
+                        $preciosCongelados[$varId] = (float) $itemBd->precio_unitario_congelado;
+                    }
                 }
-                session(['carrito_archivum' => $nuevoMapa]);
+                session([
+                    'carrito_archivum' => $nuevoMapa,
+                    'carrito_precios_congelados' => $preciosCongelados,
+                ]);
             }
         }
     }

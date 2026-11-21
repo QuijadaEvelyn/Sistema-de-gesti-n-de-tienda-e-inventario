@@ -21,6 +21,7 @@ class CarritoItem extends Model
         'carrito_id',
         'variante_sku_id',
         'cantidad',
+        'precio_unitario_congelado',
     ];
 
     /**
@@ -32,7 +33,37 @@ class CarritoItem extends Model
     {
         return [
             'cantidad' => 'integer',
+            'precio_unitario_congelado' => 'decimal:2',
         ];
+    }
+
+    /**
+     * Resuelve el precio unitario aplicable al ítem del carrito:
+     * - Si es Pieza Única (stock = 1 o registrada en piezas_unicas / edición limitada):
+     *   NO aplica precio congelado; siempre devuelve el precio actual del producto/variante.
+     * - Si es Producto Común y tiene `precio_unitario_congelado`, respeta el precio congelado.
+     */
+    public function resolverPrecioUnitario(?bool $esPiezaUnica = null): float
+    {
+        $variante = $this->varianteSku;
+        $precioActual = (float) ($variante?->precio ?? $variante?->producto?->precio ?? 0.0);
+
+        if ($esPiezaUnica === null && $variante !== null) {
+            $esPiezaUnica = \App\Http\Controllers\CheckoutSimuladoController::esVariantePiezaUnica(
+                $variante,
+                (int) $this->cantidad
+            );
+        }
+
+        if ($esPiezaUnica) {
+            return $precioActual;
+        }
+
+        if ($this->precio_unitario_congelado !== null) {
+            return (float) $this->precio_unitario_congelado;
+        }
+
+        return $precioActual;
     }
 
     /**

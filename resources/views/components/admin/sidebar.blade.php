@@ -31,14 +31,14 @@
             <x-ui.archivum-logo size="md" />
             <div class="flex flex-col">
                 <span class="font-brand-serif text-base text-primary dark:text-[#ccbeff] font-bold tracking-[0.2em] leading-none transition-colors group-hover:text-primary">ARCHIVUM</span>
-                <span class="font-label-code text-[10px] text-secondary uppercase tracking-widest mt-1">Archival &amp; Curated</span>
+                <span class="font-label-code text-[10px] text-secondary uppercase tracking-widest mt-1">Tienda &amp; Inventario</span>
             </div>
         </a>
 
         <!-- Navegación Administrativa Principal con Control de Acceso por Rol -->
         <div class="px-space-md py-space-sm">
             <span class="font-label-sm uppercase tracking-wider text-outline px-space-sm block mb-space-xs font-semibold">
-                Gestión de Archivo &amp; Terminal
+                Panel de Administración
             </span>
 
             <nav class="flex flex-col gap-space-xs" aria-label="Menú administrativo por rol">
@@ -216,15 +216,15 @@
     <div class="p-space-md border-t border-purple-100 dark:border-purple-500/30 bg-surface-container-lowest dark:bg-[#140d20]">
         <a href="{{ route('admin.terminal') }}"
            class="sidebar-terminal-glossy p-space-sm rounded-xl flex items-center justify-between group"
-           title="Inspeccionar estado de TERMINAL ARCHIVO v4.8.2-PROD">
+           title="Inspeccionar estado del sistema v4.8.2-PROD">
             <div class="flex items-center gap-space-sm">
                 <span class="material-symbols-outlined text-primary text-[20px] group-hover:scale-105 transition-transform">security</span>
                 <div>
-                    <div class="font-label-sm text-on-surface dark:text-stone-100 font-semibold group-hover:text-primary transition-colors">TERMINAL ARCHIVO</div>
+                    <div class="font-label-sm text-on-surface dark:text-stone-100 font-semibold group-hover:text-primary transition-colors">ESTADO DEL SISTEMA</div>
                     <div class="font-label-code text-on-surface-variant dark:text-stone-400 text-[10px]">v4.8.2-PROD</div>
                 </div>
             </div>
-            <span class="h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-emerald-100 dark:ring-emerald-950" title="Terminal en línea y sincronizada"></span>
+            <span class="h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-emerald-100 dark:ring-emerald-950" title="Sistema en línea y sincronizado"></span>
         </a>
     </div>
 </aside>

@@ -1,4 +1,4 @@
-<x-layouts.public title="ARCHIVUM · Galería de Colecciones &amp; Bóveda Pública">
+<x-layouts.public title="ARCHIVUM · Tienda de Libros, Discos y Coleccionables">
 
     @php
         $coleccionProductos = $productos ?? collect();
@@ -18,18 +18,18 @@
         );
     @endphp
 
-    <!-- Héroe Curatorial & Bienvenida al Archivo -->
+    <!-- Hero Principal & Bienvenida a la Tienda -->
     <section class="relative rounded-2xl overflow-hidden bg-[#FAF8FF] dark:bg-gradient-to-r dark:from-purple-900 dark:to-indigo-950 text-slate-900 dark:text-white p-6 sm:p-12 mb-10 shadow-xs dark:shadow-lg border border-purple-200 dark:border-purple-800/40">
         <div class="relative z-10 max-w-3xl">
             <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-500/20 border border-purple-200 dark:border-purple-300/30 text-purple-800 dark:text-purple-200 text-xs font-label-md tracking-wider mb-4 font-semibold">
                 <span class="material-symbols-outlined text-[14px] text-purple-600 dark:text-purple-300">verified</span>
-                CATÁLOGO DESCLASIFICADO · PRIMAVERA 2026
+                CATÁLOGO OFICIAL · TEMPORADA 2026
             </span>
             <h1 class="text-2xl sm:text-5xl font-bold font-quicksand leading-tight tracking-tight text-slate-900 dark:text-white mb-4">
-                Tesoros del Pensamiento &amp; Sonido Histórico
+                Libros, Discos de Vinilo &amp; Ediciones de Colección
             </h1>
             <p class="font-title-editorial text-slate-600 dark:text-purple-100/90 text-lg sm:text-xl leading-relaxed mb-6">
-                «Un acervo protegido para bibliófilos y audiófilos: primeras ediciones autografiadas, matrices de prensado original y vestigios culturales autenticados con rigor notarial.»
+                «Descubre nuestro catálogo especializado: primeras ediciones autografiadas, vinilos originales y artículos de colección con Certificado de Autenticidad.»
             </p>
             <div class="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2.5 text-xs sm:text-sm font-label-md">
                 <a href="{{ route('public.libros') }}" class="btn-glass-surface px-3 sm:px-5 py-2.5 sm:py-3 rounded-xl font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-xs text-center">
@@ -46,7 +46,7 @@
                 </a>
                 <a href="{{ route('public.adquisiciones') }}" class="btn-glass-surface px-3 sm:px-5 py-2.5 sm:py-3 rounded-xl font-semibold uppercase tracking-wider flex items-center justify-center gap-2 shadow-xs text-center">
                     <span class="material-symbols-outlined text-[16px] sm:text-[18px]">auto_awesome</span>
-                    <span class="truncate">Adquisiciones</span>
+                    <span class="truncate">Ediciones Especiales</span>
                 </a>
             </div>
         </div>
@@ -232,22 +232,22 @@
         </section>
     @endif
 
-    <!-- Vitrina Curatorial: Carrusel 3D Coverflow Interactivo Puro -->
-    <section class="relative block w-full py-6 sm:py-10 mt-6 sm:mt-8 clear-both" aria-label="Vitrina Rotativa 3D de Piezas Destacadas">
+    <!-- Selección Destacada: Carrusel 3D Coverflow Interactivo Puro -->
+    <section class="relative block w-full py-6 sm:py-10 mt-6 sm:mt-8 clear-both" aria-label="Selección Destacada de Productos">
         <!-- Encabezado separado con margen inferior amplio -->
         <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 sm:mb-16 relative z-20">
             <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-2 sm:gap-4 flex-wrap">
                 <div class="max-w-xl">
                     <span class="inline-flex items-center gap-1.5 text-[11px] font-label-code uppercase tracking-widest text-primary dark:text-purple-300">
                         <span class="material-symbols-outlined text-[15px]">view_in_ar</span>
-                        <span>Exhibición Curatorial · Desplazamiento Fluido</span>
+                        <span>Productos Destacados · Desplazamiento Fluido</span>
                     </span>
                     <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-on-surface dark:text-white font-quicksand">
-                        Vitrina Rotativa de Piezas Destacadas
+                        Selección Destacada de Productos
                     </h2>
                 </div>
                 <p class="text-xs text-on-surface-variant dark:text-purple-300/80 font-label-code max-w-sm md:text-right leading-relaxed">
-                    Desliza con el mouse, pantalla táctil o rueda para explorar el acervo 3D
+                    Desliza con el mouse, pantalla táctil o rueda para explorar el catálogo 3D
                 </p>
             </div>
         </div>
@@ -259,7 +259,7 @@
                 tabindex="0"
                 role="region"
                 aria-roledescription="carousel"
-                aria-label="Vitrina Rotativa 3D de Piezas Destacadas"
+                aria-label="Selección Destacada de Productos"
                 class="coverflow-stage relative z-10 w-full mt-4 h-[520px] sm:h-[580px] flex items-center justify-center overflow-hidden select-none focus:outline-none"
                 style="perspective: 1200px; transform-style: preserve-3d;"
             >
@@ -284,7 +284,7 @@
                                 }
                             }
                             $initTransform = match ($initDiff) {
-                                0 => 'translate3d(0px, 0px, 40px) rotateY(0deg) scale(1)',
+                                0 => 'translate3d(0, 0, 0) scale(1)',
                                 -1 => 'translate3d(-335px, 0px, -110px) rotateY(24deg) scale(0.86)',
                                 1 => 'translate3d(335px, 0px, -110px) rotateY(-24deg) scale(0.86)',
                                 -2 => 'translate3d(-610px, 0px, -210px) rotateY(30deg) scale(0.74)',
@@ -303,17 +303,18 @@
                                 -2, 2 => '10',
                                 default => '1',
                             };
+                            $initPointerEvents = $initDiff === 0 ? 'auto' : 'none';
                         @endphp
                     <div
-                        class="coverflow-slot-anchor absolute w-[240px] sm:w-[280px] md:w-[300px] h-[400px] sm:h-[440px] md:h-[460px]"
-                        style="top: 50%; left: 50%; transform: translate(-50%, -50%); transform-style: preserve-3d; z-index: {{ $initZIndex }};"
+                        class="coverflow-slot-anchor {{ $initDiff === 0 ? 'is-active' : '' }} absolute w-[255px] sm:w-[280px] md:w-[300px] h-auto min-h-[430px] sm:min-h-[450px]"
+                        style="top: 50%; left: 50%; transform: translate(-50%, -50%); transform-style: preserve-3d; z-index: {{ $initZIndex }}; pointer-events: {{ $initPointerEvents }};"
                         data-slide-index="{{ $initIdx }}"
                     >
                         <div
-                            class="coverflow-slot w-full h-full"
-                            style="transform-style: preserve-3d; transform: {{ $initTransform }}; opacity: {{ $initOpacity }};"
+                            class="coverflow-slot w-full h-auto"
+                            style="transform-style: preserve-3d; transform: {{ $initTransform }}; opacity: {{ $initOpacity }}; backface-visibility: hidden; -webkit-backface-visibility: hidden;"
                         >
-                            <div class="coverflow-card h-full rounded-2xl {{ $initDiff === 0 ? 'coverflow-card-active' : '' }}">
+                            <div class="coverflow-card h-auto min-h-[430px] sm:min-h-[450px] flex flex-col justify-between rounded-2xl {{ $initDiff === 0 ? 'coverflow-card-active is-active' : '' }}">
                                 <x-public.product-card :producto="$productoCarrusel" />
                             </div>
                         </div>
@@ -515,7 +516,7 @@
                                                     <span class="hidden sm:inline">PIEZA ÚNICA</span>
                                                     <span>1/1</span>
                                                 </span>
-                                                <span class="inline-flex items-center bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[9px] sm:text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
+                                                <span class="inline-flex items-center bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[9px] sm:text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 disponible</span>
                                             </div>
                                             <span class="material-symbols-outlined text-purple-400 dark:text-purple-300 group-hover:text-primary transition-colors text-[64px]">album</span>
                                         </div>
@@ -530,7 +531,7 @@
                                     </div>
                                     <div class="pt-2.5 sm:pt-4 mt-2.5 sm:mt-4 border-t border-purple-100 dark:border-purple-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                                         <div>
-                                            <span class="text-[10px] uppercase font-label-code text-outline dark:text-purple-300/60 block">Precio Tasado:</span>
+                                            <span class="text-[10px] uppercase font-label-code text-outline dark:text-purple-300/60 block">Precio:</span>
                                             <span class="font-tabular-data font-bold text-on-surface dark:text-white text-base">$18,500 <span class="text-xs font-normal text-on-surface-variant dark:text-purple-200/60">MXN</span></span>
                                         </div>
                                         <a draggable="false" data-requires-auth-reserve="true" href="{{ route('public.vinilos') }}" class="btn-glass-purple px-3.5 py-2.5 rounded-xl text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs cursor-pointer select-none">
@@ -568,7 +569,7 @@
                                                     <span class="hidden sm:inline">PIEZA ÚNICA</span>
                                                     <span>1/1</span>
                                                 </span>
-                                                <span class="inline-flex items-center bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[9px] sm:text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
+                                                <span class="inline-flex items-center bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[9px] sm:text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 disponible</span>
                                             </div>
                                             <span class="material-symbols-outlined text-purple-400 dark:text-purple-300 group-hover:text-primary transition-colors text-[64px]">auto_stories</span>
                                         </div>
@@ -583,7 +584,7 @@
                                     </div>
                                     <div class="pt-2.5 sm:pt-4 mt-2.5 sm:mt-4 border-t border-purple-100 dark:border-purple-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                                         <div>
-                                            <span class="text-[10px] uppercase font-label-code text-outline dark:text-purple-300/60 block">Precio Tasado:</span>
+                                            <span class="text-[10px] uppercase font-label-code text-outline dark:text-purple-300/60 block">Precio:</span>
                                             <span class="font-tabular-data font-bold text-on-surface dark:text-white text-base">$32,000 <span class="text-xs font-normal text-on-surface-variant dark:text-purple-200/60">MXN</span></span>
                                         </div>
                                         <a draggable="false" data-requires-auth-reserve="true" href="{{ route('public.libros') }}" class="btn-glass-purple px-3.5 py-2.5 rounded-xl text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs cursor-pointer select-none">
@@ -621,7 +622,7 @@
                                                     <span class="hidden sm:inline">PIEZA ÚNICA</span>
                                                     <span>1/1</span>
                                                 </span>
-                                                <span class="inline-flex items-center bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[9px] sm:text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
+                                                <span class="inline-flex items-center bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[9px] sm:text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 disponible</span>
                                             </div>
                                             <span class="material-symbols-outlined text-purple-400 dark:text-purple-300 group-hover:text-primary transition-colors text-[64px]">history_edu</span>
                                         </div>
@@ -636,7 +637,7 @@
                                     </div>
                                     <div class="pt-2.5 sm:pt-4 mt-2.5 sm:mt-4 border-t border-purple-100 dark:border-purple-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                                         <div>
-                                            <span class="text-[10px] uppercase font-label-code text-outline dark:text-purple-300/60 block">Precio Tasado:</span>
+                                            <span class="text-[10px] uppercase font-label-code text-outline dark:text-purple-300/60 block">Precio:</span>
                                             <span class="font-tabular-data font-bold text-on-surface dark:text-white text-base">$9,400 <span class="text-xs font-normal text-on-surface-variant dark:text-purple-200/60">MXN</span></span>
                                         </div>
                                         <a draggable="false" data-requires-auth-reserve="true" href="{{ route('public.memorabilia') }}" class="btn-glass-purple px-3.5 py-2.5 rounded-xl text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs cursor-pointer select-none">
@@ -674,7 +675,7 @@
                                                     <span class="hidden sm:inline">PIEZA ÚNICA</span>
                                                     <span>1/1</span>
                                                 </span>
-                                                <span class="inline-flex items-center bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[9px] sm:text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
+                                                <span class="inline-flex items-center bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[9px] sm:text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 disponible</span>
                                             </div>
                                             <span class="material-symbols-outlined text-purple-400 dark:text-purple-300 group-hover:text-primary transition-colors text-[64px]">album</span>
                                         </div>
@@ -689,7 +690,7 @@
                                     </div>
                                     <div class="pt-2.5 sm:pt-4 mt-2.5 sm:mt-4 border-t border-purple-100 dark:border-purple-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                                         <div>
-                                            <span class="text-[10px] uppercase font-label-code text-outline dark:text-purple-300/60 block">Precio Tasado:</span>
+                                            <span class="text-[10px] uppercase font-label-code text-outline dark:text-purple-300/60 block">Precio:</span>
                                             <span class="font-tabular-data font-bold text-on-surface dark:text-white text-base">$24,500 <span class="text-xs font-normal text-on-surface-variant dark:text-purple-200/60">MXN</span></span>
                                         </div>
                                         <a draggable="false" data-requires-auth-reserve="true" href="{{ route('public.vinilos') }}" class="btn-glass-purple px-3.5 py-2.5 rounded-xl text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs cursor-pointer select-none">
@@ -727,7 +728,7 @@
                                                     <span class="hidden sm:inline">PIEZA ÚNICA</span>
                                                     <span>1/1</span>
                                                 </span>
-                                                <span class="inline-flex items-center bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[9px] sm:text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
+                                                <span class="inline-flex items-center bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[9px] sm:text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 disponible</span>
                                             </div>
                                             <span class="material-symbols-outlined text-purple-400 dark:text-purple-300 group-hover:text-primary transition-colors text-[64px]">auto_stories</span>
                                         </div>
@@ -742,7 +743,7 @@
                                     </div>
                                     <div class="pt-2.5 sm:pt-4 mt-2.5 sm:mt-4 border-t border-purple-100 dark:border-purple-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                                         <div>
-                                            <span class="text-[10px] uppercase font-label-code text-outline dark:text-purple-300/60 block">Precio Tasado:</span>
+                                            <span class="text-[10px] uppercase font-label-code text-outline dark:text-purple-300/60 block">Precio:</span>
                                             <span class="font-tabular-data font-bold text-on-surface dark:text-white text-base">$28,000 <span class="text-xs font-normal text-on-surface-variant dark:text-purple-200/60">MXN</span></span>
                                         </div>
                                         <a draggable="false" data-requires-auth-reserve="true" href="{{ route('public.libros') }}" class="btn-glass-purple px-3.5 py-2.5 rounded-xl text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs cursor-pointer select-none">
@@ -780,7 +781,7 @@
                                                     <span class="hidden sm:inline">PIEZA ÚNICA</span>
                                                     <span>1/1</span>
                                                 </span>
-                                                <span class="inline-flex items-center bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[9px] sm:text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 en bóveda</span>
+                                                <span class="inline-flex items-center bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[9px] sm:text-[10px] font-label-code font-semibold px-2 py-0.5 rounded-full shadow-2xs">1 disponible</span>
                                             </div>
                                             <span class="material-symbols-outlined text-purple-400 dark:text-purple-300 group-hover:text-primary transition-colors text-[64px]">history_edu</span>
                                         </div>
@@ -795,7 +796,7 @@
                                     </div>
                                     <div class="pt-2.5 sm:pt-4 mt-2.5 sm:mt-4 border-t border-purple-100 dark:border-purple-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                                         <div>
-                                            <span class="text-[10px] uppercase font-label-code text-outline dark:text-purple-300/60 block">Precio Tasado:</span>
+                                            <span class="text-[10px] uppercase font-label-code text-outline dark:text-purple-300/60 block">Precio:</span>
                                             <span class="font-tabular-data font-bold text-on-surface dark:text-white text-base">$65,000 <span class="text-xs font-normal text-on-surface-variant dark:text-purple-200/60">MXN</span></span>
                                         </div>
                                         <a draggable="false" data-requires-auth-reserve="true" href="{{ route('public.memorabilia') }}" class="btn-glass-purple px-3.5 py-2.5 rounded-xl text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs cursor-pointer select-none">
@@ -817,24 +818,24 @@
     <div id="catalogo" class="flex flex-col md:flex-row md:items-center md:justify-between pb-6 border-b border-purple-200/80 gap-4 mb-8">
         <div>
             <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-on-surface font-quicksand">
-                Acervo General en Custodia
+                Catálogo General de Productos
             </h2>
             <p class="text-xs text-primary font-label-code mt-1 font-semibold uppercase tracking-wider">
-                Mostrando {{ $coleccionProductos->count() }} piezas certificadas archivadas en catálogo activo · Sede Central
+                Mostrando {{ $coleccionProductos->count() }} productos disponibles en el catálogo activo · Sucursal Central
             </p>
         </div>
 
         <form method="GET" action="{{ route('public.home') }}" class="flex items-center flex-wrap gap-3 text-xs font-label-md">
             <label for="sort-select" class="text-secondary uppercase tracking-wider font-semibold">Ordenar:</label>
             <select id="sort-select" name="orden" onchange="this.form.submit()" class="bg-surface-container-lowest text-on-surface border border-purple-200/80 rounded-lg py-1.5 px-3 focus:ring-1 focus:ring-primary focus:outline-none shadow-2xs font-medium cursor-pointer">
-                <option value="relevancia" @selected(request('orden') === 'relevancia')>Relevancia Curatorial</option>
+                <option value="relevancia" @selected(request('orden') === 'relevancia')>Destacados</option>
                 <option value="precio_desc" @selected(request('orden') === 'precio_desc')>Precio: Mayor a Menor</option>
                 <option value="precio_asc" @selected(request('orden') === 'precio_asc')>Precio: Menor a Mayor</option>
             </select>
 
             <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container border border-purple-200/80 text-secondary font-medium">
                 <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>Disponibles para Reserva Inmediata</span>
+                <span>Disponibles para Compra Inmediata</span>
             </span>
         </form>
     </div>
@@ -911,18 +912,24 @@
                             let isVisible = true;
 
                             if (diff === 0) {
-                                // Tarjeta central activa: al frente, nítida, profundidad Z y glow
+                                // Tarjeta central activa: al frente, 100% nítida (Z=0, scale(1), sin blur ni escalado que distorsione texto/imagen)
                                 posX = 0;
-                                posZ = 40;
+                                posZ = 0;
                                 rotY = 0;
                                 scale = 1;
                                 zIndex = 30;
                                 opacity = 1;
 
-                                if (card) card.classList.add('coverflow-card-active');
+                                anchor.classList.add('is-active');
+                                if (card) card.classList.add('coverflow-card-active', 'is-active');
                                 anchor.style.pointerEvents = 'auto';
                                 anchor.setAttribute('aria-hidden', 'false');
                                 slot.style.cursor = 'default';
+                                slot.style.transform = 'translate3d(0, 0, 0) scale(1)';
+                                slot.style.backfaceVisibility = 'hidden';
+                                slot.style.webkitBackfaceVisibility = 'hidden';
+                                slot.style.filter = 'none';
+                                slot.style.willChange = 'auto';
                             } else if (diff === -1) {
                                 // Inmediata izquierda: rotateY(24deg), scale(0.86), z-index 20
                                 posX = -spacingX;
@@ -932,8 +939,9 @@
                                 zIndex = 20;
                                 opacity = 0.85;
 
-                                if (card) card.classList.remove('coverflow-card-active');
-                                anchor.style.pointerEvents = 'auto';
+                                anchor.classList.remove('is-active');
+                                if (card) card.classList.remove('coverflow-card-active', 'is-active');
+                                anchor.style.pointerEvents = 'none';
                                 anchor.setAttribute('aria-hidden', 'true');
                                 slot.style.cursor = 'pointer';
                             } else if (diff === 1) {
@@ -945,8 +953,9 @@
                                 zIndex = 20;
                                 opacity = 0.85;
 
-                                if (card) card.classList.remove('coverflow-card-active');
-                                anchor.style.pointerEvents = 'auto';
+                                anchor.classList.remove('is-active');
+                                if (card) card.classList.remove('coverflow-card-active', 'is-active');
+                                anchor.style.pointerEvents = 'none';
                                 anchor.setAttribute('aria-hidden', 'true');
                                 slot.style.cursor = 'pointer';
                             } else if (diff === -2) {
@@ -958,8 +967,9 @@
                                 zIndex = 10;
                                 opacity = 0.55;
 
-                                if (card) card.classList.remove('coverflow-card-active');
-                                anchor.style.pointerEvents = 'auto';
+                                anchor.classList.remove('is-active');
+                                if (card) card.classList.remove('coverflow-card-active', 'is-active');
+                                anchor.style.pointerEvents = 'none';
                                 anchor.setAttribute('aria-hidden', 'true');
                                 slot.style.cursor = 'pointer';
                             } else if (diff === 2) {
@@ -971,8 +981,9 @@
                                 zIndex = 10;
                                 opacity = 0.55;
 
-                                if (card) card.classList.remove('coverflow-card-active');
-                                anchor.style.pointerEvents = 'auto';
+                                anchor.classList.remove('is-active');
+                                if (card) card.classList.remove('coverflow-card-active', 'is-active');
+                                anchor.style.pointerEvents = 'none';
                                 anchor.setAttribute('aria-hidden', 'true');
                                 slot.style.cursor = 'pointer';
                             } else {
@@ -986,7 +997,8 @@
                                 opacity = 0;
                                 isVisible = false;
 
-                                if (card) card.classList.remove('coverflow-card-active');
+                                anchor.classList.remove('is-active');
+                                if (card) card.classList.remove('coverflow-card-active', 'is-active');
                                 anchor.style.pointerEvents = 'none';
                                 anchor.setAttribute('aria-hidden', 'true');
                                 slot.style.cursor = 'default';
@@ -997,7 +1009,11 @@
                             anchor.style.translate = 'none';
                             anchor.style.transform = 'translate(-50%, -50%)';
                             anchor.style.zIndex = zIndex;
-                            slot.style.transform = `translate3d(${posX}px, 0px, ${posZ}px) rotateY(${rotY}deg) scale(${scale})`;
+                            if (diff !== 0) {
+                                slot.style.transform = `translate3d(${posX}px, 0px, ${posZ}px) rotateY(${rotY}deg) scale(${scale})`;
+                                slot.style.backfaceVisibility = 'hidden';
+                                slot.style.webkitBackfaceVisibility = 'hidden';
+                            }
                             slot.style.opacity = opacity;
                             slot.style.visibility = isVisible ? 'visible' : 'hidden';
                         });
@@ -1116,6 +1132,9 @@
 
                     stage.addEventListener('pointerdown', function (e) {
                         if (e.button !== undefined && e.button !== 0) return;
+                        if (e.target && typeof e.target.closest === 'function' && e.target.closest('button, a, select, input, form')) {
+                            return;
+                        }
                         handleStart(e.clientX, e.clientY, e.pointerId);
                     });
 
@@ -1135,6 +1154,9 @@
 
                     // Soporte táctil móvil adicional
                     stage.addEventListener('touchstart', function (e) {
+                        if (e.target && typeof e.target.closest === 'function' && e.target.closest('button, a, select, input, form')) {
+                            return;
+                        }
                         if (e.touches && e.touches[0]) {
                             handleStart(e.touches[0].clientX, e.touches[0].clientY);
                         }
@@ -1150,14 +1172,17 @@
                         handleEnd();
                     });
 
-                    // 3. Clic Directo en Tarjetas Laterales (Fase de Captura):
-                    // Centra suavemente la tarjeta lateral y evita abrir enlaces hasta estar en el centro.
-                    // Solo la tarjeta central (diff === 0) ejecuta Ver detalles o Reservar.
+                    // 3. Clic en el escenario (permite clic normal en botón RESERVAR / Ver detalles de la tarjeta central)
                     stage.addEventListener('click', function (e) {
                         if (dragMoved) {
                             e.preventDefault();
                             e.stopImmediatePropagation();
                             dragMoved = false;
+                            return;
+                        }
+
+                        const activeAnchor = e.target.closest('.coverflow-slot-anchor.is-active');
+                        if (activeAnchor) {
                             return;
                         }
 
@@ -1169,9 +1194,21 @@
                                 e.stopPropagation();
                                 e.stopImmediatePropagation();
                                 goTo(slideIdx);
+                                return;
                             }
                         }
-                    }, true);
+
+                        const rect = stage.getBoundingClientRect();
+                        const centerX = rect.left + rect.width / 2;
+                        const offsetFromCenter = e.clientX - centerX;
+                        if (Math.abs(offsetFromCenter) > 155) {
+                            if (offsetFromCenter > 0) {
+                                next();
+                            } else {
+                                prev();
+                            }
+                        }
+                    }, false);
 
                     // 4. Teclado Accesible
                     stage.addEventListener('keydown', function (e) {

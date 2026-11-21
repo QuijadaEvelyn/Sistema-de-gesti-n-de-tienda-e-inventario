@@ -9,10 +9,10 @@
                     <span>Regresar al Catálogo de Productos</span>
                 </a>
                 <h1 class="text-2xl font-bold text-on-surface dark:text-white font-quicksand">
-                    Dar de Alta Producto en Bóveda
+                    Dar de Alta Producto en Catálogo
                 </h1>
                 <p class="text-xs text-on-surface-variant dark:text-purple-200/70 font-label-code uppercase tracking-wider mt-0.5">
-                    Registro de nueva pieza histórica &middot; Autorizado para Administradores y Personal Operativo
+                    Registro de nuevo producto &middot; Autorizado para Administradores y Personal Operativo
                 </p>
             </div>
             <div class="flex items-center gap-2">
@@ -132,7 +132,7 @@
                     <div class="flex items-center gap-2">
                         <span class="material-symbols-outlined text-primary dark:text-purple-300 text-[22px]" id="icono_ficha">auto_stories</span>
                         <h2 class="text-sm font-bold uppercase font-label-code text-on-surface dark:text-white" id="titulo_ficha">
-                            2. Ficha Curatorial Especializada
+                            2. Ficha Técnica del Producto
                         </h2>
                     </div>
                     <span id="badge_ficha" class="text-[10px] font-label-code text-primary dark:text-purple-300 uppercase font-bold bg-purple-100 dark:bg-purple-900/50 px-2.5 py-0.5 rounded-full border border-purple-300 dark:border-purple-700/60">
@@ -223,14 +223,14 @@
             <div class="bg-surface-container-lowest dark:bg-[#1a1329] p-6 rounded-3xl border border-purple-200/70 dark:border-purple-800/40 shadow-xs space-y-4">
                 <div class="flex items-center gap-2 border-b border-purple-100 dark:border-purple-900/40 pb-3">
                     <span class="material-symbols-outlined text-primary dark:text-purple-300 text-[22px]">payments</span>
-                    <h2 class="text-sm font-bold uppercase font-label-code text-on-surface dark:text-white">3. Valor Tasado, Sede de Ingreso &amp; Fotografía</h2>
+                    <h2 class="text-sm font-bold uppercase font-label-code text-on-surface dark:text-white">3. Precio, Sucursal de Ingreso &amp; Fotografía</h2>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {{-- Precio Tasado Base --}}
+                    {{-- Precio Base --}}
                     <div>
                         <label for="input_precio" class="block text-xs font-label-code uppercase text-on-surface dark:text-white font-semibold mb-1">
-                            Precio Tasado (MXN) <span class="text-rose-500">*</span>
+                            Precio (MXN) <span class="text-rose-500">*</span>
                         </label>
                         <div class="relative">
                             <span class="absolute left-3 top-2.5 text-sm font-bold text-outline">$</span>
@@ -286,16 +286,16 @@
                         </select>
                     </div>
 
-                    {{-- Descripción Curatorial --}}
+                    {{-- Descripción del Producto --}}
                     <div class="md:col-span-3">
                         <label for="input_descripcion" class="block text-xs font-label-code uppercase text-on-surface dark:text-white font-semibold mb-1">
-                            Descripción Curatorial &amp; Reseña Patrimonial
+                            Descripción del Producto
                         </label>
                         <textarea
                             id="input_descripcion"
                             name="descripcion"
                             rows="3"
-                            placeholder="Describa el origen notariado, estado de conservación, sellos periciales o rareza de la pieza..."
+                            placeholder="Describa las características, edición, estado de conservación o detalles del producto..."
                             class="w-full px-3.5 py-2.5 rounded-xl border border-purple-200 dark:border-purple-800/60 text-sm bg-white dark:bg-[#1f1a2e] text-on-surface dark:text-white focus:outline-none focus:border-primary resize-y"
                         >{{ old('descripcion') }}</textarea>
                     </div>

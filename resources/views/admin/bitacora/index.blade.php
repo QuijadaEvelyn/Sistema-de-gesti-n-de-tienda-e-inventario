@@ -1,8 +1,8 @@
 <x-layouts.admin title="ARCHIVUM · Bitácora del Sistema" active-route="bitacora">
     <div class="space-y-6">
         <div>
-            <h1 class="text-2xl font-bold text-on-surface font-quicksand">Bitácora de Auditoría Notarial</h1>
-            <p class="text-xs text-on-surface-variant font-label-code uppercase tracking-wider mt-1">Registro inmutable de acciones operativas y de seguridad</p>
+            <h1 class="text-2xl font-bold text-on-surface font-quicksand">Bitácora del Sistema</h1>
+            <p class="text-xs text-on-surface-variant font-label-code uppercase tracking-wider mt-1">Registro de acciones operativas y de seguridad</p>
         </div>
 
         <form method="GET" action="{{ route('admin.bitacora') }}" class="bg-surface-container-lowest p-4 rounded-2xl border border-purple-200/70 flex flex-wrap gap-3 items-center">

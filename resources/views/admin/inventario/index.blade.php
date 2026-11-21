@@ -13,7 +13,7 @@
                     @endif
                 </h1>
                 <p class="text-xs text-on-surface-variant font-label-code uppercase tracking-wider mt-1">
-                    Sede: {{ $sucursalActiva?->nombre ?? 'Todas las Sedes (Vista Global)' }} &middot; Total en custodia: {{ number_format($totalUnidades) }} unidades &middot; Alertas de stock mínimo: {{ $alertasStock }}
+                    Sucursal: {{ $sucursalActiva?->nombre ?? 'Todas las Sucursales (Vista Global)' }} &middot; Total disponible: {{ number_format($totalUnidades) }} unidades &middot; Alertas de stock mínimo: {{ $alertasStock }}
                 </p>
             </div>
             <div class="flex flex-wrap gap-2">

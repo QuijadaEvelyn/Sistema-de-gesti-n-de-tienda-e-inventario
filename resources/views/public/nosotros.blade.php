@@ -1,4 +1,4 @@
-<x-layouts.public title="ARCHIVUM · Conoce más de nosotros &amp; Manifiesto Curatorial">
+<x-layouts.public title="ARCHIVUM · Conoce más de nosotros">
 
     @php
         $particulasLluvia = [
@@ -80,7 +80,7 @@
             </p>
 
             <p class="text-sm sm:text-base text-on-surface-variant dark:text-slate-100 leading-relaxed max-w-3xl mx-auto">
-                <strong class="text-on-surface dark:text-white font-bold">ARCHIVUM</strong> es un sistema curado y especializado en el resguardo climatizado, la exhibición interactiva y el <strong class="text-on-surface dark:text-white font-bold">comercio híbrido de libros raros e incunables, vinilos de primer tiraje y piezas de colección únicas</strong> distribuidas en múltiples sedes. Nuestra arquitectura tecnológica une el rigor de un archivo museográfico con una experiencia de adquisición transparente, trazable y protegida contra sobreventas.
+                <strong class="text-on-surface dark:text-white font-bold">ARCHIVUM</strong> es una tienda especializada en la venta y gestión de <strong class="text-on-surface dark:text-white font-bold">libros y ediciones especiales, discos de vinilo originales y artículos de colección únicos</strong> distribuidos en múltiples sucursales. Nuestra plataforma ofrece una experiencia de compra clara, segura y protegida contra sobreventas.
             </p>
 
             <!-- Acciones Principales -->
@@ -91,41 +91,41 @@
                 </a>
                 <a href="{{ route('public.adquisiciones') }}" class="px-6 py-3 rounded-xl bg-white/95 dark:bg-[#281b44] hover:bg-purple-50 dark:hover:bg-purple-900/50 text-primary dark:text-amber-50 border border-purple-300 dark:border-purple-400/40 text-xs font-label-md font-bold uppercase tracking-wider shadow-2xs transition flex items-center gap-2">
                     <span class="material-symbols-outlined text-[18px]">auto_awesome</span>
-                    <span>Ver Adquisiciones Selectas</span>
+                    <span>Ver Ediciones Especiales</span>
                 </a>
             </div>
         </div>
 
-        <!-- Panel Interactivo de Métricas Curatorias (Fluid Dashboard) -->
+        <!-- Panel Interactivo de Métricas (Fluid Dashboard) -->
         <div class="relative z-10 mt-8 max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-5">
             <x-ui.metric-card
-                title="Sedes Interconectadas"
+                title="Sucursales Conectadas"
                 :value="$metricas['total_sedes']"
-                unit="bóvedas"
-                subtitle="Red multicéntrica de resguardo y exhibición"
+                unit="sucursales"
+                subtitle="Red de tiendas y almacén general"
                 badge="Activas"
                 :badge-pulse="true"
                 badge-color="emerald"
                 icon="storefront"
                 icon-bg="bg-primary-container"
-                summary-left="Custodia física"
-                summary-right="100% Climatizado"
+                summary-left="Atención directa"
+                summary-right="100% Verificado"
                 :action-url="route('public.contacto')"
-                action-text="Ver sedes"
+                action-text="Ver sucursales"
                 action-icon="location_on"
             />
             <x-ui.metric-card
-                title="Acervo Certificado"
+                title="Catálogo Certificado"
                 :value="$metricas['total_productos']"
-                unit="lotes"
-                subtitle="Libros raros, vinilos y coleccionables"
+                unit="productos"
+                subtitle="Libros, vinilos y coleccionables"
                 badge="En Catálogo"
                 :badge-pulse="true"
                 badge-color="purple"
                 icon="inventory_2"
                 icon-bg="bg-secondary-container text-on-secondary-container"
-                summary-left="Trazabilidad"
-                summary-right="Peritaje notariado"
+                summary-left="Autenticidad"
+                summary-right="Certificado incluido"
                 :action-url="route('public.home') . '#catalogo'"
                 action-text="Explorar catálogo"
                 action-icon="explore"
@@ -140,10 +140,10 @@
                 badge-color="amber"
                 icon="workspace_premium"
                 icon-bg="bg-tertiary"
-                summary-left="Bloqueo temporal"
+                summary-left="Reserva temporal"
                 summary-right="5 minutos"
                 :action-url="route('public.adquisiciones')"
-                action-text="Ver selectas"
+                action-text="Ver ediciones"
                 action-icon="auto_awesome"
             />
         </div>
@@ -176,12 +176,12 @@
                     <div class="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-900/50 text-primary dark:text-amber-50 flex items-center justify-center">
                         <span class="material-symbols-outlined text-[22px]">auto_stories</span>
                     </div>
-                    <h3 class="font-bold text-base text-on-surface dark:text-white font-quicksand">Libros Raros &amp; Incunables</h3>
+                    <h3 class="font-bold text-base text-on-surface dark:text-white font-quicksand">Libros &amp; Ediciones Especiales</h3>
                     <p class="text-xs text-on-surface-variant dark:text-slate-100 leading-relaxed">
-                        Primeras ediciones hispanoamericanas, pruebas de galera, ejemplares autografiados y encuadernaciones históricas con dictamen bibliográfico.
+                        Primeras ediciones hispanoamericanas, ejemplares autografiados y ediciones históricas verificadas.
                     </p>
                     <a href="{{ route('public.libros') }}" class="inline-flex items-center gap-1 text-[11px] font-label-code uppercase text-primary dark:text-amber-50 font-bold hover:underline pt-1">
-                        <span>Ir a Sala Bibliográfica</span>
+                        <span>Ver Libros</span>
                         <span>&rarr;</span>
                     </a>
                 </div>
@@ -192,10 +192,10 @@
                     </div>
                     <h3 class="font-bold text-base text-on-surface dark:text-white font-quicksand">Vinilos de Primer Tiraje</h3>
                     <p class="text-xs text-on-surface-variant dark:text-slate-100 leading-relaxed">
-                        Prensados originales en 180 gramos, matrices analógicas mono y sellos legendarios graduados bajo el estándar internacional <em>Goldmine</em>.
+                        Prensados originales en 180 gramos, ediciones analógicas y sellos legendarios graduados bajo el estándar internacional <em>Goldmine</em>.
                     </p>
                     <a href="{{ route('public.vinilos') }}" class="inline-flex items-center gap-1 text-[11px] font-label-code uppercase text-indigo-700 dark:text-amber-50 font-bold hover:underline pt-1">
-                        <span>Ir a Sala Fonográfica 3D</span>
+                        <span>Ver Discos 3D</span>
                         <span>&rarr;</span>
                     </a>
                 </div>
@@ -204,25 +204,25 @@
                     <div class="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-50 flex items-center justify-center">
                         <span class="material-symbols-outlined text-[22px]">history_edu</span>
                     </div>
-                    <h3 class="font-bold text-base text-on-surface dark:text-white font-quicksand">Memorabilia &amp; Piezas 1/1</h3>
+                    <h3 class="font-bold text-base text-on-surface dark:text-white font-quicksand">Coleccionables &amp; Piezas 1/1</h3>
                     <p class="text-xs text-on-surface-variant dark:text-slate-100 leading-relaxed">
-                        Manuscritos autógrafos, partituras de época, medallas históricas y fotografía en plata sobre gelatina con Certificado de Autenticidad (COA) notariado.
+                        Manuscritos autógrafos, numismática, figuras y artículos históricos con Certificado de Autenticidad.
                     </p>
                     <a href="{{ route('public.memorabilia') }}" class="inline-flex items-center gap-1 text-[11px] font-label-code uppercase text-amber-700 dark:text-amber-50 font-bold hover:underline pt-1">
-                        <span>Ir a Archivo Documental</span>
+                        <span>Ver Coleccionables</span>
                         <span>&rarr;</span>
                     </a>
                 </div>
             </div>
 
-            <!-- Pilares Tecnológicos y Reglas de Custodia -->
+            <!-- Pilares Tecnológicos y Reglas del Carrito -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-purple-100 dark:border-purple-500/20 text-xs">
                 <div class="p-4 rounded-xl bg-purple-50/70 dark:bg-purple-950/40 border border-purple-200/70 dark:border-purple-500/30 flex items-start gap-3">
                     <span class="material-symbols-outlined text-purple-700 dark:text-amber-50 text-[22px] shrink-0 mt-0.5">timer</span>
                     <div>
-                        <h4 class="font-bold text-on-surface dark:text-white font-quicksand text-sm">Reserva Exclusiva en Bóveda (5 Minutos)</h4>
+                        <h4 class="font-bold text-on-surface dark:text-white font-quicksand text-sm">Reserva Temporal en Carrito (5 Minutos)</h4>
                         <p class="text-on-surface-variant dark:text-slate-100 mt-0.5 leading-relaxed">
-                            Cuando un coleccionista añade una <strong class="text-on-surface dark:text-amber-50 font-bold">Pieza Única (1/1)</strong> a su carrito, el sistema bloquea la pieza de forma inmediata durante 5 minutos para evitar sobreventas concurrentes.
+                            Cuando un cliente añade una <strong class="text-on-surface dark:text-amber-50 font-bold">Pieza Única (1/1)</strong> a su carrito, el sistema la reserva durante 5 minutos mientras que los productos comunes se guardan por 7 días.
                         </p>
                     </div>
                 </div>
@@ -260,7 +260,7 @@
                         <div class="pt-4 mt-4 border-t border-purple-100 dark:border-purple-500/20 flex items-center justify-between text-xs">
                             <span class="font-tabular-data text-outline dark:text-amber-50/80">Tel: {{ $sede->telefono }}</span>
                             <a href="{{ route('public.home', ['sucursal_id' => $sede->id]) }}" class="font-label-code uppercase font-bold text-primary dark:text-amber-50 hover:underline">
-                                Ver Acervo &rarr;
+                                Ver Catálogo &rarr;
                             </a>
                         </div>
                     </div>

@@ -389,7 +389,7 @@
                                     id="card-stock-badge"
                                     class="px-2.5 py-0.5 rounded-full text-[11px] font-label-code font-bold uppercase {{ $discoInicial['agotado'] ? 'bg-red-600 text-white border border-red-700' : 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-200 border border-emerald-300 dark:border-emerald-400/40' }}"
                                 >
-                                    {{ $discoInicial['agotado'] ? 'AGOTADO' : $discoInicial['stock'].' en bóveda' }}
+                                    {{ $discoInicial['agotado'] ? 'AGOTADO' : $discoInicial['stock'].' disponibles' }}
                                 </span>
                             </div>
                         </div>
@@ -423,10 +423,10 @@
                             </div>
                         </div>
 
-                        <!-- Precio Tasado y Botón Directo de «RESERVAR» Vinculado con Stock en Tiempo Real -->
+                        <!-- Precio y Botón Directo de «RESERVAR» Vinculado con Stock en Tiempo Real -->
                         <div class="pt-3 border-t border-purple-200/80 dark:border-white/15 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                             <div>
-                                <span class="text-[10px] uppercase font-label-code text-purple-700 dark:text-purple-300 block font-semibold">Precio Tasado en Bóveda:</span>
+                                <span class="text-[10px] uppercase font-label-code text-purple-700 dark:text-purple-300 block font-semibold">Precio:</span>
                                 <div class="flex items-baseline gap-1.5">
                                     <span id="card-precio" class="font-tabular-data font-bold text-2xl sm:text-3xl text-purple-600 dark:text-white">
                                         {{ $discoInicial['precio_formateado'] }}

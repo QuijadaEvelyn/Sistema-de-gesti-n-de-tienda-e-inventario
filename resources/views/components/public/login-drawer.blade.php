@@ -22,10 +22,10 @@
                 <x-ui.archivum-logo size="lg" />
                 <div>
                     <h2 id="login-drawer-title" class="font-headline-sm text-lg text-on-surface font-bold font-brand-serif tracking-[0.15em] uppercase">
-                        Bóveda de Autenticación ARCHIVUM
+                        Acceso a tu Cuenta ARCHIVUM
                     </h2>
                     <span class="font-label-code text-secondary text-[11px] uppercase tracking-wider">
-                        Acceso Cifrado para Coleccionistas &amp; Personal
+                        Inicio de Sesión para Clientes &amp; Personal
                     </span>
                 </div>
             </div>
@@ -99,9 +99,9 @@
                     <span class="material-symbols-outlined text-[18px]">verified_user</span>
                 </div>
                 <div class="space-y-0.5">
-                    <p id="checkout-auth-banner-title" class="font-bold font-quicksand text-primary text-sm">Autenticación Requerida en Bóveda</p>
+                    <p id="checkout-auth-banner-title" class="font-bold font-quicksand text-primary text-sm">Inicio de Sesión Requerido</p>
                     <p id="checkout-auth-banner-text" class="text-on-surface-variant text-[11px] leading-relaxed font-semibold">
-                        {{ $avisoAutenticacion ?: 'Inicia sesión o regístrate para reservar piezas en la bóveda' }}
+                        {{ $avisoAutenticacion ?: 'Inicia sesión o regístrate para agregar productos al carrito' }}
                     </p>
                 </div>
             </div>
@@ -176,7 +176,7 @@
                         class="btn-glass-purple w-full py-3.5 px-5 rounded-xl font-bold uppercase tracking-wider text-xs shadow-md font-quicksand flex items-center justify-center gap-2"
                     >
                         <span class="material-symbols-outlined text-[18px]">lock_open</span>
-                        <span id="drawer-login-submit-text">Entrar a la Bóveda</span>
+                        <span id="drawer-login-submit-text">Iniciar Sesión</span>
                     </button>
                 </form>
 
@@ -580,7 +580,7 @@
             });
         }
 
-        bindAjaxForm('drawer-login-form', 'drawer-login-submit', 'drawer-login-submit-text', 'Entrar a la Bóveda');
+        bindAjaxForm('drawer-login-form', 'drawer-login-submit', 'drawer-login-submit-text', 'Iniciar Sesión');
         bindAjaxForm('drawer-register-form', 'drawer-register-submit', 'drawer-register-submit-text', 'Crear mi Cuenta de Cliente');
 
         // Si estamos en /login, /register, /admin/login, ?login=1 o existen errores de validación, abrir el drawer automáticamente

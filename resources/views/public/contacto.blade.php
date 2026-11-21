@@ -1,17 +1,17 @@
-<x-layouts.public title="ARCHIVUM · Contacto, Sedes &amp; Horarios de Bóveda">
+<x-layouts.public title="ARCHIVUM · Contacto, Sucursales &amp; Horarios">
     <div class="space-y-12 mb-16">
 
         {{-- Encabezado Editorial --}}
         <header class="text-center max-w-3xl mx-auto space-y-4 pt-4">
             <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 text-xs font-label-code uppercase tracking-wider">
                 <span class="material-symbols-outlined text-[16px]">location_on</span>
-                Atención Curatorial Directa
+                Atención al Cliente Directa
             </span>
             <h1 class="text-3xl sm:text-4xl font-bold font-quicksand text-on-surface">
-                Contacto, Sedes &amp; Horarios de Bóveda
+                Contacto, Sucursales &amp; Horarios de Atención
             </h1>
             <p class="text-sm sm:text-base text-on-surface-variant leading-relaxed">
-                Nuestros conservadores y tasadores están a su disposición para coordinar citas privadas de inspección, consultas bibliográficas, audiciones de fonoteca y peritaje notariado de colecciones.
+                Nuestro equipo está a tu disposición para resolver dudas sobre el catálogo, disponibilidad en sucursales, envíos y Certificados de Autenticidad.
             </p>
         </header>
 
@@ -51,25 +51,25 @@
                                 <span class="material-symbols-outlined text-[20px]">storefront</span>
                             </div>
                             <div>
-                                <h2 class="text-lg font-bold font-quicksand text-on-surface">Red de Sedes &amp; Gabinetes</h2>
-                                <p class="text-xs text-on-surface-variant font-label-code uppercase tracking-wider">Horarios oficiales de visita y custodia</p>
+                                <h2 class="text-lg font-bold font-quicksand text-on-surface">Nuestras Sucursales</h2>
+                                <p class="text-xs text-on-surface-variant font-label-code uppercase tracking-wider">Horarios oficiales de atención al público</p>
                             </div>
                         </div>
                         <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 text-[11px] font-label-code">
                             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                            Bóvedas Abiertas
+                            Sucursales Abiertas
                         </span>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                         <div class="p-4 rounded-2xl bg-surface-container-low dark:bg-[#211636] border border-purple-100 dark:border-purple-500/20">
-                            <span class="text-xs font-label-code text-primary uppercase font-bold block mb-1">Conmutador Notarial</span>
+                            <span class="text-xs font-label-code text-primary uppercase font-bold block mb-1">Teléfono de Atención</span>
                             <p class="text-sm font-semibold text-on-surface">+52 (55) 5512-4200</p>
-                            <p class="text-xs text-on-surface-variant mt-0.5">Línea directa para peritajes</p>
+                            <p class="text-xs text-on-surface-variant mt-0.5">Línea directa para clientes</p>
                         </div>
                         <div class="p-4 rounded-2xl bg-surface-container-low dark:bg-[#211636] border border-purple-100 dark:border-purple-500/20">
-                            <span class="text-xs font-label-code text-primary uppercase font-bold block mb-1">Correo Curatorial</span>
-                            <p class="text-sm font-semibold text-on-surface">curaduria@archivum.mx</p>
+                            <span class="text-xs font-label-code text-primary uppercase font-bold block mb-1">Correo de Contacto</span>
+                            <p class="text-sm font-semibold text-on-surface">contacto@archivum.mx</p>
                             <p class="text-xs text-on-surface-variant mt-0.5">Respuestas en menos de 24h</p>
                         </div>
                     </div>
@@ -105,10 +105,10 @@
 
                                 {{-- Bloque de Horarios Específicos --}}
                                 <div class="bg-surface-container-low dark:bg-[#25193e] px-4 py-3 rounded-xl border border-purple-100 dark:border-purple-500/20 text-xs shrink-0 sm:min-w-[210px] space-y-1">
-                                    <span class="font-bold text-primary block font-label-code uppercase text-[11px]">Horario de Bóveda:</span>
+                                    <span class="font-bold text-primary block font-label-code uppercase text-[11px]">Horario de Atención:</span>
                                     <p class="text-on-surface font-medium">Lun – Vie: 10:00 a 20:00 hrs</p>
                                     <p class="text-on-surface-variant">Sáb: 11:00 a 18:00 hrs</p>
-                                    <p class="text-[10px] text-outline font-label-code">Dom: Citas exclusivas COA</p>
+                                    <p class="text-[10px] text-outline font-label-code">Dom: Atención con cita previa</p>
                                 </div>
                             </div>
                         </div>
@@ -119,12 +119,12 @@
                     @endforelse
                 </div>
 
-                {{-- Protocolo de Citas Privadas --}}
+                {{-- Información sobre Ediciones Especiales --}}
                 <div class="p-5 rounded-2xl bg-purple-50/60 dark:bg-purple-950/20 border border-purple-200/60 dark:border-purple-500/20 flex items-start gap-4">
                     <span class="material-symbols-outlined text-primary text-[24px] shrink-0 mt-0.5">verified</span>
                     <div class="text-xs text-on-surface-variant leading-relaxed">
-                        <strong class="text-on-surface block font-quicksand font-bold mb-0.5">Protocolo Notarial para Inspección de Ejemplares Únicos (1/1)</strong>
-                        La revisión física de incunables, primeras ediciones autografiadas o acetatos matriz requiere reserva previa con 48 horas de anticipación para acondicionamiento en cámara de temperatura controlada.
+                        <strong class="text-on-surface block font-quicksand font-bold mb-0.5">Citas para Revisión de Piezas Únicas y Ediciones Especiales</strong>
+                        Si deseas conocer físicamente alguna Edición Especial, primera edición autografiada o vinilo de colección en sucursal, puedes agendar una cita con 24 horas de anticipación a través de este formulario.
                     </div>
                 </div>
 
@@ -133,7 +133,7 @@
             {{-- Columna Derecha: Formulario de Mensaje Funcional (5 cols) --}}
             <div class="lg:col-span-5 bg-surface-container-lowest dark:bg-[#1b132a] p-6 sm:p-8 rounded-3xl border border-purple-200/80 dark:border-purple-500/30 shadow-xs space-y-5">
                 <div class="space-y-1 border-b border-purple-100 dark:border-purple-500/20 pb-4">
-                    <h2 class="text-xl font-bold font-quicksand text-on-surface">Enviar Mensaje a Curaduría</h2>
+                    <h2 class="text-xl font-bold font-quicksand text-on-surface">Envíanos un Mensaje</h2>
                     <p class="text-xs text-on-surface-variant font-label-code uppercase tracking-wider">
                         Formulario de consulta directa e informes
                     </p>
@@ -246,7 +246,7 @@
                             class="btn-glass-purple w-full py-3.5 rounded-xl font-bold font-label-md uppercase tracking-wider text-xs flex items-center justify-center gap-2 shadow-md cursor-pointer"
                         >
                             <span class="material-symbols-outlined text-[18px]">mail</span>
-                            <span>Enviar Mensaje a Curaduría</span>
+                            <span>Enviar Mensaje</span>
                         </button>
                     </div>
 

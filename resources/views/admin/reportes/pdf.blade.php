@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Reporte Oficial de Acervo e Inventario — ARCHIVUM ({{ $folio_reporte }})</title>
+    <title>Reporte Oficial de Catálogo e Inventario — ARCHIVUM ({{ $folio_reporte }})</title>
     <style>
         @page {
             size: letter landscape;
@@ -209,54 +209,54 @@
             <div class="logo-box">A</div>
             <div class="brand-block">
                 <h1 class="brand-title">ARCHIVUM</h1>
-                <p class="brand-subtitle">Bóveda Curatorial &amp; Sistema de Gestión de Inventario</p>
+                <p class="brand-subtitle">Sistema de Gestión de Tienda e Inventario</p>
             </div>
         </div>
         <div class="header-right">
             <div><strong>FOLIO OFICIAL: {{ $folio_reporte }}</strong></div>
             <div>Emisión: {{ $fecha_emision }}</div>
-            <div>Sede: {{ $filtro_sucursal }}</div>
-            <div>Colección: {{ $filtro_categoria }}</div>
+            <div>Sucursal: {{ $filtro_sucursal }}</div>
+            <div>Categoría: {{ $filtro_categoria }}</div>
         </div>
     </div>
 
     {{-- Resumen Ejecutivo Calculado --}}
     <div class="kpi-grid">
         <div class="kpi-card">
-            <div class="kpi-label">SKUs Catalogados</div>
+            <div class="kpi-label">SKUs Registrados</div>
             <div class="kpi-value">{{ $resumen['total_skus'] }} referencias</div>
             <div class="kpi-meta">Agotados: {{ $resumen['skus_agotados'] }} | Bajo mín: {{ $resumen['alertas_stock_bajo'] }}</div>
         </div>
         <div class="kpi-card">
-            <div class="kpi-label">Piezas en Bóveda</div>
-            <div class="kpi-value">{{ $resumen['total_unidades_boveda'] }} ejemplares</div>
+            <div class="kpi-label">Productos Disponibles</div>
+            <div class="kpi-value">{{ $resumen['total_unidades_boveda'] }} unidades</div>
             <div class="kpi-meta">Reservas activas: {{ $resumen['reservas_activas'] }} uds.</div>
         </div>
         <div class="kpi-card">
-            <div class="kpi-label">Valoración del Acervo</div>
+            <div class="kpi-label">Valor Total del Catálogo</div>
             <div class="kpi-value">${{ number_format($resumen['valor_total_acervo'], 2) }} MXN</div>
-            <div class="kpi-meta">Tasación curatorial asegurada</div>
+            <div class="kpi-meta">Inventario valorizado activo</div>
         </div>
         <div class="kpi-card">
-            <div class="kpi-label">Lotes Certificados COA</div>
+            <div class="kpi-label">Certificados de Autenticidad</div>
             <div class="kpi-value">{{ $resumen['total_piezas_certificadas'] }} certificados</div>
             <div class="kpi-meta">Ingresos: ${{ number_format($resumen['ingresos_acumulados'], 2) }} MXN</div>
         </div>
     </div>
 
-    {{-- Desglose Detallado de Inventario y Lotes Certificados --}}
-    <h2 class="section-title">Desglose Oficial de Inventario en Bóveda y Lotes Certificados (COA)</h2>
+    {{-- Desglose Detallado de Inventario y Certificados --}}
+    <h2 class="section-title">Desglose Oficial de Inventario Disponible y Certificados de Autenticidad</h2>
     <table class="report-table">
         <thead>
             <tr>
                 <th>SKU</th>
-                <th>Pieza / Título Curatorial</th>
+                <th>Producto</th>
                 <th>Categoría</th>
-                <th>Bóveda / Sede</th>
-                <th>Certificado COA / Serie</th>
+                <th>Sucursal</th>
+                <th>Certificado / Serie</th>
                 <th class="text-center">Stock</th>
                 <th class="text-right">Precio Unitario</th>
-                <th class="text-right">Valor Tasado</th>
+                <th class="text-right">Valor Total</th>
                 <th class="text-center">Estatus</th>
             </tr>
         </thead>
@@ -280,7 +280,7 @@
                         @elseif($fila['estado_stock'] === 'BAJO MINIMO')
                             <span class="badge-bajo">BAJO MÍNIMO</span>
                         @else
-                            <span class="badge-ok">EN BÓVEDA</span>
+                            <span class="badge-ok">DISPONIBLE</span>
                         @endif
                     </td>
                 </tr>
@@ -294,8 +294,8 @@
 
     <div class="footer-seal">
         <div style="display: table-cell; width: 70%;">
-            <strong>ARCHIVUM CURATORIAL VAULT — CERTIFICADO DE AUDITORÍA PATRIMONIAL</strong><br>
-            Documento emitido por el Sistema de Gestión de Tienda e Inventario ARCHIVUM para respaldo contable, seguro curatorial y control de bóveda.
+            <strong>ARCHIVUM — REPORTE OFICIAL DE TIENDA E INVENTARIO</strong><br>
+            Documento emitido por el Sistema de Gestión de Tienda e Inventario ARCHIVUM para control de inventario y ventas.
         </div>
         <div style="display: table-cell; width: 30%; text-align: right;">
             Sello Digital: {{ strtoupper(substr(md5($folio_reporte), 0, 12)) }}

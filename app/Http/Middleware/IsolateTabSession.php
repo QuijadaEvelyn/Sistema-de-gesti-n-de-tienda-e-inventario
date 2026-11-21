@@ -141,6 +141,7 @@ class IsolateTabSession
         $state = [
             'user_id' => (int) $user->getAuthIdentifier(),
             'carrito_archivum' => $request->session()->get('carrito_archivum', []),
+            'carrito_precios_congelados' => $request->session()->get('carrito_precios_congelados', []),
             'carrito_reservas_ids' => $request->session()->get('carrito_reservas_ids', []),
             'carrito_expira_en' => $request->session()->get('carrito_expira_en'),
             'authenticated_at' => now()->toIso8601String(),
@@ -234,6 +235,7 @@ class IsolateTabSession
 
                     // Hidratar en memoria el carrito correspondiente a esta pestaña
                     $request->session()->put('carrito_archivum', $tabState['carrito_archivum'] ?? []);
+                    $request->session()->put('carrito_precios_congelados', $tabState['carrito_precios_congelados'] ?? []);
                     $request->session()->put('carrito_reservas_ids', $tabState['carrito_reservas_ids'] ?? []);
                     if (! empty($tabState['carrito_expira_en'])) {
                         $request->session()->put('carrito_expira_en', $tabState['carrito_expira_en']);
@@ -253,6 +255,7 @@ class IsolateTabSession
             $request->session()->forget([
                 $guardSessionKey,
                 'carrito_archivum',
+                'carrito_precios_congelados',
                 'carrito_reservas_ids',
                 'carrito_expira_en',
             ]);
@@ -284,6 +287,7 @@ class IsolateTabSession
             self::putTabState($request, $activeTabId, [
                 'user_id' => (int) $currentUser->getAuthIdentifier(),
                 'carrito_archivum' => $request->session()->get('carrito_archivum', []),
+                'carrito_precios_congelados' => $request->session()->get('carrito_precios_congelados', []),
                 'carrito_reservas_ids' => $request->session()->get('carrito_reservas_ids', []),
                 'carrito_expira_en' => $request->session()->get('carrito_expira_en'),
                 'authenticated_at' => $existingState['authenticated_at'] ?? now()->toIso8601String(),
@@ -297,6 +301,7 @@ class IsolateTabSession
             $request->session()->forget([
                 $guardSessionKey,
                 'carrito_archivum',
+                'carrito_precios_congelados',
                 'carrito_reservas_ids',
                 'carrito_expira_en',
             ]);

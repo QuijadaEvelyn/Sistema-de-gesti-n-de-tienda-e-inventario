@@ -1,4 +1,4 @@
-<x-layouts.admin title="ARCHIVUM · Estado de Terminal Operativa" active-route="dashboard">
+<x-layouts.admin title="ARCHIVUM · Estado del Sistema" active-route="dashboard">
     <div class="space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-surface-container-lowest p-6 rounded-2xl border border-purple-200/70 shadow-xs">
             <div class="flex items-center gap-4">
@@ -6,7 +6,7 @@
                     <span class="material-symbols-outlined text-[26px]">terminal</span>
                 </div>
                 <div>
-                    <h1 class="text-xl font-bold text-on-surface font-quicksand">TERMINAL ARCHIVO {{ $version }}</h1>
+                    <h1 class="text-xl font-bold text-on-surface font-quicksand">ESTADO DEL SISTEMA {{ $version }}</h1>
                     <p class="text-xs text-on-surface-variant font-label-code uppercase tracking-wider">
                         Diagnóstico Operativo · Operador: {{ $usuario->nombre }} ({{ $usuario->email }})
                     </p>

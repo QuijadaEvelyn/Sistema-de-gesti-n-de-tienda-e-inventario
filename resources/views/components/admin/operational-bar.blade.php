@@ -1,7 +1,7 @@
 @props([
     'sessionId' => '#ADM-8841-MX',
     'curatorName' => 'Mateo Vargas',
-    'curatorRole' => 'Administrador General · Sistema de Catalogación & Logística de Anticuario',
+    'curatorRole' => 'Administrador General · Sistema de Gestión de Tienda e Inventario',
     'activePeriod' => '30d',
     'sucursales' => collect(),
     'sucursalActiva' => null,
@@ -17,7 +17,7 @@
     <!-- Identificador de Sesión, Saludo y Sede Activa -->
     <div class="flex flex-col">
         <div class="flex flex-wrap items-center gap-space-xs mb-1">
-            <span class="font-label-code uppercase tracking-wider text-primary dark:text-[#ccbeff] font-bold text-[11px]">Terminal de Control Maestro</span>
+            <span class="font-label-code uppercase tracking-wider text-primary dark:text-[#ccbeff] font-bold text-[11px]">Panel de Administración</span>
             <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
             <span class="font-tabular-data text-on-surface-variant dark:text-[#e6dfd5] font-medium text-xs">SESIÓN ID: {{ $sessionId }}</span>
             <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>

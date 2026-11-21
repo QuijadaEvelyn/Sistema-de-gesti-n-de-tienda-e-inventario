@@ -9,10 +9,10 @@
                     <span>Regresar al Catálogo de Productos</span>
                 </a>
                 <h1 class="text-2xl font-bold text-on-surface dark:text-white font-quicksand">
-                    Editar Pieza: {{ $producto->nombre }}
+                    Editar Producto: {{ $producto->nombre }}
                 </h1>
                 <p class="text-xs text-on-surface-variant dark:text-purple-200/70 font-label-code uppercase tracking-wider mt-0.5">
-                    Modificación de ficha técnica, valor tasado y portada
+                    Modificación de ficha técnica, precio y portada
                 </p>
             </div>
             <div class="flex items-center gap-2">
@@ -68,10 +68,10 @@
                         />
                     </div>
 
-                    {{-- Precio Tasado --}}
+                    {{-- Precio --}}
                     <div>
                         <label class="block text-xs font-label-code uppercase text-on-surface dark:text-white font-semibold mb-1">
-                            Precio Tasado (MXN) <span class="text-rose-500">*</span>
+                            Precio (MXN) <span class="text-rose-500">*</span>
                         </label>
                         <input
                             type="number"
@@ -131,7 +131,7 @@
                     {{-- Descripción --}}
                     <div class="md:col-span-2">
                         <label class="block text-xs font-label-code uppercase text-on-surface dark:text-white font-semibold mb-1">
-                            Descripción Curatorial
+                            Descripción del Producto
                         </label>
                         <textarea
                             name="descripcion"

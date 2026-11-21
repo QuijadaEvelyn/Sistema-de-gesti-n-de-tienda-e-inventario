@@ -91,7 +91,7 @@ return Application::configure(basePath: dirname(__DIR__))
             if ($request->expectsJson() || $request->ajax() || $request->is('api/*')) {
                 return response()->json([
                     'status' => 'unauthenticated',
-                    'message' => 'Inicia sesión o regístrate para reservar piezas en la bóveda.',
+                    'message' => 'Inicia sesión o regístrate para agregar productos al carrito.',
                     'login_url' => route('login'),
                     'redirect' => route('login'),
                 ], 401);
@@ -104,7 +104,7 @@ return Application::configure(basePath: dirname(__DIR__))
             session(['url.intended' => $intendedUrl]);
 
             return redirect()->to(route('login'))
-                ->with('status', 'Inicia sesión o regístrate para reservar piezas en la bóveda.')
-                ->with('auth_notice', 'Inicia sesión o regístrate para reservar piezas en la bóveda.');
+                ->with('status', 'Inicia sesión o regístrate para agregar productos al carrito.')
+                ->with('auth_notice', 'Inicia sesión o regístrate para agregar productos al carrito.');
         });
     })->create();

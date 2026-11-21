@@ -1,4 +1,4 @@
-<x-layouts.public :title="'ARCHIVUM · ' . ($meta['titulo'] ?? 'Libros & Incunables Raros')">
+<x-layouts.public :title="'ARCHIVUM · ' . ($meta['titulo'] ?? 'Libros & Ediciones Especiales')">
 
     @php
         $coleccionLibros = $productos ?? collect();
@@ -7,19 +7,19 @@
         $libroInicial = $totalLibrosEstante > 0 ? $librosEstante[0] : null;
     @endphp
 
-    <!-- Encabezado Curatorial de la Sala Bibliográfica (Paleta Oficial Archivum) -->
+    <!-- Encabezado de la Sección de Libros -->
     <section class="relative rounded-2xl overflow-hidden bg-[#FAF8FF] dark:bg-gradient-to-r dark:from-purple-950 dark:via-indigo-950 dark:to-slate-950 text-slate-900 dark:text-white p-6 sm:p-8 mb-8 shadow-xs dark:shadow-lg border border-purple-200 dark:border-purple-700/40">
         <div class="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             <div class="max-w-2xl space-y-2">
                 <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-500/20 border border-purple-200 dark:border-purple-300/30 text-purple-800 dark:text-purple-200 text-xs font-label-md tracking-wider font-semibold">
                     <span class="material-symbols-outlined text-[15px] text-purple-600 dark:text-purple-300">auto_stories</span>
-                    <span>{{ $meta['badge'] ?? 'CATÁLOGO BIBLIOGRÁFICO · LIBROS & INCUNABLES' }}</span>
+                    <span>{{ $meta['badge'] ?? 'CATÁLOGO DE LIBROS · EDICIONES ESPECIALES' }}</span>
                 </span>
                 <h1 class="text-2xl sm:text-4xl font-bold font-quicksand leading-tight text-slate-900 dark:text-white">
-                    {{ $meta['titulo'] ?? 'Libros Raros & Primeras Ediciones' }}
+                    {{ $meta['titulo'] ?? 'Libros & Primeras Ediciones' }}
                 </h1>
                 <p class="font-title-editorial text-slate-600 dark:text-purple-100/90 text-sm sm:text-base leading-relaxed">
-                    «Explora nuestra estantería curatorial interactiva en 3D: examina cada lomo encuadernado en piel y tela de época, desliza el cursor para abrir los ejemplares adyacentes y gira cada libro para descubrir su portada original, ficha técnica y certificado notarial COA.»
+                    «Explora nuestra estantería interactiva en 3D: examina cada lomo, desliza el cursor para abrir los ejemplares y gira cada libro para descubrir su portada original, ficha técnica y Certificado de Autenticidad.»
                 </p>
             </div>
 
@@ -29,7 +29,7 @@
                     <span>Estante 3D Activo</span>
                 </span>
                 <a href="#acervo-libros-grid" class="px-3.5 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold uppercase tracking-wider transition shadow-sm">
-                    Ver Acervo Completo ({{ $coleccionLibros->count() }})
+                    Ver Catálogo Completo ({{ $coleccionLibros->count() }})
                 </a>
             </div>
         </div>
@@ -56,7 +56,7 @@
                 <div class="flex items-center gap-2.5">
                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-100 dark:bg-white/10 border border-purple-200 dark:border-white/15 text-[11px] font-label-code uppercase tracking-wider text-purple-900 dark:text-purple-200 font-semibold">
                         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-                        <span id="bookshelf-status-label">BÓVEDA DE INCUNABLES · LOMO A PORTADA</span>
+                        <span id="bookshelf-status-label">EDICIONES ESPECIALES · LOMO A PORTADA</span>
                     </span>
                     <span id="bookshelf-genre-pill" class="px-3 py-1 rounded-full bg-purple-200/60 dark:bg-purple-500/20 border border-purple-300 dark:border-purple-400/30 text-purple-900 dark:text-purple-200 text-[11px] font-label-code font-bold uppercase tracking-wider flex items-center gap-1">
                         <span class="material-symbols-outlined text-[13px]" id="bookshelf-genre-icon">{{ $libroInicial['genero_icono'] }}</span>
@@ -258,7 +258,7 @@
                         <div class="px-4 py-0.5 rounded bg-white dark:bg-gradient-to-r dark:from-purple-900 dark:via-indigo-900 dark:to-purple-900 border border-purple-300 dark:border-purple-400/50 shadow-2xs dark:shadow-inner flex items-center gap-2">
                             <span class="w-1.5 h-1.5 rounded-full bg-purple-600 dark:bg-purple-300"></span>
                             <span class="text-[9px] sm:text-[10px] font-label-code text-purple-950 dark:text-purple-100 uppercase tracking-widest font-bold">
-                                ARCHIVUM · ESTANTERÍA DE PRIMERAS EDICIONES &amp; INCUNABLES HISTÓRICOS
+                                ARCHIVUM · ESTANTERÍA DE PRIMERAS EDICIONES &amp; EDICIONES ESPECIALES
                             </span>
                             <span class="w-1.5 h-1.5 rounded-full bg-purple-600 dark:bg-purple-300"></span>
                         </div>
@@ -326,7 +326,7 @@
                     <div class="lg:col-span-5 flex flex-col justify-between p-4 sm:p-5 rounded-2xl bg-purple-50/70 dark:bg-[#140d20]/90 border border-purple-200/80 dark:border-purple-500/30 space-y-4">
                         <div class="space-y-1">
                             <span class="text-[10px] font-label-code text-purple-700 dark:text-purple-300 uppercase tracking-wider block font-bold">
-                                Cotización &amp; Valor Patrimonial
+                                Precio
                             </span>
                             <div class="flex items-baseline gap-2">
                                 <span id="dossier-price" class="text-2xl sm:text-3xl font-bold font-mono text-purple-600 dark:text-purple-300">
@@ -352,8 +352,8 @@
                                     class="w-full py-3 px-4 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs font-label-code uppercase tracking-wider shadow-md transition flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                                     {{ $libroInicial['agotado'] ? 'disabled' : '' }}
                                 >
-                                    <span class="material-symbols-outlined text-[18px]">lock</span>
-                                    <span id="dossier-submit-text">{{ $libroInicial['agotado'] ? 'EJEMPLAR RESERVADO' : 'RESERVAR EN BÓVEDA' }}</span>
+                                    <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+                                    <span id="dossier-submit-text">{{ $libroInicial['agotado'] ? 'AGOTADO' : 'AGREGAR AL CARRITO' }}</span>
                                 </button>
                             </form>
 

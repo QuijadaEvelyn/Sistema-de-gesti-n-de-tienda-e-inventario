@@ -1,6 +1,6 @@
 @php
     $nombreOperador = $usuario?->nombre ?? 'Mateo Vargas';
-    $rolOperador = strtoupper($usuario?->roles?->pluck('nombre')->implode(' · ') ?: 'Curador en Jefe');
+    $rolOperador = strtoupper($usuario?->roles?->pluck('nombre')->implode(' · ') ?: 'Administrador General');
     $codigoPeriodo = $periodo['codigo'] ?? '30d';
     $etiquetaPeriodo = $periodo['etiqueta'] ?? 'ÚLTIMOS 30 DÍAS';
     $etiquetaSede = $sucursalActiva ? $sucursalActiva->nombre : 'Todas las Sedes (Vista Global)';
@@ -30,13 +30,13 @@
     $seriesJson = json_encode($seriesAnaliticas ?? []);
 @endphp
 
-<x-layouts.admin title="ARCHIVUM · Terminal de Control Maestro" active-route="dashboard">
+<x-layouts.admin title="ARCHIVUM · Panel de Administración" active-route="dashboard">
 
     <!-- Barra Operativa Superior: Saludo, Sesión, Filtros de Temporalidad y Selector de Sucursal -->
     <x-admin.operational-bar 
         session-id="#ADM-8841-MX"
         :curator-name="$nombreOperador"
-        :curator-role="$rolOperador.' · Sistema de Catalogación & Logística de Anticuario'"
+        :curator-role="$rolOperador.' · Sistema de Gestión de Tienda e Inventario'"
         :active-period="$codigoPeriodo"
         :sucursales="$sucursales ?? collect()"
         :sucursal-activa="$sucursalActiva ?? null"
@@ -45,7 +45,7 @@
 
     <!-- =========================================================================
          FILA SUPERIOR COMPACTA: 3 COLUMNAS KPI EN UNA SOLA FILA
-         Agrupa las 3 tarjetas KPI: Ventas & Ingresos Estimados, Piezas en Custodia y Dictamen Notarial COA
+         Agrupa las 3 tarjetas KPI: Ventas & Ingresos Estimados, Productos en Inventario y Certificados de Autenticidad
          ========================================================================= -->
     <section class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full mb-4" id="dashboard-summary-grid">
         
@@ -68,31 +68,31 @@
             class="w-full p-4"
         />
 
-        <!-- KPI 2: Piezas en Custodia -->
+        <!-- KPI 2: Productos en Inventario -->
         <x-ui.kpi-card 
             table-source="existencias_table ({{ $sucursalActiva ? $sucursalActiva->nombre : 'Global' }})"
-            title="Piezas en Custodia"
+            title="Productos en Inventario"
             :value="number_format($unidadesEnCustodia)"
-            currency="unidades en bóveda"
+            currency="unidades disponibles"
             :trend="$alertasBajoStock.' bajo stock'"
             :is-positive="$alertasBajoStock === 0"
-            badge="Bóveda Abierta"
+            badge="Inventario Activo"
             :badge-pulse="true"
             badge-color="purple"
             icon="shelves"
             icon-bg="bg-secondary-container text-on-secondary-container"
-            :summary-left="'Valoración: $'.number_format($valoracionInventario, 0)"
-            :summary-right="'SKUs en sede: '.$totalSkus"
+            :summary-left="'Valor Total: $'.number_format($valoracionInventario, 0)"
+            :summary-right="'SKUs en sucursal: '.$totalSkus"
             :bento-delay="140"
             class="w-full p-4"
         />
 
-        <!-- KPI 3: Dictamen Notarial COA -->
+        <!-- KPI 3: Certificados de Autenticidad -->
         <x-ui.kpi-card 
             table-source="piezas_unicas ({{ $sucursalActiva ? $sucursalActiva->nombre : 'Global' }})"
-            title="Dictamen Notarial COA"
+            title="Certificados de Autenticidad"
             :value="(string) $totalCoa"
-            currency="series certificadas"
+            currency="productos certificados"
             :trend="$coaDisponibles.' disponibles'"
             :is-positive="true"
             badge="Certificación Vigente"
@@ -101,7 +101,7 @@
             icon="verified"
             icon-bg="bg-secondary-container text-on-secondary-container"
             :summary-left="'Disponibles: '.$coaDisponibles"
-            :summary-right="'Comprometidos: '.$coaComprometidos"
+            :summary-right="'Reservados: '.$coaComprometidos"
             :bento-delay="180"
             class="w-full p-4"
         />
@@ -109,7 +109,7 @@
     </section>
 
     <!-- =========================================================================
-         GRÁFICA ANALÍTICA PRINCIPAL: FLUJO DE BÓVEDA (CHART.JS)
+         GRÁFICA ANALÍTICA PRINCIPAL: RESUMEN DE VENTAS (CHART.JS)
          Subida inmediatamente debajo de la fila de 3 KPIs
          ========================================================================= -->
     <section class="bento-reveal bento-delay-140 relative w-full max-w-full box-border overflow-hidden p-4 sm:p-5 rounded-2xl bg-white/80 dark:bg-[#161329]/80 backdrop-blur-xl border border-purple-200/60 dark:border-white/12 shadow-[0_8px_32px_0_rgba(91,59,179,0.06)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.35)] mb-4 transition-all duration-300">
@@ -122,14 +122,14 @@
                         <span class="material-symbols-outlined text-[18px]">query_stats</span>
                     </span>
                     <h2 class="text-sm sm:text-base font-bold text-on-surface dark:text-[#fdfbf7] font-quicksand flex items-center gap-2 flex-wrap">
-                        <span>Flujo de Bóveda &amp; Rendimiento Curatorial</span>
+                        <span>Resumen de Ventas &amp; Rendimiento de Tienda</span>
                         <span class="text-[10px] px-2 py-0.5 rounded-full bg-purple-100 dark:bg-purple-950/80 text-purple-900 dark:text-purple-200 font-label-code font-bold uppercase tracking-wider">
                             {{ $etiquetaSede }}
                         </span>
                     </h2>
                 </div>
                 <p class="text-xs text-on-surface-variant dark:text-[#e6dfd5] font-title-editorial italic">
-                    «Monitoreo de ingresos comerciales consolidados y volumen de órdenes de coleccionismo con proyección de curva suave.»
+                    «Monitoreo de ingresos consolidados y volumen de pedidos confirmados.»
                 </p>
             </div>
 
@@ -192,7 +192,7 @@
             </div>
 
             <div class="p-2.5 sm:p-3 rounded-xl bg-surface-container-low/50 dark:bg-white/5 border border-purple-200/40 dark:border-white/5 backdrop-blur-sm min-w-0 overflow-hidden">
-                <span class="block text-[10px] font-label-code uppercase tracking-wider text-on-surface-variant dark:text-[#ccbeff] truncate">Valoración en Custodia</span>
+                <span class="block text-[10px] font-label-code uppercase tracking-wider text-on-surface-variant dark:text-[#ccbeff] truncate">Valor del Inventario</span>
                 <div class="flex items-baseline gap-1.5 mt-0.5 truncate">
                     <span class="font-quicksand font-bold text-base sm:text-lg text-secondary dark:text-purple-200 font-tabular-data truncate">
                         ${{ number_format($valoracionInventario, 0) }} MXN
@@ -216,10 +216,10 @@
             </div>
             <div>
                 <h2 class="text-xs sm:text-sm font-bold text-on-surface dark:text-[#fdfbf7] font-quicksand">
-                    Módulo de Reportes Oficiales &amp; Exportación de Acervo ({{ $etiquetaSede }})
+                    Módulo de Reportes &amp; Exportación de Catálogo ({{ $etiquetaSede }})
                 </h2>
                 <p class="text-[11px] text-on-surface-variant dark:text-[#e6dfd5]">
-                    Genera resúmenes calculados de inventario en bóveda, lotes certificados COA y descargas directas en CSV y PDF para la sede y período activos.
+                    Genera resúmenes calculados de inventario disponible, certificados de autenticidad y descargas directas en CSV y PDF para la sucursal y período activos.
                 </p>
             </div>
         </div>
@@ -286,10 +286,10 @@
         <div class="p-space-lg border-b border-purple-200/60 dark:border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
                 <h2 class="font-headline-sm text-lg text-on-surface dark:text-[#fdfbf7] font-bold">
-                    Existencias en Custodia &amp; Valoración Patrimonial — {{ $etiquetaSede }}
+                    Existencias en Inventario &amp; Valor Total — {{ $etiquetaSede }}
                 </h2>
                 <p class="font-title-editorial text-xs text-on-surface-variant dark:text-[#e6dfd5] italic mt-0.5">
-                    Inventario filtrado estrictamente según la sede seleccionada y el rango temporal activo ({{ $etiquetaPeriodo }})
+                    Inventario filtrado estrictamente según la sucursal seleccionada y el rango temporal activo ({{ $etiquetaPeriodo }})
                 </p>
             </div>
             <div class="flex flex-wrap items-center gap-2">
@@ -306,13 +306,13 @@
                 <thead class="bg-purple-50/70 dark:bg-purple-950/40 backdrop-blur-sm border-b border-purple-200/70 dark:border-white/10 text-secondary dark:text-purple-200 font-label-md uppercase tracking-wider font-bold">
                     <tr>
                         <th class="py-3 px-4 font-semibold">SKU / Identificador</th>
-                        <th class="py-3 px-4 font-semibold">Lote / Ejemplar</th>
+                        <th class="py-3 px-4 font-semibold">Producto</th>
                         <th class="py-3 px-4 font-semibold">Categoría</th>
-                        <th class="py-3 px-4 font-semibold">Sede Custodia</th>
-                        <th class="py-3 px-4 font-semibold">Graduación</th>
-                        <th class="py-3 px-4 font-semibold text-center">Stock en Sede</th>
+                        <th class="py-3 px-4 font-semibold">Sucursal</th>
+                        <th class="py-3 px-4 font-semibold">Estado</th>
+                        <th class="py-3 px-4 font-semibold text-center">Stock en Sucursal</th>
                         <th class="py-3 px-4 font-semibold text-right">Precio Unitario</th>
-                        <th class="py-3 px-4 font-semibold text-right">Valor Tasado en Sede</th>
+                        <th class="py-3 px-4 font-semibold text-right">Valor Total en Sucursal</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-purple-100 dark:divide-white/5 font-body-md text-on-surface dark:text-[#e6dfd5]">
@@ -373,10 +373,10 @@
         <!-- Pie de Tabla Dinámico -->
         <div class="p-space-md bg-purple-50/40 dark:bg-white/5 border-t border-purple-200/60 dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs font-label-code text-on-surface-variant dark:text-[#d4c8bd]">
             <span>
-                Mostrando {{ ($existenciasSede ?? collect())->count() }} lotes en <strong>{{ $etiquetaSede }}</strong> &middot; Total físico: {{ number_format($unidadesEnCustodia) }} unidades
+                Mostrando {{ ($existenciasSede ?? collect())->count() }} productos en <strong>{{ $etiquetaSede }}</strong> &middot; Total físico: {{ number_format($unidadesEnCustodia) }} unidades
             </span>
             <span class="font-bold text-primary dark:text-[#ccbeff]">
-                Valoración Patrimonial en Sede: ${{ number_format($valoracionInventario, 2) }} MXN
+                Valor Total del Inventario: ${{ number_format($valoracionInventario, 2) }} MXN
             </span>
         </div>
 

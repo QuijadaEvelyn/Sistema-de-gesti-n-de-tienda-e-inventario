@@ -15,14 +15,14 @@
                 </div>
                 <div class="space-y-1">
                     <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-400/20 text-emerald-200 text-[11px] font-label-code uppercase tracking-wider">
-                        Transacción Aprobada · Pasarela Simulada ARCHIVUM
+                        Transacción Aprobada · Proceso de Pago Seguro ARCHIVUM
                     </span>
                     <h1 class="text-2xl sm:text-3xl font-bold font-quicksand">
-                        ¡Pago Exitoso! Tu Adquisición está en Custodia
+                        ¡Pago Exitoso! Tu Pedido está en Preparación
                     </h1>
                     <p class="text-xs sm:text-sm text-emerald-100/90">
                         Folio de Pedido: <strong class="font-label-code">{{ $pedido->folio }}</strong>
-                        &middot; Guía de Custodia: <strong class="font-label-code">{{ $envio?->numero_guia ?? 'GUA-PENDIENTE' }}</strong>
+                        &middot; Guía de Envío: <strong class="font-label-code">{{ $envio?->numero_guia ?? 'GUA-PENDIENTE' }}</strong>
                         @if ($detalleTarjeta)
                             &middot; Tarjeta terminación <strong>&bull;&bull;&bull;&bull; {{ $detalleTarjeta->ultimos_digitos }}</strong> (Aut. {{ $detalleTarjeta->autorizacion }})
                         @endif
@@ -31,7 +31,7 @@
             </div>
             <div class="flex flex-wrap gap-3">
                 <a href="{{ route('public.home') }}" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/20 text-xs font-bold uppercase tracking-wider transition">
-                    Volver a la Galería
+                    Volver a la Tienda
                 </a>
                 @auth
                     <a href="{{ route('cliente.pedidos') }}" class="px-4 py-2.5 rounded-xl bg-emerald-400 text-emerald-950 hover:bg-emerald-300 text-xs font-bold uppercase tracking-wider transition">
@@ -42,7 +42,7 @@
         </div>
     </section>
 
-    <!-- Simulación Interactiva de Seguimiento de Paquete (Rastreo Tipo Bóveda) -->
+    <!-- Simulación Interactiva de Seguimiento de Paquete -->
     <section class="bg-white rounded-2xl border border-purple-200/80 p-6 sm:p-8 shadow-xs mb-8 space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-purple-100 pb-4">
             <div>
@@ -50,7 +50,7 @@
                     Seguimiento de Paquete en Tiempo Real
                 </span>
                 <h2 class="text-xl font-bold text-on-surface font-quicksand">
-                    Estado del Envío: {{ $etapasRastreo[$estadoActualEnvio]['titulo'] ?? 'Bóveda Preparando Lote' }}
+                    Estado del Envío: {{ $etapasRastreo[$estadoActualEnvio]['titulo'] ?? 'Preparando Pedido' }}
                 </h2>
                 <p class="text-xs text-on-surface-variant">
                     Transportista: {{ $envio?->paqueteria ?? 'Custodia Climatizada ARCHIVUM' }} &middot; Entrega estimada: {{ $envio?->fecha_estimada_entrega?->format('d/m/Y') ?? now()->addDays(3)->format('d/m/Y') }}

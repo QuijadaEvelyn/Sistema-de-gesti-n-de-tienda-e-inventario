@@ -457,10 +457,10 @@
                             @csrf
                             <div class="sm:col-span-2">
                                 <label class="block text-[10px] font-label-code uppercase text-outline mb-1">Nombre de la Promoción / Lanzamiento *</label>
-                                <input type="text" name="nombre" required placeholder="Ej. Preventa Exclusiva VIP: Incunable..." class="w-full px-3 py-2 rounded-xl border border-purple-200 bg-white text-on-surface" />
+                                <input type="text" name="nombre" required placeholder="Ej. Preventa Exclusiva VIP: Edición Especial..." class="w-full px-3 py-2 rounded-xl border border-purple-200 bg-white text-on-surface" />
                             </div>
                             <div>
-                                <label class="block text-[10px] font-label-code uppercase text-outline mb-1">Pieza Vinculada (Opcional)</label>
+                                <label class="block text-[10px] font-label-code uppercase text-outline mb-1">Producto Vinculado (Opcional)</label>
                                 <select name="producto_id" class="w-full px-3 py-2 rounded-xl border border-purple-200 bg-white text-on-surface">
                                     <option value="">Catálogo General</option>
                                     @foreach ($productosCatalogo ?? [] as $prodCat)

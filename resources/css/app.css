@@ -737,8 +737,8 @@
     position: relative;
     z-index: 10;
     width: 100%;
-    min-height: 520px;
-    height: 580px;
+    min-height: 540px;
+    height: 600px;
     margin-top: 1rem;
     display: flex;
     align-items: center;
@@ -764,7 +764,6 @@
     user-select: none !important;
     -webkit-user-select: none !important;
     -webkit-user-drag: none !important;
-    touch-action: none;
 }
 
 .coverflow-stage img,
@@ -772,6 +771,10 @@
     pointer-events: none !important;
     -webkit-user-drag: none !important;
     user-drag: none !important;
+    object-fit: cover;
+    image-rendering: auto;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 .coverflow-track {
@@ -792,23 +795,31 @@
     translate: none !important;
     transform: translate(-50%, -50%);
     width: 300px;
-    height: 460px;
+    height: auto;
+    min-height: 460px;
     transform-style: preserve-3d;
     opacity: 1; /* Visibles siempre por defecto antes y después de JS */
     overflow: visible;
+    pointer-events: none;
+}
+
+.coverflow-slot-anchor.is-active {
+    pointer-events: auto;
+    z-index: 30;
 }
 
 @media (max-width: 639px) {
     #vitrina-coverflow-carousel,
     .coverflow-stage {
         min-height: 520px;
-        height: 520px;
+        height: 540px;
         overflow: hidden;
     }
 
     .coverflow-slot-anchor {
-        width: 250px;
-        height: 400px;
+        width: 255px;
+        height: auto;
+        min-height: 430px;
     }
 }
 
@@ -816,39 +827,122 @@
     #vitrina-coverflow-carousel,
     .coverflow-stage {
         min-height: 580px;
-        height: 580px;
+        height: 600px;
         overflow: hidden;
+    }
+
+    .coverflow-slot-anchor {
+        width: 280px;
+        height: auto;
+        min-height: 450px;
     }
 }
 
 .coverflow-slot {
     width: 100%;
-    height: 100%;
+    height: auto;
+    min-height: 100%;
     transform-style: preserve-3d;
     opacity: 1;
     overflow: visible;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
     transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s ease;
-    will-change: transform, opacity;
 }
 
 .coverflow-card {
     width: 100%;
-    height: 100%;
-    transform-style: preserve-3d;
+    height: auto;
+    min-height: 450px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     overflow: visible;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    filter: none !important;
     transition: box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1),
                 border-color 0.5s cubic-bezier(0.22, 1, 0.36, 1),
                 transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.coverflow-card-active {
+@media (max-width: 639px) {
+    .coverflow-card {
+        min-height: 420px;
+    }
+}
+
+.coverflow-card > article {
+    width: 100%;
+    height: auto !important;
+    min-height: 450px;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    box-sizing: border-box !important;
+    padding-bottom: 1.15rem !important;
+    overflow: visible !important;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform: translateZ(0);
+    filter: none !important;
+}
+
+@media (max-width: 639px) {
+    .coverflow-card > article {
+        min-height: 420px;
+        padding-bottom: 1rem !important;
+    }
+}
+
+/* Ajustar el contenedor de la imagen dentro del carrusel para que deje espacio holgado al título y al footer de Precio + Reservar */
+.coverflow-card > article > div:first-child > div:first-child {
+    aspect-ratio: auto !important;
+    height: 195px !important;
+    max-height: 195px !important;
+    flex-shrink: 0;
+}
+
+@media (min-width: 640px) {
+    .coverflow-card > article > div:first-child > div:first-child {
+        height: 215px !important;
+        max-height: 215px !important;
+    }
+}
+
+.coverflow-card-active,
+.coverflow-card.is-active {
+    transform: translate3d(0, 0, 0) scale(1) !important;
+    backface-visibility: hidden !important;
+    -webkit-backface-visibility: hidden !important;
+    filter: none !important;
+    will-change: auto !important;
+    pointer-events: auto !important;
+    z-index: 30;
     box-shadow: 0 20px 45px -12px rgba(99, 14, 212, 0.35),
                 0 0 0 2px rgba(124, 58, 237, 0.7) !important;
 }
 
-.dark .coverflow-card-active {
+.dark .coverflow-card-active,
+.dark .coverflow-card.is-active {
     box-shadow: 0 20px 50px -12px rgba(168, 85, 247, 0.45),
                 0 0 0 2px rgba(168, 85, 247, 0.8) !important;
+}
+
+.coverflow-card:not(.coverflow-card-active) button,
+.coverflow-card:not(.coverflow-card-active) a,
+.coverflow-card:not(.coverflow-card-active) form,
+.coverflow-card:not(.coverflow-card-active) select {
+    pointer-events: none !important;
+}
+
+.coverflow-card-active button,
+.coverflow-card-active a,
+.coverflow-card-active form,
+.coverflow-card-active select {
+    pointer-events: auto !important;
+    position: relative;
+    z-index: 35;
 }
 
 @media (prefers-reduced-motion: reduce) {

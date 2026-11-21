@@ -1,7 +1,7 @@
 <footer class="bg-surface-container-low border-t border-purple-200/80 text-on-surface mt-20 pt-16 pb-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <!-- Bloque de 3 Garantías Curatoriales de Museo -->
+        <!-- Bloque de 3 Garantías de la Tienda -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pb-14 border-b border-purple-200/70">
             
             <div class="flex items-start gap-4 p-4 rounded-xl bg-surface-container-lowest border border-purple-200/60 shadow-2xs">
@@ -9,9 +9,9 @@
                     <span class="material-symbols-outlined text-[24px]">verified_user</span>
                 </div>
                 <div>
-                    <h3 class="font-bold text-on-surface text-base font-quicksand">Autenticidad Notariada COA</h3>
+                    <h3 class="font-bold text-on-surface text-base font-quicksand">Certificado de Autenticidad</h3>
                     <p class="text-on-surface-variant text-xs mt-1 leading-relaxed">
-                        Cada ejemplar, prensado de vinilo y pieza de memorabilia incluye certificado de autenticidad físico con sello lacrado y registro en cadena de custodia.
+                        Cada libro, disco de vinilo y artículo de colección incluye certificado de autenticidad físico y garantía de originalidad verificada.
                     </p>
                 </div>
             </div>
@@ -21,9 +21,9 @@
                     <span class="material-symbols-outlined text-[24px]">package_2</span>
                 </div>
                 <div>
-                    <h3 class="font-bold text-on-surface text-base font-quicksand">Embalaje Libre de Ácido</h3>
+                    <h3 class="font-bold text-on-surface text-base font-quicksand">Empaque de Alta Protección</h3>
                     <p class="text-on-surface-variant text-xs mt-1 leading-relaxed">
-                        Foliado con papel japonés sin lignina y fundas de polietileno de alta densidad para vinilo (antiestáticas y anti-fricción de grado archivo).
+                        Protección con materiales libres de ácido y fundas antiestáticas de alta densidad para que tus libros y vinilos lleguen en perfecto estado.
                     </p>
                 </div>
             </div>
@@ -33,16 +33,16 @@
                     <span class="material-symbols-outlined text-[24px]">local_shipping</span>
                 </div>
                 <div>
-                    <h3 class="font-bold text-on-surface text-base font-quicksand">Logística Climatizada Blindada</h3>
+                    <h3 class="font-bold text-on-surface text-base font-quicksand">Envío Seguro y Asegurado</h3>
                     <p class="text-on-surface-variant text-xs mt-1 leading-relaxed">
-                        Envíos protegidos con control de humedad y seguro del 100% del valor tasado hasta la entrega personal en mano.
+                        Envíos protegidos con seguimiento en tiempo real y seguro por el 100% del precio de tu compra hasta la entrega en tu domicilio.
                     </p>
                 </div>
             </div>
 
         </div>
 
-        <!-- Enlaces Principales del Archivo y Boletín Curatorial -->
+        <!-- Enlaces Principales del Catálogo y Boletín -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 py-12 border-b border-purple-200/60">
             
             <!-- Columna de Marca -->
@@ -51,53 +51,53 @@
                     <x-ui.archivum-logo size="md" />
                     <div>
                         <span class="text-lg font-bold font-brand-serif tracking-[0.2em] uppercase text-on-surface transition-colors group-hover:text-primary">ARCHIVUM</span>
-                        <p class="text-[10px] font-label-code text-primary uppercase tracking-widest">Sistemas de Conservación &amp; Curaduría</p>
+                        <p class="text-[10px] font-label-code text-primary uppercase tracking-widest">Sistema de Gestión de Tienda e Inventario</p>
                     </div>
                 </div>
                 <p class="font-title-editorial text-on-surface-variant text-sm max-w-sm">
-                    «Preservando la memoria táctil: primeras ediciones impresas, matrices de vinilo histórico y testimonios materiales autenticados para colecciones de trascendencia.»
+                    «Tu tienda especializada en libros de colección, primeras ediciones, discos de vinilo y artículos auténticos seleccionados con garantía.»
                 </p>
                 <div class="text-xs text-on-surface-variant font-label-code">
-                    <span class="font-semibold text-primary">Sede Central:</span> Av. Juárez 42, Centro Histórico, Bellas Artes, CDMX.
+                    <span class="font-semibold text-primary">Sucursal Central:</span> Av. Juárez 42, Centro Histórico, Bellas Artes, CDMX.
                 </div>
             </div>
 
             <!-- Columna Catálogo -->
             <div>
-                <h4 class="font-label-md text-primary font-bold tracking-wider mb-4">Catálogos Activos</h4>
+                <h4 class="font-label-md text-primary font-bold tracking-wider mb-4">Catálogo Destacado</h4>
                 <ul class="space-y-2 text-xs font-medium text-on-surface-variant">
-                    <li><a href="#" class="hover:text-primary transition">Incunables del Siglo XV</a></li>
-                    <li><a href="#" class="hover:text-primary transition">Primeras Ediciones Siglo XX</a></li>
-                    <li><a href="#" class="hover:text-primary transition">Prensados Originales Blue Note</a></li>
-                    <li><a href="#" class="hover:text-primary transition">Discos 78 RPM / Shellac Raro</a></li>
-                    <li><a href="#" class="hover:text-primary transition">Carteles &amp; Programas de Ópera</a></li>
-                    <li><a href="#" class="hover:text-primary transition">Manuscritos Autografiados</a></li>
+                    <li><a href="{{ route('public.libros') }}" class="hover:text-primary transition">Ediciones Especiales Clásicas</a></li>
+                    <li><a href="{{ route('public.libros') }}" class="hover:text-primary transition">Primeras Ediciones Siglo XX</a></li>
+                    <li><a href="{{ route('public.vinilos') }}" class="hover:text-primary transition">Vinilos Originales Blue Note</a></li>
+                    <li><a href="{{ route('public.vinilos') }}" class="hover:text-primary transition">Discos de Vinilo 180g y CDs</a></li>
+                    <li><a href="{{ route('public.memorabilia') }}" class="hover:text-primary transition">Artículos de Colección</a></li>
+                    <li><a href="{{ route('public.adquisiciones') }}" class="hover:text-primary transition">Ediciones Autografiadas</a></li>
                 </ul>
             </div>
 
             <!-- Columna Sucursales -->
             <div>
-                <h4 class="font-label-md text-primary font-bold tracking-wider mb-4">Red de Galerías</h4>
+                <h4 class="font-label-md text-primary font-bold tracking-wider mb-4">Nuestras Sucursales</h4>
                 <ul class="space-y-2 text-xs font-medium text-on-surface-variant">
-                    <li><a href="{{ route('public.contacto') }}" class="hover:text-primary transition font-semibold text-primary flex items-center gap-1"><span>Sedes &amp; Horarios</span><span class="material-symbols-outlined text-[14px]">arrow_forward</span></a></li>
+                    <li><a href="{{ route('public.contacto') }}" class="hover:text-primary transition font-semibold text-primary flex items-center gap-1"><span>Sucursales &amp; Horarios</span><span class="material-symbols-outlined text-[14px]">arrow_forward</span></a></li>
                     <li><a href="{{ route('public.contacto') }}" class="hover:text-primary transition">Sucursal Bellas Artes (Central)</a></li>
-                    <li><a href="{{ route('public.contacto') }}" class="hover:text-primary transition">Gabinete Coyoacán (Librería)</a></li>
-                    <li><a href="{{ route('public.contacto') }}" class="hover:text-primary transition">Bóveda Almacén General</a></li>
-                    <li><a href="{{ route('public.contacto') }}" class="hover:text-primary transition">Citas Privadas de Tasación</a></li>
+                    <li><a href="{{ route('public.contacto') }}" class="hover:text-primary transition">Sucursal Coyoacán (Librería)</a></li>
+                    <li><a href="{{ route('public.contacto') }}" class="hover:text-primary transition">Almacén General</a></li>
+                    <li><a href="{{ route('public.contacto') }}" class="hover:text-primary transition">Atención al Cliente</a></li>
                 </ul>
             </div>
 
-            <!-- Columna Boletín para Coleccionistas -->
+            <!-- Columna Boletín para Clientes -->
             <div>
-                <h4 class="font-label-md text-primary font-bold tracking-wider mb-4">Alertas de Bóveda</h4>
+                <h4 class="font-label-md text-primary font-bold tracking-wider mb-4">Novedades del Catálogo</h4>
                 <p class="text-xs text-on-surface-variant mb-3">
-                    Reciba notificaciones anticipadas de desclasificación de lotes privados 24h antes de su apertura pública.
+                    Recibe notificaciones anticipadas de nuevos lanzamientos, promociones y preventas especiales 24h antes de su apertura.
                 </p>
                 <form action="#" method="POST" class="space-y-2">
                     @csrf
                     <input 
                         type="email" 
-                        placeholder="coleccionista@correo.com" 
+                        placeholder="cliente@correo.com" 
                         class="w-full bg-white border border-purple-200/80 rounded-lg px-3 py-2 text-xs text-on-surface placeholder:text-outline focus:border-primary focus:outline-none" 
                         required 
                     />
@@ -116,7 +116,7 @@
             </div>
             <div class="flex items-center gap-6">
                 <a href="{{ route('public.contacto') }}" class="hover:text-primary transition">Contacto &amp; Horarios</a>
-                <a href="{{ route('public.nosotros') }}" class="hover:text-primary transition">Manifiesto Curatorial</a>
+                <a href="{{ route('public.nosotros') }}" class="hover:text-primary transition">Conoce más de nosotros</a>
                 <a href="{{ route('public.privacidad') }}" class="hover:text-primary transition">Aviso de Privacidad</a>
             </div>
         </div>

@@ -204,7 +204,7 @@
                     type="button"
                     id="open-cart-btn"
                     class="btn-glass-purple relative w-9 h-9 sm:w-11 sm:h-11 p-0 sm:p-2.5 rounded-xl shadow-xs flex items-center justify-center focus:outline-none cursor-pointer shrink-0"
-                    aria-label="Abrir Carrito de Adquisiciones"
+                    aria-label="Abrir Carrito de Compras"
                 >
                     <span class="material-symbols-outlined text-[18px] sm:text-[20px]">shopping_bag</span>
                     <span
@@ -258,7 +258,7 @@
                 <a href="{{ route('public.adquisiciones') }}"
                    class="pb-0.5 border-b-2 transition flex items-center gap-1 shrink-0 {{ request()->routeIs('public.adquisiciones') ? 'text-primary font-bold border-primary' : 'text-primary hover:text-primary-hover font-bold border-transparent hover:border-primary' }}">
                     <span class="material-symbols-outlined text-[15px]">auto_awesome</span>
-                    <span>Adquisiciones Selectas</span>
+                    <span>Ediciones Especiales</span>
                 </a>
                 <a href="{{ route('public.nosotros') }}"
                    id="nav-tab-nosotros"

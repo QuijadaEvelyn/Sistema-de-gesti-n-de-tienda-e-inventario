@@ -1,17 +1,17 @@
-<x-layouts.admin title="ARCHIVUM · Bandeja de Mensajes &amp; Consultas de Curaduría" active-route="mensajes">
+<x-layouts.admin title="ARCHIVUM · Bandeja de Mensajes &amp; Consultas" active-route="mensajes">
     <div class="space-y-6">
 
         {{-- Encabezado Principal y Métricas Rápidas --}}
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-purple-200/70 dark:border-purple-500/30 pb-5">
             <div>
                 <span class="font-label-code text-[10px] uppercase tracking-widest text-primary dark:text-purple-300 font-bold block mb-1">
-                    Atención al Coleccionista &middot; Bóveda Notarial
+                    Atención al Cliente &middot; Centro de Contacto
                 </span>
                 <h1 class="text-2xl sm:text-3xl font-bold text-on-surface font-quicksand">
                     Bandeja de Mensajes &amp; Consultas
                 </h1>
                 <p class="text-xs text-on-surface-variant dark:text-stone-300 mt-1 max-w-2xl leading-relaxed">
-                    Comunicaciones y solicitudes de peritaje o tasación enviadas por clientes y visitantes desde el portal público de contacto.
+                    Mensajes, dudas y consultas enviados por clientes y visitantes desde el formulario público de contacto.
                 </p>
             </div>
 
@@ -52,7 +52,7 @@
                 <div class="text-2xl sm:text-3xl font-bold font-quicksand text-amber-600 dark:text-amber-400 font-tabular-data">
                     {{ $totales['pendientes'] }}
                 </div>
-                <span class="text-[10px] text-outline dark:text-stone-400 font-label-code block">Requieren revisión curatorial</span>
+                <span class="text-[10px] text-outline dark:text-stone-400 font-label-code block">Requieren atención</span>
             </div>
 
             <div class="bg-surface-container-lowest dark:bg-[#171024] p-5 rounded-2xl border border-purple-200/70 dark:border-purple-500/30 shadow-2xs space-y-1">
@@ -63,7 +63,7 @@
                 <div class="text-2xl sm:text-3xl font-bold font-quicksand text-primary dark:text-purple-300 font-tabular-data">
                     {{ $totales['leidos'] }}
                 </div>
-                <span class="text-[10px] text-outline dark:text-stone-400 font-label-code block">En proceso de dictamen</span>
+                <span class="text-[10px] text-outline dark:text-stone-400 font-label-code block">En seguimiento</span>
             </div>
 
             <div class="bg-surface-container-lowest dark:bg-[#171024] p-5 rounded-2xl border border-emerald-200/80 dark:border-emerald-500/30 shadow-2xs space-y-1">
@@ -115,7 +115,7 @@
 
             <div class="w-full md:w-56">
                 <label for="sucursal_id" class="block font-label-code text-[10px] uppercase tracking-widest text-secondary dark:text-purple-300 mb-1">
-                    Sede / Bóveda
+                    Sucursal
                 </label>
                 <select
                     id="sucursal_id"
@@ -175,7 +175,7 @@
                                     @elseif ($msg->estatus === 'leido')
                                         <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold font-label-code uppercase bg-purple-100 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 border border-purple-300 dark:border-purple-700/50">
                                             <span class="material-symbols-outlined text-[12px]">visibility</span>
-                                            Leído / En Dictamen
+                                            Leído / En Revisión
                                         </span>
                                     @else
                                         <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold font-label-code uppercase bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700/50">
@@ -297,7 +297,7 @@
                                 @if (!empty($filtros['buscar']) || !empty($filtros['estatus']) || !empty($filtros['sucursal_id']))
                                     No hay mensajes que coincidan con los filtros aplicados. Intenta restablecer la búsqueda.
                                 @else
-                                    La bandeja de curaduría está al día. Las nuevas comunicaciones de coleccionistas se reflejarán aquí de inmediato.
+                                    La bandeja de mensajes está al día. Las nuevas consultas de clientes se reflejarán aquí de inmediato.
                                 @endif
                             </p>
                         </div>

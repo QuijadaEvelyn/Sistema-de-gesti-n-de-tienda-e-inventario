@@ -72,20 +72,26 @@ export function initCoverflowCarousel() {
             let isVisible = true;
 
             if (diff === 0) {
-                // Tarjeta central: de frente, nítida, profundidad Z y glow activo
+                // Tarjeta central activa: en plano Z=0 exacto (scale(1), sin blur ni escalado que distorsione la rasterización)
                 posX = 0;
-                posZ = 40;
+                posZ = 0;
                 rotY = 0;
                 scale = 1;
                 zIndex = 30;
                 opacity = 1;
 
+                anchor.classList.add('is-active');
                 if (card) {
-                    card.classList.add('coverflow-card-active');
+                    card.classList.add('coverflow-card-active', 'is-active');
                 }
                 anchor.style.pointerEvents = 'auto';
                 anchor.setAttribute('aria-hidden', 'false');
                 slot.style.cursor = 'default';
+                slot.style.transform = 'translate3d(0, 0, 0) scale(1)';
+                slot.style.backfaceVisibility = 'hidden';
+                slot.style.webkitBackfaceVisibility = 'hidden';
+                slot.style.filter = 'none';
+                slot.style.willChange = 'auto';
             } else if (diff === -1) {
                 // Inmediata izquierda: rotateY(24deg), scale(0.86), z-index 20
                 posX = -spacingX;
@@ -95,10 +101,11 @@ export function initCoverflowCarousel() {
                 zIndex = 20;
                 opacity = 0.85;
 
+                anchor.classList.remove('is-active');
                 if (card) {
-                    card.classList.remove('coverflow-card-active');
+                    card.classList.remove('coverflow-card-active', 'is-active');
                 }
-                anchor.style.pointerEvents = 'auto';
+                anchor.style.pointerEvents = 'none';
                 anchor.setAttribute('aria-hidden', 'true');
                 slot.style.cursor = 'pointer';
             } else if (diff === 1) {
@@ -110,10 +117,11 @@ export function initCoverflowCarousel() {
                 zIndex = 20;
                 opacity = 0.85;
 
+                anchor.classList.remove('is-active');
                 if (card) {
-                    card.classList.remove('coverflow-card-active');
+                    card.classList.remove('coverflow-card-active', 'is-active');
                 }
-                anchor.style.pointerEvents = 'auto';
+                anchor.style.pointerEvents = 'none';
                 anchor.setAttribute('aria-hidden', 'true');
                 slot.style.cursor = 'pointer';
             } else if (diff === -2) {
@@ -125,10 +133,11 @@ export function initCoverflowCarousel() {
                 zIndex = 10;
                 opacity = 0.55;
 
+                anchor.classList.remove('is-active');
                 if (card) {
-                    card.classList.remove('coverflow-card-active');
+                    card.classList.remove('coverflow-card-active', 'is-active');
                 }
-                anchor.style.pointerEvents = 'auto';
+                anchor.style.pointerEvents = 'none';
                 anchor.setAttribute('aria-hidden', 'true');
                 slot.style.cursor = 'pointer';
             } else if (diff === 2) {
@@ -140,10 +149,11 @@ export function initCoverflowCarousel() {
                 zIndex = 10;
                 opacity = 0.55;
 
+                anchor.classList.remove('is-active');
                 if (card) {
-                    card.classList.remove('coverflow-card-active');
+                    card.classList.remove('coverflow-card-active', 'is-active');
                 }
-                anchor.style.pointerEvents = 'auto';
+                anchor.style.pointerEvents = 'none';
                 anchor.setAttribute('aria-hidden', 'true');
                 slot.style.cursor = 'pointer';
             } else {
@@ -157,8 +167,9 @@ export function initCoverflowCarousel() {
                 opacity = 0;
                 isVisible = false;
 
+                anchor.classList.remove('is-active');
                 if (card) {
-                    card.classList.remove('coverflow-card-active');
+                    card.classList.remove('coverflow-card-active', 'is-active');
                 }
                 anchor.style.pointerEvents = 'none';
                 anchor.setAttribute('aria-hidden', 'true');
@@ -166,7 +177,11 @@ export function initCoverflowCarousel() {
             }
 
             anchor.style.zIndex = zIndex;
-            slot.style.transform = `translate3d(${posX}px, 0, ${posZ}px) rotateY(${rotY}deg) scale(${scale})`;
+            if (diff !== 0) {
+                slot.style.transform = `translate3d(${posX}px, 0, ${posZ}px) rotateY(${rotY}deg) scale(${scale})`;
+                slot.style.backfaceVisibility = 'hidden';
+                slot.style.webkitBackfaceVisibility = 'hidden';
+            }
             slot.style.opacity = opacity;
             slot.style.visibility = isVisible ? 'visible' : 'hidden';
         });
@@ -298,6 +313,10 @@ export function initCoverflowCarousel() {
         if (e.button !== undefined && e.button !== 0) {
             return;
         }
+        // No interceptar ni secuestrar el puntero cuando el usuario hace clic en un botón, enlace o control de formulario
+        if (e.target && typeof e.target.closest === 'function' && e.target.closest('button, a, select, input, form')) {
+            return;
+        }
         handleStart(e.clientX, e.clientY, e.pointerId);
     });
 
@@ -319,6 +338,9 @@ export function initCoverflowCarousel() {
     stage.addEventListener(
         'touchstart',
         function (e) {
+            if (e.target && typeof e.target.closest === 'function' && e.target.closest('button, a, select, input, form')) {
+                return;
+            }
             if (e.touches && e.touches[0]) {
                 handleStart(e.touches[0].clientX, e.touches[0].clientY);
             }
@@ -340,9 +362,7 @@ export function initCoverflowCarousel() {
         handleEnd();
     });
 
-    // 3. Clic Directo en Tarjetas Laterales (Fase de Captura):
-    // Centra suavemente la tarjeta lateral y evita que abra enlaces/modales hasta estar en el centro.
-    // Solo la tarjeta central (diff === 0) ejecuta Ver detalles o Reservar.
+    // 3. Clic en el escenario (navegación lateral cuando se hace clic a la izquierda o derecha de la tarjeta central)
     stage.addEventListener(
         'click',
         function (e) {
@@ -353,18 +373,37 @@ export function initCoverflowCarousel() {
                 return;
             }
 
-            const anchor = e.target.closest('.coverflow-slot-anchor');
-            if (anchor) {
-                const slideIdx = parseInt(anchor.dataset.slideIndex, 10);
+            // Si el clic fue dentro de la tarjeta activa central (ej. botón RESERVAR o Ver detalles), permitir su flujo normal
+            const activeAnchor = e.target.closest('.coverflow-slot-anchor.is-active');
+            if (activeAnchor) {
+                return;
+            }
+
+            const clickedAnchor = e.target.closest('.coverflow-slot-anchor');
+            if (clickedAnchor) {
+                const slideIdx = parseInt(clickedAnchor.dataset.slideIndex, 10);
                 if (!isNaN(slideIdx) && slideIdx !== activeIndex) {
                     e.preventDefault();
                     e.stopPropagation();
                     e.stopImmediatePropagation();
                     goTo(slideIdx);
+                    return;
+                }
+            }
+
+            // Si hizo clic en la zona lateral izquierda o derecha del escenario (sobre una tarjeta lateral con pointer-events: none)
+            const rect = stage.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const offsetFromCenter = e.clientX - centerX;
+            if (Math.abs(offsetFromCenter) > 155) {
+                if (offsetFromCenter > 0) {
+                    next();
+                } else {
+                    prev();
                 }
             }
         },
-        true // Capture phase: intercepta antes de cualquier onclick interno
+        false
     );
 
     // 4. Navegación por Teclado Accesible

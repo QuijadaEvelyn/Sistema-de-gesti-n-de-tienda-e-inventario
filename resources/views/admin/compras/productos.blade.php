@@ -188,15 +188,15 @@
                         </div>
                     </div>
 
-                    {{-- Campo: Descripción / Notas de Curaduría --}}
+                    {{-- Campo: Descripción del Producto --}}
                     <div class="md:col-span-2">
                         <label class="block text-xs font-label-code uppercase mb-1 text-on-surface font-semibold">
-                            Descripción / Notas de Curaduría <span class="text-on-surface-variant font-normal text-[10px]">(Opcional)</span>
+                            Descripción del Producto <span class="text-on-surface-variant font-normal text-[10px]">(Opcional)</span>
                         </label>
                         <textarea
                             name="descripcion"
                             rows="2"
-                            placeholder="Detalles del estado de conservación, tiraje, notas históricas o especificaciones peritadas de la pieza..."
+                            placeholder="Detalles del estado de conservación, edición o especificaciones del producto..."
                             class="w-full px-3 py-2 rounded-xl border border-purple-200 dark:border-purple-800/60 text-xs bg-white dark:bg-[#1f1a2e] text-on-surface placeholder:text-outline/70 focus:border-primary transition-all resize-y"
                         ></textarea>
                     </div>
@@ -432,7 +432,7 @@
                         @empty
                             <tr>
                                 <td colspan="7" class="py-8 text-center text-outline text-xs">
-                                    No se encontraron productos registrados en el acervo.
+                                    No se encontraron productos registrados en el catálogo.
                                 </td>
                             </tr>
                         @endforelse

@@ -2,10 +2,10 @@
 
     <div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-purple-200/80 pb-5">
         <div>
-            <span class="text-xs font-label-code uppercase tracking-wider text-primary font-bold">Panel del Coleccionista</span>
-            <h1 class="text-2xl sm:text-3xl font-bold text-on-surface font-quicksand">Mis Adquisiciones, Envíos &amp; Garantías</h1>
+            <span class="text-xs font-label-code uppercase tracking-wider text-primary font-bold">Mi Cuenta</span>
+            <h1 class="text-2xl sm:text-3xl font-bold text-on-surface font-quicksand">Mis Pedidos, Envíos &amp; Garantías</h1>
             <p class="text-xs text-on-surface-variant mt-1">
-                Consulta el estado de tus lotes certificados, rastrea tus envíos o solicita una devolución por garantía en caso de daño o discrepancia curatorial.
+                Consulta el estado de tus compras, rastrea tus envíos o solicita una devolución por garantía en caso de daño o defecto.
             </p>
         </div>
         <div class="flex items-center gap-3">
@@ -57,10 +57,10 @@
 
                 @if ($esFrecuenteVip)
                     <h2 class="text-xl sm:text-2xl font-bold font-quicksand text-white">
-                        Tienes Acceso Anticipado a las Preventas Exclusivas de Bóveda
+                        Tienes Acceso Anticipado a las Preventas Exclusivas del Catálogo
                     </h2>
                     <p class="text-xs text-purple-200">
-                        Por haber superado las <strong>5 adquisiciones certificadas</strong>, puedes apartar y asegurar piezas de edición especial durante la <em>Fase de Preventa Exclusiva</em> antes de su apertura al público general.
+                        Por haber superado las <strong>5 compras completadas</strong>, puedes apartar y asegurar productos de edición especial durante la <em>Fase de Preventa Exclusiva</em> antes de su apertura al público general.
                     </p>
                 @else
                     <h2 class="text-lg sm:text-xl font-bold font-quicksand text-on-surface">

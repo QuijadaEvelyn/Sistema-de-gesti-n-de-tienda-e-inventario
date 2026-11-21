@@ -62,7 +62,7 @@ class VentaService
 
             foreach ($items as $item) {
                 $variante = $item->varianteSku;
-                $precioUnitario = (float) ($variante->precio ?? $variante->producto->precio);
+                $precioUnitario = $item->resolverPrecioUnitario();
                 $subtotalLinea = $precioUnitario * $item->cantidad;
                 $subtotal += $subtotalLinea;
 

@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Bitacora;
 use App\Models\Cliente;
+use App\Models\Libro;
 use App\Models\MensajeContacto;
 use App\Models\PiezaUnica;
 use App\Models\Producto;
@@ -44,17 +45,17 @@ class CatalogoPublicoController extends Controller
         ],
         'memorabilia' => [
             'titulo' => 'Coleccionables',
-            'subtitulo' => 'Figuras Pop/Anime, Juguetes, Numismática, Videojuegos & Archivo Histórico',
-            'badge' => 'ARCHIVO PATRIMONIAL · COLECCIONABLES',
+            'subtitulo' => 'Figuras Pop/Anime, Juguetes, Numismática, Videojuegos & Artículos de Colección',
+            'badge' => 'CATÁLOGO ESPECIAL · COLECCIONABLES',
             'icono' => 'history_edu',
-            'descripcion' => 'Figuras de culto, juguetes manufacturados, monedas y billetes, memorabilia gamer y piezas históricas notariadas.',
+            'descripcion' => 'Figuras de colección, juguetes clásicos, monedas y billetes, memorabilia gamer y ediciones con certificado de autenticidad.',
         ],
         'adquisiciones' => [
-            'titulo' => 'Adquisiciones Selectas',
-            'subtitulo' => 'Piezas Cúmbre de Alta Curaduría y Ejemplares Únicos',
-            'badge' => 'BÓVEDA DE ALTA CURADURÍA · LOTES SELECTOS',
+            'titulo' => 'Ediciones Especiales',
+            'subtitulo' => 'Colección Destacada y Ejemplares Únicos',
+            'badge' => 'COLECCIÓN DESTACADA · EDICIONES ESPECIALES',
             'icono' => 'auto_awesome',
-            'descripcion' => 'Selección transversal de las piezas de mayor rareza patrimonial disponibles para reserva inmediata con custodia preferente.',
+            'descripcion' => 'Selección destacada de ediciones especiales y piezas únicas disponibles para compra inmediata.',
         ],
     ];
 
@@ -269,7 +270,7 @@ class CatalogoPublicoController extends Controller
 
         $librosEstante = [];
         foreach ($seleccionados->values() as $idx => $prod) {
-            /** @var \App\Models\Producto $prod */
+            /** @var Producto $prod */
             $variante = $prod->variantesSku->first();
             $sku = $variante?->sku ?? 'LIB-ARC-'.$prod->id;
             $graduacionRaw = $variante?->descripcion ?? 'MINT (M) · PRIMERA EDICIÓN';
@@ -529,7 +530,7 @@ class CatalogoPublicoController extends Controller
 
         return redirect()->route('public.contacto')->with(
             'status',
-            'Su mensaje ha sido remitido a la curaduría de ARCHIVUM con éxito. Le responderemos a la brevedad.'
+            'Tu mensaje ha sido enviado al equipo de atención de ARCHIVUM con éxito. Te responderemos a la brevedad.'
         );
     }
 
@@ -566,7 +567,7 @@ class CatalogoPublicoController extends Controller
             static $librosSincronizados = false;
             if (! $librosSincronizados) {
                 $librosSincronizados = true;
-                $tieneNuevosGeneros = \App\Models\Libro::whereIn('genero', ['terror', 'ciencia_ficcion', 'fantasia'])->exists();
+                $tieneNuevosGeneros = Libro::whereIn('genero', ['terror', 'ciencia_ficcion', 'fantasia'])->exists();
                 if (! $tieneNuevosGeneros) {
                     app(CatalogoProductoSeeder::class)->run();
                 }

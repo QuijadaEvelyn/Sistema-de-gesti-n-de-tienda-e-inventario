@@ -19,7 +19,7 @@
     try {
         var isServerAuth = {{ $archivumIsAuth ? 'true' : 'false' }};
         var serverTabId = @json($archivumActiveTabId);
-        var AUTH_REQUIRED_MSG = 'Inicia sesión o regístrate para reservar piezas en la bóveda';
+        var AUTH_REQUIRED_MSG = 'Inicia sesión o regístrate para agregar productos al carrito';
 
         function generateTabToken() {
             var randomPart = Math.random().toString(36).substring(2, 12) + Math.random().toString(36).substring(2, 12);

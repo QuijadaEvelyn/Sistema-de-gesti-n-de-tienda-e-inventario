@@ -12,21 +12,21 @@
 <div id="drawer-overlay" class="fixed inset-0 bg-[#07040d]/85 backdrop-blur-sm z-50 transition-opacity duration-300 opacity-0 pointer-events-none" aria-hidden="true"></div>
 
 <!-- Cajón Desplegable del Carrito (Cart Drawer) -->
-<aside id="cart-drawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-surface-container-lowest dark:bg-[#171024] border-l border-purple-200/80 dark:border-purple-500/30 z-50 shadow-2xl flex flex-col justify-between transform translate-x-full transition-transform duration-300 ease-out" role="dialog" aria-modal="true" aria-label="Bóveda de Adquisiciones">
+<aside id="cart-drawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-surface-container-lowest dark:bg-[#171024] border-l border-purple-200/80 dark:border-purple-500/30 z-50 shadow-2xl flex flex-col justify-between transform translate-x-full transition-transform duration-300 ease-out" role="dialog" aria-modal="true" aria-label="Carrito de Compras">
 
     <!-- Encabezado del Cajón -->
     <div class="p-space-lg border-b border-purple-200/70 dark:border-purple-500/30 bg-surface-container-low/50 dark:bg-[#1b132a]">
         <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
-                <span class="material-symbols-outlined text-primary text-[24px]">lock</span>
+                <span class="material-symbols-outlined text-primary text-[24px]">shopping_bag</span>
                 <div>
-                    <h2 class="font-headline-sm text-base text-on-surface font-bold">Bóveda de Adquisición</h2>
+                    <h2 class="font-headline-sm text-base text-on-surface font-bold">Carrito de Compras</h2>
                     <span id="cart-drawer-pieces-count" class="font-label-code text-secondary text-[11px] uppercase tracking-wider">
-                        {{ $carritoDrawer['cantidad_total'] }} {{ $carritoDrawer['cantidad_total'] === 1 ? 'pieza en custodia' : 'piezas en custodia temporal' }}
+                        {{ $carritoDrawer['cantidad_total'] }} {{ $carritoDrawer['cantidad_total'] === 1 ? 'producto en carrito' : 'productos reservados' }}
                     </span>
                 </div>
             </div>
-            <button type="button" id="close-cart-btn" class="p-1.5 rounded-lg text-outline hover:text-on-surface hover:bg-surface-container dark:hover:bg-[#221834] transition" aria-label="Cerrar Bóveda">
+            <button type="button" id="close-cart-btn" class="p-1.5 rounded-lg text-outline hover:text-on-surface hover:bg-surface-container dark:hover:bg-[#221834] transition" aria-label="Cerrar Carrito">
                 <span class="material-symbols-outlined text-[20px]">close</span>
             </button>
         </div>
@@ -78,9 +78,9 @@
                     <span class="material-symbols-outlined text-[32px] text-primary">shopping_bag</span>
                 </div>
                 <div class="space-y-1.5 max-w-xs mx-auto">
-                    <p class="text-sm font-bold text-on-surface font-quicksand">Tu Bóveda de Adquisición está vacía</p>
+                    <p class="text-sm font-bold text-on-surface font-quicksand">Tu Carrito de Compras está vacío</p>
                     <p class="text-xs text-on-surface-variant leading-relaxed">
-                        Explora nuestras secciones de Libros Raros, Vinilos Históricos o Memorabilia y pulsa el botón de carrito para reservar una pieza.
+                        Explora nuestras secciones de Libros, Discos o Coleccionables y pulsa el botón de agregar para añadir productos a tu carrito.
                     </p>
                 </div>
             </div>
@@ -151,13 +151,18 @@
 
                                     <div class="flex items-center justify-between mt-2 pt-1 border-t border-purple-200/40 dark:border-purple-500/20">
                                         <span class="font-label-code text-[10px] text-emerald-700 bg-emerald-50 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800/40 px-2 py-0.5 rounded border border-emerald-200 truncate max-w-[140px]">{{ $item['graduacion'] }}</span>
-                                        <span id="cart-item-subtotal-{{ $item['variante_sku_id'] }}" class="font-tabular-data font-bold text-on-surface text-sm">${{ number_format($item['subtotal'], 0) }} MXN</span>
+                                        <div class="text-right">
+                                            <span id="cart-item-subtotal-{{ $item['variante_sku_id'] }}" class="font-tabular-data font-bold text-on-surface text-sm block">${{ number_format($item['subtotal'], 0) }} MXN</span>
+                                            <span class="text-[10px] font-label-code text-on-surface-variant block">
+                                                Precio actual del catálogo
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                                 <form method="POST" action="{{ route('carrito.remover', $item['variante_sku_id']) }}" class="absolute top-2 right-2">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="text-outline hover:text-error transition" title="Liberar de reserva y devolver a bóveda">
+                                    <button type="submit" class="text-outline hover:text-error transition" title="Quitar del carrito y devolver al catálogo">
                                         <span class="material-symbols-outlined text-[16px]">delete</span>
                                     </button>
                                 </form>
@@ -261,7 +266,15 @@
 
                                     <div class="flex items-center justify-between mt-2 pt-1 border-t border-purple-200/40 dark:border-purple-500/20">
                                         <span class="font-label-code text-[10px] text-emerald-700 bg-emerald-50 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800/40 px-2 py-0.5 rounded border border-emerald-200 truncate max-w-[140px]">{{ $item['graduacion'] }}</span>
-                                        <span id="cart-item-subtotal-{{ $item['variante_sku_id'] }}" class="font-tabular-data font-bold text-on-surface text-sm">${{ number_format($item['subtotal'], 0) }} MXN</span>
+                                        <div class="text-right">
+                                            <span id="cart-item-subtotal-{{ $item['variante_sku_id'] }}" class="font-tabular-data font-bold text-on-surface text-sm block">${{ number_format($item['subtotal'], 0) }} MXN</span>
+                                            <span class="text-[10px] font-label-code text-on-surface-variant block">
+                                                ${{ number_format($item['precio'], 0) }} MXN c/u &middot; Precio congelado
+                                                @if (! empty($item['cambio_precio_catalogo']))
+                                                    <span class="line-through text-outline ml-0.5">${{ number_format($item['precio_catalogo_actual'], 0) }}</span>
+                                                @endif
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                                 <form method="POST" action="{{ route('carrito.remover', $item['variante_sku_id']) }}" class="absolute top-2 right-2">
@@ -293,15 +306,15 @@
                 </div>
             @endif
             <div class="flex justify-between text-on-surface-variant">
-                <span>Subtotal Lote Certificado:</span>
+                <span>Subtotal de Productos:</span>
                 <span id="cart-drawer-subtotal" class="font-tabular-data font-medium text-on-surface">${{ number_format($carritoDrawer['subtotal'], 2) }} MXN</span>
             </div>
             <div class="flex justify-between text-on-surface-variant">
-                <span>Embalaje Antiácido &amp; Seguro:</span>
-                <span class="font-tabular-data text-emerald-700 font-semibold">Cortesía de Bóveda</span>
+                <span>Empaque Protegido &amp; Seguro:</span>
+                <span class="font-tabular-data text-emerald-700 font-semibold">Envío Gratis</span>
             </div>
             <div class="flex justify-between font-bold text-sm text-on-surface pt-2 border-t border-purple-200/50 dark:border-purple-500/30">
-                <span class="font-quicksand">Total Estimado de Depósito:</span>
+                <span class="font-quicksand">Total a Pagar:</span>
                 <span id="cart-drawer-total" class="font-tabular-data text-primary font-bold text-base">${{ number_format($carritoDrawer['total'], 2) }} MXN</span>
             </div>
         </div>
@@ -309,7 +322,7 @@
         @auth
             <a href="{{ route('checkout.index') }}" class="btn-glass-purple w-full font-label-md py-3.5 rounded-xl flex items-center justify-center gap-2 shadow-md">
                 <span class="material-symbols-outlined text-[18px]">lock</span>
-                <span>Proceder a Pasarela Notariada</span>
+                <span>Proceder al Pago Seguro</span>
             </a>
         @else
             <button
@@ -318,7 +331,7 @@
                 class="btn-glass-purple w-full font-label-md py-3.5 rounded-xl flex items-center justify-center gap-2 shadow-md cursor-pointer"
             >
                 <span class="material-symbols-outlined text-[18px]">lock</span>
-                <span>Proceder a Pasarela Notariada</span>
+                <span>Proceder al Pago Seguro</span>
             </button>
         @endauth
 
@@ -326,7 +339,7 @@
             @if ($tieneAmbosTipos)
                 Las Piezas Únicas se reservan por 5 minutos; los Productos Regulares se guardan por 7 días.
             @elseif ($tienePiezasUnicas)
-                Si no completas tu adquisición en 5 minutos, las piezas únicas se liberan automáticamente a la bóveda.
+                Si no completas tu compra en 5 minutos, las piezas únicas regresan automáticamente al catálogo.
             @else
                 Tus productos regulares se conservan guardados en tu carrito durante 7 días.
             @endif
@@ -444,7 +457,7 @@
 
                         const piecesCountEl = document.getElementById('cart-drawer-pieces-count');
                         if (piecesCountEl) {
-                            piecesCountEl.textContent = `${carrito.cantidad_total} ${carrito.cantidad_total === 1 ? 'pieza en custodia' : 'piezas en custodia temporal'}`;
+                            piecesCountEl.textContent = `${carrito.cantidad_total} ${carrito.cantidad_total === 1 ? 'producto en carrito' : 'productos reservados'}`;
                         }
 
                         const cartCounterBadge = document.getElementById('cart-counter-badge');

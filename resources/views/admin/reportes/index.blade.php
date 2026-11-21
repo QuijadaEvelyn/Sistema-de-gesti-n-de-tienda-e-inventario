@@ -4,10 +4,10 @@
         {{-- Encabezado Institucional y Botones de Exportación Directa --}}
         <div class="flex flex-col lg:flex-row lg:items-end justify-between border-b border-purple-200/70 pb-5 gap-4">
             <div>
-                <p class="font-label-code text-[10px] uppercase tracking-[0.25em] text-secondary mb-1">Auditoría Patrimonial &amp; Control de Bóveda</p>
+                <p class="font-label-code text-[10px] uppercase tracking-[0.25em] text-secondary mb-1">Reportes de Tienda &amp; Control de Inventario</p>
                 <h1 class="text-2xl font-bold text-on-surface font-quicksand">Módulo de Reportes &amp; Exportación (CSV y PDF)</h1>
                 <p class="text-xs text-on-surface-variant mt-1">
-                    Resúmenes calculados sobre el estado del acervo, inventario actual, piezas en bóveda, lotes certificados (COA) y transacciones recientes.
+                    Resúmenes calculados sobre el estado del catálogo, inventario disponible, certificados de autenticidad y ventas recientes.
                 </p>
             </div>
 
@@ -46,12 +46,12 @@
             </div>
         </div>
 
-        {{-- Barra de Filtros Dinámicos por Bóveda/Sucursal y Categoría --}}
+        {{-- Barra de Filtros Dinámicos por Sucursal y Categoría --}}
         <form method="GET" action="{{ route('admin.reportes') }}" class="bg-surface-container-lowest p-4 rounded-2xl border border-purple-200/70 flex flex-wrap items-end gap-4 shadow-2xs">
             <div class="flex-1 min-w-[220px]">
-                <label for="sucursal_id" class="block font-label-code text-[10px] uppercase tracking-widest text-secondary mb-1">Sede / Bóveda</label>
+                <label for="sucursal_id" class="block font-label-code text-[10px] uppercase tracking-widest text-secondary mb-1">Sucursal</label>
                 <select id="sucursal_id" name="sucursal_id" class="w-full px-3.5 py-2 rounded-xl border border-purple-200 text-sm bg-white">
-                    <option value="">Todas las Bóvedas Activas</option>
+                    <option value="">Todas las Sucursales Activas</option>
                     @foreach($sucursales as $sucursal)
                         <option value="{{ $sucursal->id }}" @selected($sucursalSeleccionada === $sucursal->id)>
                             {{ $sucursal->nombre }} ({{ $sucursal->ciudad }})
@@ -61,12 +61,12 @@
             </div>
 
             <div class="flex-1 min-w-[220px]">
-                <label for="tipo_catalogo" class="block font-label-code text-[10px] uppercase tracking-widest text-secondary mb-1">Categoría Curatorial</label>
+                <label for="tipo_catalogo" class="block font-label-code text-[10px] uppercase tracking-widest text-secondary mb-1">Categoría</label>
                 <select id="tipo_catalogo" name="tipo_catalogo" class="w-full px-3.5 py-2 rounded-xl border border-purple-200 text-sm bg-white">
-                    <option value="">Acervo Completo (Todas las Categorías)</option>
-                    <option value="libro" @selected($categoriaSeleccionada === 'libro')>Libros Raros &amp; Incunables</option>
-                    <option value="disco" @selected($categoriaSeleccionada === 'disco')>Discos &amp; Vinilos Históricos</option>
-                    <option value="coleccionable" @selected($categoriaSeleccionada === 'coleccionable')>Memorabilia &amp; Archivo</option>
+                    <option value="">Catálogo Completo (Todas las Categorías)</option>
+                    <option value="libro" @selected($categoriaSeleccionada === 'libro')>Libros &amp; Ediciones Especiales</option>
+                    <option value="disco" @selected($categoriaSeleccionada === 'disco')>Discos &amp; Vinilos</option>
+                    <option value="coleccionable" @selected($categoriaSeleccionada === 'coleccionable')>Coleccionables</option>
                 </select>
             </div>
 
@@ -82,32 +82,32 @@
             </div>
         </form>
 
-        {{-- 1. KPIs Ejecutivos Calculados del Estado del Acervo --}}
+        {{-- 1. KPIs Ejecutivos Calculados del Estado del Catálogo --}}
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div class="bg-surface-container-lowest rounded-2xl border border-purple-200/70 p-5 shadow-2xs">
-                <span class="font-label-code text-[10px] uppercase tracking-widest text-secondary block mb-1.5">Valoración Total del Acervo</span>
+                <span class="font-label-code text-[10px] uppercase tracking-widest text-secondary block mb-1.5">Valor Total del Catálogo</span>
                 <span class="text-2xl font-bold text-on-surface font-quicksand">
                     ${{ number_format($resumen['valor_total_acervo'], 2) }} <span class="text-xs font-normal text-outline">MXN</span>
                 </span>
                 <div class="mt-2.5 flex items-center gap-1.5 text-secondary text-xs font-label-code">
                     <span class="material-symbols-outlined text-sm">verified</span>
-                    <span>Tasación curatorial activa</span>
+                    <span>Inventario valorizado activo</span>
                 </div>
             </div>
 
             <div class="bg-surface-container-lowest rounded-2xl border border-purple-200/70 p-5 shadow-2xs">
-                <span class="font-label-code text-[10px] uppercase tracking-widest text-secondary block mb-1.5">Piezas en Bóveda Actual</span>
+                <span class="font-label-code text-[10px] uppercase tracking-widest text-secondary block mb-1.5">Productos Disponibles en Inventario</span>
                 <span class="text-2xl font-bold text-on-surface font-quicksand">
                     {{ number_format($resumen['total_unidades_boveda']) }} <span class="text-xs font-normal text-outline">unidades</span>
                 </span>
                 <div class="mt-2.5 flex items-center justify-between text-xs font-label-code text-on-surface-variant">
                     <span>{{ $resumen['total_skus'] }} SKUs registrados</span>
-                    <span class="text-amber-700 font-semibold">{{ $resumen['reservas_activas'] }} en reserva</span>
+                    <span class="text-amber-700 font-semibold">{{ $resumen['reservas_activas'] }} en carrito</span>
                 </div>
             </div>
 
             <div class="bg-surface-container-lowest rounded-2xl border border-purple-200/70 p-5 shadow-2xs">
-                <span class="font-label-code text-[10px] uppercase tracking-widest text-secondary block mb-1.5">Lotes Certificados (COA)</span>
+                <span class="font-label-code text-[10px] uppercase tracking-widest text-secondary block mb-1.5">Certificados de Autenticidad</span>
                 <span class="text-2xl font-bold text-on-surface font-quicksand">
                     {{ number_format($rotacionPiezas['total_piezas']) }} <span class="text-xs font-normal text-outline">series</span>
                 </span>
@@ -131,14 +131,14 @@
             </div>
         </div>
 
-        {{-- 2. Desglose por Categoría Curatorial y Valoración por Sede --}}
+        {{-- 2. Desglose por Categoría y Valoración por Sucursal --}}
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {{-- Estado del Acervo por Categoría --}}
+            {{-- Estado del Catálogo por Categoría --}}
             <div class="bg-surface-container-lowest rounded-2xl border border-purple-200/70 p-5 shadow-2xs space-y-3">
                 <div class="flex items-center justify-between border-b border-purple-100 pb-3">
                     <div>
-                        <p class="font-label-code text-[10px] uppercase tracking-widest text-secondary">Distribución Temática</p>
-                        <h2 class="text-lg font-bold text-on-surface font-quicksand">Estado del Acervo por Categoría</h2>
+                        <p class="font-label-code text-[10px] uppercase tracking-widest text-secondary">Distribución por Categoría</p>
+                        <h2 class="text-lg font-bold text-on-surface font-quicksand">Estado del Catálogo por Categoría</h2>
                     </div>
                     <span class="material-symbols-outlined text-secondary">category</span>
                 </div>
@@ -149,7 +149,7 @@
                             <div>
                                 <p class="font-semibold text-sm text-on-surface">{{ $cat['etiqueta'] }}</p>
                                 <p class="font-label-code text-[11px] text-on-surface-variant">
-                                    {{ $cat['skus'] }} SKUs catalogados &middot; {{ $cat['unidades'] }} ejemplares en bóveda
+                                    {{ $cat['skus'] }} SKUs registrados &middot; {{ $cat['unidades'] }} unidades disponibles
                                 </p>
                             </div>
                             <div class="text-right">
@@ -163,12 +163,12 @@
                 </div>
             </div>
 
-            {{-- Valoración Económica por Sucursal / Bóveda --}}
+            {{-- Valor de Inventario por Sucursal --}}
             <div class="bg-surface-container-lowest rounded-2xl border border-purple-200/70 p-5 shadow-2xs space-y-3">
                 <div class="flex items-center justify-between border-b border-purple-100 pb-3">
                     <div>
-                        <p class="font-label-code text-[10px] uppercase tracking-widest text-secondary">Sedes &amp; Bóvedas Físicas</p>
-                        <h2 class="text-lg font-bold text-on-surface font-quicksand">Valoración Patrimonial por Sucursal</h2>
+                        <p class="font-label-code text-[10px] uppercase tracking-widest text-secondary">Sucursales Físicas</p>
+                        <h2 class="text-lg font-bold text-on-surface font-quicksand">Valor de Inventario por Sucursal</h2>
                     </div>
                     <span class="material-symbols-outlined text-secondary">account_balance</span>
                 </div>
@@ -196,16 +196,16 @@
             </div>
         </div>
 
-        {{-- 3. Desglose Completo del Inventario Actual y Piezas en Bóveda --}}
+        {{-- 3. Desglose Completo del Inventario Actual --}}
         <div class="bg-surface-container-lowest rounded-2xl border border-purple-200/70 overflow-hidden shadow-xs">
             <div class="px-5 py-4 bg-surface-container-low border-b border-purple-200/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                    <p class="font-label-code text-[10px] uppercase tracking-widest text-secondary">Catálogo Unificado &amp; Certificados COA</p>
-                    <h2 class="text-lg font-bold text-on-surface font-quicksand">Inventario Actual de Piezas en Bóveda ({{ $filasInventario->count() }} registros)</h2>
+                    <p class="font-label-code text-[10px] uppercase tracking-widest text-secondary">Catálogo Unificado &amp; Certificados de Autenticidad</p>
+                    <h2 class="text-lg font-bold text-on-surface font-quicksand">Inventario Actual de Productos Disponibles ({{ $filasInventario->count() }} registros)</h2>
                 </div>
                 <div class="flex flex-wrap items-center gap-2 font-label-code text-[11px]">
                     <span class="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-semibold">
-                        En Bóveda: {{ $filasInventario->where('estado_stock', 'EN BOVEDA')->count() }}
+                        Disponibles: {{ $filasInventario->where('estado_stock', 'EN BOVEDA')->count() }}
                     </span>
                     <span class="px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 font-semibold">
                         Bajo Mínimo: {{ $filasInventario->where('estado_stock', 'BAJO MINIMO')->count() }}
@@ -221,13 +221,13 @@
                     <thead class="bg-surface-container-low border-b border-purple-200/60 text-xs uppercase font-label-code text-secondary">
                         <tr>
                             <th class="py-3 px-4">SKU</th>
-                            <th class="py-3 px-4">Pieza / Título Curatorial</th>
+                            <th class="py-3 px-4">Producto</th>
                             <th class="py-3 px-4">Categoría</th>
-                            <th class="py-3 px-4">Bóveda / Sede</th>
-                            <th class="py-3 px-4">Certificado COA / Serie</th>
-                            <th class="py-3 px-4 text-center">Stock Bóveda</th>
+                            <th class="py-3 px-4">Sucursal</th>
+                            <th class="py-3 px-4">Certificado / Serie</th>
+                            <th class="py-3 px-4 text-center">Stock Disponible</th>
                             <th class="py-3 px-4 text-right">Precio Unitario</th>
-                            <th class="py-3 px-4 text-right">Valor Tasado</th>
+                            <th class="py-3 px-4 text-right">Valor Total</th>
                             <th class="py-3 px-4 text-center">Estatus</th>
                         </tr>
                     </thead>
@@ -257,7 +257,7 @@
                                     @elseif($fila['estado_stock'] === 'BAJO MINIMO')
                                         <span class="px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold">BAJO MÍNIMO</span>
                                     @else
-                                        <span class="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-semibold">EN BÓVEDA</span>
+                                        <span class="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-semibold">DISPONIBLE</span>
                                     @endif
                                 </td>
                             </tr>
@@ -273,12 +273,12 @@
             </div>
         </div>
 
-        {{-- 4. Transacciones y Adquisiciones Recientes --}}
+        {{-- 4. Transacciones y Pedidos Recientes --}}
         <div class="bg-surface-container-lowest rounded-2xl border border-purple-200/70 overflow-hidden shadow-xs">
             <div class="px-5 py-4 bg-surface-container-low border-b border-purple-200/60 flex items-center justify-between">
                 <div>
-                    <p class="font-label-code text-[10px] uppercase tracking-widest text-secondary">Actividad de Coleccionistas</p>
-                    <h2 class="text-lg font-bold text-on-surface font-quicksand">Transacciones y Adquisiciones Recientes</h2>
+                    <p class="font-label-code text-[10px] uppercase tracking-widest text-secondary">Actividad de Clientes</p>
+                    <h2 class="text-lg font-bold text-on-surface font-quicksand">Transacciones y Pedidos Recientes</h2>
                 </div>
                 <span class="material-symbols-outlined text-secondary">receipt_long</span>
             </div>
@@ -288,8 +288,8 @@
                     <thead class="bg-surface-container-low border-b border-purple-200/60 text-xs uppercase font-label-code text-secondary">
                         <tr>
                             <th class="py-3 px-4">Folio</th>
-                            <th class="py-3 px-4">Coleccionista / Cliente</th>
-                            <th class="py-3 px-4">Piezas Adquiridas</th>
+                            <th class="py-3 px-4">Cliente</th>
+                            <th class="py-3 px-4">Productos Comprados</th>
                             <th class="py-3 px-4">Estatus Pedido</th>
                             <th class="py-3 px-4">Guía / Envío</th>
                             <th class="py-3 px-4 text-right">Monto Total</th>
@@ -304,10 +304,10 @@
                             <tr class="hover:bg-surface-container-low/50 transition">
                                 <td class="py-3 px-4 font-label-code font-bold text-primary">{{ $pedido->folio }}</td>
                                 <td class="py-3 px-4 text-on-surface">
-                                    {{ $pedido->cliente?->nombre_completo ?? $pedido->cliente?->usuario?->name ?? 'Coleccionista Registrado' }}
+                                    {{ $pedido->cliente?->nombre_completo ?? $pedido->cliente?->usuario?->name ?? 'Cliente Registrado' }}
                                 </td>
                                 <td class="py-3 px-4 text-xs text-on-surface-variant">
-                                    {{ $pedido->detalles->sum('cantidad') }} ejemplar(es)
+                                    {{ $pedido->detalles->sum('cantidad') }} unidad(es)
                                 </td>
                                 <td class="py-3 px-4">
                                     <span class="px-2.5 py-1 rounded-full bg-purple-100 text-primary text-xs font-label-code uppercase">
@@ -327,7 +327,7 @@
                         @empty
                             <tr>
                                 <td colspan="7" class="py-6 text-center text-on-surface-variant">
-                                    Aún no se han registrado transacciones en la bóveda.
+                                    Aún no se han registrado ventas en la tienda.
                                 </td>
                             </tr>
                         @endforelse

@@ -27,7 +27,7 @@
                     <tr>
                         <th class="py-3 px-4">Sucursal</th>
                         <th class="py-3 px-4">Dirección</th>
-                        <th class="py-3 px-4 text-right">Unidades en Custodia</th>
+                        <th class="py-3 px-4 text-right">Unidades Disponibles</th>
                         <th class="py-3 px-4 text-right">Estado</th>
                     </tr>
                 </thead>

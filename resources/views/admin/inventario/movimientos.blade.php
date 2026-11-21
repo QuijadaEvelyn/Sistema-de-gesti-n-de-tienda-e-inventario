@@ -5,13 +5,13 @@
             <div>
                 <div class="flex items-center gap-2 mb-1">
                     <span class="px-2.5 py-0.5 rounded-full bg-purple-100 text-primary text-[11px] font-label-code font-bold uppercase tracking-wider">
-                        {{ $sucursalActiva ? 'Bóveda: '.$sucursalActiva->nombre : 'Todas las Sedes (Consolidado)' }}
+                        {{ $sucursalActiva ? 'Sucursal: '.$sucursalActiva->nombre : 'Todas las Sucursales (Consolidado)' }}
                     </span>
                     <span class="text-xs text-outline font-label-code">· Control Físico de Existencias</span>
                 </div>
                 <h1 class="text-2xl font-bold text-on-surface font-quicksand">Ajustes de Stock &amp; Recepciones</h1>
                 <p class="text-xs text-on-surface-variant font-label-code uppercase tracking-wider mt-1">
-                    Registro auditable de entradas de mercancía, mermas y conteos cíclicos de bóveda
+                    Registro de entradas de mercancía, mermas y conteos de inventario
                 </p>
             </div>
             <div class="flex items-center gap-2">
@@ -78,7 +78,7 @@
         <form method="POST" action="{{ route('almacen.ajustes.store') }}" class="bg-surface-container-lowest p-6 rounded-2xl border border-purple-200/70 grid grid-cols-1 md:grid-cols-4 gap-4 items-end shadow-2xs">
             @csrf
             <div>
-                <label class="block text-xs font-label-code uppercase mb-1 text-secondary">Existencia / SKU en Bóveda</label>
+                <label class="block text-xs font-label-code uppercase mb-1 text-secondary">Existencia / SKU en Inventario</label>
                 <select name="existencia_id" required class="w-full px-3 py-2 rounded-xl border border-purple-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary/30">
                     @foreach ($existencias as $ex)
                         <option value="{{ $ex->id }}">

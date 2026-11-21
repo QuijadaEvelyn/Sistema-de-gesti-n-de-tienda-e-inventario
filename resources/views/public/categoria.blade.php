@@ -23,7 +23,7 @@
                 {{ $meta['subtitulo'] }}
             </h2>
             <p class="text-xs text-primary font-label-code mt-1 font-semibold uppercase tracking-wider">
-                Mostrando {{ $productos->count() }} {{ $productos->count() === 1 ? 'pieza autenticada' : 'piezas autenticadas' }} en esta sección
+                Mostrando {{ $productos->count() }} {{ $productos->count() === 1 ? 'producto disponible' : 'productos disponibles' }} en esta sección
             </p>
         </div>
 
@@ -39,7 +39,7 @@
                 class="bg-white border border-purple-200/80 rounded-xl px-3.5 py-2 text-xs text-on-surface focus:outline-none focus:border-primary"
             />
             <select name="orden" onchange="this.form.submit()" class="bg-white text-on-surface border border-purple-200/80 rounded-xl py-2 px-3 focus:ring-1 focus:ring-primary focus:outline-none shadow-2xs font-medium cursor-pointer">
-                <option value="relevancia" @selected(request('orden') === 'relevancia')>Ordenar: Relevancia Curatorial</option>
+                <option value="relevancia" @selected(request('orden') === 'relevancia')>Ordenar: Destacados</option>
                 <option value="precio_desc" @selected(request('orden') === 'precio_desc')>Precio: Mayor a Menor</option>
                 <option value="precio_asc" @selected(request('orden') === 'precio_asc')>Precio: Menor a Mayor</option>
             </select>

@@ -1,7 +1,7 @@
-<x-layouts.public title="ARCHIVUM · Pasarela de Pago Notariada (Modo Simulación)">
+<x-layouts.public title="ARCHIVUM · Proceso de Pago Seguro">
 
     @if (empty($carrito['items']))
-        <!-- Vista de Bóveda / Checkout Vacía con Centrado Vertical Completo -->
+        <!-- Vista de Carrito / Checkout Vacía con Centrado Vertical Completo -->
         <div class="min-h-[70vh] flex flex-col justify-center items-center py-6">
             <div class="w-full max-w-xl bg-white rounded-3xl border border-purple-200/80 p-8 sm:p-12 text-center shadow-lg space-y-5 my-auto">
                 <div class="w-20 h-20 rounded-3xl bg-surface-container mx-auto flex items-center justify-center text-outline shadow-2xs border border-purple-200/60">
@@ -10,12 +10,12 @@
                 
                 <div class="space-y-2">
                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-label-code uppercase tracking-wider">
-                        <span class="material-symbols-outlined text-[14px]">lock</span>
-                        <span>Bóveda de Adquisición</span>
+                        <span class="material-symbols-outlined text-[14px]">shopping_bag</span>
+                        <span>Carrito de Compras</span>
                     </span>
-                    <h1 class="text-2xl sm:text-3xl font-bold text-on-surface font-quicksand">Tu Bóveda de Adquisición está vacía</h1>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-on-surface font-quicksand">Tu Carrito de Compras está vacío</h1>
                     <p class="text-sm text-on-surface-variant max-w-md mx-auto leading-relaxed">
-                        Explora nuestras secciones de Libros Raros, Vinilos Históricos o Memorabilia y pulsa el botón de carrito para reservar una pieza.
+                        Explora nuestras secciones de Libros, Discos o Coleccionables y agrega productos a tu carrito para continuar con tu compra.
                     </p>
                 </div>
 
@@ -48,7 +48,7 @@
                 <div class="flex flex-wrap items-center gap-2 mb-2">
                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-label-code uppercase tracking-wider">
                         <span class="material-symbols-outlined text-[14px]">verified_user</span>
-                        <span>Pasarela de Prueba / Simulación Activa</span>
+                        <span>Proceso de Pago Seguro Activo</span>
                     </span>
                     @if (! empty($carrito['tiene_piezas_unicas']))
                         <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 border border-amber-300 text-amber-900 text-xs font-label-code font-bold uppercase tracking-wider">
@@ -64,7 +64,7 @@
                         </span>
                     @endif
                 </div>
-                <h1 class="text-2xl sm:text-3xl font-bold text-on-surface font-quicksand">Checkout &amp; Formalización de Adquisición</h1>
+                <h1 class="text-2xl sm:text-3xl font-bold text-on-surface font-quicksand">Checkout &amp; Proceso de Pago Seguro</h1>
                 <p class="text-xs text-on-surface-variant mt-1">
                     En modo simulación puedes ingresar cualquier número de tarjeta de crédito para completar la compra y probar el rastreo de envío.
                 </p>
@@ -240,7 +240,12 @@
                                         <div>
                                             <span class="text-[10px] font-label-code text-primary font-bold">SKU: #{{ $item['sku'] }} &middot; GUARDADO POR 7 DÍAS</span>
                                             <h3 class="text-sm font-bold text-on-surface font-quicksand">{{ $item['nombre'] }}</h3>
-                                            <p class="text-xs text-on-surface-variant">{{ $item['subtitulo'] }} &middot; Cantidad: {{ $item['cantidad'] }}</p>
+                                            <p class="text-xs text-on-surface-variant">
+                                                {{ $item['subtitulo'] }} &middot; Cantidad: {{ $item['cantidad'] }} &middot; ${{ number_format($item['precio'], 2) }} MXN c/u (Precio congelado)
+                                                @if (! empty($item['cambio_precio_catalogo']))
+                                                    <span class="line-through text-outline ml-1">${{ number_format($item['precio_catalogo_actual'], 2) }} MXN</span>
+                                                @endif
+                                            </p>
                                         </div>
                                         <div class="text-right">
                                             <span class="font-tabular-data font-bold text-sm text-on-surface">${{ number_format($item['subtotal'], 2) }}</span>
@@ -268,12 +273,12 @@
                             </div>
                         @endif
                         <div class="flex justify-between text-on-surface-variant">
-                            <span>Subtotal Tasado:</span>
+                            <span>Subtotal:</span>
                             <span id="checkout-subtotal" class="font-tabular-data">${{ number_format($carrito['subtotal'], 2) }} MXN</span>
                         </div>
                         <div class="flex justify-between text-on-surface-variant">
-                            <span>Custodia Climatizada &amp; Embalaje Antiácido:</span>
-                            <span class="text-emerald-700 font-semibold">Cortesía de Bóveda</span>
+                            <span>Envío Seguro &amp; Empaque Protegido:</span>
+                            <span class="text-emerald-700 font-semibold">Envío Gratis</span>
                         </div>
                         <div class="flex justify-between text-base font-bold text-on-surface pt-2 border-t border-purple-100">
                             <span>Total a Pagar:</span>

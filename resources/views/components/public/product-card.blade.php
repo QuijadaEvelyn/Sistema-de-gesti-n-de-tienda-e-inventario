@@ -76,26 +76,26 @@
                 'Editorial' => $producto->libro?->editorial ?? 'Edición Histórica',
                 'Año de Publicación' => (string) ($producto->libro?->anio_publicacion ?? 'N/D'),
                 'Género Literario' => ucfirst($producto->libro?->genero ?? 'General'),
-                'Páginas' => $producto->libro?->paginas ? $producto->libro->paginas . ' págs.' : 'Edición íntegra peritada',
+                'Páginas' => $producto->libro?->paginas ? $producto->libro->paginas . ' págs.' : 'Edición completa verificada',
                 'Encuadernación' => $producto->libro?->tapa ?? 'Tapa dura artesanal',
-                'ISBN' => $producto->libro?->isbn ?? 'Custodia Patrimonial',
+                'ISBN' => $producto->libro?->isbn ?? 'Catálogo General',
             ],
             'disco' => [
                 'Artista / Intérprete' => $producto->disco?->artista ?? 'Intérprete Histórico',
                 'Sello Discográfico' => $producto->disco?->sello ?? 'Prensado Original',
                 'Año de Lanzamiento' => (string) ($producto->disco?->anio_lanzamiento ?? 'N/D'),
-                'Formato' => $producto->disco?->formato === 'cd' ? 'Disco Compacto (CD Audiofilia)' : 'Vinilo LP 180g (Prensado Analógico)',
+                'Formato' => $producto->disco?->formato === 'cd' ? 'Disco Compacto (CD)' : 'Vinilo LP 180g (Prensado Analógico)',
                 'Velocidad' => $producto->disco?->rpm ? $producto->disco->rpm . ' RPM' : '33 ⅓ RPM',
                 'Pistas' => $producto->disco?->numero_pistas ? $producto->disco->numero_pistas . ' pistas' : 'Álbum Completo',
-                'Código Matriz' => $producto->disco?->codigo_matriz ?? 'Autenticación notarial',
+                'Código Matriz' => $producto->disco?->codigo_matriz ?? 'Edición verificada',
             ],
             default => [
-                'Marca / Fabricante' => $producto->coleccionable?->marca ?? 'Archivo Histórico',
+                'Marca / Fabricante' => $producto->coleccionable?->marca ?? 'Colección Original',
                 'Material de Confección' => $producto->coleccionable?->material ?? 'Material Auténtico',
-                'Categoría' => ucfirst($producto->coleccionable?->categoria ?? 'Memorabilia'),
+                'Categoría' => ucfirst($producto->coleccionable?->categoria ?? 'Coleccionables'),
                 'Año / Datación' => (string) ($producto->coleccionable?->anio_fabricacion ?? 'Época Clásica'),
-                'Certificación COA' => $producto->coleccionable?->certificado_autenticidad ?? 'Certificado de Autenticidad Notariado',
-                'Edición Limitada' => $producto->coleccionable?->edicion_limitada ? 'Sí · Serie Numerada' : 'Colección Especial',
+                'Certificado' => $producto->coleccionable?->certificado_autenticidad ?? 'Certificado de Autenticidad',
+                'Edición Limitada' => $producto->coleccionable?->edicion_limitada ? 'Sí · Serie Numerada' : 'Edición Especial',
             ],
         },
     ];
@@ -105,16 +105,16 @@
     draggable="false"
     data-unique-piece="{{ $esPiezaUnica ? 'true' : 'false' }}"
     data-product-details="{{ json_encode($datosModal, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) }}"
-    class="{{ $clasesTarjeta }} rounded-2xl p-2.5 sm:p-5 flex flex-col justify-between transition-all duration-200 group relative h-full select-none"
+    class="{{ $clasesTarjeta }} rounded-2xl p-2.5 sm:p-5 pb-4 sm:pb-5 flex flex-col justify-between transition-all duration-200 group relative h-auto min-h-full select-none"
 >
     <div>
         <!-- Imagen / Miniatura con Indicador de Disponibilidad Limpio -->
         <div
             onclick="abrirModalDetalleProducto(this)"
             class="w-full aspect-square rounded-xl {{ $clasesMiniatura }} flex items-center justify-center relative overflow-hidden mb-2.5 sm:mb-4 transition-colors cursor-pointer group-hover:shadow-inner"
-            title="Haz clic para ver la ficha curatorial de {{ $producto->nombre }}"
+            title="Haz clic para ver los detalles de {{ $producto->nombre }}"
         >
-            <!-- Capa Glossy Curatorial Sutil -->
+            <!-- Capa Glossy Sutil -->
             <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 dark:via-white/5 dark:to-white/10 pointer-events-none rounded-xl z-20"></div>
 
             <!-- Contenedor Flex Superior para Insignias (Izquierda: Pieza Única, Derecha: Stock) sin Encimarse Jamás -->
@@ -141,7 +141,7 @@
                         </span>
                     @else
                         <span class="inline-flex items-center bg-white/95 dark:bg-[#1b132a]/95 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[9px] sm:text-[10px] font-label-code font-semibold px-1.5 sm:px-2 py-0.5 rounded-full shadow-2xs whitespace-nowrap">
-                            {{ $stockTotal }} en bóveda
+                            {{ $stockTotal }} {{ $stockTotal === 1 ? 'disponible' : 'disponibles' }}
                         </span>
                     @endif
                 </div>
@@ -154,7 +154,7 @@
             @endif
         </div>
 
-        <!-- Información Limpia: Nombre, Subtítulo y Enlace Sutil a Ficha Curatorial -->
+        <!-- Información Limpia: Nombre, Subtítulo y Enlace a Detalles -->
         <div class="space-y-1">
             <h3
                 onclick="abrirModalDetalleProducto(this)"
@@ -171,7 +171,7 @@
                 type="button"
                 onclick="abrirModalDetalleProducto(this)"
                 class="pt-1 sm:pt-1.5 inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-label-code text-primary dark:text-purple-300 hover:underline font-semibold cursor-pointer group-hover:translate-x-0.5 transition-transform"
-                title="Abrir ficha curatorial y especificaciones técnicas"
+                title="Ver detalles y especificaciones técnicas"
             >
                 <span class="material-symbols-outlined text-[13px] sm:text-[14px]">info</span>
                 <span>Ver detalles &rarr;</span>
@@ -179,10 +179,10 @@
         </div>
     </div>
 
-    <!-- Pie: Precio Tasado y Botón/Contador de Reserva -->
+    <!-- Pie: Precio y Botón/Contador de Reserva -->
     <div class="pt-2.5 sm:pt-4 mt-2.5 sm:mt-4 border-t border-purple-100 dark:border-purple-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div>
-            <span class="text-[9px] sm:text-[10px] uppercase font-label-code text-outline dark:text-purple-300/60 block">Precio Tasado:</span>
+            <span class="text-[9px] sm:text-[10px] uppercase font-label-code text-outline dark:text-purple-300/60 block">Precio:</span>
             <span class="font-tabular-data font-bold text-on-surface dark:text-white text-sm sm:text-base">
                 ${{ number_format((float) $producto->precio, 0) }}
                 <span class="text-[10px] sm:text-xs font-normal text-on-surface-variant dark:text-purple-200/60">MXN</span>
@@ -209,7 +209,7 @@
                 <button
                     type="submit"
                     class="w-full sm:w-auto justify-center btn-glass-purple px-2.5 sm:px-3.5 py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs cursor-pointer"
-                    title="Reservar en Bóveda de Adquisición"
+                    title="Agregar al Carrito de Compras"
                 >
                     <span class="material-symbols-outlined text-[15px] sm:text-[18px]">add_shopping_cart</span>
                     <span>Reservar</span>
@@ -221,7 +221,7 @@
                 disabled
                 aria-disabled="true"
                 class="w-full sm:w-auto justify-center px-2.5 sm:px-3.5 py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl bg-slate-200 text-slate-500 dark:bg-slate-800 dark:text-slate-400 border border-slate-300 dark:border-slate-700 text-[11px] sm:text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-1.5 opacity-50 cursor-not-allowed pointer-events-none select-none"
-                title="{{ $estaReservadaTemporalmente ? 'Pieza única reservada temporalmente por otro coleccionista (5 min)' : 'Pieza agotada en bóveda' }}"
+                title="{{ $estaReservadaTemporalmente ? 'Pieza única reservada temporalmente por otro cliente (5 min)' : 'Producto agotado' }}"
             >
                 <span class="material-symbols-outlined text-[15px] sm:text-[18px]">{{ $estaReservadaTemporalmente ? 'lock_clock' : 'block' }}</span>
                 <span>{{ $estaReservadaTemporalmente ? 'En Reserva' : 'Reservar' }}</span>

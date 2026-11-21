@@ -5,13 +5,13 @@
             <div>
                 <div class="flex items-center gap-2 mb-1">
                     <span class="px-2.5 py-0.5 rounded-full bg-purple-100 text-primary text-[11px] font-label-code font-bold uppercase tracking-wider">
-                        {{ $sucursalActiva ? 'Bóveda Activa: '.$sucursalActiva->nombre : 'Todas las Sedes (Consolidado)' }}
+                        {{ $sucursalActiva ? 'Sucursal Activa: '.$sucursalActiva->nombre : 'Todas las Sucursales (Consolidado)' }}
                     </span>
-                    <span class="text-xs text-outline font-label-code">· Custodia Inter-Sede</span>
+                    <span class="text-xs text-outline font-label-code">· Traslado entre Sucursales</span>
                 </div>
                 <h1 class="text-2xl font-bold text-on-surface font-quicksand">Transferencias de Stock Inter-Sucursal</h1>
                 <p class="text-xs text-on-surface-variant font-label-code uppercase tracking-wider mt-1">
-                    Traslado certificado de ejemplares, vinilos y piezas de archivo entre bóvedas de ARCHIVUM
+                    Traslado de libros, discos y coleccionables entre sucursales de ARCHIVUM
                 </p>
             </div>
             <a href="{{ route('admin.inventario') }}"
@@ -113,7 +113,7 @@
                             <td class="py-3 px-4 text-right">
                                 @if ($yaRecibida)
                                     <span class="px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-label-code font-bold">
-                                        Recibida en Bóveda
+                                        Recibida en Sucursal
                                     </span>
                                 @else
                                     <form method="POST" action="{{ route('almacen.transferencias.confirmar', $salida) }}" class="inline">

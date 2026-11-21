@@ -36,6 +36,11 @@ class CarritoService
 
             $this->inventarioService->verificarStock($varianteSkuId, $cantidad, $sucursalId, bloquear: true);
 
+            $variante = $existencia->varianteSku ?? \App\Models\VarianteSku::with('producto')->find($varianteSkuId);
+            $esPiezaUnica = $variante !== null
+                && \App\Http\Controllers\CheckoutSimuladoController::esVariantePiezaUnica($variante, $cantidad);
+            $precioVigente = (float) ($variante?->precio ?? $variante?->producto?->precio ?? 0.0);
+
             /** @var CarritoItem|null $item */
             $item = CarritoItem::where('carrito_id', $carrito->id)
                 ->where('variante_sku_id', $varianteSkuId)
@@ -43,12 +48,18 @@ class CarritoService
 
             if ($item !== null) {
                 $item->cantidad += $cantidad;
+                if ($esPiezaUnica) {
+                    $item->precio_unitario_congelado = null;
+                } elseif ($item->precio_unitario_congelado === null && $precioVigente > 0) {
+                    $item->precio_unitario_congelado = $precioVigente;
+                }
                 $item->save();
             } else {
                 $item = CarritoItem::create([
                     'carrito_id' => $carrito->id,
                     'variante_sku_id' => $varianteSkuId,
                     'cantidad' => $cantidad,
+                    'precio_unitario_congelado' => $esPiezaUnica ? null : $precioVigente,
                 ]);
             }
 
@@ -112,7 +123,7 @@ class CarritoService
 
         foreach ($items as $item) {
             $variante = $item->varianteSku;
-            $precio = (float) ($variante->precio ?? $variante->producto->precio);
+            $precio = $item->resolverPrecioUnitario();
             $subtotalLinea = $precio * $item->cantidad;
             $subtotal += $subtotalLinea;
 

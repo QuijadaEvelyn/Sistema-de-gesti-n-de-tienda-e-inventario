@@ -19,7 +19,7 @@
         class="relative w-full max-w-2xl max-h-[90vh] bg-white dark:bg-[#171024] border border-purple-200/90 dark:border-purple-500/30 rounded-3xl shadow-2xl overflow-hidden flex flex-col transform scale-95 transition-all duration-300 ease-out z-10"
         onclick="event.stopPropagation()"
     >
-        <!-- Encabezado del Modal con Identidad Curatorial -->
+        <!-- Encabezado del Modal de Detalles -->
         <div class="px-6 py-4 bg-surface-container-low/70 dark:bg-[#1b132a] border-b border-purple-200/60 dark:border-purple-500/30 flex items-center justify-between shrink-0">
             <div class="flex items-center gap-2.5">
                 <div class="w-8 h-8 rounded-lg bg-primary-container text-white flex items-center justify-center shadow-2xs">
@@ -27,10 +27,10 @@
                 </div>
                 <div>
                     <span id="modal-product-category-badge" class="font-label-code text-[10px] uppercase font-bold tracking-wider text-primary dark:text-purple-300 block">
-                        Ficha Curatorial ARCHIVUM
+                        Detalle del Producto ARCHIVUM
                     </span>
                     <span id="modal-product-sede" class="font-label-code text-[10px] text-secondary dark:text-stone-300 block">
-                        Custodia: Sede Central
+                        Sucursal: Sede Central
                     </span>
                 </div>
             </div>
@@ -62,52 +62,52 @@
                             MINT (M)
                         </span>
                         <span id="modal-product-availability" class="font-label-code text-xs font-semibold px-2 py-0.5 rounded bg-surface-container dark:bg-[#1b132a] text-on-surface border border-purple-200/60 dark:border-purple-500/30">
-                            Pieza Disponible
+                            Producto Disponible
                         </span>
                     </div>
                     <h2 id="modal-product-title" class="text-xl sm:text-2xl font-bold font-quicksand text-on-surface dark:text-white leading-tight">
                         Título del Producto
                     </h2>
                     <p id="modal-product-subtitle" class="font-title-editorial text-sm text-on-surface-variant dark:text-amber-100 italic">
-                        Subtítulo Curatorial
+                        Autor / Artista
                     </p>
                 </div>
             </div>
 
-            <!-- Reseña y Peritaje Curatorial Extenso -->
+            <!-- Descripción del Producto -->
             <div class="space-y-2 p-5 rounded-2xl bg-surface-container-low/60 dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30">
                 <span class="font-label-code text-[11px] uppercase tracking-wider font-bold text-primary dark:text-purple-300 flex items-center gap-1.5">
                     <span class="material-symbols-outlined text-[16px]">history_edu</span>
-                    <span>Dictamen y Reseña Curatorial</span>
+                    <span>Descripción y Detalles del Producto</span>
                 </span>
                 <p id="modal-product-description" class="text-sm leading-relaxed text-secondary dark:text-stone-200 font-normal">
-                    Descripción detallada del ejemplar...
+                    Descripción detallada del artículo...
                 </p>
             </div>
 
-            <!-- Especificaciones Técnicas y Peritaje Material -->
+            <!-- Especificaciones Técnicas -->
             <div class="space-y-3">
                 <span class="font-label-code text-[11px] uppercase tracking-wider font-bold text-outline dark:text-stone-400 block">
-                    Especificaciones Técnicas &amp; Catalogación
+                    Especificaciones Técnicas
                 </span>
                 <div id="modal-product-specs-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
                     <!-- Filas de atributos técnicos inyectadas dinámicamente -->
                 </div>
             </div>
 
-            <!-- Garantía Curatorial & Protección Legal -->
+            <!-- Garantía de Autenticidad & Envío Seguro -->
             <div class="p-3.5 rounded-xl bg-purple-50/50 dark:bg-[#1b132a] border border-purple-200/50 dark:border-purple-500/20 flex items-center gap-3 text-xs text-on-surface-variant dark:text-stone-300">
                 <span class="material-symbols-outlined text-primary text-[20px] shrink-0">verified</span>
                 <p class="text-[11px] leading-snug">
-                    Ejemplar autenticado bajo custodia con peritaje notarial y embalaje libre de ácido conforme a la Ley Federal de Protección al Patrimonio.
+                    Producto verificado con Certificado de Autenticidad y empaque de alta protección para envío seguro a domicilio.
                 </p>
             </div>
         </div>
 
-        <!-- Pie del Modal: Precio Tasado y Botón de Acción Directo -->
+        <!-- Pie del Modal: Precio y Botón de Acción Directo -->
         <div class="px-6 py-4 bg-surface-container-low/70 dark:bg-[#1b132a] border-t border-purple-200/60 dark:border-purple-500/30 flex flex-col sm:flex-row items-center justify-between gap-4 shrink-0">
             <div>
-                <span class="text-[10px] uppercase font-label-code text-outline dark:text-stone-400 block">Precio Tasado:</span>
+                <span class="text-[10px] uppercase font-label-code text-outline dark:text-stone-400 block">Precio:</span>
                 <div class="flex items-baseline gap-1.5">
                     <span id="modal-product-price" class="font-tabular-data font-bold text-xl sm:text-2xl text-on-surface dark:text-white">
                         $0
@@ -140,12 +140,12 @@
                 // Inyección de textos y datos
                 document.getElementById('modal-product-title').textContent = item.nombre;
                 document.getElementById('modal-product-subtitle').textContent = item.subtitulo;
-                document.getElementById('modal-product-description').textContent = item.descripcion || 'Sin descripción curatorial disponible.';
+                document.getElementById('modal-product-description').textContent = item.descripcion || 'Sin descripción disponible.';
                 document.getElementById('modal-product-price').textContent = '$' + item.precio;
                 document.getElementById('modal-product-sku').textContent = 'SKU: #' + item.sku;
                 document.getElementById('modal-product-grading').textContent = item.graduacion;
                 
-                // Imagen o Icono Curatorial
+                // Imagen o Icono
                 const modalImg = document.getElementById('modal-product-img');
                 const modalHeroIcon = document.getElementById('modal-product-hero-icon');
                 if (item.imagen && modalImg && modalHeroIcon) {
@@ -160,8 +160,8 @@
 
                 document.getElementById('modal-product-hero-icon').textContent = item.icono;
                 document.getElementById('modal-product-category-icon').textContent = item.icono;
-                document.getElementById('modal-product-category-badge').textContent = 'CATÁLOGO · ' + (item.tipo || 'PIEZA').toUpperCase();
-                document.getElementById('modal-product-sede').textContent = item.sede ? 'Custodia: ' + item.sede : 'Custodia en Bóveda Central';
+                document.getElementById('modal-product-category-badge').textContent = 'CATÁLOGO · ' + (item.tipo || 'ARTÍCULO').toUpperCase();
+                document.getElementById('modal-product-sede').textContent = item.sede ? 'Sucursal: ' + item.sede : 'Disponible en Sucursal Central';
 
                 // Estado de Disponibilidad
                 const availBadge = document.getElementById('modal-product-availability');
@@ -169,10 +169,10 @@
                     availBadge.textContent = 'En Reserva Temporal (5 min)';
                     availBadge.className = 'font-label-code text-xs font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-500 border border-amber-500/40';
                 } else if (item.estaAgotado) {
-                    availBadge.textContent = 'Pieza Agotada';
+                    availBadge.textContent = 'Agotado';
                     availBadge.className = 'font-label-code text-xs font-bold px-2 py-0.5 rounded bg-rose-500/20 text-rose-500 border border-rose-500/40';
                 } else {
-                    availBadge.textContent = item.esPiezaUnica ? 'Pieza Única 1/1 Certificada' : (item.stock + ' unidades en custodia');
+                    availBadge.textContent = item.esPiezaUnica ? 'Pieza Única 1/1 Certificada' : (item.stock + ' disponibles');
                     availBadge.className = 'font-label-code text-xs font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30';
                 }
 
@@ -207,7 +207,7 @@
                         <input type="hidden" name="cantidad" value="1" />
                         <button type="submit" class="btn-glass-purple w-full sm:w-auto px-5 py-2.5 rounded-xl text-xs font-label-md font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-sm cursor-pointer">
                             <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
-                            <span>Reservar en Bóveda</span>
+                            <span>Agregar al Carrito</span>
                         </button>
                     `;
                     actionContainer.appendChild(form);
@@ -215,7 +215,7 @@
                     actionContainer.innerHTML = `
                         <button type="button" disabled class="px-5 py-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-300 dark:border-slate-700 text-xs font-label-md font-bold uppercase tracking-wider flex items-center gap-2 opacity-60 cursor-not-allowed">
                             <span class="material-symbols-outlined text-[18px]">${item.estaReservada ? 'lock_clock' : 'block'}</span>
-                            <span>${item.estaReservada ? 'Pieza en Reserva' : 'Agotado'}</span>
+                            <span>${item.estaReservada ? 'En Reserva' : 'Agotado'}</span>
                         </button>
                     `;
                 }

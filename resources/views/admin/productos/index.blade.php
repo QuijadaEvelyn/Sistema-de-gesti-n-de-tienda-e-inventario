@@ -6,13 +6,13 @@
             <div>
                 <span class="inline-flex items-center gap-1.5 text-[10px] font-label-code uppercase tracking-widest text-primary dark:text-purple-300 font-bold mb-1">
                     <span class="material-symbols-outlined text-[14px]">library_add</span>
-                    <span>Gestión de Acervo &middot; Permisos para Administrador y Personal</span>
+                    <span>Gestión de Catálogo &middot; Permisos para Administrador y Personal</span>
                 </span>
                 <h1 class="text-2xl font-bold text-on-surface dark:text-white font-quicksand">
                     Catálogo de Productos &amp; Control de Altas y Bajas
                 </h1>
                 <p class="text-xs text-on-surface-variant dark:text-purple-200/70 font-label-code uppercase tracking-wider mt-1">
-                    Total: {{ number_format($totalProductos) }} piezas &middot; Activos en tienda: {{ number_format($totalActivos) }} &middot; Dados de baja: {{ number_format($totalBaja) }}
+                    Total: {{ number_format($totalProductos) }} productos &middot; Activos en tienda: {{ number_format($totalActivos) }} &middot; Dados de baja: {{ number_format($totalBaja) }}
                 </p>
             </div>
             <div class="flex flex-wrap gap-2.5">
@@ -198,7 +198,7 @@
                                     @if ($esActivo)
                                         <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700/60 text-[10px] font-label-code font-bold uppercase tracking-wider shadow-2xs">
                                             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                                            <span>Activo &middot; En Bóveda</span>
+                                            <span>Activo &middot; Disponible</span>
                                         </span>
                                     @else
                                         <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border border-rose-300 dark:border-rose-700/60 text-[10px] font-label-code font-bold uppercase tracking-wider shadow-2xs">
