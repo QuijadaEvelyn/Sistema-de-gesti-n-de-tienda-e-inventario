@@ -64,11 +64,11 @@
             @endforeach
         </div>
 
-        <!-- Encabezado y Manifiesto Institucional -->
+        <!-- Encabezado Principal -->
         <div class="relative z-10 max-w-4xl mx-auto text-center space-y-5">
             <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-100/95 dark:bg-purple-900/60 border border-purple-300 dark:border-purple-400/40 text-primary dark:text-amber-50 text-xs font-label-code font-bold uppercase tracking-widest shadow-2xs">
-                <span class="material-symbols-outlined text-[16px] text-primary dark:text-amber-50">museum</span>
-                <span>Manifiesto Institucional &middot; Identidad ARCHIVUM</span>
+                <span class="material-symbols-outlined text-[16px] text-primary dark:text-amber-50">storefront</span>
+                <span>NUESTRA TIENDA &middot; IDENTIDAD ARCHIVUM</span>
             </div>
 
             <h1 id="titulo-conoce-mas" class="text-3xl sm:text-5xl font-bold text-on-surface dark:text-white font-quicksand tracking-tight leading-tight">
@@ -76,11 +76,11 @@
             </h1>
 
             <p class="font-title-editorial text-lg sm:text-2xl text-primary dark:text-amber-50 italic max-w-3xl mx-auto leading-relaxed">
-                «El santuario donde la bibliofilia, la fonografía analógica y la memoria histórica convergen bajo custodia certificada.»
+                «Tu tienda especializada en libros, discos, vinilos y coleccionables: desde novelas actuales, lanzamientos comerciales y ediciones de tus creadores favoritos, hasta piezas exclusivas y de colección.»
             </p>
 
             <p class="text-sm sm:text-base text-on-surface-variant dark:text-slate-100 leading-relaxed max-w-3xl mx-auto">
-                <strong class="text-on-surface dark:text-white font-bold">ARCHIVUM</strong> es una tienda especializada en la venta y gestión de <strong class="text-on-surface dark:text-white font-bold">libros y ediciones especiales, discos de vinilo originales y artículos de colección únicos</strong> distribuidos en múltiples sucursales. Nuestra plataforma ofrece una experiencia de compra clara, segura y protegida contra sobreventas.
+                <strong class="text-on-surface dark:text-white font-bold">ARCHIVUM</strong> es una tienda abierta a todo tipo de lectores, melómanos y fans donde conviven el <strong class="text-on-surface dark:text-white font-bold">catálogo comercial y actual</strong> (novelas, literatura juvenil, libros de youtubers y creadores, CDs, vinilos modernos y figuras de cultura pop) con <strong class="text-on-surface dark:text-white font-bold">ediciones especiales y piezas únicas</strong> (primeras ediciones, prensados limitados y artículos exclusivos) distribuidos en nuestras sucursales.
             </p>
 
             <!-- Acciones Principales -->
@@ -115,17 +115,17 @@
                 action-icon="location_on"
             />
             <x-ui.metric-card
-                title="Catálogo Certificado"
+                title="Catálogo Disponible"
                 :value="$metricas['total_productos']"
                 unit="productos"
-                subtitle="Libros, vinilos y coleccionables"
+                subtitle="Lanzamientos actuales y ediciones especiales"
                 badge="En Catálogo"
                 :badge-pulse="true"
                 badge-color="purple"
                 icon="inventory_2"
                 icon-bg="bg-secondary-container text-on-secondary-container"
-                summary-left="Autenticidad"
-                summary-right="Certificado incluido"
+                summary-left="Disponibilidad"
+                summary-right="En tiempo real"
                 :action-url="route('public.home') . '#catalogo'"
                 action-text="Explorar catálogo"
                 action-icon="explore"
@@ -134,7 +134,7 @@
                 title="Piezas Únicas (1/1)"
                 :value="$metricas['total_piezas_unicas']"
                 unit="ejemplares"
-                subtitle="Protección estricta contra sobreventa"
+                subtitle="Ediciones limitadas y de colección"
                 badge="Reserva Activa"
                 :badge-pulse="true"
                 badge-color="amber"
@@ -148,37 +148,60 @@
             />
         </div>
 
-        <!-- Tarjeta Central Estilo Vitrina Curatorial -->
+        <!-- Tarjeta Central de Oferta Comercial y Coleccionismo -->
         <div class="relative z-10 mt-10 max-w-4xl mx-auto rounded-2xl bg-white/95 dark:bg-[#1e1430]/95 backdrop-blur-md border border-purple-200/90 dark:border-purple-500/30 shadow-xl p-6 sm:p-10 space-y-8">
             <div class="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-purple-100 dark:border-purple-500/20 text-xs font-label-code text-secondary dark:text-amber-50">
                 <span class="inline-flex items-center gap-1.5 font-bold text-primary dark:text-amber-50 uppercase">
                     <span class="material-symbols-outlined text-[16px] text-primary dark:text-amber-50">verified_user</span>
-                    <span>Arquitectura de Resguardo &amp; Comercio Híbrido</span>
+                    <span>Catálogo Comercial &amp; Ediciones de Colección</span>
                 </span>
                 <span class="inline-flex items-center gap-1 text-on-surface-variant dark:text-slate-100">
                     <span class="material-symbols-outlined text-[15px] text-purple-600 dark:text-amber-50">hub</span>
-                    <span>{{ $metricas['total_sedes'] }} Sedes Interconectadas &middot; {{ $metricas['total_productos'] }} Lotes Activos</span>
+                    <span>{{ $metricas['total_sedes'] }} Sucursales Conectadas &middot; {{ $metricas['total_productos'] }} Productos Activos</span>
                 </span>
             </div>
 
             <div class="text-center space-y-2">
                 <h2 class="text-2xl sm:text-3xl font-bold text-on-surface dark:text-white font-quicksand">
-                    Nuestra Esencia Curatorial
+                    ¿Qué encontrarás en ARCHIVUM?
                 </h2>
                 <p class="font-title-editorial text-sm sm:text-base text-on-surface-variant dark:text-amber-50 italic">
-                    Autenticidad pericial, conservación libre de ácido y exclusividad garantizada en cada ejemplar
+                    Un espacio moderno que reúne tus lanzamientos favoritos del día a día junto con ediciones especiales y piezas únicas
                 </p>
             </div>
 
-            <!-- Tres Ejes Temáticos del Acervo -->
+            <!-- Dos mundos que conviven en ARCHIVUM -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
+                <div class="p-5 rounded-2xl bg-purple-50/80 dark:bg-purple-950/40 border border-purple-200/80 dark:border-purple-500/30 space-y-2">
+                    <div class="inline-flex items-center gap-1.5 text-xs font-label-code font-bold uppercase text-primary dark:text-purple-300">
+                        <span class="material-symbols-outlined text-[18px]">local_mall</span>
+                        <span>Catálogo Comercial y Actual</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-on-surface-variant dark:text-slate-100 leading-relaxed">
+                        Novelas contemporáneas, literatura juvenil, libros de youtubers y creadores de contenido, álbumes recientes en CD y vinilo moderno, videojuegos y artículos coleccionables de cultura pop y anime con stock múltiple.
+                    </p>
+                </div>
+
+                <div class="p-5 rounded-2xl bg-amber-50/80 dark:bg-amber-950/35 border border-amber-200/80 dark:border-amber-500/30 space-y-2">
+                    <div class="inline-flex items-center gap-1.5 text-xs font-label-code font-bold uppercase text-amber-700 dark:text-amber-300">
+                        <span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+                        <span>Ediciones Especiales y Piezas Únicas</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-on-surface-variant dark:text-slate-100 leading-relaxed">
+                        Primeras ediciones, libros firmados, prensados limitados en vinilo de 180g, monedas, figuras numeradas y coleccionables exclusivos o antiguos verificados para coleccionistas.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Tres Categorías Principales de la Tienda -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-left">
                 <div class="p-5 rounded-2xl bg-surface-container-low/90 dark:bg-[#271a3f]/90 border border-purple-200/80 dark:border-purple-500/30 space-y-2">
                     <div class="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-900/50 text-primary dark:text-amber-50 flex items-center justify-center">
                         <span class="material-symbols-outlined text-[22px]">auto_stories</span>
                     </div>
-                    <h3 class="font-bold text-base text-on-surface dark:text-white font-quicksand">Libros &amp; Ediciones Especiales</h3>
+                    <h3 class="font-bold text-base text-on-surface dark:text-white font-quicksand">Libros para Todos los Gustos</h3>
                     <p class="text-xs text-on-surface-variant dark:text-slate-100 leading-relaxed">
-                        Primeras ediciones hispanoamericanas, ejemplares autografiados y ediciones históricas verificadas.
+                        Desde novelas actuales, bestsellers juveniles y libros de creadores o youtubers, hasta clásicos literarios, primeras ediciones y ejemplares firmados.
                     </p>
                     <a href="{{ route('public.libros') }}" class="inline-flex items-center gap-1 text-[11px] font-label-code uppercase text-primary dark:text-amber-50 font-bold hover:underline pt-1">
                         <span>Ver Libros</span>
@@ -190,9 +213,9 @@
                     <div class="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-amber-50 flex items-center justify-center">
                         <span class="material-symbols-outlined text-[22px]">album</span>
                     </div>
-                    <h3 class="font-bold text-base text-on-surface dark:text-white font-quicksand">Vinilos de Primer Tiraje</h3>
+                    <h3 class="font-bold text-base text-on-surface dark:text-white font-quicksand">Discos, CDs &amp; Vinilos</h3>
                     <p class="text-xs text-on-surface-variant dark:text-slate-100 leading-relaxed">
-                        Prensados originales en 180 gramos, ediciones analógicas y sellos legendarios graduados bajo el estándar internacional <em>Goldmine</em>.
+                        Álbumes recientes, reediciones modernas en vinilo de 180g, discos compactos (CD) y prensados especiales de tus artistas y bandas favoritas.
                     </p>
                     <a href="{{ route('public.vinilos') }}" class="inline-flex items-center gap-1 text-[11px] font-label-code uppercase text-indigo-700 dark:text-amber-50 font-bold hover:underline pt-1">
                         <span>Ver Discos 3D</span>
@@ -204,9 +227,9 @@
                     <div class="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-50 flex items-center justify-center">
                         <span class="material-symbols-outlined text-[22px]">history_edu</span>
                     </div>
-                    <h3 class="font-bold text-base text-on-surface dark:text-white font-quicksand">Coleccionables &amp; Piezas 1/1</h3>
+                    <h3 class="font-bold text-base text-on-surface dark:text-white font-quicksand">Coleccionables &amp; Cultura Pop</h3>
                     <p class="text-xs text-on-surface-variant dark:text-slate-100 leading-relaxed">
-                        Manuscritos autógrafos, numismática, figuras y artículos históricos con Certificado de Autenticidad.
+                        Figuras de anime y cultura pop, juguetes, videojuegos retro, monedas y piezas exclusivas 1/1 con certificado de autenticidad.
                     </p>
                     <a href="{{ route('public.memorabilia') }}" class="inline-flex items-center gap-1 text-[11px] font-label-code uppercase text-amber-700 dark:text-amber-50 font-bold hover:underline pt-1">
                         <span>Ver Coleccionables</span>
@@ -218,11 +241,11 @@
             <!-- Pilares Tecnológicos y Reglas del Carrito -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-purple-100 dark:border-purple-500/20 text-xs">
                 <div class="p-4 rounded-xl bg-purple-50/70 dark:bg-purple-950/40 border border-purple-200/70 dark:border-purple-500/30 flex items-start gap-3">
-                    <span class="material-symbols-outlined text-purple-700 dark:text-amber-50 text-[22px] shrink-0 mt-0.5">timer</span>
+                    <span class="material-symbols-outlined text-purple-700 dark:text-amber-50 text-[22px] shrink-0 mt-0.5">shopping_bag</span>
                     <div>
-                        <h4 class="font-bold text-on-surface dark:text-white font-quicksand text-sm">Reserva Temporal en Carrito (5 Minutos)</h4>
+                        <h4 class="font-bold text-on-surface dark:text-white font-quicksand text-sm">Carrito Inteligente y Precio Protegido</h4>
                         <p class="text-on-surface-variant dark:text-slate-100 mt-0.5 leading-relaxed">
-                            Cuando un cliente añade una <strong class="text-on-surface dark:text-amber-50 font-bold">Pieza Única (1/1)</strong> a su carrito, el sistema la reserva durante 5 minutos mientras que los productos comunes se guardan por 7 días.
+                            Los <strong class="text-on-surface dark:text-amber-50 font-bold">productos comunes</strong> se guardan en tu carrito por 7 días respetando el precio al que los agregaste, mientras que las <strong class="text-on-surface dark:text-amber-50 font-bold">Piezas Únicas (1/1)</strong> cuentan con reserva exclusiva de 5 minutos.
                         </p>
                     </div>
                 </div>
@@ -232,18 +255,18 @@
                     <div>
                         <h4 class="font-bold text-on-surface dark:text-white font-quicksand text-sm">Preventas Anticipadas para Clientes Frecuentes</h4>
                         <p class="text-on-surface-variant dark:text-slate-100 mt-0.5 leading-relaxed">
-                            Los coleccionistas que alcanzan <strong class="text-on-surface dark:text-amber-50 font-bold">5 compras completadas</strong> obtienen acceso anticipado VIP para apartar lanzamientos especiales días antes de su apertura al público general.
+                            Los clientes que completan <strong class="text-on-surface dark:text-amber-50 font-bold">5 compras</strong> obtienen acceso anticipado VIP para apartar nuevos lanzamientos y ediciones especiales días antes de su venta general.
                         </p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Red de Sedes y Bóvedas Físicas de ARCHIVUM -->
+        <!-- Red de Sucursales Físicas de ARCHIVUM -->
         <div class="relative z-10 mt-10 max-w-4xl mx-auto">
             <div class="text-center mb-5">
-                <span class="text-[11px] font-label-code uppercase tracking-widest text-primary dark:text-amber-50 font-bold">Distribución Multicéntrica</span>
-                <h2 class="text-xl sm:text-2xl font-bold text-on-surface dark:text-white font-quicksand">Nuestras Sedes y Bóvedas de Resguardo</h2>
+                <span class="text-[11px] font-label-code uppercase tracking-widest text-primary dark:text-amber-50 font-bold">Disponibilidad por Sucursal</span>
+                <h2 class="text-xl sm:text-2xl font-bold text-on-surface dark:text-white font-quicksand">Nuestras Tiendas y Sucursales</h2>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
