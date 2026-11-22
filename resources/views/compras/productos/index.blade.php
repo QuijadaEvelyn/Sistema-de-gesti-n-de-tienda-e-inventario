@@ -7,10 +7,16 @@
                 <h1 class="text-2xl font-bold text-on-surface font-quicksand">Altas de Productos &amp; Variantes SKU</h1>
                 <p class="text-xs text-on-surface-variant font-label-code uppercase tracking-wider mt-1">Gestión del catálogo maestro e importación masiva de inventario</p>
             </div>
-            <a href="{{ route('compras.productos.plantilla-csv') }}" class="btn-glass-surface inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-label-md text-xs font-bold shadow-xs">
-                <span class="material-symbols-outlined text-[18px]">download</span>
-                <span>Descargar Plantilla CSV</span>
-            </a>
+            <div class="flex flex-wrap items-center gap-2">
+                <a href="{{ route('admin.productos.index') }}" class="px-4 py-2.5 rounded-xl border border-purple-200 bg-purple-100 hover:bg-purple-200 text-purple-900 dark:bg-white/5 dark:border-purple-500/30 dark:text-purple-300 text-xs font-label-md font-bold flex items-center gap-1.5 transition">
+                    <span class="material-symbols-outlined text-[18px]">library_add</span>
+                    <span>Catálogo, Altas &amp; Bajas</span>
+                </a>
+                <a href="{{ route('compras.productos.plantilla-csv') }}" class="btn-glass-surface inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-label-md text-xs font-bold shadow-xs">
+                    <span class="material-symbols-outlined text-[18px]">download</span>
+                    <span>Descargar Plantilla CSV</span>
+                </a>
+            </div>
         </div>
 
         {{-- Alertas de Notificación y Errores --}}
@@ -419,6 +425,14 @@
                                 <td class="py-3 px-4 text-right font-tabular-data font-semibold">{{ $prod->variantes_sku_count }}</td>
                                 <td class="py-3 px-4 text-center">
                                     <div class="inline-flex items-center justify-center gap-1.5">
+                                        <a
+                                            href="{{ route('admin.productos.edit', $prod) }}"
+                                            class="btn-glass-surface px-2.5 py-1.5 rounded-xl text-xs font-semibold inline-flex items-center gap-1.5 shadow-2xs"
+                                            title="Editar producto, precio y stock"
+                                        >
+                                            <span class="material-symbols-outlined text-[16px] text-primary">edit</span>
+                                            <span class="hidden sm:inline">Editar</span>
+                                        </a>
                                         <button
                                             type="button"
                                             onclick="abrirModalEditarPrecioCompras({{ $prod->id }}, '{{ addslashes($prod->nombre) }}', '{{ number_format((float) $prod->precio, 2, '.', '') }}', '{{ route('compras.productos.actualizar-precio', $prod) }}')"

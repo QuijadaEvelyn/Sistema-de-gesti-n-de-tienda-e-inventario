@@ -282,10 +282,10 @@ Route::prefix('compras')
 
         Route::get('/ordenes', [ComprasController::class, 'ordenes'])->name('compras.ordenes');
         Route::post('/ordenes/recepcionar', [ComprasController::class, 'recepcionar'])->name('compras.ordenes.recepcionar');
-        Route::get('/productos', [ProductoController::class, 'index'])->name('compras.productos');
-        Route::post('/productos', [ProductoController::class, 'store'])->name('compras.productos.store');
+        Route::get('/productos', [ComprasController::class, 'productos'])->name('compras.productos');
+        Route::post('/productos', [ComprasController::class, 'storeProducto'])->name('compras.productos.store');
         Route::match(['patch', 'post'], '/productos/{producto}/precio', [ProductoController::class, 'actualizarPrecio'])->name('compras.productos.actualizar-precio');
-        Route::post('/productos/{producto}/imagen', [ProductoController::class, 'actualizarImagen'])->name('compras.productos.actualizar-imagen');
+        Route::post('/productos/{producto}/imagen', [ComprasController::class, 'actualizarImagen'])->name('compras.productos.actualizar-imagen');
         Route::get('/productos/plantilla-csv', [ComprasController::class, 'descargarPlantillaCsv'])->name('compras.productos.plantilla-csv');
         Route::post('/productos/importar-csv', [ComprasController::class, 'importarCsv'])->name('compras.productos.importar-csv');
     });

@@ -117,10 +117,15 @@ class ComprasController extends Controller
         $imagenRuta = null;
         if ($request->hasFile('imagen')) {
             $archivo = $request->file('imagen');
-            $nombreArchivo = Str::random(40).'.'.$archivo->guessExtension();
+            $extension = $archivo->guessExtension() ?: ($archivo->getClientOriginalExtension() ?: 'jpg');
+            $nombreArchivo = Str::random(40).'.'.$extension;
+            $contenido = File::get($archivo->getRealPath());
+
+            Storage::disk('public')->put('productos/'.$nombreArchivo, $contenido);
+
             $directorioDestino = public_path('images/productos');
             File::ensureDirectoryExists($directorioDestino);
-            $archivo->move($directorioDestino, $nombreArchivo);
+            File::put($directorioDestino.DIRECTORY_SEPARATOR.$nombreArchivo, $contenido);
             $imagenRuta = 'images/productos/'.$nombreArchivo;
         }
 
@@ -273,9 +278,9 @@ class ComprasController extends Controller
                     : (! empty($validated['cantidad']) ? (int) $validated['cantidad'] : 1);
 
                 foreach ($sucursales as $suc) {
-                    $cant = ($suc->id == $sucursalSeleccionadaId) ? $cantidadInicial : 2;
+                    $cant = ($suc->id == $sucursalSeleccionadaId) ? $cantidadInicial : 0;
 
-                    $existencia = Existencia::firstOrCreate(
+                    $existencia = Existencia::updateOrCreate(
                         [
                             'variante_sku_id' => $variante->id,
                             'sucursal_id' => $suc->id,
@@ -286,7 +291,7 @@ class ComprasController extends Controller
                         ]
                     );
 
-                    if (Schema::hasTable('movimientos_inventario')) {
+                    if ($cant > 0 && Schema::hasTable('movimientos_inventario')) {
                         MovimientoInventario::create([
                             'existencia_id' => $existencia->id,
                             'usuario_id' => $request->user()?->id,
@@ -332,10 +337,15 @@ class ComprasController extends Controller
         ]);
 
         $archivo = $request->file('imagen');
-        $nombreArchivo = Str::random(40).'.'.$archivo->guessExtension();
+        $extension = $archivo->guessExtension() ?: ($archivo->getClientOriginalExtension() ?: 'jpg');
+        $nombreArchivo = Str::random(40).'.'.$extension;
+        $contenido = File::get($archivo->getRealPath());
+
+        Storage::disk('public')->put('productos/'.$nombreArchivo, $contenido);
+
         $directorioDestino = public_path('images/productos');
         File::ensureDirectoryExists($directorioDestino);
-        $archivo->move($directorioDestino, $nombreArchivo);
+        File::put($directorioDestino.DIRECTORY_SEPARATOR.$nombreArchivo, $contenido);
         $nuevaRuta = 'images/productos/'.$nombreArchivo;
 
         if ($producto->imagen && str_starts_with($producto->imagen, 'images/productos/')) {

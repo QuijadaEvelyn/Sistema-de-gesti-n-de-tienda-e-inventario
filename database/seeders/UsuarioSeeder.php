@@ -23,7 +23,7 @@ class UsuarioSeeder extends Seeder
     public function run(): void
     {
         // Contraseña unificada para pruebas de acceso en entorno local/desarrollo
-        $passwordCifrada = Hash::make('Password123!');
+        $passwordCifrada = Hash::make('12345678');
 
         // 1. Asegurar existencia de los 5 roles del sistema
         $rolesDefinidos = [
@@ -132,15 +132,16 @@ class UsuarioSeeder extends Seeder
                     ? "{$data['nombre']} {$data['apellidos']}"
                     : $data['nombre'];
 
-                // Crear o recuperar usuario base
+                // Crear o actualizar usuario base con credenciales vigentes
                 /** @var Usuario $usuario */
-                $usuario = Usuario::firstOrCreate(
+                $usuario = Usuario::withTrashed()->updateOrCreate(
                     ['email' => $data['email']],
                     [
                         'nombre' => $nombreCompleto,
                         'password' => $passwordCifrada,
                         'activo' => true,
                         'email_verificado_en' => now(),
+                        'deleted_at' => null,
                     ]
                 );
 
@@ -168,4 +169,3 @@ class UsuarioSeeder extends Seeder
         });
     }
 }
-

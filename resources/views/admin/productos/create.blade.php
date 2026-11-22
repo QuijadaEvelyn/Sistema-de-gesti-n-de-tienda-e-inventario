@@ -264,8 +264,31 @@
                             class="w-full px-3.5 py-2.5 rounded-xl border border-purple-200 dark:border-purple-800/60 text-sm bg-white dark:bg-[#1f1a2e] text-on-surface dark:text-white font-tabular-data focus:outline-none focus:border-primary"
                         />
                         <p class="text-[10px] text-on-surface-variant dark:text-purple-200/70 mt-1 font-label-code">
-                            Pieza única: 1 unidad &middot; Stock masivo: &gt;1 unidades
+                            Pieza única: 1 unidad &middot; Producto común: &gt;1 unidades
                         </p>
+                    </div>
+
+                    {{-- Régimen del Producto: Común vs Pieza Única --}}
+                    <div class="md:col-span-3 p-3.5 rounded-2xl bg-purple-50/60 dark:bg-purple-950/30 border border-purple-200/80 dark:border-purple-800/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <label class="inline-flex items-center gap-2.5 cursor-pointer text-xs font-semibold text-on-surface dark:text-white">
+                            <input
+                                type="checkbox"
+                                id="check_es_pieza_unica"
+                                name="es_pieza_unica"
+                                value="1"
+                                @checked(old('es_pieza_unica', false))
+                                class="w-4 h-4 rounded border-purple-300 text-primary focus:ring-primary"
+                            />
+                            <span>Registrar como Pieza Única / Exclusiva (1/1 con número de serie y stock fijo de 1 unidad)</span>
+                        </label>
+                        <input
+                            type="text"
+                            id="input_numero_serie"
+                            name="numero_serie"
+                            value="{{ old('numero_serie') }}"
+                            placeholder="N.º de serie opcional (ej. ARC-2026-001)"
+                            class="px-3 py-1.5 rounded-xl border border-purple-200 dark:border-purple-800/60 text-xs bg-white dark:bg-[#1f1a2e] text-on-surface dark:text-white font-label-code uppercase"
+                        />
                     </div>
 
                     {{-- Sucursal / Sede de Custodia --}}
@@ -386,6 +409,26 @@
 
         selectCat?.addEventListener('change', actualizarFicha);
         actualizarFicha();
+
+        // Sincronización entre checkbox Pieza Única y Stock Inicial
+        const checkUnica = document.getElementById('check_es_pieza_unica');
+        const inputStock = document.getElementById('input_stock');
+
+        checkUnica?.addEventListener('change', function () {
+            if (this.checked && inputStock) {
+                inputStock.value = '1';
+                inputStock.setAttribute('readonly', 'readonly');
+            } else if (inputStock) {
+                inputStock.removeAttribute('readonly');
+            }
+        });
+
+        inputStock?.addEventListener('input', function () {
+            if (parseInt(this.value || '1', 10) > 1 && checkUnica) {
+                checkUnica.checked = false;
+                this.removeAttribute('readonly');
+            }
+        });
 
         // Previsualización de imagen
         document.getElementById('input_imagen')?.addEventListener('change', function(e) {

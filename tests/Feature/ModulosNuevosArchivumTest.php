@@ -13,6 +13,7 @@ use App\Models\Rol;
 use App\Models\Sucursal;
 use App\Models\Usuario;
 use App\Models\VarianteSku;
+use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
@@ -698,5 +699,89 @@ class ModulosNuevosArchivumTest extends TestCase
             'existencia_id' => $existenciaUnica->id,
             'motivo' => 'Ajuste manual desde edición de producto',
         ]);
+    }
+
+    /**
+     * MÓDULO 6: Verificación de flujo completo 100% real (Alta de producto en BD sin seeders de relleno ->
+     * aparición inmediata en catálogo público -> compra en carrito -> descuento real de stock -> edición).
+     */
+    public function test_flujo_completo_con_datos_reales_alta_producto_catalogo_publico_compra_y_edicion_sin_seeders_ficticios(): void
+    {
+        // 1. Ejecutar DatabaseSeeder: solo crea roles, usuarios base, sucursales y catálogos maestros (0 productos ficticios)
+        $this->seed(DatabaseSeeder::class);
+
+        $this->assertSame(0, Producto::count());
+        $this->assertDatabaseHas('roles', ['nombre' => 'administrador']);
+        $this->assertDatabaseHas('roles', ['nombre' => 'compras']);
+        $this->assertDatabaseHas('roles', ['nombre' => 'ventas']);
+        $this->assertDatabaseHas('roles', ['nombre' => 'almacen']);
+        $this->assertDatabaseHas('roles', ['nombre' => 'cliente']);
+
+        $admin = Usuario::where('email', 'admin@archivum.com')->firstOrFail();
+        $cliente = Usuario::where('email', 'elena.ramirez@gmail.com')->firstOrFail();
+        $catalogoLibros = Catalogo::where('tipo', 'libro')->firstOrFail();
+        $sucursal = Sucursal::firstOrFail();
+
+        // 2. Dar de alta un producto real desde el panel administrativo (/admin/productos)
+        $resAlta = $this->actingAs($admin)->post(route('admin.productos.store'), [
+            'catalogo_id' => $catalogoLibros->id,
+            'sku' => 'LIB-REAL-2026-01',
+            'nombre' => 'Novela Contemporánea Edición Real',
+            'descripcion' => 'Producto creado manualmente en base de datos.',
+            'precio' => 450.00,
+            'stock_inicial' => 5,
+            'sucursal_id' => $sucursal->id,
+            'autor' => 'Autor Contemporáneo',
+            'editorial' => 'Editorial Moderna',
+            'genero' => 'novela',
+            'anio_publicacion' => 2026,
+            'paginas' => 310,
+        ]);
+
+        $resAlta->assertRedirect(route('admin.productos.index'))
+            ->assertSessionHas('status');
+
+        $productoReal = Producto::where('nombre', 'Novela Contemporánea Edición Real')->firstOrFail();
+        $varianteReal = VarianteSku::where('sku', 'LIB-REAL-2026-01')->firstOrFail();
+
+        $this->assertDatabaseHas('libros', [
+            'producto_id' => $productoReal->id,
+            'autor' => 'Autor Contemporáneo',
+        ]);
+        $this->assertDatabaseHas('existencias', [
+            'variante_sku_id' => $varianteReal->id,
+            'sucursal_id' => $sucursal->id,
+            'cantidad' => 5,
+        ]);
+
+        // 3. Aparece inmediatamente en la tienda pública (/catalogo/libros y /)
+        $this->get(route('public.libros'))
+            ->assertOk()
+            ->assertSee('Novela Contemporánea Edición Real');
+
+        // 4. Cliente agrega 2 unidades al carrito y confirma su pedido -> el stock real pasa de 5 a 3
+        $this->actingAs($cliente)->post(route('carrito.agregar'), [
+            'variante_sku_id' => $varianteReal->id,
+            'cantidad' => 2,
+        ])->assertRedirect();
+
+        $this->assertSame(3, (int) $varianteReal->existencias()->sum('cantidad'));
+
+        $this->actingAs($cliente)->post(route('checkout.pagar'), [
+            'nombre_completo' => 'Elena Ramírez',
+            'email' => $cliente->email,
+            'telefono' => '5511223344',
+            'calle' => 'Av. Reforma 100',
+            'colonia' => 'Juárez',
+            'ciudad' => 'Ciudad de México',
+            'estado' => 'CDMX',
+            'codigo_postal' => '06600',
+            'nombre_titular' => 'Elena Ramírez',
+            'numero_tarjeta' => '4111 2222 3333 4444',
+            'expiracion' => '12/29',
+            'cvv' => '123',
+        ])->assertRedirect();
+
+        $this->assertSame(3, (int) $varianteReal->existencias()->sum('cantidad'));
     }
 }

@@ -269,7 +269,7 @@ class ComprasProductosImagenTest extends TestCase
         $response = $this->actingAs($usuario)->post(route('compras.productos.store'), $payload);
 
         $response->assertRedirect(route('compras.productos'));
-        $producto = Producto::where('sku', 'COL-EVA-001')->orWhere('nombre', 'Figura Evangelion EVA-01')->first();
+        $producto = Producto::where('nombre', 'Figura Evangelion EVA-01')->first();
         $this->assertNotNull($producto);
         $this->assertNull($producto->attributes['imagen'] ?? null);
 

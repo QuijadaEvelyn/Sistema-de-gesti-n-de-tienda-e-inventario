@@ -13,7 +13,6 @@ use App\Models\Producto;
 use App\Models\Promocion;
 use App\Models\Sucursal;
 use App\Services\SucursalContextoService;
-use Database\Seeders\CatalogoProductoSeeder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -580,21 +579,8 @@ class CatalogoPublicoController extends Controller
         // Liberar automáticamente cualquier reserva de carrito cuyo temporizador de 5 minutos haya expirado
         CheckoutSimuladoController::liberarReservasExpiradas();
 
-        // Si estamos en entorno web interactivo y aún no se han sembrado los productos, poblar automáticamente
-        if (! app()->runningUnitTests() && Producto::count() === 0) {
-            app(CatalogoProductoSeeder::class)->run();
-        } elseif (! app()->runningUnitTests() && Schema::hasTable('libros')) {
-            // Asegurar que los 12 géneros literarios del catálogo curado estén sembrados en la base de datos
-            static $librosSincronizados = false;
-            if (! $librosSincronizados) {
-                $librosSincronizados = true;
-                $tieneNuevosGeneros = Libro::whereIn('genero', ['terror', 'ciencia_ficcion', 'fantasia'])->exists();
-                if (! $tieneNuevosGeneros) {
-                    app(CatalogoProductoSeeder::class)->run();
-                }
-            }
-        } elseif (Schema::hasTable('discos') && Schema::hasColumn('discos', 'imagen')) {
-            // Asegurar que los vinilos existentes tengan su imagen asignada en la base de datos
+        // Sincronizar imágenes conocidas para discos existentes que aún no tengan imagen asignada
+        if (Schema::hasTable('discos') && Schema::hasColumn('discos', 'imagen')) {
             static $imagenesSincronizadas = false;
             if (! $imagenesSincronizadas) {
                 $imagenesSincronizadas = true;
@@ -705,10 +691,6 @@ class CatalogoPublicoController extends Controller
     {
         if (! Schema::hasTable('promociones')) {
             return collect();
-        }
-
-        if (! app()->runningUnitTests() && Promocion::count() === 0 && Producto::count() > 0) {
-            app(CatalogoProductoSeeder::class)->run();
         }
 
         $query = Promocion::query()->where('activa', true);

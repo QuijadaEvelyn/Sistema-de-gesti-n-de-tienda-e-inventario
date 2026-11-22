@@ -21,12 +21,15 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
+use Throwable;
 
 class ProductoController extends Controller
 {
@@ -137,8 +140,29 @@ class ProductoController extends Controller
     }
 
     /**
+     * Guarda una imagen subida tanto en `public/images/productos` (acceso directo en Nginx)
+     * como en `storage/app/public/productos` (acceso por enlace simbólico `storage:link`).
+     */
+    private function guardarImagenSubida(UploadedFile $archivo): string
+    {
+        $extension = $archivo->guessExtension() ?: ($archivo->getClientOriginalExtension() ?: 'jpg');
+        $nombreArchivo = Str::random(40).'.'.$extension;
+        $contenido = File::get($archivo->getRealPath());
+
+        // 1. Guardar en storage/app/public/productos (para storage:link -> /storage/productos/...)
+        Storage::disk('public')->put('productos/'.$nombreArchivo, $contenido);
+
+        // 2. Guardar también en public/images/productos (respaldo directo para Nginx sin depender de symlinks en Windows/Docker)
+        $directorioDestino = public_path('images/productos');
+        File::ensureDirectoryExists($directorioDestino);
+        File::put($directorioDestino.DIRECTORY_SEPARATOR.$nombreArchivo, $contenido);
+
+        return 'images/productos/'.$nombreArchivo;
+    }
+
+    /**
      * Procesa y registra el alta de un nuevo producto, su variante SKU,
-     * ficha especializada, existencia física inicial y auditoría en bitácora.
+     * ficha especializada, existencia física inicial (y pieza única si aplica) y auditoría en bitácora.
      */
     public function store(Request $request): RedirectResponse
     {
@@ -146,16 +170,22 @@ class ProductoController extends Controller
             $request->merge(['isbn' => null]);
         }
 
+        if ($request->filled('sku') && is_string($request->input('sku'))) {
+            $request->merge(['sku' => strtoupper(trim((string) $request->input('sku')))]);
+        }
+
         $validated = $request->validate([
             'catalogo_id' => ['required', 'integer', 'exists:catalogos,id'],
             'nombre' => ['required', 'string', 'max:255'],
             'descripcion' => ['nullable', 'string', 'max:5000'],
-            'precio' => ['required', 'numeric', 'min:0'],
+            'precio' => ['required', 'numeric', 'min:0.01'],
             'sku' => ['required', 'string', 'max:100', 'unique:variantes_sku,sku'],
             'estado_conservacion' => ['nullable', 'string', 'max:100'],
             'imagen' => ['nullable', 'image', 'max:4096'],
             'sucursal_id' => ['nullable', 'integer', 'exists:sucursales,id'],
             'stock_inicial' => ['nullable', 'integer', 'min:1', 'max:10000'],
+            'es_pieza_unica' => ['nullable', 'boolean'],
+            'numero_serie' => ['nullable', 'string', 'max:100'],
 
             // Metadatos de Libros
             'autor' => ['nullable', 'string', 'max:255'],
@@ -181,6 +211,7 @@ class ProductoController extends Controller
             'categoria' => ['nullable', 'string', 'max:100'],
             'anio_edicion' => ['nullable', 'integer', 'between:1900,2030'],
         ], [
+            'precio.min' => 'El precio del producto debe ser de al menos $0.01 MXN.',
             'imagen.image' => 'El archivo adjunto debe ser una imagen válida (JPG, PNG, WEBP).',
             'imagen.max' => 'La fotografía del producto no debe exceder 4MB.',
             'sku.unique' => 'Este código SKU ya está registrado en el inventario.',
@@ -189,164 +220,202 @@ class ProductoController extends Controller
 
         $imagenRuta = null;
         if ($request->hasFile('imagen')) {
-            $archivo = $request->file('imagen');
-            $nombreArchivo = Str::random(40).'.'.$archivo->guessExtension();
-            $directorioDestino = public_path('images/productos');
-            File::ensureDirectoryExists($directorioDestino);
-            $archivo->move($directorioDestino, $nombreArchivo);
-            $imagenRuta = 'images/productos/'.$nombreArchivo;
+            $imagenRuta = $this->guardarImagenSubida($request->file('imagen'));
         }
 
-        DB::transaction(function () use ($validated, $request, $imagenRuta): void {
-            $catalogo = Catalogo::find($validated['catalogo_id']);
-            $descripcion = $validated['descripcion'] ?? $validated['nombre'];
-            $graduacion = $validated['estado_conservacion'] ?: 'MINT (M)';
-
-            $datosProducto = [
-                'catalogo_id' => $validated['catalogo_id'],
-                'nombre' => $validated['nombre'],
-                'descripcion' => $descripcion,
-                'precio' => $validated['precio'],
-                'activo' => true,
-            ];
-            if ($imagenRuta !== null && Schema::hasColumn('productos', 'imagen')) {
-                $datosProducto['imagen'] = $imagenRuta;
-            }
-
-            $producto = Producto::create($datosProducto);
-
-            // Variante SKU inicial
-            $datosVariante = [
-                'producto_id' => $producto->id,
-                'sku' => strtoupper(trim($validated['sku'])),
-                'descripcion' => "{$graduacion} · {$validated['nombre']}",
-                'precio' => $validated['precio'],
-                'activa' => true,
-            ];
-            if ($imagenRuta !== null && Schema::hasColumn('variantes_sku', 'imagen')) {
-                $datosVariante['imagen'] = $imagenRuta;
-            }
-
-            $variante = VarianteSku::create($datosVariante);
-
-            // Sincronización de ficha especializada según tipo de catálogo
-            if ($catalogo) {
-                $tipoCatalogo = strtolower((string) $catalogo->tipo);
-                $nombreCatalogo = strtolower((string) $catalogo->nombre);
-                $esVinilo = $tipoCatalogo === 'disco' || $tipoCatalogo === 'vinilo' || str_contains($nombreCatalogo, 'disco') || str_contains($nombreCatalogo, 'vinil');
-                $esLibro = $tipoCatalogo === 'libro' || str_contains($nombreCatalogo, 'libro');
-                $esColeccionable = $tipoCatalogo === 'coleccionable' || str_contains($nombreCatalogo, 'coleccion');
-
-                if ($esVinilo && Schema::hasTable('discos')) {
-                    $formatoNormalizado = 'vinilo';
-                    $formatoRaw = strtolower((string) ($request->input('formato') ?: 'vinilo'));
-                    if (str_contains($formatoRaw, 'cd')) {
-                        $formatoNormalizado = 'CD';
-                    } elseif (str_contains($formatoRaw, 'cassette')) {
-                        $formatoNormalizado = 'cassette';
-                    }
-
-                    $sello = $request->input('sello_discografico') ?: ($request->input('disquera') ?: 'Prensado Curatorial');
-                    $datosDisco = [
-                        'artista' => $request->input('artista') ?: $producto->nombre,
-                        'sello' => $sello,
-                        'genero' => $request->input('genero') ?: 'Música Histórica',
-                        'formato' => $formatoNormalizado,
-                        'anio_lanzamiento' => $request->filled('anio_lanzamiento') ? (int) $request->input('anio_lanzamiento') : (int) date('Y'),
-                        'rpm' => $request->input('rpm') ?: ($formatoNormalizado === 'CD' ? 'PCM' : '33 RPM'),
-                    ];
-                    if ($imagenRuta !== null && Schema::hasColumn('discos', 'imagen')) {
-                        $datosDisco['imagen'] = $imagenRuta;
-                    }
-                    Disco::updateOrCreate(['producto_id' => $producto->id], $datosDisco);
-                } elseif ($esLibro && Schema::hasTable('libros')) {
-                    $isbn = filled($request->input('isbn')) ? trim((string) $request->input('isbn')) : null;
-                    $datosLibro = [
-                        'autor' => $request->input('autor') ?: 'Autor Histórico',
-                        'editorial' => $request->input('editorial') ?: 'Edición Notariada',
-                        'genero' => $request->input('genero') ?: 'novela',
-                        'anio_publicacion' => $request->filled('anio_publicacion') ? (int) $request->input('anio_publicacion') : (int) date('Y'),
-                        'paginas' => $request->filled('paginas') ? (int) $request->input('paginas') : 250,
-                        'isbn' => $isbn,
-                        'tapa' => $request->input('tapa') ?: 'Tapa dura artesanal',
-                    ];
-                    if ($imagenRuta !== null && Schema::hasColumn('libros', 'imagen')) {
-                        $datosLibro['imagen'] = $imagenRuta;
-                    }
-                    Libro::updateOrCreate(['producto_id' => $producto->id], $datosLibro);
-                } elseif ($esColeccionable && Schema::hasTable('coleccionables')) {
-                    $datosColeccionable = [
-                        'marca' => $request->input('fabricante') ?: ($request->input('autor') ?: 'Manufactura Histórica'),
-                        'serie' => $request->input('serie') ?: 'Edición Limitada',
-                        'categoria' => $request->input('categoria') ?: 'figuras',
-                        'material' => $request->input('material') ?: 'Pieza Autenticada',
-                        'edicion_limitada' => true,
-                    ];
-                    if ($imagenRuta !== null && Schema::hasColumn('coleccionables', 'imagen')) {
-                        $datosColeccionable['imagen'] = $imagenRuta;
-                    }
-                    Coleccionable::updateOrCreate(['producto_id' => $producto->id], $datosColeccionable);
-                }
-            }
-
-            // Asignación de existencia en sucursales
-            $sucursales = Schema::hasTable('sucursales')
-                ? Sucursal::where('activa', true)->get()
-                : collect();
-
-            if ($sucursales->isNotEmpty()) {
-                $sucursalSeleccionadaId = ! empty($validated['sucursal_id'])
-                    ? (int) $validated['sucursal_id']
-                    : ($request->session()->get(SucursalContextoService::SESSION_SUCURSAL_KEY)
-                        ?: $sucursales->first()->id);
-
+        try {
+            DB::transaction(function () use ($validated, $request, $imagenRuta): void {
+                $catalogo = Catalogo::find($validated['catalogo_id']);
+                $descripcion = $validated['descripcion'] ?? $validated['nombre'];
+                $graduacion = ($validated['estado_conservacion'] ?? null) ?: 'MINT (M)';
                 $cantidadInicial = ! empty($validated['stock_inicial']) ? (int) $validated['stock_inicial'] : 1;
+                $esPiezaUnica = $request->has('es_pieza_unica')
+                    ? $request->boolean('es_pieza_unica')
+                    : ($cantidadInicial === 1);
 
-                foreach ($sucursales as $suc) {
-                    $cant = ($suc->id == $sucursalSeleccionadaId) ? $cantidadInicial : 0;
+                if ($esPiezaUnica) {
+                    $cantidadInicial = 1;
+                }
 
-                    $existencia = Existencia::firstOrCreate(
+                $datosProducto = [
+                    'catalogo_id' => $validated['catalogo_id'],
+                    'nombre' => $validated['nombre'],
+                    'descripcion' => $descripcion,
+                    'precio' => $validated['precio'],
+                    'activo' => true,
+                ];
+                if ($imagenRuta !== null && Schema::hasColumn('productos', 'imagen')) {
+                    $datosProducto['imagen'] = $imagenRuta;
+                }
+
+                $producto = Producto::create($datosProducto);
+
+                // Variante SKU inicial
+                $datosVariante = [
+                    'producto_id' => $producto->id,
+                    'sku' => strtoupper(trim($validated['sku'])),
+                    'descripcion' => "{$graduacion} · {$validated['nombre']}",
+                    'precio' => $validated['precio'],
+                    'activa' => true,
+                ];
+                if ($imagenRuta !== null && Schema::hasColumn('variantes_sku', 'imagen')) {
+                    $datosVariante['imagen'] = $imagenRuta;
+                }
+
+                $variante = VarianteSku::create($datosVariante);
+
+                // Sincronización de ficha especializada según tipo de catálogo
+                if ($catalogo) {
+                    $tipoCatalogo = strtolower((string) $catalogo->tipo);
+                    $nombreCatalogo = strtolower((string) $catalogo->nombre);
+                    $esVinilo = $tipoCatalogo === 'disco' || $tipoCatalogo === 'vinilo' || str_contains($nombreCatalogo, 'disco') || str_contains($nombreCatalogo, 'vinil');
+                    $esLibro = $tipoCatalogo === 'libro' || str_contains($nombreCatalogo, 'libro');
+                    $esColeccionable = $tipoCatalogo === 'coleccionable' || str_contains($nombreCatalogo, 'coleccion');
+
+                    if ($esVinilo && Schema::hasTable('discos')) {
+                        $formatoNormalizado = 'vinilo';
+                        $formatoRaw = strtolower((string) ($request->input('formato') ?: 'vinilo'));
+                        if (str_contains($formatoRaw, 'cd')) {
+                            $formatoNormalizado = 'CD';
+                        } elseif (str_contains($formatoRaw, 'cassette')) {
+                            $formatoNormalizado = 'cassette';
+                        }
+
+                        $sello = $request->input('sello_discografico') ?: ($request->input('disquera') ?: 'Edición Oficial');
+                        $datosDisco = [
+                            'artista' => $request->input('artista') ?: $producto->nombre,
+                            'sello' => $sello,
+                            'genero' => $request->input('genero') ?: 'Música',
+                            'formato' => $formatoNormalizado,
+                            'anio_lanzamiento' => $request->filled('anio_lanzamiento') ? (int) $request->input('anio_lanzamiento') : (int) date('Y'),
+                            'rpm' => $request->input('rpm') ?: ($formatoNormalizado === 'CD' ? 'PCM' : '33 RPM'),
+                        ];
+                        if ($imagenRuta !== null && Schema::hasColumn('discos', 'imagen')) {
+                            $datosDisco['imagen'] = $imagenRuta;
+                        }
+                        Disco::updateOrCreate(['producto_id' => $producto->id], $datosDisco);
+                    } elseif ($esLibro && Schema::hasTable('libros')) {
+                        $isbn = filled($request->input('isbn')) ? trim((string) $request->input('isbn')) : null;
+                        $datosLibro = [
+                            'autor' => $request->input('autor') ?: 'Autor',
+                            'editorial' => $request->input('editorial') ?: 'Editorial',
+                            'genero' => $request->input('genero') ?: 'novela',
+                            'anio_publicacion' => $request->filled('anio_publicacion') ? (int) $request->input('anio_publicacion') : (int) date('Y'),
+                            'paginas' => $request->filled('paginas') ? (int) $request->input('paginas') : 250,
+                            'isbn' => $isbn,
+                            'tapa' => $request->input('tapa') ?: 'Tapa dura',
+                        ];
+                        if ($imagenRuta !== null && Schema::hasColumn('libros', 'imagen')) {
+                            $datosLibro['imagen'] = $imagenRuta;
+                        }
+                        Libro::updateOrCreate(['producto_id' => $producto->id], $datosLibro);
+                    } elseif ($esColeccionable && Schema::hasTable('coleccionables')) {
+                        $datosColeccionable = [
+                            'marca' => $request->input('fabricante') ?: ($request->input('autor') ?: 'Colección Oficial'),
+                            'serie' => $request->input('serie') ?: 'Edición Especial',
+                            'categoria' => $request->input('categoria') ?: 'figuras',
+                            'material' => $request->input('material') ?: 'Original',
+                            'edicion_limitada' => $esPiezaUnica,
+                        ];
+                        if ($imagenRuta !== null && Schema::hasColumn('coleccionables', 'imagen')) {
+                            $datosColeccionable['imagen'] = $imagenRuta;
+                        }
+                        Coleccionable::updateOrCreate(['producto_id' => $producto->id], $datosColeccionable);
+                    }
+                }
+
+                // Asignación de existencia en sucursales
+                $sucursales = Schema::hasTable('sucursales')
+                    ? Sucursal::where('activa', true)->get()
+                    : collect();
+
+                if ($sucursales->isEmpty() && Schema::hasTable('sucursales')) {
+                    $sucursalDefault = Sucursal::firstOrCreate(
+                        ['nombre' => 'Sucursal Central Bellas Artes'],
                         [
-                            'variante_sku_id' => $variante->id,
-                            'sucursal_id' => $suc->id,
-                        ],
-                        [
-                            'cantidad' => $cant,
-                            'stock_minimo' => 1,
+                            'direccion' => 'Av. Juárez 18, Centro Histórico, CDMX',
+                            'telefono' => '5555128900',
+                            'activa' => true,
                         ]
                     );
+                    $sucursales = collect([$sucursalDefault]);
+                }
 
-                    if ($cant > 0 && Schema::hasTable('movimientos_inventario')) {
-                        MovimientoInventario::create([
-                            'existencia_id' => $existencia->id,
-                            'usuario_id' => $request->user()?->id,
-                            'tipo' => 'entrada',
-                            'cantidad' => $cant,
-                            'motivo' => "Alta de producto [{$validated['sku']}] por {$request->user()?->nombre}",
-                            'created_at' => now(),
-                        ]);
+                if ($sucursales->isNotEmpty()) {
+                    $sucursalSeleccionadaId = ! empty($validated['sucursal_id'])
+                        ? (int) $validated['sucursal_id']
+                        : ($request->session()->get(SucursalContextoService::SESSION_SUCURSAL_KEY)
+                            ?: $sucursales->first()->id);
+
+                    foreach ($sucursales as $suc) {
+                        $cant = ($suc->id == $sucursalSeleccionadaId) ? $cantidadInicial : 0;
+
+                        $existencia = Existencia::updateOrCreate(
+                            [
+                                'variante_sku_id' => $variante->id,
+                                'sucursal_id' => $suc->id,
+                            ],
+                            [
+                                'cantidad' => $cant,
+                                'stock_minimo' => 1,
+                            ]
+                        );
+
+                        if ($cant > 0 && $esPiezaUnica && Schema::hasTable('piezas_unicas')) {
+                            $serieUnica = ! empty($validated['numero_serie'])
+                                ? strtoupper(trim((string) $validated['numero_serie']))
+                                : ('ARC-'.$variante->sku.'-'.str_pad((string) $producto->id, 3, '0', STR_PAD_LEFT));
+
+                            PiezaUnica::firstOrCreate(
+                                ['existencia_id' => $existencia->id],
+                                [
+                                    'numero_serie' => $serieUnica,
+                                    'certificado' => 'COA-'.strtoupper(substr(md5($variante->sku), 0, 8)),
+                                    'estado' => 'disponible',
+                                ]
+                            );
+                        }
+
+                        if ($cant > 0 && Schema::hasTable('movimientos_inventario')) {
+                            MovimientoInventario::create([
+                                'existencia_id' => $existencia->id,
+                                'usuario_id' => $request->user()?->id,
+                                'tipo' => 'entrada',
+                                'cantidad' => $cant,
+                                'motivo' => "Alta de producto [{$validated['sku']}] por {$request->user()?->nombre}",
+                                'created_at' => now(),
+                            ]);
+                        }
                     }
                 }
-            }
 
-            // Registro de auditoría estricto en Bitácora
-            Bitacora::create([
-                'usuario_id' => $request->user()?->id,
-                'accion' => 'ALTA_PRODUCTO',
-                'tabla_afectada' => 'productos',
-                'registro_id' => $producto->id,
-                'detalle' => [
-                    'nombre' => $producto->nombre,
-                    'sku' => $validated['sku'],
-                    'precio' => $producto->precio,
-                    'usuario_nombre' => $request->user()?->nombre,
-                    'usuario_rol' => $request->user()?->roles->pluck('nombre')->all(),
-                    'imagen' => $imagenRuta,
-                ],
-                'ip' => $request->ip() ?? '127.0.0.1',
-                'created_at' => now(),
-            ]);
-        });
+                // Registro de auditoría estricto en Bitácora
+                if (Schema::hasTable('bitacoras')) {
+                    Bitacora::create([
+                        'usuario_id' => $request->user()?->id,
+                        'accion' => 'ALTA_PRODUCTO',
+                        'tabla_afectada' => 'productos',
+                        'registro_id' => $producto->id,
+                        'detalle' => [
+                            'nombre' => $producto->nombre,
+                            'sku' => $validated['sku'],
+                            'precio' => $producto->precio,
+                            'stock_inicial' => $cantidadInicial,
+                            'es_pieza_unica' => $esPiezaUnica,
+                            'usuario_nombre' => $request->user()?->nombre,
+                            'usuario_rol' => $request->user()?->roles->pluck('nombre')->all(),
+                            'imagen' => $imagenRuta,
+                        ],
+                        'ip' => $request->ip() ?? '127.0.0.1',
+                        'created_at' => now(),
+                    ]);
+                }
+            });
+        } catch (Throwable $e) {
+            return back()
+                ->withInput()
+                ->withErrors(['database' => 'Error al guardar el producto en la base de datos: '.$e->getMessage()]);
+        }
 
         return redirect()
             ->route('admin.productos.index')
@@ -445,172 +514,173 @@ class ProductoController extends Controller
 
         $imagenRuta = null;
         if ($request->hasFile('imagen')) {
-            $archivo = $request->file('imagen');
-            $nombreArchivo = Str::random(40).'.'.$archivo->guessExtension();
-            $directorioDestino = public_path('images/productos');
-            File::ensureDirectoryExists($directorioDestino);
-            $archivo->move($directorioDestino, $nombreArchivo);
-            $imagenRuta = 'images/productos/'.$nombreArchivo;
+            $imagenRuta = $this->guardarImagenSubida($request->file('imagen'));
         }
 
-        DB::transaction(function () use ($validated, $request, $producto, $variante, $imagenRuta, $esPiezaUnica): void {
-            $precioAnterior = round((float) $producto->precio, 2);
-            $nuevoPrecio = round((float) $validated['precio'], 2);
+        try {
+            DB::transaction(function () use ($validated, $request, $producto, $variante, $imagenRuta, $esPiezaUnica): void {
+                $precioAnterior = round((float) $producto->precio, 2);
+                $nuevoPrecio = round((float) $validated['precio'], 2);
 
-            $datosProducto = [
-                'nombre' => $validated['nombre'],
-                'descripcion' => $validated['descripcion'] ?? $producto->descripcion,
-                'precio' => $nuevoPrecio,
-            ];
-            if ($imagenRuta !== null && Schema::hasColumn('productos', 'imagen')) {
-                $datosProducto['imagen'] = $imagenRuta;
-            }
-
-            $producto->update($datosProducto);
-
-            if ($variante) {
-                $datosVariante = [
-                    'sku' => strtoupper(trim($validated['sku'])),
+                $datosProducto = [
+                    'nombre' => $validated['nombre'],
+                    'descripcion' => $validated['descripcion'] ?? $producto->descripcion,
                     'precio' => $nuevoPrecio,
                 ];
-                if ($imagenRuta !== null && Schema::hasColumn('variantes_sku', 'imagen')) {
-                    $datosVariante['imagen'] = $imagenRuta;
+                if ($imagenRuta !== null && Schema::hasColumn('productos', 'imagen')) {
+                    $datosProducto['imagen'] = $imagenRuta;
                 }
-                if (! $esPiezaUnica && isset($validated['stock']) && Schema::hasColumn('variantes_sku', 'stock')) {
-                    $datosVariante['stock'] = (int) $validated['stock'];
+
+                $producto->update($datosProducto);
+
+                if ($variante) {
+                    $datosVariante = [
+                        'sku' => strtoupper(trim($validated['sku'])),
+                        'precio' => $nuevoPrecio,
+                    ];
+                    if ($imagenRuta !== null && Schema::hasColumn('variantes_sku', 'imagen')) {
+                        $datosVariante['imagen'] = $imagenRuta;
+                    }
+                    if (! $esPiezaUnica && isset($validated['stock']) && Schema::hasColumn('variantes_sku', 'stock')) {
+                        $datosVariante['stock'] = (int) $validated['stock'];
+                    }
+                    $variante->update($datosVariante);
                 }
-                $variante->update($datosVariante);
-            }
 
-            if (Schema::hasTable('variantes_sku') && Schema::hasColumn('variantes_sku', 'precio')) {
-                $producto->variantesSku()->update(['precio' => $nuevoPrecio]);
-            }
+                if (Schema::hasTable('variantes_sku') && Schema::hasColumn('variantes_sku', 'precio')) {
+                    $producto->variantesSku()->update(['precio' => $nuevoPrecio]);
+                }
 
-            $stockAnterior = $variante ? (int) Existencia::where('variante_sku_id', $variante->id)->sum('cantidad') : 0;
-            $stockFinal = $stockAnterior;
+                $stockAnterior = $variante ? (int) Existencia::where('variante_sku_id', $variante->id)->sum('cantidad') : 0;
+                $stockFinal = $stockAnterior;
 
-            // Actualizar existencias ÚNICAMENTE si el producto es Común (nunca para Piezas Únicas / Exclusivas)
-            if (! $esPiezaUnica && $variante && array_key_exists('stock', $validated) && Schema::hasTable('existencias')) {
-                $nuevoStock = (int) $validated['stock'];
-                $diferenciaStock = $nuevoStock - $stockAnterior;
+                // Actualizar existencias ÚNICAMENTE si el producto es Común (nunca para Piezas Únicas / Exclusivas)
+                if (! $esPiezaUnica && $variante && array_key_exists('stock', $validated) && Schema::hasTable('existencias')) {
+                    $nuevoStock = (int) $validated['stock'];
+                    $diferenciaStock = $nuevoStock - $stockAnterior;
 
-                if ($diferenciaStock !== 0) {
-                    $existencias = Existencia::where('variante_sku_id', $variante->id)
-                        ->orderByDesc('cantidad')
-                        ->orderBy('id')
-                        ->lockForUpdate()
-                        ->get();
+                    if ($diferenciaStock !== 0) {
+                        $existencias = Existencia::where('variante_sku_id', $variante->id)
+                            ->orderByDesc('cantidad')
+                            ->orderBy('id')
+                            ->lockForUpdate()
+                            ->get();
 
-                    if ($existencias->isEmpty()) {
-                        $sucursalId = $request->session()->get(SucursalContextoService::SESSION_SUCURSAL_KEY)
-                            ?: (Schema::hasTable('sucursales') ? Sucursal::where('activa', true)->orderBy('id')->value('id') : null);
+                        if ($existencias->isEmpty()) {
+                            $sucursalId = $request->session()->get(SucursalContextoService::SESSION_SUCURSAL_KEY)
+                                ?: (Schema::hasTable('sucursales') ? Sucursal::where('activa', true)->orderBy('id')->value('id') : null);
 
-                        if ($sucursalId) {
-                            $nuevaExistencia = Existencia::create([
-                                'variante_sku_id' => $variante->id,
-                                'sucursal_id' => (int) $sucursalId,
-                                'cantidad' => $nuevoStock,
-                                'stock_minimo' => 1,
-                            ]);
-
-                            if ($nuevoStock > 0 && Schema::hasTable('movimientos_inventario')) {
-                                MovimientoInventario::create([
-                                    'existencia_id' => $nuevaExistencia->id,
-                                    'usuario_id' => $request->user()?->id,
-                                    'tipo' => 'entrada',
+                            if ($sucursalId) {
+                                $nuevaExistencia = Existencia::create([
+                                    'variante_sku_id' => $variante->id,
+                                    'sucursal_id' => (int) $sucursalId,
                                     'cantidad' => $nuevoStock,
-                                    'motivo' => 'Ajuste manual desde edición de producto',
-                                    'created_at' => now(),
+                                    'stock_minimo' => 1,
                                 ]);
-                            }
-                        }
-                    } elseif ($diferenciaStock > 0) {
-                        $sucursalActivaId = $request->session()->get(SucursalContextoService::SESSION_SUCURSAL_KEY);
-                        $existenciaPrincipal = ($sucursalActivaId
-                            ? $existencias->firstWhere('sucursal_id', (int) $sucursalActivaId)
-                            : null) ?? $existencias->first();
 
-                        $existenciaPrincipal->increment('cantidad', $diferenciaStock);
+                                if ($nuevoStock > 0 && Schema::hasTable('movimientos_inventario')) {
+                                    MovimientoInventario::create([
+                                        'existencia_id' => $nuevaExistencia->id,
+                                        'usuario_id' => $request->user()?->id,
+                                        'tipo' => 'entrada',
+                                        'cantidad' => $nuevoStock,
+                                        'motivo' => 'Ajuste manual desde edición de producto',
+                                        'created_at' => now(),
+                                    ]);
+                                }
+                            }
+                        } elseif ($diferenciaStock > 0) {
+                            $sucursalActivaId = $request->session()->get(SucursalContextoService::SESSION_SUCURSAL_KEY);
+                            $existenciaPrincipal = ($sucursalActivaId
+                                ? $existencias->firstWhere('sucursal_id', (int) $sucursalActivaId)
+                                : null) ?? $existencias->first();
 
-                        if (Schema::hasTable('movimientos_inventario')) {
-                            MovimientoInventario::create([
-                                'existencia_id' => $existenciaPrincipal->id,
-                                'usuario_id' => $request->user()?->id,
-                                'tipo' => 'entrada',
-                                'cantidad' => $diferenciaStock,
-                                'motivo' => 'Ajuste manual desde edición de producto',
-                                'created_at' => now(),
-                            ]);
-                        }
-                    } else {
-                        $porDescontar = abs($diferenciaStock);
-                        foreach ($existencias as $existencia) {
-                            if ($porDescontar <= 0) {
-                                break;
-                            }
-                            $actualSede = (int) $existencia->cantidad;
-                            if ($actualSede <= 0) {
-                                continue;
-                            }
-                            $descuento = min($actualSede, $porDescontar);
-                            $existencia->decrement('cantidad', $descuento);
-                            $porDescontar -= $descuento;
+                            $existenciaPrincipal->increment('cantidad', $diferenciaStock);
 
                             if (Schema::hasTable('movimientos_inventario')) {
                                 MovimientoInventario::create([
-                                    'existencia_id' => $existencia->id,
+                                    'existencia_id' => $existenciaPrincipal->id,
                                     'usuario_id' => $request->user()?->id,
-                                    'tipo' => 'ajuste',
-                                    'cantidad' => $descuento,
+                                    'tipo' => 'entrada',
+                                    'cantidad' => $diferenciaStock,
                                     'motivo' => 'Ajuste manual desde edición de producto',
                                     'created_at' => now(),
                                 ]);
                             }
+                        } else {
+                            $porDescontar = abs($diferenciaStock);
+                            foreach ($existencias as $existencia) {
+                                if ($porDescontar <= 0) {
+                                    break;
+                                }
+                                $actualSede = (int) $existencia->cantidad;
+                                if ($actualSede <= 0) {
+                                    continue;
+                                }
+                                $descuento = min($actualSede, $porDescontar);
+                                $existencia->decrement('cantidad', $descuento);
+                                $porDescontar -= $descuento;
+
+                                if (Schema::hasTable('movimientos_inventario')) {
+                                    MovimientoInventario::create([
+                                        'existencia_id' => $existencia->id,
+                                        'usuario_id' => $request->user()?->id,
+                                        'tipo' => 'ajuste',
+                                        'cantidad' => $descuento,
+                                        'motivo' => 'Ajuste manual desde edición de producto',
+                                        'created_at' => now(),
+                                    ]);
+                                }
+                            }
                         }
+
+                        $stockFinal = $nuevoStock;
                     }
-
-                    $stockFinal = $nuevoStock;
                 }
-            }
 
-            // Actualizar metadatos según ficha
-            if ($producto->libro) {
-                $producto->libro->update(array_filter([
-                    'autor' => $request->input('autor'),
-                    'editorial' => $request->input('editorial'),
-                    'genero' => $request->input('genero'),
-                ]));
-            } elseif ($producto->disco) {
-                $producto->disco->update(array_filter([
-                    'artista' => $request->input('artista'),
-                    'sello' => $request->input('sello_discografico'),
-                    'genero' => $request->input('genero'),
-                ]));
-            } elseif ($producto->coleccionable) {
-                $producto->coleccionable->update(array_filter([
-                    'marca' => $request->input('fabricante'),
-                ]));
-            }
+                // Actualizar metadatos según ficha
+                if ($producto->libro) {
+                    $producto->libro->update(array_filter([
+                        'autor' => $request->input('autor'),
+                        'editorial' => $request->input('editorial'),
+                        'genero' => $request->input('genero'),
+                    ]));
+                } elseif ($producto->disco) {
+                    $producto->disco->update(array_filter([
+                        'artista' => $request->input('artista'),
+                        'sello' => $request->input('sello_discografico'),
+                        'genero' => $request->input('genero'),
+                    ]));
+                } elseif ($producto->coleccionable) {
+                    $producto->coleccionable->update(array_filter([
+                        'marca' => $request->input('fabricante'),
+                    ]));
+                }
 
-            Bitacora::create([
-                'usuario_id' => $request->user()?->id,
-                'accion' => 'EDICION_PRODUCTO',
-                'tabla_afectada' => 'productos',
-                'registro_id' => $producto->id,
-                'detalle' => [
-                    'nombre' => $producto->nombre,
-                    'sku' => $validated['sku'],
-                    'precio_anterior' => $precioAnterior,
-                    'precio' => $nuevoPrecio,
-                    'es_pieza_unica' => $esPiezaUnica,
-                    'stock_anterior' => $stockAnterior,
-                    'stock_actual' => $stockFinal,
-                    'usuario_nombre' => $request->user()?->nombre,
-                ],
-                'ip' => $request->ip() ?? '127.0.0.1',
-                'created_at' => now(),
-            ]);
-        });
+                Bitacora::create([
+                    'usuario_id' => $request->user()?->id,
+                    'accion' => 'EDICION_PRODUCTO',
+                    'tabla_afectada' => 'productos',
+                    'registro_id' => $producto->id,
+                    'detalle' => [
+                        'nombre' => $producto->nombre,
+                        'sku' => $validated['sku'],
+                        'precio_anterior' => $precioAnterior,
+                        'precio' => $nuevoPrecio,
+                        'es_pieza_unica' => $esPiezaUnica,
+                        'stock_anterior' => $stockAnterior,
+                        'stock_actual' => $stockFinal,
+                        'usuario_nombre' => $request->user()?->nombre,
+                    ],
+                    'ip' => $request->ip() ?? '127.0.0.1',
+                    'created_at' => now(),
+                ]);
+            });
+        } catch (Throwable $e) {
+            return back()
+                ->withInput()
+                ->withErrors(['database' => 'Error al actualizar el producto en la base de datos: '.$e->getMessage()]);
+        }
 
         return redirect()
             ->route('admin.productos.index')
@@ -699,12 +769,7 @@ class ProductoController extends Controller
             'imagen.max' => 'La imagen no debe superar los 4MB.',
         ]);
 
-        $archivo = $request->file('imagen');
-        $nombreArchivo = Str::random(40).'.'.$archivo->guessExtension();
-        $directorioDestino = public_path('images/productos');
-        File::ensureDirectoryExists($directorioDestino);
-        $archivo->move($directorioDestino, $nombreArchivo);
-        $imagenRuta = 'images/productos/'.$nombreArchivo;
+        $imagenRuta = $this->guardarImagenSubida($request->file('imagen'));
 
         $producto->update(['imagen' => $imagenRuta]);
         $producto->variantesSku()->update(['imagen' => $imagenRuta]);
