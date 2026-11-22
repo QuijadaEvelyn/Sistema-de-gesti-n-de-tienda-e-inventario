@@ -7,24 +7,24 @@
 <!-- Overlay Translúcido de Acceso Lateral (Atmósfera de Bóveda Nocturna) -->
 <div id="login-drawer-overlay" class="fixed inset-0 bg-[#07040d]/85 backdrop-blur-sm z-50 transition-opacity duration-300 {{ $abrirPorDefecto ? 'opacity-100' : 'opacity-0 pointer-events-none' }}" aria-hidden="true"></div>
 
-<!-- Cajón Desplegable de Autenticación al 50% de Ancho (Login Slide-Over Drawer) -->
+<!-- Cajón Desplegable de Autenticación Lateral Derecho (Login Slide-Over Drawer) -->
 <aside
     id="login-drawer"
-    class="fixed top-0 right-0 h-full w-full md:w-1/2 bg-surface-container-lowest dark:bg-[#171024] border-l border-purple-200/80 dark:border-purple-500/30 z-50 shadow-2xl flex flex-col justify-between transform {{ $abrirPorDefecto ? 'translate-x-0' : 'translate-x-full' }} transition-transform duration-300 ease-out"
+    class="fixed inset-y-0 right-0 h-full w-full max-w-md bg-surface-container-lowest dark:bg-[#171024] border-l border-purple-200/80 dark:border-purple-500/30 z-50 shadow-2xl flex flex-col justify-between transform {{ $abrirPorDefecto ? 'translate-x-0' : 'translate-x-full' }} transition-transform duration-300 ease-out"
     role="dialog"
     aria-modal="true"
     aria-labelledby="login-drawer-title"
 >
     <!-- Encabezado del Slide-Over tipo Bóveda -->
-    <div class="p-6 sm:p-8 border-b border-purple-200/70 dark:border-purple-500/30 bg-surface-container-low/50 dark:bg-[#1b132a]">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center gap-3 group">
-                <x-ui.archivum-logo size="lg" />
-                <div>
-                    <h2 id="login-drawer-title" class="font-headline-sm text-lg text-on-surface font-bold font-brand-serif tracking-[0.15em] uppercase">
+    <div class="px-6 py-5 border-b border-purple-200/70 dark:border-purple-500/30 bg-surface-container-low/50 dark:bg-[#1b132a]">
+        <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2.5 min-w-0 group">
+                <x-ui.archivum-logo size="md" />
+                <div class="min-w-0">
+                    <h2 id="login-drawer-title" class="font-headline-sm text-sm sm:text-base text-on-surface font-bold font-brand-serif tracking-wider uppercase leading-snug">
                         Acceso a tu Cuenta ARCHIVUM
                     </h2>
-                    <span class="font-label-code text-secondary text-[11px] uppercase tracking-wider">
+                    <span class="block font-label-code text-secondary text-[10px] uppercase tracking-wider truncate">
                         Inicio de Sesión para Clientes &amp; Personal
                     </span>
                 </div>
@@ -32,7 +32,7 @@
             <button
                 type="button"
                 id="close-login-drawer-btn"
-                class="p-2 rounded-xl text-outline hover:text-on-surface hover:bg-surface-container dark:hover:bg-[#221834] transition focus:outline-none"
+                class="p-2 rounded-xl text-outline hover:text-on-surface hover:bg-surface-container dark:hover:bg-[#221834] transition focus:outline-none shrink-0"
                 aria-label="Cerrar panel de acceso"
             >
                 <span class="material-symbols-outlined text-[22px]">close</span>
@@ -40,12 +40,12 @@
         </div>
 
         <!-- Selector de Pestañas: Iniciar Sesión / Crear Cuenta -->
-        <div class="mt-5 grid grid-cols-2 gap-2 p-1 rounded-xl bg-surface-container dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30">
+        <div class="mt-4 grid grid-cols-2 gap-1.5 p-1 rounded-xl bg-surface-container dark:bg-[#140d20] border border-purple-200/60 dark:border-purple-500/30">
             <button
                 type="button"
                 id="tab-login-btn"
                 data-drawer-tab="login"
-                class="btn-glass-purple py-2 px-4 rounded-lg text-xs font-bold uppercase tracking-wider font-quicksand flex items-center justify-center gap-1.5 shadow-2xs"
+                class="btn-glass-purple py-2 px-3 rounded-lg text-xs font-bold uppercase tracking-wider font-quicksand flex items-center justify-center gap-1.5 shadow-2xs whitespace-nowrap"
             >
                 <span class="material-symbols-outlined text-[16px]">login</span>
                 <span>Iniciar Sesión</span>
@@ -54,7 +54,7 @@
                 type="button"
                 id="tab-register-btn"
                 data-drawer-tab="register"
-                class="btn-glass-surface py-2 px-4 rounded-lg text-xs font-bold uppercase tracking-wider font-quicksand flex items-center justify-center gap-1.5 shadow-2xs"
+                class="btn-glass-surface py-2 px-3 rounded-lg text-xs font-bold uppercase tracking-wider font-quicksand flex items-center justify-center gap-1.5 shadow-2xs whitespace-nowrap"
             >
                 <span class="material-symbols-outlined text-[16px]">person_add</span>
                 <span>Crear Cuenta</span>
@@ -63,8 +63,8 @@
     </div>
 
     <!-- Cuerpo Desplazable con Formularios y Alertas de Validación en Línea -->
-    <div class="flex-1 overflow-y-auto p-6 sm:p-10 space-y-6">
-        <div class="max-w-lg mx-auto space-y-6">
+    <div class="flex-1 overflow-y-auto px-6 py-6 space-y-5">
+        <div class="w-full mx-auto space-y-5">
 
             <!-- Contenedor de Confirmación Exitosa Dinámico (AJAX + Sesión Laravel) -->
             <div
@@ -371,13 +371,13 @@
         </div>
     </div>
 
-        <!-- Pie del Cajón de Autenticación -->
-    <div class="p-6 border-t border-purple-200/70 dark:border-purple-500/30 bg-surface-container-lowest dark:bg-[#140d20] flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-outline dark:text-stone-400 font-label-code">
+    <!-- Pie del Cajón de Autenticación -->
+    <div class="px-6 py-4 border-t border-purple-200/70 dark:border-purple-500/30 bg-surface-container-lowest dark:bg-[#140d20] flex flex-col gap-1.5 text-[11px] text-outline dark:text-stone-400 font-label-code">
         <div class="flex items-center gap-1.5">
-            <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+            <span class="h-2 w-2 rounded-full bg-emerald-500 shrink-0"></span>
             <span>Protocolo SSL / TLS 1.3 · Sesión Protegida</span>
         </div>
-        <button type="button" data-open-login-drawer="login" class="text-primary hover:underline font-semibold cursor-pointer">
+        <button type="button" data-open-login-drawer="login" class="text-primary hover:underline font-semibold text-left cursor-pointer">
             Acceso Unificado (Clientes &amp; Personal Interno) &rarr;
         </button>
     </div>
