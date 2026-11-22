@@ -1916,11 +1916,22 @@ class CheckoutSimuladoController extends Controller
      */
     private function obtenerOCrearCarritoBaseDatos(): ?Carrito
     {
-        if (! auth()->check() || ! Schema::hasTable('carritos')) {
+        if (! auth()->check() || ! Schema::hasTable('carritos') || ! Schema::hasTable('clientes')) {
             return null;
         }
 
+        /** @var Usuario|null $user */
+        $user = auth()->user();
         $cliente = Cliente::where('usuario_id', auth()->id())->first();
+        if (! $cliente && $user) {
+            $cliente = Cliente::create([
+                'usuario_id' => $user->id,
+                'nombre' => $user->nombre ?: 'Cliente',
+                'apellidos' => 'Coleccionista',
+                'email' => $user->email,
+            ]);
+        }
+
         if (! $cliente) {
             return null;
         }

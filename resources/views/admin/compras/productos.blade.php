@@ -415,18 +415,29 @@
                                 <td class="py-3 px-4 font-label-code text-xs">#{{ $prod->id }}</td>
                                 <td class="py-3 px-4 font-bold text-on-surface">{{ $prod->nombre }}</td>
                                 <td class="py-3 px-4 text-xs">{{ $prod->catalogo?->nombre }}</td>
-                                <td class="py-3 px-4 text-right font-tabular-data font-bold">${{ number_format((float) $prod->precio, 2) }}</td>
+                                <td class="py-3 px-4 text-right font-tabular-data font-bold">${{ number_format((float) $prod->precio, 2) }} <span class="text-[10px] font-normal text-on-surface-variant">MXN</span></td>
                                 <td class="py-3 px-4 text-right font-tabular-data font-semibold">{{ $prod->variantes_sku_count }}</td>
                                 <td class="py-3 px-4 text-center">
-                                    <button
-                                        type="button"
-                                        onclick="abrirModalActualizarImagen({{ $prod->id }}, '{{ addslashes($prod->nombre) }}', '{{ route('compras.productos.actualizar-imagen', $prod) }}', '{{ $prod->imagen ? asset('/' . ltrim($prod->imagen, '/')) : '' }}')"
-                                        class="btn-glass-surface px-2.5 py-1.5 rounded-xl text-xs font-semibold inline-flex items-center gap-1.5 shadow-2xs"
-                                        title="{{ $prod->imagen ? 'Actualizar o cambiar portada' : 'Subir foto de portada' }}"
-                                    >
-                                        <span class="material-symbols-outlined text-[16px] text-primary">add_a_photo</span>
-                                        <span class="hidden sm:inline">{{ $prod->imagen ? 'Cambiar Foto' : 'Subir Foto' }}</span>
-                                    </button>
+                                    <div class="inline-flex items-center justify-center gap-1.5">
+                                        <button
+                                            type="button"
+                                            onclick="abrirModalEditarPrecioCompras({{ $prod->id }}, '{{ addslashes($prod->nombre) }}', '{{ number_format((float) $prod->precio, 2, '.', '') }}', '{{ route('compras.productos.actualizar-precio', $prod) }}')"
+                                            class="btn-glass-surface px-2.5 py-1.5 rounded-xl text-xs font-semibold inline-flex items-center gap-1.5 shadow-2xs cursor-pointer"
+                                            title="Editar precio de {{ $prod->nombre }}"
+                                        >
+                                            <span class="material-symbols-outlined text-[16px] text-primary">payments</span>
+                                            <span class="hidden sm:inline">Editar Precio</span>
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onclick="abrirModalActualizarImagen({{ $prod->id }}, '{{ addslashes($prod->nombre) }}', '{{ route('compras.productos.actualizar-imagen', $prod) }}', '{{ $prod->imagen ? asset('/' . ltrim($prod->imagen, '/')) : '' }}')"
+                                            class="btn-glass-surface px-2.5 py-1.5 rounded-xl text-xs font-semibold inline-flex items-center gap-1.5 shadow-2xs cursor-pointer"
+                                            title="{{ $prod->imagen ? 'Actualizar o cambiar portada' : 'Subir foto de portada' }}"
+                                        >
+                                            <span class="material-symbols-outlined text-[16px] text-primary">add_a_photo</span>
+                                            <span class="hidden sm:inline">{{ $prod->imagen ? 'Cambiar Foto' : 'Subir Foto' }}</span>
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         @empty
@@ -448,6 +459,111 @@
         </div>
 
     </div>
+
+    {{-- Modal para Edición Rápida de Precio (MXN) --}}
+    <div
+        id="modal_editar_precio_compras"
+        class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs transition-opacity duration-200"
+        aria-modal="true"
+        role="dialog"
+    >
+        <div class="bg-surface-container-lowest dark:bg-[#1f1730] border border-purple-200/80 dark:border-purple-700/60 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4 relative animate-in fade-in zoom-in-95 duration-150">
+            <div class="flex items-center justify-between border-b border-purple-100 dark:border-purple-900/40 pb-3">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary text-[22px]">payments</span>
+                    <h3 class="text-sm font-bold uppercase font-label-code text-on-surface dark:text-white">Editar Precio del Producto</h3>
+                </div>
+                <button
+                    type="button"
+                    onclick="cerrarModalEditarPrecioCompras()"
+                    class="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-on-surface hover:bg-surface-container-low transition cursor-pointer"
+                    title="Cerrar modal"
+                >
+                    <span class="material-symbols-outlined text-[18px]">close</span>
+                </button>
+            </div>
+
+            <div class="space-y-1">
+                <p id="compras_modal_precio_nombre" class="font-bold text-sm text-on-surface dark:text-white line-clamp-2"></p>
+                <p class="text-xs text-on-surface-variant font-label-code">
+                    El nuevo precio se actualizará de inmediato en la tienda pública.
+                </p>
+            </div>
+
+            <form
+                id="form_editar_precio_compras"
+                method="POST"
+                action=""
+                class="space-y-4"
+            >
+                @csrf
+                @method('PATCH')
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="text-on-surface-variant font-label-code uppercase">Precio Actual:</span>
+                        <span id="compras_modal_precio_actual" class="font-tabular-data font-bold text-on-surface dark:text-white"></span>
+                    </div>
+
+                    <label for="compras_input_nuevo_precio" class="block text-xs font-label-code uppercase font-bold text-on-surface dark:text-white">
+                        Nuevo Precio (MXN) <span class="text-rose-500">*</span>
+                    </label>
+                    <div class="relative">
+                        <span class="absolute left-3.5 top-2.5 text-sm font-bold text-primary">$</span>
+                        <input
+                            type="number"
+                            step="0.01"
+                            min="0.01"
+                            max="99999999.99"
+                            id="compras_input_nuevo_precio"
+                            name="precio"
+                            required
+                            placeholder="0.00"
+                            class="w-full pl-8 pr-14 py-2.5 rounded-xl border border-purple-300 dark:border-purple-700 text-sm font-tabular-data font-bold bg-white dark:bg-[#160f24] text-on-surface dark:text-white focus:outline-none focus:border-primary"
+                        />
+                        <span class="absolute right-3.5 top-2.5 text-xs font-label-code text-on-surface-variant">MXN</span>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-end gap-2 pt-2 border-t border-purple-100 dark:border-purple-900/40">
+                    <button
+                        type="button"
+                        onclick="cerrarModalEditarPrecioCompras()"
+                        class="btn-glass-surface px-4 py-2 rounded-xl text-xs font-bold cursor-pointer"
+                    >
+                        Cancelar
+                    </button>
+                    <button
+                        type="submit"
+                        class="btn-glass-purple px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider inline-flex items-center gap-1.5 cursor-pointer"
+                    >
+                        <span class="material-symbols-outlined text-[16px]">check_circle</span>
+                        <span>Guardar Nuevo Precio</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        window.abrirModalEditarPrecioCompras = function (id, nombre, precioActual, actionUrl) {
+            const modal = document.getElementById('modal_editar_precio_compras');
+            const form = document.getElementById('form_editar_precio_compras');
+            const lblNombre = document.getElementById('compras_modal_precio_nombre');
+            const lblActual = document.getElementById('compras_modal_precio_actual');
+            const inputPrecio = document.getElementById('compras_input_nuevo_precio');
+            if (!modal || !form) return;
+            form.action = actionUrl;
+            if (lblNombre) lblNombre.textContent = nombre;
+            const numPrecio = parseFloat(precioActual || '0');
+            if (lblActual) lblActual.textContent = '$' + numPrecio.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' MXN';
+            if (inputPrecio) inputPrecio.value = numPrecio.toFixed(2);
+            modal.classList.remove('hidden');
+            setTimeout(() => { inputPrecio?.focus(); inputPrecio?.select(); }, 50);
+        };
+        window.cerrarModalEditarPrecioCompras = function () {
+            document.getElementById('modal_editar_precio_compras')?.classList.add('hidden');
+        };
+    </script>
 
     {{-- Modal Vidrioso para Actualizar Portada de Producto Existente --}}
     <div

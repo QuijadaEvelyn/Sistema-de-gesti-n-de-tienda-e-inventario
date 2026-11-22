@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\CheckoutSimuladoController;
 use App\Http\Controllers\Controller;
 use App\Models\Bitacora;
 use App\Models\Catalogo;
@@ -363,7 +364,17 @@ class ProductoController extends Controller
             'disco',
             'coleccionable',
             'variantesSku.existencias.sucursal',
+            'variantesSku.existencias.piezasUnicas',
         ]);
+
+        $variante = $producto->variantesSku->first();
+        $piezaUnica = $variante ? CheckoutSimuladoController::obtenerPiezaUnicaDeVariante((int) $variante->id) : null;
+        $esPiezaUnica = $variante !== null && (
+            $piezaUnica !== null
+            || (bool) ($producto->coleccionable?->edicion_limitada ?? false)
+            || CheckoutSimuladoController::esVariantePiezaUnica($variante)
+        );
+        $stockActual = $variante ? (int) $variante->existencias->sum('cantidad') : 0;
 
         $catalogos = Schema::hasTable('catalogos')
             ? Catalogo::where('activo', true)->orderBy('nombre')->get()
@@ -377,20 +388,34 @@ class ProductoController extends Controller
             'producto' => $producto,
             'catalogos' => $catalogos,
             'sucursales' => $sucursales,
+            'esPiezaUnica' => $esPiezaUnica,
+            'piezaUnica' => $piezaUnica,
+            'stockActual' => $stockActual,
         ]);
     }
 
     /**
-     * Actualiza la información de un producto, su variante SKU y ficha especializada.
+     * Actualiza la información de un producto, su variante SKU, existencias (solo para productos comunes) y ficha especializada.
      */
     public function update(Request $request, Producto $producto): RedirectResponse
     {
-        $variante = $producto->variantesSku->first();
+        $producto->loadMissing([
+            'coleccionable',
+            'variantesSku.existencias.piezasUnicas',
+        ]);
 
-        $validated = $request->validate([
+        $variante = $producto->variantesSku->first();
+        $piezaUnica = $variante ? CheckoutSimuladoController::obtenerPiezaUnicaDeVariante((int) $variante->id) : null;
+        $esPiezaUnica = $variante !== null && (
+            $piezaUnica !== null
+            || (bool) ($producto->coleccionable?->edicion_limitada ?? false)
+            || CheckoutSimuladoController::esVariantePiezaUnica($variante)
+        );
+
+        $rules = [
             'nombre' => ['required', 'string', 'max:255'],
             'descripcion' => ['nullable', 'string', 'max:5000'],
-            'precio' => ['required', 'numeric', 'min:0'],
+            'precio' => ['required', 'numeric', 'min:0.01'],
             'sku' => ['required', 'string', 'max:100', Rule::unique('variantes_sku', 'sku')->ignore($variante?->id)],
             'imagen' => ['nullable', 'image', 'max:4096'],
 
@@ -401,6 +426,21 @@ class ProductoController extends Controller
             'artista' => ['nullable', 'string', 'max:255'],
             'sello_discografico' => ['nullable', 'string', 'max:255'],
             'fabricante' => ['nullable', 'string', 'max:255'],
+        ];
+
+        // Si el producto es Común, exigir y validar `stock` (integer >= 0).
+        // Si es Pieza Única / Exclusiva, ignorar o rechazar cambios de stock para proteger su exclusividad.
+        if (! $esPiezaUnica) {
+            $rules['stock'] = ['required', 'integer', 'min:0', 'max:100000'];
+        }
+
+        $validated = $request->validate($rules, [
+            'precio.required' => 'El precio del producto es obligatorio.',
+            'precio.numeric' => 'El precio debe ser un valor numérico válido.',
+            'precio.min' => 'El precio debe ser de al menos $0.01 MXN.',
+            'stock.required' => 'El stock disponible es obligatorio para productos comunes.',
+            'stock.integer' => 'El stock disponible debe ser un número entero de unidades.',
+            'stock.min' => 'El stock disponible no puede ser negativo.',
         ]);
 
         $imagenRuta = null;
@@ -413,11 +453,14 @@ class ProductoController extends Controller
             $imagenRuta = 'images/productos/'.$nombreArchivo;
         }
 
-        DB::transaction(function () use ($validated, $request, $producto, $variante, $imagenRuta): void {
+        DB::transaction(function () use ($validated, $request, $producto, $variante, $imagenRuta, $esPiezaUnica): void {
+            $precioAnterior = round((float) $producto->precio, 2);
+            $nuevoPrecio = round((float) $validated['precio'], 2);
+
             $datosProducto = [
                 'nombre' => $validated['nombre'],
                 'descripcion' => $validated['descripcion'] ?? $producto->descripcion,
-                'precio' => $validated['precio'],
+                'precio' => $nuevoPrecio,
             ];
             if ($imagenRuta !== null && Schema::hasColumn('productos', 'imagen')) {
                 $datosProducto['imagen'] = $imagenRuta;
@@ -428,12 +471,106 @@ class ProductoController extends Controller
             if ($variante) {
                 $datosVariante = [
                     'sku' => strtoupper(trim($validated['sku'])),
-                    'precio' => $validated['precio'],
+                    'precio' => $nuevoPrecio,
                 ];
                 if ($imagenRuta !== null && Schema::hasColumn('variantes_sku', 'imagen')) {
                     $datosVariante['imagen'] = $imagenRuta;
                 }
+                if (! $esPiezaUnica && isset($validated['stock']) && Schema::hasColumn('variantes_sku', 'stock')) {
+                    $datosVariante['stock'] = (int) $validated['stock'];
+                }
                 $variante->update($datosVariante);
+            }
+
+            if (Schema::hasTable('variantes_sku') && Schema::hasColumn('variantes_sku', 'precio')) {
+                $producto->variantesSku()->update(['precio' => $nuevoPrecio]);
+            }
+
+            $stockAnterior = $variante ? (int) Existencia::where('variante_sku_id', $variante->id)->sum('cantidad') : 0;
+            $stockFinal = $stockAnterior;
+
+            // Actualizar existencias ÚNICAMENTE si el producto es Común (nunca para Piezas Únicas / Exclusivas)
+            if (! $esPiezaUnica && $variante && array_key_exists('stock', $validated) && Schema::hasTable('existencias')) {
+                $nuevoStock = (int) $validated['stock'];
+                $diferenciaStock = $nuevoStock - $stockAnterior;
+
+                if ($diferenciaStock !== 0) {
+                    $existencias = Existencia::where('variante_sku_id', $variante->id)
+                        ->orderByDesc('cantidad')
+                        ->orderBy('id')
+                        ->lockForUpdate()
+                        ->get();
+
+                    if ($existencias->isEmpty()) {
+                        $sucursalId = $request->session()->get(SucursalContextoService::SESSION_SUCURSAL_KEY)
+                            ?: (Schema::hasTable('sucursales') ? Sucursal::where('activa', true)->orderBy('id')->value('id') : null);
+
+                        if ($sucursalId) {
+                            $nuevaExistencia = Existencia::create([
+                                'variante_sku_id' => $variante->id,
+                                'sucursal_id' => (int) $sucursalId,
+                                'cantidad' => $nuevoStock,
+                                'stock_minimo' => 1,
+                            ]);
+
+                            if ($nuevoStock > 0 && Schema::hasTable('movimientos_inventario')) {
+                                MovimientoInventario::create([
+                                    'existencia_id' => $nuevaExistencia->id,
+                                    'usuario_id' => $request->user()?->id,
+                                    'tipo' => 'entrada',
+                                    'cantidad' => $nuevoStock,
+                                    'motivo' => 'Ajuste manual desde edición de producto',
+                                    'created_at' => now(),
+                                ]);
+                            }
+                        }
+                    } elseif ($diferenciaStock > 0) {
+                        $sucursalActivaId = $request->session()->get(SucursalContextoService::SESSION_SUCURSAL_KEY);
+                        $existenciaPrincipal = ($sucursalActivaId
+                            ? $existencias->firstWhere('sucursal_id', (int) $sucursalActivaId)
+                            : null) ?? $existencias->first();
+
+                        $existenciaPrincipal->increment('cantidad', $diferenciaStock);
+
+                        if (Schema::hasTable('movimientos_inventario')) {
+                            MovimientoInventario::create([
+                                'existencia_id' => $existenciaPrincipal->id,
+                                'usuario_id' => $request->user()?->id,
+                                'tipo' => 'entrada',
+                                'cantidad' => $diferenciaStock,
+                                'motivo' => 'Ajuste manual desde edición de producto',
+                                'created_at' => now(),
+                            ]);
+                        }
+                    } else {
+                        $porDescontar = abs($diferenciaStock);
+                        foreach ($existencias as $existencia) {
+                            if ($porDescontar <= 0) {
+                                break;
+                            }
+                            $actualSede = (int) $existencia->cantidad;
+                            if ($actualSede <= 0) {
+                                continue;
+                            }
+                            $descuento = min($actualSede, $porDescontar);
+                            $existencia->decrement('cantidad', $descuento);
+                            $porDescontar -= $descuento;
+
+                            if (Schema::hasTable('movimientos_inventario')) {
+                                MovimientoInventario::create([
+                                    'existencia_id' => $existencia->id,
+                                    'usuario_id' => $request->user()?->id,
+                                    'tipo' => 'ajuste',
+                                    'cantidad' => $descuento,
+                                    'motivo' => 'Ajuste manual desde edición de producto',
+                                    'created_at' => now(),
+                                ]);
+                            }
+                        }
+                    }
+
+                    $stockFinal = $nuevoStock;
+                }
             }
 
             // Actualizar metadatos según ficha
@@ -463,7 +600,11 @@ class ProductoController extends Controller
                 'detalle' => [
                     'nombre' => $producto->nombre,
                     'sku' => $validated['sku'],
-                    'precio' => $producto->precio,
+                    'precio_anterior' => $precioAnterior,
+                    'precio' => $nuevoPrecio,
+                    'es_pieza_unica' => $esPiezaUnica,
+                    'stock_anterior' => $stockAnterior,
+                    'stock_actual' => $stockFinal,
                     'usuario_nombre' => $request->user()?->nombre,
                 ],
                 'ip' => $request->ip() ?? '127.0.0.1',
@@ -591,6 +732,68 @@ class ProductoController extends Controller
         ]);
 
         return back()->with('status', "Fotografía de «{$producto->nombre}» actualizada exitosamente.");
+    }
+
+    /**
+     * Modifica rápida y directamente el precio de un producto desde las tablas de Catálogo e Inventario.
+     * Actualiza tanto el producto como sus variantes SKU y registra la auditoría en Bitácora.
+     * Los carritos activos con Productos Comunes conservan su `precio_unitario_congelado`.
+     */
+    public function actualizarPrecio(Request $request, Producto $producto): RedirectResponse|JsonResponse
+    {
+        $validated = $request->validate([
+            'precio' => ['required', 'numeric', 'min:0.01', 'max:99999999.99'],
+        ], [
+            'precio.required' => 'Por favor ingrese el nuevo precio del producto.',
+            'precio.numeric' => 'El precio debe ser un valor numérico válido.',
+            'precio.min' => 'El precio debe ser de al menos $0.01 MXN.',
+            'precio.max' => 'El precio ingresado excede el límite permitido.',
+        ]);
+
+        $precioAnterior = round((float) $producto->precio, 2);
+        $nuevoPrecio = round((float) $validated['precio'], 2);
+
+        DB::transaction(function () use ($request, $producto, $precioAnterior, $nuevoPrecio): void {
+            $producto->update(['precio' => $nuevoPrecio]);
+
+            if (Schema::hasTable('variantes_sku') && Schema::hasColumn('variantes_sku', 'precio')) {
+                $producto->variantesSku()->update(['precio' => $nuevoPrecio]);
+            }
+
+            if (Schema::hasTable('bitacoras')) {
+                Bitacora::create([
+                    'usuario_id' => $request->user()?->id,
+                    'accion' => 'ACTUALIZAR_PRECIO_PRODUCTO',
+                    'tabla_afectada' => 'productos',
+                    'registro_id' => $producto->id,
+                    'detalle' => [
+                        'nombre' => $producto->nombre,
+                        'precio_anterior' => $precioAnterior,
+                        'precio_nuevo' => $nuevoPrecio,
+                        'usuario_nombre' => $request->user()?->nombre,
+                        'usuario_rol' => $request->user()?->roles->pluck('nombre')->all(),
+                    ],
+                    'ip' => $request->ip() ?? '127.0.0.1',
+                    'created_at' => now(),
+                ]);
+            }
+        });
+
+        $precioFormateado = '$'.number_format($nuevoPrecio, 2).' MXN';
+        $mensaje = "Precio actualizado correctamente para «{$producto->nombre}» a {$precioFormateado}.";
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => $mensaje,
+                'producto_id' => $producto->id,
+                'precio_anterior' => $precioAnterior,
+                'precio' => $nuevoPrecio,
+                'precio_formateado' => '$'.number_format($nuevoPrecio, 2),
+            ]);
+        }
+
+        return back()->with('status', $mensaje);
     }
 
     /**

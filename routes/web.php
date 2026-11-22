@@ -166,6 +166,7 @@ Route::prefix('admin')
             Route::post('/', [ProductoController::class, 'store'])->name('admin.productos.store');
             Route::get('/{producto}/editar', [ProductoController::class, 'edit'])->name('admin.productos.edit');
             Route::put('/{producto}', [ProductoController::class, 'update'])->name('admin.productos.update');
+            Route::match(['patch', 'post'], '/{producto}/precio', [ProductoController::class, 'actualizarPrecio'])->name('admin.productos.actualizar-precio');
             Route::patch('/{producto}/toggle-estado', [ProductoController::class, 'toggleEstado'])->name('admin.productos.toggle-estado');
             Route::post('/{producto}/baja', [ProductoController::class, 'baja'])->name('admin.productos.baja');
             Route::post('/{producto}/reactivar', [ProductoController::class, 'reactivar'])->name('admin.productos.reactivar');
@@ -283,6 +284,7 @@ Route::prefix('compras')
         Route::post('/ordenes/recepcionar', [ComprasController::class, 'recepcionar'])->name('compras.ordenes.recepcionar');
         Route::get('/productos', [ProductoController::class, 'index'])->name('compras.productos');
         Route::post('/productos', [ProductoController::class, 'store'])->name('compras.productos.store');
+        Route::match(['patch', 'post'], '/productos/{producto}/precio', [ProductoController::class, 'actualizarPrecio'])->name('compras.productos.actualizar-precio');
         Route::post('/productos/{producto}/imagen', [ProductoController::class, 'actualizarImagen'])->name('compras.productos.actualizar-imagen');
         Route::get('/productos/plantilla-csv', [ComprasController::class, 'descargarPlantillaCsv'])->name('compras.productos.plantilla-csv');
         Route::post('/productos/importar-csv', [ComprasController::class, 'importarCsv'])->name('compras.productos.importar-csv');

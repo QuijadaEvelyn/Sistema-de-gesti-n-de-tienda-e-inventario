@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Models\Catalogo;
+use App\Models\Existencia;
+use App\Models\PiezaUnica;
 use App\Models\Producto;
 use App\Models\Proveedor;
 use App\Models\Rol;
@@ -389,6 +391,312 @@ class ModulosNuevosArchivumTest extends TestCase
         $this->assertDatabaseHas('bitacoras', [
             'accion' => 'STOCK_PROVEEDOR_RECEPCIONADO',
             'tabla_afectada' => 'movimientos_inventario',
+        ]);
+    }
+
+    /**
+     * MÓDULO 4: Modificación rápida de precios en el panel privado (Administrador y Empleados)
+     * e integración con la regla de congelamiento de precio en carritos activos (Productos Comunes vs Piezas Únicas).
+     */
+    public function test_modificacion_rapida_de_precio_en_panel_privado_refleja_en_tienda_publica_y_respeta_precio_congelado_en_productos_comunes(): void
+    {
+        $entorno = $this->crearEntornoBase();
+        $admin = $this->crearUsuarioConRol('administrador');
+        $empleadoAlmacen = $this->crearUsuarioConRol('almacen');
+        $empleadoCompras = $this->crearUsuarioConRol('compras');
+        $clientePrevio = $this->crearUsuarioConRol('cliente');
+        $clienteNuevo = $this->crearUsuarioConRol('cliente');
+
+        // 1. Crear un Producto Común (stock > 1) con precio original $1,500.00 MXN
+        $productoComun = Producto::create([
+            'catalogo_id' => $entorno['catalogoLibros']->id,
+            'nombre' => 'Edición Conmemorativa Poemas Selectos',
+            'descripcion' => 'Tiraje regular de catálogo con stock múltiple.',
+            'precio' => 1500.00,
+            'activo' => true,
+        ]);
+
+        $varianteComun = VarianteSku::create([
+            'producto_id' => $productoComun->id,
+            'sku' => 'LIB-COM-1500',
+            'descripcion' => 'MINT (M) · Tiraje Múltiple',
+            'precio' => 1500.00,
+            'activa' => true,
+        ]);
+
+        Existencia::create([
+            'variante_sku_id' => $varianteComun->id,
+            'sucursal_id' => $entorno['sucursal']->id,
+            'cantidad' => 10,
+            'stock_minimo' => 1,
+        ]);
+
+        // 2. Crear una Pieza Única (stock = 1 + registro en piezas_unicas) con precio original $12,000.00 MXN
+        $productoUnico = Producto::create([
+            'catalogo_id' => $entorno['catalogoLibros']->id,
+            'nombre' => 'Manuscrito Único Firmado 1920',
+            'descripcion' => 'Ejemplar único 1/1 numerado.',
+            'precio' => 12000.00,
+            'activo' => true,
+        ]);
+
+        $varianteUnica = VarianteSku::create([
+            'producto_id' => $productoUnico->id,
+            'sku' => 'LIB-UNI-12000',
+            'descripcion' => 'MINT (M) · Pieza Única',
+            'precio' => 12000.00,
+            'activa' => true,
+        ]);
+
+        $existenciaUnica = Existencia::create([
+            'variante_sku_id' => $varianteUnica->id,
+            'sucursal_id' => $entorno['sucursal']->id,
+            'cantidad' => 1,
+            'stock_minimo' => 1,
+        ]);
+
+        PiezaUnica::create([
+            'existencia_id' => $existenciaUnica->id,
+            'numero_serie' => 'ARC-UNI-1920-001',
+            'estado' => 'disponible',
+        ]);
+
+        // 3. El Cliente Previo agrega el Producto Común ($1,500.00) y la Pieza Única ($12,000.00) a su carrito ANTES del cambio de precio
+        $this->actingAs($clientePrevio)->post(route('carrito.agregar'), [
+            'variante_sku_id' => $varianteComun->id,
+            'cantidad' => 2,
+        ])->assertRedirect();
+
+        $this->actingAs($clientePrevio)->post(route('carrito.agregar'), [
+            'variante_sku_id' => $varianteUnica->id,
+            'cantidad' => 1,
+        ])->assertRedirect();
+
+        $this->assertDatabaseHas('carrito_items', [
+            'variante_sku_id' => $varianteComun->id,
+            'precio_unitario_congelado' => 1500.00,
+        ]);
+
+        $this->assertDatabaseHas('carrito_items', [
+            'variante_sku_id' => $varianteUnica->id,
+            'precio_unitario_congelado' => null,
+        ]);
+
+        // 4. Verificar que las vistas privadas (/admin/productos y /admin/inventario) muestran el botón "Editar Precio"
+        $this->actingAs($empleadoAlmacen)
+            ->get(route('admin.inventario'))
+            ->assertOk()
+            ->assertSee('Editar Precio')
+            ->assertSee('modal_editar_precio_inventario', false);
+
+        $this->actingAs($empleadoCompras)
+            ->get(route('admin.productos.index'))
+            ->assertOk()
+            ->assertSee('Editar Precio')
+            ->assertSee('modal_editar_precio', false);
+
+        // 5. Validación: rechaza precios menores a 0.01
+        $this->actingAs($empleadoAlmacen)
+            ->from(route('admin.inventario'))
+            ->patch(route('admin.productos.actualizar-precio', $productoComun), [
+                'precio' => 0,
+            ])
+            ->assertRedirect(route('admin.inventario'))
+            ->assertSessionHasErrors(['precio']);
+
+        // 6. Un empleado modifica el precio del Producto Común de $1,500.00 a $2,250.00 MXN
+        $this->actingAs($empleadoAlmacen)
+            ->from(route('admin.inventario'))
+            ->patch(route('admin.productos.actualizar-precio', $productoComun), [
+                'precio' => 2250.00,
+            ])
+            ->assertRedirect(route('admin.inventario'))
+            ->assertSessionHas('status');
+
+        $productoComun->refresh();
+        $varianteComun->refresh();
+        $this->assertEquals(2250.00, (float) $productoComun->precio);
+        $this->assertEquals(2250.00, (float) $varianteComun->precio);
+
+        $this->assertDatabaseHas('bitacoras', [
+            'accion' => 'ACTUALIZAR_PRECIO_PRODUCTO',
+            'tabla_afectada' => 'productos',
+            'registro_id' => $productoComun->id,
+            'usuario_id' => $empleadoAlmacen->id,
+        ]);
+
+        // 7. El Administrador modifica el precio de la Pieza Única de $12,000.00 a $15,500.00 MXN
+        $this->actingAs($admin)
+            ->from(route('admin.productos.index'))
+            ->patch(route('admin.productos.actualizar-precio', $productoUnico), [
+                'precio' => 15500.00,
+            ])
+            ->assertRedirect(route('admin.productos.index'))
+            ->assertSessionHas('status');
+
+        $productoUnico->refresh();
+        $varianteUnica->refresh();
+        $this->assertEquals(15500.00, (float) $productoUnico->precio);
+        $this->assertEquals(15500.00, (float) $varianteUnica->precio);
+
+        // 8. Verificar reflejo inmediato en la tienda pública (/catalogo/libros)
+        $this->get(route('public.libros'))
+            ->assertOk()
+            ->assertSee('2,250')
+            ->assertSee('15,500');
+
+        // 9. Verificar carrito del Cliente Previo:
+        //    - Producto Común mantiene su precio congelado de $1,500.00 (incluso si incrementa cantidad a 3 -> subtotal $4,500.00)
+        //    - Pieza Única refleja el nuevo precio vigente de $15,500.00
+        $resPatchPrevio = $this->actingAs($clientePrevio)
+            ->patchJson(route('carrito.actualizar', $varianteComun->id), [
+                'cantidad' => 3,
+            ]);
+
+        $resPatchPrevio->assertOk()
+            ->assertJsonPath('status', 'success');
+
+        $this->assertEquals(1500.00, (float) $resPatchPrevio->json('carrito.items_regulares.0.precio'));
+        $this->assertEquals(1500.00, (float) $resPatchPrevio->json('carrito.items_regulares.0.precio_unitario_congelado'));
+        $this->assertEquals(4500.00, (float) $resPatchPrevio->json('carrito.items_regulares.0.subtotal'));
+        $this->assertEquals(15500.00, (float) $resPatchPrevio->json('carrito.items_piezas_unicas.0.precio'));
+
+        // El total del carrito del Cliente Previo es 3 * $1,500.00 (común congelado) + 1 * $15,500.00 (pieza única actualizada) = $20,000.00
+        $this->assertEquals(20000.00, (float) $resPatchPrevio->json('carrito.total'));
+
+        // 10. Un Cliente Nuevo que agrega el Producto Común DESPUÉS del cambio de precio recibe el nuevo precio de $2,250.00
+        $this->flushSession();
+        $resNuevoCliente = $this->actingAs($clienteNuevo)
+            ->postJson(route('carrito.agregar'), [
+                'variante_sku_id' => $varianteComun->id,
+                'cantidad' => 1,
+            ]);
+
+        $resNuevoCliente->assertOk()
+            ->assertJsonPath('status', 'success');
+        $this->assertEquals(2250.00, (float) $resNuevoCliente->json('carrito.total'));
+    }
+
+    /**
+     * MÓDULO 5: Edición de Stock Disponible en la vista de Editar Producto (exclusivo para Productos Comunes,
+     * bloqueado en Piezas Únicas / Exclusivas y auditado en `movimientos_inventario`).
+     */
+    public function test_editar_producto_permite_modificar_stock_en_productos_comunes_y_bloquea_en_piezas_unicas(): void
+    {
+        $entorno = $this->crearEntornoBase();
+        $empleado = $this->crearUsuarioConRol('almacen');
+
+        // 1. Producto Común (stock = 5)
+        $productoComun = Producto::create([
+            'catalogo_id' => $entorno['catalogoLibros']->id,
+            'nombre' => 'Antología Poética Edición Común',
+            'descripcion' => 'Tiraje regular editable.',
+            'precio' => 650.00,
+            'activo' => true,
+        ]);
+
+        $varianteComun = VarianteSku::create([
+            'producto_id' => $productoComun->id,
+            'sku' => 'LIB-EDIT-COM-01',
+            'descripcion' => 'MINT (M)',
+            'precio' => 650.00,
+            'activa' => true,
+        ]);
+
+        $existenciaComun = Existencia::create([
+            'variante_sku_id' => $varianteComun->id,
+            'sucursal_id' => $entorno['sucursal']->id,
+            'cantidad' => 5,
+            'stock_minimo' => 1,
+        ]);
+
+        // 2. Pieza Única / Exclusiva (stock = 1 + registro en piezas_unicas)
+        $productoUnico = Producto::create([
+            'catalogo_id' => $entorno['catalogoLibros']->id,
+            'nombre' => 'Códice Único Numerado 1/1',
+            'descripcion' => 'Pieza exclusiva no editable en stock.',
+            'precio' => 28000.00,
+            'activo' => true,
+        ]);
+
+        $varianteUnica = VarianteSku::create([
+            'producto_id' => $productoUnico->id,
+            'sku' => 'LIB-EDIT-UNI-01',
+            'descripcion' => 'MINT (M) · Pieza Única',
+            'precio' => 28000.00,
+            'activa' => true,
+        ]);
+
+        $existenciaUnica = Existencia::create([
+            'variante_sku_id' => $varianteUnica->id,
+            'sucursal_id' => $entorno['sucursal']->id,
+            'cantidad' => 1,
+            'stock_minimo' => 1,
+        ]);
+
+        PiezaUnica::create([
+            'existencia_id' => $existenciaUnica->id,
+            'numero_serie' => 'ARC-COD-001',
+            'estado' => 'disponible',
+        ]);
+
+        // 3. Verificar Vista de Edición para Producto Común: muestra input `name="stock"` editable con valor 5
+        $this->actingAs($empleado)
+            ->get(route('admin.productos.edit', $productoComun))
+            ->assertOk()
+            ->assertSee('Stock Disponible (Unidades)')
+            ->assertSee('name="stock"', false)
+            ->assertDontSee('Pieza Única / Exclusiva — Stock fijo (no editable)');
+
+        // 4. Verificar Vista de Edición para Pieza Única: muestra input deshabilitado y etiqueta de bloqueo
+        $this->actingAs($empleado)
+            ->get(route('admin.productos.edit', $productoUnico))
+            ->assertOk()
+            ->assertSee('Stock Disponible (Unidades)')
+            ->assertSee('Pieza Única / Exclusiva — Stock fijo (no editable)')
+            ->assertDontSee('name="stock"', false);
+
+        // 5. Actualizar Producto Común aumentando stock de 5 a 14 unidades -> actualiza existencias y crea movimiento_inventario
+        $this->actingAs($empleado)
+            ->put(route('admin.productos.update', $productoComun), [
+                'sku' => 'LIB-EDIT-COM-01',
+                'precio' => 700.00,
+                'stock' => 14,
+                'nombre' => 'Antología Poética Edición Común',
+                'descripcion' => 'Tiraje regular editable.',
+            ])
+            ->assertRedirect(route('admin.productos.index'))
+            ->assertSessionHas('status');
+
+        $existenciaComun->refresh();
+        $this->assertSame(14, (int) $existenciaComun->cantidad);
+
+        $this->assertDatabaseHas('movimientos_inventario', [
+            'existencia_id' => $existenciaComun->id,
+            'usuario_id' => $empleado->id,
+            'cantidad' => 9,
+            'motivo' => 'Ajuste manual desde edición de producto',
+        ]);
+
+        // 6. Intentar modificar stock de la Pieza Única enviando `stock => 50` en el request -> se ignora el cambio de stock (queda en 1), pero sí actualiza el precio
+        $this->actingAs($empleado)
+            ->put(route('admin.productos.update', $productoUnico), [
+                'sku' => 'LIB-EDIT-UNI-01',
+                'precio' => 31000.00,
+                'stock' => 50,
+                'nombre' => 'Códice Único Numerado 1/1',
+                'descripcion' => 'Pieza exclusiva no editable en stock.',
+            ])
+            ->assertRedirect(route('admin.productos.index'))
+            ->assertSessionHas('status');
+
+        $existenciaUnica->refresh();
+        $productoUnico->refresh();
+        $this->assertSame(1, (int) $existenciaUnica->cantidad);
+        $this->assertEquals(31000.00, (float) $productoUnico->precio);
+        $this->assertDatabaseMissing('movimientos_inventario', [
+            'existencia_id' => $existenciaUnica->id,
+            'motivo' => 'Ajuste manual desde edición de producto',
         ]);
     }
 }

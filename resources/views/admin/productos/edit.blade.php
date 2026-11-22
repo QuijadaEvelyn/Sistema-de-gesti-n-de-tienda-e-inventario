@@ -46,6 +46,15 @@
 
         @php
             $variante = $producto->variantesSku->first();
+            $esPiezaUnicaVista = $esPiezaUnica ?? (
+                $variante !== null && (
+                    \App\Http\Controllers\CheckoutSimuladoController::obtenerPiezaUnicaDeVariante((int) $variante->id) !== null
+                    || (bool) ($producto->coleccionable?->edicion_limitada ?? false)
+                    || \App\Http\Controllers\CheckoutSimuladoController::esVariantePiezaUnica($variante)
+                )
+            );
+            $stockActualVista = $stockActual ?? ($variante ? (int) $variante->existencias->sum('cantidad') : 0);
+            $valorStockUnico = $stockActualVista > 0 ? 1 : 0;
         @endphp
 
         <form method="POST" action="{{ route('admin.productos.update', $producto) }}" enctype="multipart/form-data" class="space-y-6">
@@ -53,7 +62,7 @@
             @method('PUT')
 
             <div class="bg-surface-container-lowest dark:bg-[#1a1329] p-6 rounded-3xl border border-purple-200/70 dark:border-purple-800/40 shadow-xs space-y-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {{-- Código SKU --}}
                     <div>
                         <label class="block text-xs font-label-code uppercase text-on-surface dark:text-white font-semibold mb-1">
@@ -76,7 +85,7 @@
                         <input
                             type="number"
                             step="0.01"
-                            min="0"
+                            min="0.01"
                             name="precio"
                             value="{{ old('precio', $producto->precio) }}"
                             required
@@ -84,8 +93,45 @@
                         />
                     </div>
 
+                    {{-- Stock Disponible (Unidades) --}}
+                    <div>
+                        <label class="block text-xs font-label-code uppercase text-on-surface dark:text-white font-semibold mb-1">
+                            Stock Disponible (Unidades)
+                            @if (! $esPiezaUnicaVista)
+                                <span class="text-rose-500">*</span>
+                            @endif
+                        </label>
+                        @if ($esPiezaUnicaVista)
+                            <input
+                                type="number"
+                                value="{{ $valorStockUnico }}"
+                                disabled
+                                readonly
+                                class="w-full px-3.5 py-2.5 rounded-xl border border-purple-200/70 dark:border-purple-800/40 text-sm bg-purple-100/50 dark:bg-purple-950/40 text-on-surface-variant dark:text-purple-300/80 font-tabular-data font-bold cursor-not-allowed select-none"
+                                title="Pieza Única / Exclusiva — Stock fijo (no editable)"
+                            />
+                            <p class="mt-1.5 text-[11px] font-label-code font-semibold text-primary dark:text-purple-300 flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[14px]">lock</span>
+                                <span>Pieza Única / Exclusiva — Stock fijo (no editable)</span>
+                            </p>
+                        @else
+                            <input
+                                type="number"
+                                name="stock"
+                                min="0"
+                                step="1"
+                                value="{{ old('stock', $stockActualVista) }}"
+                                required
+                                class="w-full px-3.5 py-2.5 rounded-xl border border-purple-200 dark:border-purple-800/60 text-sm bg-white dark:bg-[#1f1a2e] text-on-surface dark:text-white font-tabular-data font-bold focus:outline-none focus:border-primary"
+                            />
+                            <p class="mt-1 text-[11px] font-label-code text-on-surface-variant dark:text-purple-200/70">
+                                Producto común — Ajuste directo de unidades en inventario
+                            </p>
+                        @endif
+                    </div>
+
                     {{-- Nombre / Título --}}
-                    <div class="md:col-span-2">
+                    <div class="md:col-span-3">
                         <label class="block text-xs font-label-code uppercase text-on-surface dark:text-white font-semibold mb-1">
                             Título / Nombre del Producto <span class="text-rose-500">*</span>
                         </label>
@@ -108,12 +154,12 @@
                             <label class="block text-xs font-label-code uppercase text-on-surface dark:text-white font-semibold mb-1">Editorial</label>
                             <input type="text" name="editorial" value="{{ old('editorial', $producto->libro->editorial) }}" class="w-full px-3.5 py-2.5 rounded-xl border border-purple-200 dark:border-purple-800/60 text-xs bg-white dark:bg-[#1f1a2e] text-on-surface dark:text-white" />
                         </div>
-                        <div class="md:col-span-2">
+                        <div>
                             <label class="block text-xs font-label-code uppercase text-on-surface dark:text-white font-semibold mb-1">Género Literario</label>
                             <input type="text" name="genero" value="{{ old('genero', $producto->libro->genero) }}" class="w-full px-3.5 py-2.5 rounded-xl border border-purple-200 dark:border-purple-800/60 text-xs bg-white dark:bg-[#1f1a2e] text-on-surface dark:text-white" />
                         </div>
                     @elseif ($producto->disco)
-                        <div>
+                        <div class="md:col-span-2">
                             <label class="block text-xs font-label-code uppercase text-on-surface dark:text-white font-semibold mb-1">Artista / Intérprete</label>
                             <input type="text" name="artista" value="{{ old('artista', $producto->disco->artista) }}" class="w-full px-3.5 py-2.5 rounded-xl border border-purple-200 dark:border-purple-800/60 text-xs bg-white dark:bg-[#1f1a2e] text-on-surface dark:text-white" />
                         </div>
@@ -122,14 +168,14 @@
                             <input type="text" name="sello_discografico" value="{{ old('sello_discografico', $producto->disco->sello) }}" class="w-full px-3.5 py-2.5 rounded-xl border border-purple-200 dark:border-purple-800/60 text-xs bg-white dark:bg-[#1f1a2e] text-on-surface dark:text-white" />
                         </div>
                     @elseif ($producto->coleccionable)
-                        <div class="md:col-span-2">
+                        <div class="md:col-span-3">
                             <label class="block text-xs font-label-code uppercase text-on-surface dark:text-white font-semibold mb-1">Fabricante / Marca</label>
                             <input type="text" name="fabricante" value="{{ old('fabricante', $producto->coleccionable->marca) }}" class="w-full px-3.5 py-2.5 rounded-xl border border-purple-200 dark:border-purple-800/60 text-xs bg-white dark:bg-[#1f1a2e] text-on-surface dark:text-white" />
                         </div>
                     @endif
 
                     {{-- Descripción --}}
-                    <div class="md:col-span-2">
+                    <div class="md:col-span-3">
                         <label class="block text-xs font-label-code uppercase text-on-surface dark:text-white font-semibold mb-1">
                             Descripción del Producto
                         </label>
@@ -141,7 +187,7 @@
                     </div>
 
                     {{-- Fotografía de Portada --}}
-                    <div class="md:col-span-2 space-y-2">
+                    <div class="md:col-span-3 space-y-2">
                         <label class="block text-xs font-label-code uppercase text-on-surface dark:text-white font-semibold">
                             Cambiar Fotografía de Portada (Opcional &middot; JPG, PNG, WEBP)
                         </label>

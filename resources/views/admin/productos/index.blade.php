@@ -189,8 +189,21 @@
 
                                 {{-- Precio Base --}}
                                 <td class="py-3 px-4 text-right font-tabular-data font-bold text-on-surface dark:text-white">
-                                    ${{ number_format((float) $prod->precio, 2) }}
-                                    <span class="text-[10px] text-on-surface-variant font-normal">MXN</span>
+                                    <div class="inline-flex flex-col items-end gap-1">
+                                        <div>
+                                            ${{ number_format((float) $prod->precio, 2) }}
+                                            <span class="text-[10px] text-on-surface-variant font-normal">MXN</span>
+                                        </div>
+                                        <button
+                                            type="button"
+                                            onclick="abrirModalEditarPrecio({{ $prod->id }}, '{{ addslashes($prod->nombre) }}', '{{ number_format((float) $prod->precio, 2, '.', '') }}', '{{ route('admin.productos.actualizar-precio', $prod) }}', '{{ $skuText }}')"
+                                            class="px-2 py-0.5 rounded-lg bg-purple-100/80 hover:bg-purple-200 text-purple-900 dark:bg-purple-900/50 dark:hover:bg-purple-800/70 dark:text-purple-200 border border-purple-200 dark:border-purple-700/60 text-[10px] font-label-code font-bold uppercase transition inline-flex items-center gap-1 cursor-pointer"
+                                            title="Editar precio de {{ $prod->nombre }}"
+                                        >
+                                            <span class="material-symbols-outlined text-[13px]">payments</span>
+                                            <span>Editar Precio</span>
+                                        </button>
+                                    </div>
                                 </td>
 
                                 {{-- Badge de Estado en Tienda Pública --}}
@@ -245,6 +258,17 @@
                                                 </button>
                                             </form>
                                         @endif
+
+                                        {{-- Botón Editar Precio Rápido --}}
+                                        <button
+                                            type="button"
+                                            onclick="abrirModalEditarPrecio({{ $prod->id }}, '{{ addslashes($prod->nombre) }}', '{{ number_format((float) $prod->precio, 2, '.', '') }}', '{{ route('admin.productos.actualizar-precio', $prod) }}', '{{ $skuText }}')"
+                                            class="px-2.5 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-800 border border-purple-200 dark:bg-purple-950/40 dark:hover:bg-purple-900/60 dark:text-purple-200 dark:border-purple-700/60 text-[11px] font-label-code font-bold transition inline-flex items-center gap-1 cursor-pointer"
+                                            title="Modificar precio en MXN"
+                                        >
+                                            <span class="material-symbols-outlined text-[15px]">attach_money</span>
+                                            <span class="hidden md:inline">Editar Precio</span>
+                                        </button>
 
                                         {{-- Botón Editar --}}
                                         <a
@@ -376,7 +400,125 @@
         </div>
     </div>
 
+    {{-- Modal para Edición Rápida de Precio (MXN) --}}
+    <div
+        id="modal_editar_precio"
+        class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs transition-opacity duration-200"
+        aria-modal="true"
+        role="dialog"
+    >
+        <div class="bg-surface-container-lowest dark:bg-[#1f1730] border border-purple-200/80 dark:border-purple-700/60 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4 relative animate-in fade-in zoom-in-95 duration-150">
+            <div class="flex items-center justify-between border-b border-purple-100 dark:border-purple-900/40 pb-3">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary dark:text-purple-300 text-[22px]">payments</span>
+                    <h3 class="text-sm font-bold uppercase font-label-code text-on-surface dark:text-white">Editar Precio del Producto</h3>
+                </div>
+                <button
+                    type="button"
+                    onclick="cerrarModalEditarPrecio()"
+                    class="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-on-surface hover:bg-surface-container-low transition cursor-pointer"
+                    title="Cerrar modal"
+                >
+                    <span class="material-symbols-outlined text-[18px]">close</span>
+                </button>
+            </div>
+
+            <div class="space-y-1">
+                <span id="modal_precio_sku" class="inline-block text-[10px] font-label-code font-bold uppercase px-2 py-0.5 rounded-md bg-purple-100 dark:bg-purple-900/60 text-purple-900 dark:text-purple-200"></span>
+                <p id="modal_precio_producto_nombre" class="font-bold text-sm text-on-surface dark:text-white line-clamp-2"></p>
+                <p class="text-xs text-on-surface-variant dark:text-purple-200/70">
+                    El nuevo precio se actualizará de inmediato en la tienda pública. Los clientes con productos comunes en su carrito activo conservarán su precio congelado.
+                </p>
+            </div>
+
+            <form
+                id="form_editar_precio"
+                method="POST"
+                action=""
+                class="space-y-4"
+            >
+                @csrf
+                @method('PATCH')
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="text-on-surface-variant dark:text-purple-200/70 font-label-code uppercase">Precio Actual:</span>
+                        <span id="modal_precio_actual_display" class="font-tabular-data font-bold text-on-surface dark:text-white"></span>
+                    </div>
+
+                    <label for="input_modal_nuevo_precio" class="block text-xs font-label-code uppercase font-bold text-on-surface dark:text-white">
+                        Nuevo Precio (MXN) <span class="text-rose-500">*</span>
+                    </label>
+                    <div class="relative">
+                        <span class="absolute left-3.5 top-2.5 text-sm font-bold text-primary dark:text-purple-300">$</span>
+                        <input
+                            type="number"
+                            step="0.01"
+                            min="0.01"
+                            max="99999999.99"
+                            id="input_modal_nuevo_precio"
+                            name="precio"
+                            required
+                            placeholder="0.00"
+                            class="w-full pl-8 pr-14 py-2.5 rounded-xl border border-purple-300 dark:border-purple-700 text-sm font-tabular-data font-bold bg-white dark:bg-[#160f24] text-on-surface dark:text-white focus:outline-none focus:border-primary"
+                        />
+                        <span class="absolute right-3.5 top-2.5 text-xs font-label-code text-on-surface-variant dark:text-purple-300/70">MXN</span>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-end gap-2 pt-2 border-t border-purple-100 dark:border-purple-900/40">
+                    <button
+                        type="button"
+                        onclick="cerrarModalEditarPrecio()"
+                        class="px-4 py-2 rounded-xl border border-purple-200 dark:border-purple-800/60 text-xs font-semibold text-outline hover:text-on-surface transition cursor-pointer"
+                    >
+                        Cancelar
+                    </button>
+                    <button
+                        type="submit"
+                        class="btn-glass-purple px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider shadow-sm flex items-center gap-1.5 cursor-pointer"
+                    >
+                        <span class="material-symbols-outlined text-[16px]">check_circle</span>
+                        <span>Guardar Nuevo Precio</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
+        function abrirModalEditarPrecio(productoId, nombreProducto, precioActual, actionUrl, sku) {
+            const modal = document.getElementById('modal_editar_precio');
+            const form = document.getElementById('form_editar_precio');
+            const lblNombre = document.getElementById('modal_precio_producto_nombre');
+            const lblSku = document.getElementById('modal_precio_sku');
+            const lblPrecioActual = document.getElementById('modal_precio_actual_display');
+            const inputPrecio = document.getElementById('input_modal_nuevo_precio');
+
+            if (!modal || !form) return;
+
+            form.action = actionUrl;
+            if (lblNombre) lblNombre.textContent = nombreProducto;
+            if (lblSku) lblSku.textContent = sku || ('ID #' + productoId);
+            const numPrecio = parseFloat(precioActual || '0');
+            if (lblPrecioActual) {
+                lblPrecioActual.textContent = '$' + numPrecio.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' MXN';
+            }
+            if (inputPrecio) {
+                inputPrecio.value = numPrecio.toFixed(2);
+            }
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                inputPrecio?.focus();
+                inputPrecio?.select();
+            }, 50);
+        }
+
+        function cerrarModalEditarPrecio() {
+            const modal = document.getElementById('modal_editar_precio');
+            if (modal) modal.classList.add('hidden');
+        }
+
         function abrirModalActualizarImagen(productoId, nombreProducto, actionUrl, imagenActualUrl) {
             const modal = document.getElementById('modal_actualizar_imagen');
             const form = document.getElementById('form_actualizar_imagen');
