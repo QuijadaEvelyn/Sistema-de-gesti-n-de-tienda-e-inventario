@@ -16,6 +16,7 @@ use App\Models\MovimientoInventario;
 use App\Models\Producto;
 use App\Models\Sucursal;
 use App\Models\VarianteSku;
+use App\Services\ImportacionProductosService;
 use App\Services\SucursalContextoService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
@@ -23,12 +24,12 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
+use RuntimeException;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Throwable;
 
 class ProductoController extends Controller
@@ -140,24 +141,12 @@ class ProductoController extends Controller
     }
 
     /**
-     * Guarda una imagen subida tanto en `public/images/productos` (acceso directo en Nginx)
-     * como en `storage/app/public/productos` (acceso por enlace simbólico `storage:link`).
+     * Guarda una imagen subida en el disco `public` (`storage/app/public/productos`),
+     * servido directamente por Nginx en `/storage/productos/...`.
      */
     private function guardarImagenSubida(UploadedFile $archivo): string
     {
-        $extension = $archivo->guessExtension() ?: ($archivo->getClientOriginalExtension() ?: 'jpg');
-        $nombreArchivo = Str::random(40).'.'.$extension;
-        $contenido = File::get($archivo->getRealPath());
-
-        // 1. Guardar en storage/app/public/productos (para storage:link -> /storage/productos/...)
-        Storage::disk('public')->put('productos/'.$nombreArchivo, $contenido);
-
-        // 2. Guardar también en public/images/productos (respaldo directo para Nginx sin depender de symlinks en Windows/Docker)
-        $directorioDestino = public_path('images/productos');
-        File::ensureDirectoryExists($directorioDestino);
-        File::put($directorioDestino.DIRECTORY_SEPARATOR.$nombreArchivo, $contenido);
-
-        return 'images/productos/'.$nombreArchivo;
+        return (string) $archivo->store('productos', 'public');
     }
 
     /**
@@ -877,6 +866,76 @@ class ProductoController extends Controller
         }
 
         return back()->with('status', $mensaje);
+    }
+
+    /**
+     * Descarga la plantilla oficial Excel (.xlsx) con 3 pestañas (Libros, Discos y Coleccionables).
+     */
+    public function descargarPlantillaExcel(ImportacionProductosService $importador): StreamedResponse
+    {
+        $contenido = $importador->generarPlantillaExcel();
+
+        return response()->streamDownload(function () use ($contenido): void {
+            echo $contenido;
+        }, 'plantilla_productos_archivum.xlsx', [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'Cache-Control' => 'no-store, no-cache, must-revalidate',
+        ]);
+    }
+
+    /**
+     * Descarga la plantilla oficial CSV (UTF-8) para carga masiva de productos.
+     */
+    public function descargarPlantillaCsv(ImportacionProductosService $importador): StreamedResponse
+    {
+        $contenido = $importador->generarPlantillaCsv();
+
+        return response()->streamDownload(function () use ($contenido): void {
+            echo $contenido;
+        }, 'plantilla_productos_archivum.csv', [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Cache-Control' => 'no-store, no-cache, must-revalidate',
+        ]);
+    }
+
+    /**
+     * Procesa la importación masiva de productos desde un Excel (.xlsx) o CSV (UTF-8) y un ZIP opcional de imágenes.
+     */
+    public function importarCsv(Request $request, ImportacionProductosService $importador): RedirectResponse
+    {
+        $request->validate([
+            'archivo_csv' => ['required', 'file', 'mimes:xlsx,xls,csv,txt', 'max:10240'],
+            'archivo_zip' => ['nullable', 'file', 'mimes:zip', 'max:51200'],
+        ], [
+            'archivo_csv.required' => 'Debe seleccionar un archivo Excel (.xlsx) o CSV para ejecutar la carga masiva.',
+            'archivo_csv.file' => 'El archivo adjunto no es válido.',
+            'archivo_csv.mimes' => 'El archivo de datos debe tener extensión .xlsx, .xls, .csv o .txt.',
+            'archivo_csv.max' => 'El archivo de datos no debe superar los 10 MB.',
+            'archivo_zip.file' => 'El archivo ZIP adjunto no es válido.',
+            'archivo_zip.mimes' => 'El paquete de imágenes debe ser un archivo .zip válido.',
+            'archivo_zip.max' => 'El archivo ZIP no debe superar los 50 MB.',
+        ]);
+
+        try {
+            $resumen = $importador->importar(
+                archivoDatos: $request->file('archivo_csv'),
+                archivoZip: $request->file('archivo_zip'),
+                usuario: $request->user(),
+                ip: $request->ip() ?? '127.0.0.1'
+            );
+        } catch (RuntimeException|Throwable $e) {
+            return redirect()
+                ->route('admin.productos.index')
+                ->withErrors(['archivo_csv' => $e->getMessage()]);
+        }
+
+        $totalAplicados = $resumen['creados'] + $resumen['actualizados'];
+        $mensaje = "Carga masiva finalizada: {$resumen['creados']} productos creados, {$resumen['actualizados']} actualizados, {$resumen['imagenes_extraidas']} imágenes extraídas y {$resumen['omitidos']} filas con error.";
+
+        return redirect()
+            ->route('admin.productos.index')
+            ->with('status', $totalAplicados > 0 ? $mensaje : null)
+            ->with('importacion_resumen', $resumen);
     }
 
     /**

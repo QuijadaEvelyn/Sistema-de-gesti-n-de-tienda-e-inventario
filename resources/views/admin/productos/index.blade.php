@@ -20,12 +20,96 @@
                     <span class="material-symbols-outlined text-[18px]">add_circle</span>
                     <span>+ Dar de Alta Producto</span>
                 </a>
+                <button
+                    type="button"
+                    onclick="abrirModalCargaMasiva()"
+                    class="px-4 py-2.5 rounded-xl border border-purple-300 dark:border-purple-500/40 bg-white dark:bg-[#1a1329] hover:bg-purple-50 dark:hover:bg-purple-900/30 text-purple-900 dark:text-purple-200 text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-2xs transition cursor-pointer"
+                >
+                    <span class="material-symbols-outlined text-[18px] text-primary dark:text-purple-300">upload_file</span>
+                    <span>Carga Masiva (Excel / CSV)</span>
+                </button>
+                <a href="{{ route('admin.productos.plantilla-excel') }}" class="px-4 py-2.5 rounded-xl border border-purple-200 bg-purple-50 hover:bg-purple-100 text-purple-800 dark:bg-white/5 dark:border-purple-500/30 dark:text-purple-300 dark:hover:bg-white/10 text-xs font-label-md font-bold flex items-center gap-1.5 transition">
+                    <span class="material-symbols-outlined text-[18px]">table_view</span>
+                    <span>Descargar Plantilla Excel (.xlsx)</span>
+                </a>
                 <a href="{{ route('admin.inventario') }}" class="px-4 py-2.5 rounded-xl border border-purple-200 bg-purple-100 hover:bg-purple-200 text-purple-800 dark:bg-white/5 dark:border-purple-500/30 dark:text-purple-300 dark:hover:bg-white/10 text-xs font-label-md flex items-center gap-1.5 transition">
                     <span class="material-symbols-outlined text-[18px]">warehouse</span>
                     <span>Inventario por Sede</span>
                 </a>
             </div>
         </div>
+
+        {{-- Resumen de Carga Masiva (CSV / ZIP) --}}
+        @if (session('importacion_resumen'))
+            @php
+                $resumenCsv = session('importacion_resumen');
+                $erroresCsv = $resumenCsv['errores'] ?? [];
+                $detallesCsv = $resumenCsv['detalles'] ?? [];
+            @endphp
+            <div class="p-5 rounded-2xl bg-surface-container-lowest dark:bg-[#1a1329] border border-purple-200 dark:border-purple-700/60 shadow-sm space-y-3">
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-purple-100 dark:border-purple-800/40 pb-2.5">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary dark:text-purple-300 text-[20px]">analytics</span>
+                        <h2 class="text-xs font-bold uppercase font-label-code tracking-wider text-on-surface dark:text-white">
+                            Resultado de Carga Masiva CSV
+                        </h2>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2 text-[11px] font-label-code font-bold">
+                        <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-700/50">
+                            Creados: {{ $resumenCsv['creados'] ?? 0 }}
+                        </span>
+                        <span class="px-2.5 py-0.5 rounded-full bg-sky-100 dark:bg-sky-950/60 text-sky-800 dark:text-sky-300 border border-sky-200 dark:border-sky-700/50">
+                            Actualizados: {{ $resumenCsv['actualizados'] ?? 0 }}
+                        </span>
+                        <span class="px-2.5 py-0.5 rounded-full bg-purple-100 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 border border-purple-200 dark:border-purple-700/50">
+                            Imágenes ZIP: {{ $resumenCsv['imagenes_extraidas'] ?? 0 }}
+                        </span>
+                        <span class="px-2.5 py-0.5 rounded-full {{ ! empty($erroresCsv) ? 'bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border-rose-200 dark:border-rose-700/50' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700' }} border">
+                            Errores: {{ $resumenCsv['omitidos'] ?? 0 }}
+                        </span>
+                    </div>
+                </div>
+
+                @if (! empty($resumenCsv['por_pestana']))
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                        @foreach ($resumenCsv['por_pestana'] as $nombreHojaRes => $statsHoja)
+                            @if (($statsHoja['creados'] ?? 0) > 0 || ($statsHoja['actualizados'] ?? 0) > 0 || ($statsHoja['errores'] ?? 0) > 0)
+                                <div class="p-3 rounded-xl bg-purple-50/60 dark:bg-purple-950/30 border border-purple-200/70 dark:border-purple-800/40 text-xs flex items-center justify-between gap-2">
+                                    <span class="font-bold text-on-surface dark:text-white">{{ $nombreHojaRes }}</span>
+                                    <span class="font-label-code text-[11px] text-on-surface-variant dark:text-purple-200/80">
+                                        +{{ $statsHoja['creados'] ?? 0 }} creados &middot; {{ $statsHoja['actualizados'] ?? 0 }} act. &middot; {{ $statsHoja['errores'] ?? 0 }} err.
+                                    </span>
+                                </div>
+                            @endif
+                        @endforeach
+                    </div>
+                @endif
+
+                @if (! empty($erroresCsv))
+                    <div class="p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800/50 text-rose-800 dark:text-rose-200 text-xs space-y-1">
+                        <p class="font-bold uppercase font-label-code text-[11px]">Filas omitidas por error de validación:</p>
+                        <ul class="list-disc list-inside space-y-0.5 pl-1">
+                            @foreach ($erroresCsv as $errFila)
+                                <li>{{ $errFila }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                @if (! empty($detallesCsv))
+                    <details class="text-xs text-on-surface-variant dark:text-purple-200/80">
+                        <summary class="cursor-pointer font-semibold text-primary dark:text-purple-300 hover:underline">
+                            Ver detalle de {{ count($detallesCsv) }} fila(s) procesada(s)
+                        </summary>
+                        <ul class="list-disc list-inside mt-2 space-y-0.5 pl-1">
+                            @foreach ($detallesCsv as $detFila)
+                                <li>{{ $detFila }}</li>
+                            @endforeach
+                        </ul>
+                    </details>
+                @endif
+            </div>
+        @endif
 
         {{-- Alertas de Estado y Validación --}}
         @if (session('status'))
@@ -77,10 +161,10 @@
                     </a>
                 </div>
 
-                {{-- Acceso Rápido a Descarga de Plantilla CSV --}}
-                <a href="{{ route('compras.productos.plantilla-csv') }}" class="text-xs font-label-code text-primary dark:text-purple-300 hover:underline flex items-center gap-1">
-                    <span class="material-symbols-outlined text-[16px]">file_download</span>
-                    <span>Descargar Plantilla CSV</span>
+                {{-- Acceso Rápido a Descarga de Plantilla Excel --}}
+                <a href="{{ route('admin.productos.plantilla-excel') }}" class="text-xs font-label-code text-primary dark:text-purple-300 hover:underline flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[16px]">table_view</span>
+                    <span>Descargar Plantilla Excel (.xlsx)</span>
                 </a>
             </div>
 
@@ -485,7 +569,111 @@
         </div>
     </div>
 
+    {{-- Modal de Carga Masiva de Productos (CSV + ZIP de Imágenes) --}}
+    <div
+        id="modal_carga_masiva_csv"
+        class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs transition-opacity duration-200"
+        aria-modal="true"
+        role="dialog"
+    >
+        <div class="bg-surface-container-lowest dark:bg-[#1f1730] border border-purple-200/80 dark:border-purple-700/60 rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-4 relative animate-in fade-in zoom-in-95 duration-150">
+            <div class="flex items-center justify-between border-b border-purple-100 dark:border-purple-900/40 pb-3">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary dark:text-purple-300 text-[22px]">upload_file</span>
+                    <h3 class="text-sm font-bold uppercase font-label-code text-on-surface dark:text-white">Carga Masiva (Excel .xlsx / CSV &amp; ZIP)</h3>
+                </div>
+                <button
+                    type="button"
+                    onclick="cerrarModalCargaMasiva()"
+                    class="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-on-surface hover:bg-surface-container-low transition cursor-pointer"
+                    title="Cerrar modal"
+                >
+                    <span class="material-symbols-outlined text-[18px]">close</span>
+                </button>
+            </div>
+
+            <div class="p-3.5 rounded-2xl bg-purple-50/70 dark:bg-purple-950/30 border border-purple-200/70 dark:border-purple-700/40 text-xs space-y-2">
+                <div class="flex items-center justify-between gap-2">
+                    <span class="font-bold text-purple-900 dark:text-purple-200 font-label-code uppercase text-[11px]">Plantilla Oficial Excel (.xlsx) · 3 Pestañas</span>
+                    <a href="{{ route('admin.productos.plantilla-excel') }}" class="inline-flex items-center gap-1 text-primary dark:text-purple-300 font-bold hover:underline">
+                        <span class="material-symbols-outlined text-[15px]">table_view</span>
+                        <span>Descargar .xlsx</span>
+                    </a>
+                </div>
+                <p class="text-[11px] text-on-surface-variant dark:text-purple-200/75 leading-relaxed">
+                    El libro incluye 3 pestañas separadas (<strong>Libros</strong>, <strong>Discos</strong> y <strong>Coleccionables</strong>) con todos los campos de cada categoría. Si <code class="font-mono text-[10px]">es_pieza_unica = 1</code>, las existencias se fijan automáticamente en <code class="font-mono text-[10px]">1</code>.
+                </p>
+            </div>
+
+            <form
+                method="POST"
+                action="{{ route('admin.productos.importar') }}"
+                enctype="multipart/form-data"
+                class="space-y-4"
+            >
+                @csrf
+
+                <div class="space-y-1.5">
+                    <label for="input_carga_csv" class="block text-xs font-label-code uppercase font-bold text-on-surface dark:text-white">
+                        Archivo Excel (.xlsx) o CSV <span class="text-rose-500">*</span>
+                    </label>
+                    <input
+                        type="file"
+                        id="input_carga_csv"
+                        name="archivo_csv"
+                        accept=".xlsx,.xls,.csv,.txt"
+                        required
+                        class="w-full text-xs file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-primary file:text-white hover:file:opacity-90 border border-purple-200 dark:border-purple-800/60 rounded-xl p-1.5 bg-white dark:bg-[#160f24] text-on-surface dark:text-white cursor-pointer"
+                    />
+                </div>
+
+                <div class="space-y-1.5">
+                    <label for="input_carga_zip" class="block text-xs font-label-code uppercase font-bold text-on-surface dark:text-white">
+                        Archivo ZIP de Imágenes <span class="text-on-surface-variant font-normal">(Opcional &middot; JPG, PNG, WEBP)</span>
+                    </label>
+                    <input
+                        type="file"
+                        id="input_carga_zip"
+                        name="archivo_zip"
+                        accept=".zip"
+                        class="w-full text-xs file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-purple-600 file:text-white hover:file:bg-purple-500 border border-purple-200 dark:border-purple-800/60 rounded-xl p-1.5 bg-white dark:bg-[#160f24] text-on-surface dark:text-white cursor-pointer"
+                    />
+                    <p class="text-[11px] text-on-surface-variant dark:text-purple-200/70">
+                        Los nombres de archivo dentro del ZIP deben coincidir con la columna <code class="font-mono">archivo_imagen</code> del CSV.
+                    </p>
+                </div>
+
+                <div class="flex items-center justify-end gap-2 pt-2 border-t border-purple-100 dark:border-purple-900/40">
+                    <button
+                        type="button"
+                        onclick="cerrarModalCargaMasiva()"
+                        class="px-4 py-2 rounded-xl border border-purple-200 dark:border-purple-800/60 text-xs font-semibold text-outline hover:text-on-surface transition cursor-pointer"
+                    >
+                        Cancelar
+                    </button>
+                    <button
+                        type="submit"
+                        class="btn-glass-purple px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider shadow-sm flex items-center gap-1.5 cursor-pointer"
+                    >
+                        <span class="material-symbols-outlined text-[16px]">cloud_upload</span>
+                        <span>Procesar Carga Masiva</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
+        function abrirModalCargaMasiva() {
+            const modal = document.getElementById('modal_carga_masiva_csv');
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function cerrarModalCargaMasiva() {
+            const modal = document.getElementById('modal_carga_masiva_csv');
+            if (modal) modal.classList.add('hidden');
+        }
+
         function abrirModalEditarPrecio(productoId, nombreProducto, precioActual, actionUrl, sku) {
             const modal = document.getElementById('modal_editar_precio');
             const form = document.getElementById('form_editar_precio');

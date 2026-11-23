@@ -37,6 +37,7 @@ services:
     volumes:
       - .:/var/www
       - ./public:/var/www/public
+      - ./storage:/var/www/storage
       - ./storage/app/public:/var/www/public/storage
       - app_vendor:/var/www/vendor
       - app_build:/var/www/public/build

@@ -158,9 +158,12 @@ Route::prefix('admin')
         // Estado Técnico de Terminal Operativa
         Route::get('/terminal', [DashboardController::class, 'terminal'])->name('admin.terminal');
 
-        // Gestión de Productos: Altas, Bajas, Edición y Catálogo Maestro (para Administradores y Empleados)
+        // Gestión de Productos: Altas, Bajas, Edición, Carga Masiva Excel/CSV/ZIP y Catálogo Maestro (para Administradores y Empleados)
         Route::prefix('productos')->group(function (): void {
             Route::get('/', [ProductoController::class, 'index'])->name('admin.productos.index');
+            Route::get('/plantilla-excel', [ProductoController::class, 'descargarPlantillaExcel'])->name('admin.productos.plantilla-excel');
+            Route::get('/plantilla-csv', [ProductoController::class, 'descargarPlantillaCsv'])->name('admin.productos.plantilla-csv');
+            Route::post('/importar', [ProductoController::class, 'importarCsv'])->name('admin.productos.importar');
             Route::get('/crear', [ProductoController::class, 'create'])->name('admin.productos.create');
             Route::get('/alta', [ProductoController::class, 'create'])->name('admin.productos.alta');
             Route::post('/', [ProductoController::class, 'store'])->name('admin.productos.store');

@@ -1,3 +1,10 @@
+# REGLA CRÍTICA DE PRODUCCIÓN (ARCHIVUM)
+
+- La base de datos MariaDB actual (`archivum_db`, volumen `db_data`) contiene **datos reales de producción/presentación** (productos, imágenes, usuarios, pedidos).
+- **ESTÁ ESTRICTAMENTE PROHIBIDO** ejecutar comandos destructivos de Artisan (`php artisan migrate:fresh`, `php artisan migrate:refresh`, `php artisan migrate:reset`, `php artisan db:seed`, `php artisan db:wipe`) o borrar/sobrescribir registros de `usuarios`, `roles` y `productos`.
+- **ESTÁ ESTRICTAMENTE PROHIBIDO** eliminar o limpiar archivos existentes dentro de `storage/app/public/`.
+- Las pruebas automatizadas (`php artisan test`) deben ejecutarse únicamente sobre SQLite en memoria (`phpunit.xml` con `force="true"`), nunca contra MariaDB.
+
 <laravel-boost-guidelines>
 === foundation rules ===
 

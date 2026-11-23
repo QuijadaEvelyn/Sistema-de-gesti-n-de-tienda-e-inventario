@@ -25,7 +25,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use RuntimeException;
@@ -116,17 +115,7 @@ class ComprasController extends Controller
 
         $imagenRuta = null;
         if ($request->hasFile('imagen')) {
-            $archivo = $request->file('imagen');
-            $extension = $archivo->guessExtension() ?: ($archivo->getClientOriginalExtension() ?: 'jpg');
-            $nombreArchivo = Str::random(40).'.'.$extension;
-            $contenido = File::get($archivo->getRealPath());
-
-            Storage::disk('public')->put('productos/'.$nombreArchivo, $contenido);
-
-            $directorioDestino = public_path('images/productos');
-            File::ensureDirectoryExists($directorioDestino);
-            File::put($directorioDestino.DIRECTORY_SEPARATOR.$nombreArchivo, $contenido);
-            $imagenRuta = 'images/productos/'.$nombreArchivo;
+            $imagenRuta = (string) $request->file('imagen')->store('productos', 'public');
         }
 
         DB::transaction(function () use ($validated, $request, $imagenRuta): void {
@@ -336,26 +325,20 @@ class ComprasController extends Controller
             'imagen.max' => 'La imagen no debe superar los 4MB.',
         ]);
 
-        $archivo = $request->file('imagen');
-        $extension = $archivo->guessExtension() ?: ($archivo->getClientOriginalExtension() ?: 'jpg');
-        $nombreArchivo = Str::random(40).'.'.$extension;
-        $contenido = File::get($archivo->getRealPath());
-
-        Storage::disk('public')->put('productos/'.$nombreArchivo, $contenido);
-
-        $directorioDestino = public_path('images/productos');
-        File::ensureDirectoryExists($directorioDestino);
-        File::put($directorioDestino.DIRECTORY_SEPARATOR.$nombreArchivo, $contenido);
-        $nuevaRuta = 'images/productos/'.$nombreArchivo;
+        $nuevaRuta = (string) $request->file('imagen')->store('productos', 'public');
 
         if ($producto->imagen && str_starts_with($producto->imagen, 'images/productos/')) {
             $viejoArchivo = public_path($producto->imagen);
             if (File::exists($viejoArchivo)) {
                 File::delete($viejoArchivo);
             }
-        } elseif ($producto->imagen && str_starts_with($producto->imagen, 'storage/productos/')) {
-            $viejoPath = str_replace('storage/', '', $producto->imagen);
-            Storage::disk('public')->delete($viejoPath);
+        } elseif ($producto->imagen && str_starts_with($producto->imagen, 'storage/')) {
+            $viejoPath = preg_replace('#^storage/#', '', $producto->imagen);
+            if ($viejoPath) {
+                Storage::disk('public')->delete($viejoPath);
+            }
+        } elseif ($producto->imagen && str_starts_with($producto->imagen, 'productos/')) {
+            Storage::disk('public')->delete($producto->imagen);
         }
 
         DB::transaction(function () use ($producto, $nuevaRuta, $request): void {

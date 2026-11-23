@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Producto extends Model
 {
@@ -211,7 +212,9 @@ class Producto extends Model
                 return null;
             }
 
-            if (file_exists(storage_path('app/public/'.$relativaStorage)) || file_exists(public_path('storage/'.$relativaStorage))) {
+            if (file_exists(storage_path('app/public/'.$relativaStorage))
+                || file_exists(public_path('storage/'.$relativaStorage))
+                || Storage::disk('public')->exists($relativaStorage)) {
                 return asset('storage/'.$relativaStorage);
             }
 
@@ -220,7 +223,7 @@ class Producto extends Model
                 return asset($enImagesProductos);
             }
 
-            return asset('storage/'.$relativaStorage);
+            return null;
         }
 
         // 3. Rutas en `public/images/` (respaldo directo o catálogo base)
@@ -230,7 +233,9 @@ class Producto extends Model
             }
 
             $nombreBase = basename($limpia);
-            if (file_exists(storage_path('app/public/productos/'.$nombreBase)) || file_exists(public_path('storage/productos/'.$nombreBase))) {
+            if (file_exists(storage_path('app/public/productos/'.$nombreBase))
+                || file_exists(public_path('storage/productos/'.$nombreBase))
+                || Storage::disk('public')->exists('productos/'.$nombreBase)) {
                 return asset('storage/productos/'.$nombreBase);
             }
 
@@ -239,11 +244,13 @@ class Producto extends Model
                 return asset($enProductos);
             }
 
-            return asset($limpia);
+            return null;
         }
 
         // 4. Rutas relativas a `storage/app/public` (ej. `productos/archivo.jpg`)
-        if (file_exists(storage_path('app/public/'.$limpia)) || file_exists(public_path('storage/'.$limpia))) {
+        if (file_exists(storage_path('app/public/'.$limpia))
+            || file_exists(public_path('storage/'.$limpia))
+            || Storage::disk('public')->exists($limpia)) {
             return asset('storage/'.$limpia);
         }
 
@@ -252,7 +259,9 @@ class Producto extends Model
         }
 
         $nombreBase = basename($limpia);
-        if (file_exists(storage_path('app/public/productos/'.$nombreBase)) || file_exists(public_path('storage/productos/'.$nombreBase))) {
+        if (file_exists(storage_path('app/public/productos/'.$nombreBase))
+            || file_exists(public_path('storage/productos/'.$nombreBase))
+            || Storage::disk('public')->exists('productos/'.$nombreBase)) {
             return asset('storage/productos/'.$nombreBase);
         }
 
@@ -261,7 +270,7 @@ class Producto extends Model
             return asset($enImagesDirecto);
         }
 
-        return asset('storage/'.$limpia);
+        return null;
     }
 
     /**
