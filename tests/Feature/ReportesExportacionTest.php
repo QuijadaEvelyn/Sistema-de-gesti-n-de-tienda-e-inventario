@@ -168,5 +168,18 @@ class ReportesExportacionTest extends TestCase
         $this->assertStringContainsString('ARCHIVUM', $binario);
         $this->assertStringContainsString('ARC-LIB-1603-N', $binario);
         $this->assertStringContainsString('%%EOF', $binario);
+
+        // Verificar que la plantilla Blade de vista previa / DomPDF tiene las proporciones exactas (100%) y sin truncar
+        $vistaPrevia = $this->actingAs($admin)->get(route('admin.reportes.pdf', ['vista_previa' => 1]));
+        $vistaPrevia->assertOk()
+            ->assertSee('table-layout: fixed', false)
+            ->assertSee('width: 11%;', false)
+            ->assertSee('width: 24%;', false)
+            ->assertSee('width: 9%;', false)
+            ->assertSee('width: 13%;', false)
+            ->assertSee('width: 12%;', false)
+            ->assertSee('width: 10%;', false)
+            ->assertSee('PIEZA / TITULO CURATORIAL')
+            ->assertSee('[EN BOVEDA]');
     }
 }

@@ -130,8 +130,31 @@
             margin: 14px 0 8px 0;
             color: #191715;
         }
+        table.sedes-grid {
+            width: 100%;
+            table-layout: fixed;
+            border-collapse: collapse;
+            margin-bottom: 14px;
+            background: #e8e1d0;
+            border: 1px solid #c4a059;
+        }
+        table.sedes-grid td {
+            padding: 7px 10px;
+            font-family: "Courier New", monospace;
+            font-size: 8.5pt;
+            color: #201c16;
+            border-right: 1px solid #d5cab8;
+            white-space: normal;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            vertical-align: middle;
+        }
+        table.sedes-grid td:last-child {
+            border-right: none;
+        }
         table.report-table {
             width: 100%;
+            table-layout: fixed;
             border-collapse: collapse;
             margin-bottom: 16px;
         }
@@ -139,30 +162,48 @@
             background: #26231f;
             color: #f5efe4;
             font-family: "Courier New", monospace;
-            font-size: 9px;
+            font-size: 7.5pt;
             text-transform: uppercase;
-            letter-spacing: 0.08em;
-            padding: 7px 8px;
+            letter-spacing: 0.06em;
+            padding: 7px 6px;
             text-align: left;
             border: 1px solid #26231f;
+            white-space: normal;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
         table.report-table td {
-            padding: 6px 8px;
+            padding: 6px 6px;
             border: 1px solid #dcd3c2;
-            font-size: 10px;
+            font-size: 8pt;
             vertical-align: top;
+            white-space: normal;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
         table.report-table tr:nth-child(even) td {
             background: #f4efe6;
         }
         .text-right {
-            text-align: right;
+            text-align: right !important;
         }
         .text-center {
-            text-align: center;
+            text-align: center !important;
         }
         .mono {
             font-family: "Courier New", monospace;
+        }
+        .stock-number {
+            display: block;
+            font-size: 8.5pt;
+            font-weight: bold;
+            line-height: 1.2;
+        }
+        .stock-badge {
+            display: block;
+            font-size: 6.8pt;
+            margin-top: 2px;
+            line-height: 1.15;
         }
         .badge-agotado {
             color: #991b1b;
@@ -244,20 +285,44 @@
         </div>
     </div>
 
-    {{-- Desglose Detallado de Inventario y Certificados --}}
+    {{-- Barra de Valoración por Sede en Cuadrícula Proporcional Sin Cortes --}}
+    @if(! empty($valoracion_sucursales))
+        <table class="sedes-grid">
+            <tr>
+                @foreach($valoracion_sucursales as $sedeVal)
+                    <td>
+                        <strong>{{ $sedeVal['sucursal_nombre'] }}:</strong>
+                        {{ $sedeVal['total_unidades'] }} uds
+                        (${{ number_format((float) $sedeVal['valor_total_inventario'], 2) }} MXN)
+                    </td>
+                @endforeach
+            </tr>
+        </table>
+    @endif
+
+    {{-- Desglose Detallado de Inventario y Certificados (100% Exacto: 11% + 24% + 9% + 13% + 12% + 11% + 10% + 10%) --}}
     <h2 class="section-title">Desglose Oficial de Inventario Disponible y Certificados de Autenticidad</h2>
     <table class="report-table">
+        <colgroup>
+            <col style="width: 11%;">
+            <col style="width: 24%;">
+            <col style="width: 9%;">
+            <col style="width: 13%;">
+            <col style="width: 12%;">
+            <col style="width: 11%;">
+            <col style="width: 10%;">
+            <col style="width: 10%;">
+        </colgroup>
         <thead>
             <tr>
-                <th>SKU</th>
-                <th>Producto</th>
-                <th>Categoría</th>
-                <th>Sucursal</th>
-                <th>Certificado / Serie</th>
-                <th class="text-center">Stock</th>
-                <th class="text-right">Precio Unitario</th>
-                <th class="text-right">Valor Total</th>
-                <th class="text-center">Estatus</th>
+                <th style="width: 11%;">SKU</th>
+                <th style="width: 24%;">PIEZA / TITULO CURATORIAL</th>
+                <th style="width: 9%;">CATEGORIA</th>
+                <th style="width: 13%;">BOVEDA / SEDE</th>
+                <th style="width: 12%;">COA / LOTE</th>
+                <th class="text-center" style="width: 11%;">STOCK</th>
+                <th class="text-right" style="width: 10%;">PRECIO U.</th>
+                <th class="text-right" style="width: 10%;">VALOR TOTAL</th>
             </tr>
         </thead>
         <tbody>
@@ -266,27 +331,27 @@
                     <td class="mono"><strong>{{ $fila['sku'] }}</strong></td>
                     <td>
                         <strong>{{ $fila['producto'] }}</strong><br>
-                        <span class="mono" style="font-size: 9px; color: #57534e;">{{ $fila['condicion'] }}</span>
+                        <span class="mono" style="font-size: 7pt; color: #57534e;">{{ $fila['condicion'] }}</span>
                     </td>
                     <td>{{ $fila['categoria_etiqueta'] }}</td>
                     <td>{{ $fila['sucursal'] }}</td>
-                    <td class="mono" style="font-size: 9px;">{{ $fila['certificados_coa'] }}</td>
-                    <td class="text-center mono">{{ $fila['stock_boveda'] }} (mín {{ $fila['stock_minimo'] }})</td>
-                    <td class="text-right mono">${{ number_format($fila['precio_unitario'], 2) }}</td>
-                    <td class="text-right mono"><strong>${{ number_format($fila['valor_total'], 2) }}</strong></td>
+                    <td class="mono" style="font-size: 7.2pt;">{{ $fila['certificados_coa'] }}</td>
                     <td class="text-center mono">
+                        <span class="stock-number">{{ $fila['stock_boveda'] }}</span>
                         @if($fila['estado_stock'] === 'AGOTADO')
-                            <span class="badge-agotado">AGOTADO</span>
+                            <span class="stock-badge badge-agotado">[AGOTADO]</span>
                         @elseif($fila['estado_stock'] === 'BAJO MINIMO')
-                            <span class="badge-bajo">BAJO MÍNIMO</span>
+                            <span class="stock-badge badge-bajo">[BAJO MIN]</span>
                         @else
-                            <span class="badge-ok">DISPONIBLE</span>
+                            <span class="stock-badge badge-ok">[EN BOVEDA]</span>
                         @endif
                     </td>
+                    <td class="text-right mono">${{ number_format($fila['precio_unitario'], 2) }}</td>
+                    <td class="text-right mono"><strong>${{ number_format($fila['valor_total'], 2) }}</strong></td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="9" class="text-center mono">Sin registros disponibles para este criterio.</td>
+                    <td colspan="8" class="text-center mono">Sin registros disponibles para este criterio.</td>
                 </tr>
             @endforelse
         </tbody>

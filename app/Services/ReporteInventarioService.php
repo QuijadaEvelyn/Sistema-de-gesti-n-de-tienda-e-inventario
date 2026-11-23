@@ -474,7 +474,7 @@ class ReporteInventarioService
         /** @var array<int, array<string, mixed>> $valoracionSucursales */
         $valoracionSucursales = $datos['valoracion_sucursales'] ?? [];
 
-        $chunks = $filas->values()->chunk(18);
+        $chunks = $filas->values()->chunk(14);
         if ($chunks->isEmpty()) {
             $chunks = collect([collect()]);
         }
@@ -621,53 +621,99 @@ class ReporteInventarioService
             $kpiX += 182;
         }
 
-        // Resumen rápido por sucursal en barra intermedia
-        $resumenSucursalesTexto = collect($valoracionSucursales)
-            ->map(fn (array $s): string => $s['sucursal_nombre'].': '.$s['total_unidades'].' uds ($'.number_format((float) $s['valor_total_inventario'], 2).')')
-            ->implode('   |   ');
+        // Resumen rápido por sucursal en cuadrícula de 3 columnas iguales (sin cortes en "Almacén General")
+        if (! empty($valoracionSucursales)) {
+            $ops[] = '0.91 0.88 0.81 rg 36 450 720 22 re f';
+            $ops[] = '0.78 0.72 0.60 RG 0.6 w 36 450 720 22 re S';
+            $ops[] = $this->pdfTexto('F2', 6.8, 42, 463, 'VALORACION POR SEDE:', '0.45 0.36 0.20');
 
-        if ($resumenSucursalesTexto !== '') {
-            $ops[] = '0.91 0.88 0.81 rg 36 454 720 18 re f';
-            $ops[] = $this->pdfTexto('F2', 7, 44, 460, 'VALORACION POR SEDE:  '.$this->truncarTexto($resumenSucursalesTexto, 122), '0.20 0.18 0.14');
+            $numSedes = max(1, count($valoracionSucursales));
+            $anchoColSede = (int) floor(708 / min(3, $numSedes));
+            foreach (array_values($valoracionSucursales) as $idxSede => $sedeVal) {
+                $colX = 42 + (($idxSede % 3) * $anchoColSede);
+                $textoSede = $sedeVal['sucursal_nombre'].': '.$sedeVal['total_unidades'].' uds ($'.number_format((float) $sedeVal['valor_total_inventario'], 2).')';
+                $ops[] = $this->pdfTexto('F2', 6.8, $colX, 454, $textoSede, '0.16 0.14 0.12');
+            }
         }
 
         // Encabezado de Tabla de Inventario y Lotes Certificados
-        $tablaTop = 432;
+        // Proporciones sobre 720pt (x=36..756):
+        // SKU 11% (79pt: 36..115), PIEZA/TITULO 24% (173pt: 115..288), CATEGORIA 9% (65pt: 288..353),
+        // BOVEDA/SEDE 13% (93pt: 353..446), COA/LOTE 12% (87pt: 446..533), STOCK 11% (79pt: 533..612),
+        // PRECIO U. 10% (72pt: 612..684), VALOR TOTAL 10% (72pt: 684..756)
+        $tablaTop = 426;
         $ops[] = '0.16 0.14 0.12 rg 36 '.$tablaTop.' 720 18 re f';
-        $ops[] = $this->pdfTexto('F2', 7.2, 42, $tablaTop + 6, 'SKU', '0.96 0.93 0.86');
-        $ops[] = $this->pdfTexto('F2', 7.2, 122, $tablaTop + 6, 'PIEZA / TITULO CURATORIAL', '0.96 0.93 0.86');
-        $ops[] = $this->pdfTexto('F2', 7.2, 315, $tablaTop + 6, 'CATEGORIA', '0.96 0.93 0.86');
-        $ops[] = $this->pdfTexto('F2', 7.2, 425, $tablaTop + 6, 'BOVEDA / SEDE', '0.96 0.93 0.86');
-        $ops[] = $this->pdfTexto('F2', 7.2, 515, $tablaTop + 6, 'COA / LOTE', '0.96 0.93 0.86');
-        $ops[] = $this->pdfTexto('F2', 7.2, 600, $tablaTop + 6, 'STOCK', '0.96 0.93 0.86');
-        $ops[] = $this->pdfTexto('F2', 7.2, 638, $tablaTop + 6, 'PRECIO U.', '0.96 0.93 0.86');
-        $ops[] = $this->pdfTexto('F2', 7.2, 700, $tablaTop + 6, 'VALOR TOTAL', '0.96 0.93 0.86');
+        $ops[] = $this->pdfTexto('F2', 7.0, 40, $tablaTop + 6, 'SKU', '0.96 0.93 0.86');
+        $ops[] = $this->pdfTexto('F2', 7.0, 118, $tablaTop + 6, 'PIEZA / TITULO CURATORIAL', '0.96 0.93 0.86');
+        $ops[] = $this->pdfTexto('F2', 7.0, 291, $tablaTop + 6, 'CATEGORIA', '0.96 0.93 0.86');
+        $ops[] = $this->pdfTexto('F2', 7.0, 356, $tablaTop + 6, 'BOVEDA / SEDE', '0.96 0.93 0.86');
+        $ops[] = $this->pdfTexto('F2', 7.0, 449, $tablaTop + 6, 'COA / LOTE', '0.96 0.93 0.86');
+        $ops[] = $this->pdfTextoCentrado('F2', 7.0, 533, 612, $tablaTop + 6, 'STOCK', '0.96 0.93 0.86');
+        $ops[] = $this->pdfTextoDerecha('F2', 7.0, 680, $tablaTop + 6, 'PRECIO U.', '0.96 0.93 0.86');
+        $ops[] = $this->pdfTextoDerecha('F2', 7.0, 752, $tablaTop + 6, 'VALOR TOTAL', '0.96 0.93 0.86');
 
-        $filaY = $tablaTop - 18;
+        $alturaFila = 24;
+        $filaY = $tablaTop - $alturaFila;
         $par = false;
 
         foreach ($loteFilas as $fila) {
             if ($par) {
-                $ops[] = '0.95 0.93 0.89 rg 36 '.$filaY.' 720 18 re f';
+                $ops[] = '0.95 0.93 0.89 rg 36 '.$filaY.' 720 '.$alturaFila.' re f';
             } else {
-                $ops[] = '0.99 0.98 0.96 rg 36 '.$filaY.' 720 18 re f';
+                $ops[] = '0.99 0.98 0.96 rg 36 '.$filaY.' 720 '.$alturaFila.' re f';
             }
-            $ops[] = '0.86 0.83 0.77 RG 0.4 w 36 '.$filaY.' 720 18 re S';
+            $ops[] = '0.86 0.83 0.77 RG 0.4 w 36 '.$filaY.' 720 '.$alturaFila.' re S';
 
             $colorStock = ((int) $fila['stock_boveda'] <= 0)
                 ? '0.72 0.15 0.15'
                 : ($fila['es_stock_bajo'] ? '0.75 0.45 0.08' : '0.12 0.38 0.22');
 
-            $ops[] = $this->pdfTexto('F2', 6.8, 42, $filaY + 6, $this->truncarTexto((string) $fila['sku'], 18), '0.15 0.14 0.12');
-            $ops[] = $this->pdfTexto('F1', 7.0, 122, $filaY + 6, $this->truncarTexto((string) $fila['producto'], 36), '0.12 0.11 0.10');
-            $ops[] = $this->pdfTexto('F1', 6.6, 315, $filaY + 6, $this->truncarTexto((string) $fila['categoria_etiqueta'], 20), '0.30 0.28 0.24');
-            $ops[] = $this->pdfTexto('F1', 6.6, 425, $filaY + 6, $this->truncarTexto((string) $fila['sucursal'], 16), '0.30 0.28 0.24');
-            $ops[] = $this->pdfTexto('F1', 6.4, 515, $filaY + 6, $this->truncarTexto((string) $fila['certificados_coa'], 16), '0.35 0.30 0.22');
-            $ops[] = $this->pdfTexto('F2', 7.0, 602, $filaY + 6, (string) $fila['stock_boveda'].' ['.$fila['estado_stock'].']', $colorStock);
-            $ops[] = $this->pdfTexto('F1', 6.8, 638, $filaY + 6, '$'.number_format((float) $fila['precio_unitario'], 2), '0.15 0.14 0.12');
-            $ops[] = $this->pdfTexto('F2', 7.0, 700, $filaY + 6, '$'.number_format((float) $fila['valor_total'], 2), '0.12 0.11 0.10');
+            // 1. SKU (11%: x=40..113) en hasta 2 líneas sin truncar
+            $lineasSku = $this->dividirEnLineas((string) $fila['sku'], 16, 2);
+            $ops[] = $this->pdfTexto('F2', 6.6, 40, $filaY + 14, $lineasSku[0] ?? '', '0.15 0.14 0.12');
+            if (! empty($lineasSku[1])) {
+                $ops[] = $this->pdfTexto('F2', 6.3, 40, $filaY + 6, $lineasSku[1], '0.15 0.14 0.12');
+            }
 
-            $filaY -= 18;
+            // 2. PIEZA / TITULO CURATORIAL (24%: x=118..286) en 2 líneas con salto natural de palabra
+            $lineasTitulo = $this->dividirEnLineas((string) $fila['producto'], 36, 2);
+            $ops[] = $this->pdfTexto('F1', 6.8, 118, $filaY + 14, $lineasTitulo[0] ?? '', '0.12 0.11 0.10');
+            if (! empty($lineasTitulo[1])) {
+                $ops[] = $this->pdfTexto('F1', 6.6, 118, $filaY + 6, $lineasTitulo[1], '0.25 0.23 0.20');
+            }
+
+            // 3. CATEGORIA (9%: x=291..351) en hasta 2 líneas
+            $lineasCat = $this->dividirEnLineas((string) $fila['categoria_etiqueta'], 14, 2);
+            $ops[] = $this->pdfTexto('F1', 6.5, 291, $filaY + 14, $lineasCat[0] ?? '', '0.30 0.28 0.24');
+            if (! empty($lineasCat[1])) {
+                $ops[] = $this->pdfTexto('F1', 6.3, 291, $filaY + 6, $lineasCat[1], '0.30 0.28 0.24');
+            }
+
+            // 4. BOVEDA / SEDE (13%: x=356..444) en hasta 2 líneas sin cortar "Sucursal Central Bellas Artes"
+            $lineasSede = $this->dividirEnLineas((string) $fila['sucursal'], 20, 2);
+            $ops[] = $this->pdfTexto('F1', 6.5, 356, $filaY + 14, $lineasSede[0] ?? '', '0.30 0.28 0.24');
+            if (! empty($lineasSede[1])) {
+                $ops[] = $this->pdfTexto('F1', 6.3, 356, $filaY + 6, $lineasSede[1], '0.30 0.28 0.24');
+            }
+
+            // 5. COA / LOTE (12%: x=449..531) en hasta 2 líneas completas
+            $lineasCoa = $this->dividirEnLineas((string) $fila['certificados_coa'], 19, 2);
+            $ops[] = $this->pdfTexto('F1', 6.3, 449, $filaY + 14, $lineasCoa[0] ?? '', '0.35 0.30 0.22');
+            if (! empty($lineasCoa[1])) {
+                $ops[] = $this->pdfTexto('F1', 6.1, 449, $filaY + 6, $lineasCoa[1], '0.35 0.30 0.22');
+            }
+
+            // 6. STOCK (11%: x=533..612) centrado: número en negrita arriba y [EN BOVEDA] debajo para que NUNCA toque PRECIO U.
+            $ops[] = $this->pdfTextoCentrado('F2', 7.5, 533, 612, $filaY + 14, (string) $fila['stock_boveda'], $colorStock);
+            $ops[] = $this->pdfTextoCentrado('F2', 5.8, 533, 612, $filaY + 6, '['.$fila['estado_stock'].']', $colorStock);
+
+            // 7. PRECIO U. (10%: x=612..684) alineado a la derecha en x=680
+            $ops[] = $this->pdfTextoDerecha('F1', 6.8, 680, $filaY + 10, '$'.number_format((float) $fila['precio_unitario'], 2), '0.15 0.14 0.12');
+
+            // 8. VALOR TOTAL (10%: x=684..756) alineado a la derecha en x=752
+            $ops[] = $this->pdfTextoDerecha('F2', 7.0, 752, $filaY + 10, '$'.number_format((float) $fila['valor_total'], 2), '0.12 0.11 0.10');
+
+            $filaY -= $alturaFila;
             $par = ! $par;
         }
 
@@ -744,6 +790,62 @@ class ReporteInventarioService
         }
 
         return str_replace(['\\', '(', ')'], ['\\\\', '\\(', '\\)'], $convertido);
+    }
+
+    /**
+     * Genera una instrucción de texto PDF centrada horizontalmente entre $xInicio y $xFin.
+     */
+    private function pdfTextoCentrado(string $fuente, float $tamano, float $xInicio, float $xFin, float $y, string $texto, string $rgb = '0 0 0'): string
+    {
+        $anchoEstimado = mb_strlen($texto) * ($tamano * 0.52);
+        $anchoColumna = max(1.0, $xFin - $xInicio);
+        $x = $xInicio + max(2.0, ($anchoColumna - $anchoEstimado) / 2.0);
+
+        return $this->pdfTexto($fuente, $tamano, $x, $y, $texto, $rgb);
+    }
+
+    /**
+     * Genera una instrucción de texto PDF alineada a la derecha en la coordenada $xDerecha.
+     */
+    private function pdfTextoDerecha(string $fuente, float $tamano, float $xDerecha, float $y, string $texto, string $rgb = '0 0 0'): string
+    {
+        $anchoEstimado = mb_strlen($texto) * ($tamano * 0.53);
+        $x = max(36.0, $xDerecha - $anchoEstimado);
+
+        return $this->pdfTexto($fuente, $tamano, $x, $y, $texto, $rgb);
+    }
+
+    /**
+     * Divide un texto largo en múltiples líneas por palabra para permitir salto de línea limpio en lugar de cortar con '..'.
+     *
+     * @return list<string>
+     */
+    private function dividirEnLineas(string $texto, int $maxCaracteresPorLinea, int $maxLineas = 2): array
+    {
+        $texto = trim(preg_replace('/\s+/', ' ', $texto) ?? '');
+        if ($texto === '') {
+            return [''];
+        }
+
+        if (mb_strlen($texto) <= $maxCaracteresPorLinea) {
+            return [$texto];
+        }
+
+        $envuelto = wordwrap($texto, $maxCaracteresPorLinea, "\n", true);
+        $partes = array_values(array_filter(array_map('trim', explode("\n", $envuelto)), fn (string $l): bool => $l !== ''));
+
+        if (count($partes) <= $maxLineas) {
+            return $partes;
+        }
+
+        $resultado = array_slice($partes, 0, $maxLineas - 1);
+        $ultimaLinea = implode(' ', array_slice($partes, $maxLineas - 1));
+        if (mb_strlen($ultimaLinea) > $maxCaracteresPorLinea + 4) {
+            $ultimaLinea = mb_substr($ultimaLinea, 0, $maxCaracteresPorLinea + 3);
+        }
+        $resultado[] = $ultimaLinea;
+
+        return $resultado;
     }
 
     /**
