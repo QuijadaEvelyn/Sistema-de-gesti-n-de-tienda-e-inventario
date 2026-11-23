@@ -122,8 +122,11 @@
                             @endphp
                             <div class="p-3 rounded-xl bg-surface-container-low dark:bg-[#1b132a] border-2 border-purple-300 dark:border-purple-500/60 flex gap-3 relative group shadow-2xs">
                                 <div class="w-16 h-16 rounded-lg bg-surface-container dark:bg-[#140d20] flex items-center justify-center shrink-0 border border-purple-200/50 dark:border-purple-500/30 overflow-hidden">
-                                    @if (! empty($item['imagen']))
-                                        <img src="{{ asset('/' . $item['imagen']) }}" alt="{{ $item['nombre'] }}" class="w-full h-full object-cover">
+                                    @php
+                                        $urlImgUnica = ! empty($item['imagen']) ? \App\Models\Producto::resolverUrlImagen((string) $item['imagen']) : null;
+                                    @endphp
+                                    @if (! empty($urlImgUnica))
+                                        <img src="{{ $urlImgUnica }}" alt="{{ $item['nombre'] }}" class="w-full h-full object-cover">
                                     @else
                                         <span class="material-symbols-outlined text-secondary text-[28px]">{{ $iconoItem }}</span>
                                     @endif
@@ -217,8 +220,11 @@
                             @endphp
                             <div class="p-3 rounded-xl bg-surface-container-low dark:bg-[#1b132a] border border-purple-200/60 dark:border-purple-500/30 flex gap-3 relative group">
                                 <div class="w-16 h-16 rounded-lg bg-surface-container dark:bg-[#140d20] flex items-center justify-center shrink-0 border border-purple-200/50 dark:border-purple-500/30 overflow-hidden">
-                                    @if (! empty($item['imagen']))
-                                        <img src="{{ asset('/' . $item['imagen']) }}" alt="{{ $item['nombre'] }}" class="w-full h-full object-cover">
+                                    @php
+                                        $urlImgUnica = ! empty($item['imagen']) ? \App\Models\Producto::resolverUrlImagen((string) $item['imagen']) : null;
+                                    @endphp
+                                    @if (! empty($urlImgUnica))
+                                        <img src="{{ $urlImgUnica }}" alt="{{ $item['nombre'] }}" class="w-full h-full object-cover">
                                     @else
                                         <span class="material-symbols-outlined text-secondary text-[28px]">{{ $iconoItem }}</span>
                                     @endif

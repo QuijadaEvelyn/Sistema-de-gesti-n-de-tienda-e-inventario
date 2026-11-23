@@ -640,21 +640,39 @@ class ProductoController extends Controller
 
                 // Actualizar metadatos según ficha
                 if ($producto->libro) {
-                    $producto->libro->update(array_filter([
+                    $datosLibroUpdate = array_filter([
                         'autor' => $request->input('autor'),
                         'editorial' => $request->input('editorial'),
                         'genero' => $request->input('genero'),
-                    ]));
+                    ]);
+                    if ($imagenRuta !== null && Schema::hasColumn('libros', 'imagen')) {
+                        $datosLibroUpdate['imagen'] = $imagenRuta;
+                    }
+                    if (! empty($datosLibroUpdate)) {
+                        $producto->libro->update($datosLibroUpdate);
+                    }
                 } elseif ($producto->disco) {
-                    $producto->disco->update(array_filter([
+                    $datosDiscoUpdate = array_filter([
                         'artista' => $request->input('artista'),
                         'sello' => $request->input('sello_discografico'),
                         'genero' => $request->input('genero'),
-                    ]));
+                    ]);
+                    if ($imagenRuta !== null && Schema::hasColumn('discos', 'imagen')) {
+                        $datosDiscoUpdate['imagen'] = $imagenRuta;
+                    }
+                    if (! empty($datosDiscoUpdate)) {
+                        $producto->disco->update($datosDiscoUpdate);
+                    }
                 } elseif ($producto->coleccionable) {
-                    $producto->coleccionable->update(array_filter([
+                    $datosColeccionableUpdate = array_filter([
                         'marca' => $request->input('fabricante'),
-                    ]));
+                    ]);
+                    if ($imagenRuta !== null && Schema::hasColumn('coleccionables', 'imagen')) {
+                        $datosColeccionableUpdate['imagen'] = $imagenRuta;
+                    }
+                    if (! empty($datosColeccionableUpdate)) {
+                        $producto->coleccionable->update($datosColeccionableUpdate);
+                    }
                 }
 
                 Bitacora::create([

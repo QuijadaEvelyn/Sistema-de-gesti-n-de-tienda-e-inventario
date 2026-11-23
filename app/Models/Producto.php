@@ -162,98 +162,115 @@ class Producto extends Model
      */
     public function getImagenAttribute(): ?string
     {
-        return $this->attributes['imagen']
-            ?? $this->disco?->imagen
-            ?? $this->libro?->imagen
-            ?? $this->coleccionable?->imagen
-            ?? self::IMAGENES_CONOCIDAS[$this->nombre]
-            ?? null;
+        $candidatos = [
+            $this->attributes['imagen'] ?? null,
+            $this->relationLoaded('disco') ? $this->disco?->imagen : null,
+            $this->relationLoaded('libro') ? $this->libro?->imagen : null,
+            $this->relationLoaded('coleccionable') ? $this->coleccionable?->imagen : null,
+            $this->relationLoaded('variantesSku') ? $this->variantesSku->first()?->imagen : null,
+            $this->disco?->imagen ?? null,
+            $this->libro?->imagen ?? null,
+            $this->coleccionable?->imagen ?? null,
+            self::IMAGENES_CONOCIDAS[$this->nombre] ?? null,
+        ];
+
+        foreach ($candidatos as $valor) {
+            if (is_string($valor) && trim($valor) !== '') {
+                return trim($valor);
+            }
+        }
+
+        return null;
     }
 
     /**
-     * Accesor para obtener la URL pública de la imagen del producto, con verificación
-     * de existencia física para evitar enlaces rotos y soporte para rutas nuevas (images/)
-     * y heredadas (storage/ o productos/).
+     * Normaliza cualquier ruta de imagen (relativa a `storage/app/public`, con prefijo `storage/`
+     * o en `images/`) hacia su URL pública válida, evitando duplicar `/storage/storage/`.
      */
-    public function getImagenUrlAttribute(): ?string
+    public static function resolverUrlImagen(?string $ruta): ?string
     {
-        $ruta = $this->imagen;
-
-        if (empty($ruta)) {
+        if ($ruta === null || trim($ruta) === '') {
             return null;
         }
 
-        // 1. URL externa directa (CDN o mock)
+        $ruta = trim($ruta);
+
+        // 1. URL externa o absoluta ya resuelta
         if (str_starts_with($ruta, 'http://') || str_starts_with($ruta, 'https://')) {
-            return $ruta;
+            return preg_replace('#/storage/(storage/)+#i', '/storage/', $ruta) ?: $ruta;
         }
 
-        // 2. Ruta directa en public/images/ (almacenamiento primario sin symlinks)
-        if (str_starts_with($ruta, 'images/')) {
-            if (file_exists(public_path($ruta))) {
-                return asset($ruta);
+        $limpia = ltrim(str_replace('\\', '/', $ruta), '/');
+
+        // 2. Rutas que ya incluyen `storage/` (evitando duplicar `/storage/storage/`)
+        if (str_starts_with(strtolower($limpia), 'storage/')) {
+            $relativaStorage = preg_replace('#^(storage/)+#i', '', $limpia) ?: '';
+            $relativaStorage = ltrim($relativaStorage, '/');
+
+            if ($relativaStorage === '') {
+                return null;
             }
 
-            $enProductos = 'images/productos/'.basename($ruta);
-            if (file_exists(public_path($enProductos))) {
-                return asset($enProductos);
+            if (file_exists(storage_path('app/public/'.$relativaStorage)) || file_exists(public_path('storage/'.$relativaStorage))) {
+                return asset('storage/'.$relativaStorage);
             }
-        }
 
-        // 3. Rutas heredadas en storage/ (e.g. storage/productos/hash.ext)
-        if (str_starts_with($ruta, 'storage/')) {
-            $limpia = preg_replace('#^storage/#', '', $ruta);
-
-            // Verificar si el archivo ya fue respaldado en public/images/productos/
-            $enImagesProductos = 'images/productos/'.basename($ruta);
+            $enImagesProductos = 'images/productos/'.basename($relativaStorage);
             if (file_exists(public_path($enImagesProductos))) {
                 return asset($enImagesProductos);
             }
 
-            // Verificar en public/storage
-            if (file_exists(public_path('storage/'.$limpia))) {
-                return asset('storage/'.ltrim($limpia, '/'));
-            }
-
-            // Verificar en storage/app/public/
-            if (file_exists(storage_path('app/public/'.$limpia))) {
-                return asset('storage/'.ltrim($limpia, '/'));
-            }
+            return asset('storage/'.$relativaStorage);
         }
 
-        // 4. Rutas relativas como 'productos/hash.ext'
-        if (str_starts_with($ruta, 'productos/')) {
-            $enImages = 'images/'.$ruta;
-            if (file_exists(public_path($enImages))) {
-                return asset($enImages);
+        // 3. Rutas en `public/images/` (respaldo directo o catálogo base)
+        if (str_starts_with(strtolower($limpia), 'images/')) {
+            if (file_exists(public_path($limpia))) {
+                return asset($limpia);
             }
 
-            $enImagesBasename = 'images/productos/'.basename($ruta);
-            if (file_exists(public_path($enImagesBasename))) {
-                return asset($enImagesBasename);
+            $nombreBase = basename($limpia);
+            if (file_exists(storage_path('app/public/productos/'.$nombreBase)) || file_exists(public_path('storage/productos/'.$nombreBase))) {
+                return asset('storage/productos/'.$nombreBase);
             }
 
-            if (file_exists(public_path('storage/'.$ruta))) {
-                return asset('storage/'.ltrim($ruta, '/'));
+            $enProductos = 'images/productos/'.$nombreBase;
+            if (file_exists(public_path($enProductos))) {
+                return asset($enProductos);
             }
 
-            if (file_exists(storage_path('app/public/'.$ruta))) {
-                return asset('storage/'.ltrim($ruta, '/'));
-            }
+            return asset($limpia);
         }
 
-        // 5. Verificación genérica en public_path
-        $rutaLimpia = ltrim($ruta, '/');
-        if (file_exists(public_path($rutaLimpia))) {
-            return asset($rutaLimpia);
+        // 4. Rutas relativas a `storage/app/public` (ej. `productos/archivo.jpg`)
+        if (file_exists(storage_path('app/public/'.$limpia)) || file_exists(public_path('storage/'.$limpia))) {
+            return asset('storage/'.$limpia);
         }
 
-        // 6. Verificar si existe con el mismo nombre en public/images/productos/
-        $enImagesDirecto = 'images/productos/'.basename($ruta);
+        if (file_exists(public_path($limpia))) {
+            return asset($limpia);
+        }
+
+        $nombreBase = basename($limpia);
+        if (file_exists(storage_path('app/public/productos/'.$nombreBase)) || file_exists(public_path('storage/productos/'.$nombreBase))) {
+            return asset('storage/productos/'.$nombreBase);
+        }
+
+        $enImagesDirecto = 'images/productos/'.$nombreBase;
         if (file_exists(public_path($enImagesDirecto))) {
             return asset($enImagesDirecto);
         }
 
-        return null;
+        return asset('storage/'.$limpia);
+    }
+
+    /**
+     * Accesor para obtener la URL pública de la imagen del producto, manejando tanto
+     * rutas relativas a `storage/app/public` como rutas con prefijo `storage/` o `images/`
+     * sin duplicar `/storage/storage/`.
+     */
+    public function getImagenUrlAttribute(): ?string
+    {
+        return self::resolverUrlImagen($this->imagen);
     }
 }

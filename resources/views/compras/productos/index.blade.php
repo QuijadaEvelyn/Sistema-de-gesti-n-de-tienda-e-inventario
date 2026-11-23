@@ -444,7 +444,7 @@
                                         </button>
                                         <button
                                             type="button"
-                                            onclick="abrirModalActualizarImagen({{ $prod->id }}, '{{ addslashes($prod->nombre) }}', '{{ route('compras.productos.actualizar-imagen', $prod) }}', '{{ $prod->imagen ? asset('/' . ltrim($prod->imagen, '/')) : '' }}')"
+                                            onclick="abrirModalActualizarImagen({{ $prod->id }}, '{{ addslashes($prod->nombre) }}', '{{ route('compras.productos.actualizar-imagen', $prod) }}', '{{ $prod->imagen_url ?? '' }}')"
                                             class="btn-glass-surface px-2.5 py-1.5 rounded-xl text-xs font-semibold inline-flex items-center gap-1.5 shadow-2xs cursor-pointer"
                                             title="{{ $prod->imagen ? 'Actualizar o cambiar portada' : 'Subir foto de portada' }}"
                                         >
