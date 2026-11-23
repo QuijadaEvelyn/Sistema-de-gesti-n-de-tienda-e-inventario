@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Database\Seeders;
 
 use App\Models\Catalogo;
+use App\Models\Producto;
 use App\Models\Rol;
 use App\Models\Sucursal;
 use App\Models\Usuario;
@@ -136,6 +137,14 @@ class DatabaseSeeder extends Seeder
                     'activo' => true,
                 ]
             );
+        }
+
+        // Si la tabla productos está vacía (y no se está ejecutando una prueba unitaria aislada),
+        // restaurar el catálogo versionado de database/seeders/assets/catalogo_curado.json usando updateOrCreate
+        if (! app()->runningUnitTests() && Schema::hasTable('productos') && Producto::count() === 0) {
+            $this->call([
+                CatalogoCuradoSeeder::class,
+            ]);
         }
     }
 }

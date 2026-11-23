@@ -161,33 +161,23 @@ class SucursalContextoService
 
     /**
      * Sincroniza y devuelve la sucursal activa en el portal público (null = Todas las Sedes).
+     * Por defecto la tienda pública siempre muestra el catálogo global de todas las sucursales,
+     * a menos que la petición actual incluya explícitamente `?sucursal_id=` o `?sucursal=`.
      */
     public function resolverSucursalPublica(Request $request): ?Sucursal
     {
         $parametro = $request->input('sucursal_id', $request->input('sucursal'));
 
-        if ($parametro !== null && $parametro !== '') {
-            $valor = mb_strtolower(trim((string) $parametro));
-            if (in_array($valor, ['all', 'todas', 'global', '0'], true)) {
-                $request->session()->forget(self::SESSION_SUCURSAL_KEY);
-
-                return null;
-            }
-
-            $sucursal = $this->resolverSucursal($parametro);
-            if ($sucursal) {
-                $request->session()->put(self::SESSION_SUCURSAL_KEY, $sucursal->id);
-
-                return $sucursal;
-            }
-        }
-
-        $enSesion = $request->session()->get(self::SESSION_SUCURSAL_KEY);
-        if ($enSesion === null || $enSesion === 'all') {
+        if ($parametro === null || $parametro === '') {
             return null;
         }
 
-        return $this->resolverSucursal($enSesion);
+        $valor = mb_strtolower(trim((string) $parametro));
+        if (in_array($valor, ['all', 'todas', 'global', '0'], true)) {
+            return null;
+        }
+
+        return $this->resolverSucursal($parametro);
     }
 
     /**

@@ -218,6 +218,9 @@ class CatalogoPublicoController extends Controller
         $filtroActivoSlug = $filtroActivoRaw ? str_replace(['-', ' '], '_', $filtroActivoRaw) : 'todos';
         $filtroActivo = array_key_exists($filtroActivoSlug, self::GENEROS_LIBROS) ? $filtroActivoSlug : 'todos';
 
+        $sucursalActiva = app(SucursalContextoService::class)->resolverSucursalPublica($request);
+        $sucursalId = $sucursalActiva?->id;
+
         // Obtener todos los libros activos para el contador de géneros y el Estante 3D
         $todosLibros = Producto::query()
             ->with([
@@ -227,7 +230,17 @@ class CatalogoPublicoController extends Controller
                 'variantesSku.existencias.sucursal',
             ])
             ->where('activo', true)
-            ->whereHas('catalogo', fn (Builder $q) => $q->where('tipo', 'libro'))
+            ->when($sucursalId !== null, function (Builder $q) use ($sucursalId): void {
+                $q->whereHas('variantesSku.existencias', function (Builder $eq) use ($sucursalId): void {
+                    $eq->where('sucursal_id', $sucursalId);
+                });
+            })
+            ->where(function (Builder $q): void {
+                $q->whereHas('catalogo', function (Builder $c): void {
+                    $c->whereIn('tipo', ['libro', 'libros'])
+                        ->orWhere('nombre', 'like', '%libro%');
+                })->orWhereHas('libro');
+            })
             ->get();
 
         $conteoGeneros = ['todos' => $todosLibros->count()];
@@ -412,7 +425,13 @@ class CatalogoPublicoController extends Controller
                     'variantesSku.existencias.sucursal',
                 ])
                 ->where('activo', true)
-                ->whereHas('catalogo', fn (Builder $q) => $q->where('tipo', 'coleccionable'))
+                ->where(function (Builder $q): void {
+                    $q->whereHas('catalogo', function (Builder $c): void {
+                        $c->whereIn('tipo', ['coleccionable', 'coleccionables', 'memorabilia'])
+                            ->orWhere('nombre', 'like', '%coleccion%')
+                            ->orWhere('nombre', 'like', '%memorabilia%');
+                    })->orWhereHas('coleccionable');
+                })
                 ->orderByDesc('precio')
                 ->limit(10)
                 ->get()
@@ -624,38 +643,64 @@ class CatalogoPublicoController extends Controller
         }
 
         if ($categoria === 'libros') {
-            $query->whereHas('catalogo', fn (Builder $q) => $q->where('tipo', 'libro'));
+            $query->where(function (Builder $q): void {
+                $q->whereHas('catalogo', function (Builder $c): void {
+                    $c->whereIn('tipo', ['libro', 'libros'])
+                        ->orWhere('nombre', 'like', '%libro%');
+                })->orWhereHas('libro');
+            });
 
             if ($request->filled('genero') && $request->string('genero')->lower()->toString() !== 'todos') {
                 $generoRaw = $request->string('genero')->lower()->toString();
                 $generoSlug = str_replace(['-', ' '], '_', $generoRaw);
                 $query->whereHas('libro', function (Builder $l) use ($generoSlug, $generoRaw): void {
-                    $l->where('genero', $generoSlug)->orWhere('genero', $generoRaw);
+                    $l->where('genero', $generoSlug)
+                        ->orWhere('genero', $generoRaw)
+                        ->orWhere('genero', 'like', '%'.$generoRaw.'%');
                 });
             }
         } elseif ($categoria === 'vinilos') {
-            $query->whereHas('catalogo', fn (Builder $q) => $q->where('tipo', 'disco'));
+            $query->where(function (Builder $q): void {
+                $q->whereHas('catalogo', function (Builder $c): void {
+                    $c->whereIn('tipo', ['disco', 'discos', 'vinilo', 'vinilos'])
+                        ->orWhere('nombre', 'like', '%disco%')
+                        ->orWhere('nombre', 'like', '%vinil%');
+                })->orWhereHas('disco');
+            });
 
             if ($request->filled('formato') && $request->string('formato')->lower()->toString() !== 'todos') {
                 $formatoFiltro = $request->string('formato')->lower()->toString() === 'cd' ? 'CD' : 'vinilo';
                 $query->whereHas('disco', function (Builder $d) use ($formatoFiltro): void {
-                    $d->where('formato', $formatoFiltro);
+                    $d->where('formato', $formatoFiltro)
+                        ->orWhere('formato', strtolower($formatoFiltro));
                 });
             }
         } elseif ($categoria === 'memorabilia') {
-            $query->whereHas('catalogo', fn (Builder $q) => $q->where('tipo', 'coleccionable'));
+            $query->where(function (Builder $q): void {
+                $q->whereHas('catalogo', function (Builder $c): void {
+                    $c->whereIn('tipo', ['coleccionable', 'coleccionables', 'memorabilia'])
+                        ->orWhere('nombre', 'like', '%coleccion%')
+                        ->orWhere('nombre', 'like', '%memorabilia%');
+                })->orWhereHas('coleccionable');
+            });
 
             if ($request->filled('categoria') && $request->string('categoria')->lower()->toString() !== 'todos') {
                 $catFiltro = $request->string('categoria')->lower()->toString();
                 $query->whereHas('coleccionable', function (Builder $c) use ($catFiltro): void {
-                    $c->where('categoria', $catFiltro);
+                    $c->where('categoria', $catFiltro)
+                        ->orWhere('categoria', 'like', '%'.$catFiltro.'%');
                 });
             }
         } elseif ($categoria === 'adquisiciones') {
             $query->where(function (Builder $q): void {
                 $q->where('precio', '>=', 18000)
-                    ->orWhereHas('variantesSku', fn (Builder $v) => $v->where('descripcion', 'like', '%SELECTA%'))
+                    ->orWhereHas('variantesSku', fn (Builder $v) => $v->where('descripcion', 'like', '%SELECTA%')->orWhere('descripcion', 'like', '%PIEZA ÚNICA%')->orWhere('descripcion', 'like', '%EDICIÓN ESPECIAL%'))
+                    ->orWhereHas('variantesSku.existencias.piezasUnicas')
                     ->orWhereHas('coleccionable', fn (Builder $c) => $c->where('edicion_limitada', true));
+
+                if (Schema::hasColumn('productos', 'es_preventa')) {
+                    $q->orWhere('es_preventa', true);
+                }
             });
         }
 
