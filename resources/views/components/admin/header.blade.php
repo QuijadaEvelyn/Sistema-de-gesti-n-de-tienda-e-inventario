@@ -74,13 +74,13 @@
         </form>
 
         <!-- Conmutador de Tema Claro / Oscuro -->
-        <button type="button" id="admin-theme-toggle" class="btn-glass-surface p-2 rounded-lg shadow-xs" title="Alternar Tema Claro/Oscuro">
+        <button type="button" id="btn-toggle-theme" class="btn-glass-surface p-2 rounded-lg shadow-xs cursor-pointer" title="Alternar Tema Claro/Oscuro" aria-label="Cambiar tema visual" aria-pressed="false">
             <span class="material-symbols-outlined text-[20px] text-primary">light_mode</span>
         </button>
 
         <!-- Conmutador de Sonido Háptico / Táctil -->
-        <button type="button" class="sound-toggle-btn btn-glass-surface p-2 rounded-lg shadow-xs" title="Alternar sonidos táctiles del sistema" aria-label="Alternar sonidos">
-            <span class="material-symbols-outlined text-[20px] text-primary">volume_up</span>
+        <button type="button" id="btn-toggle-audio" class="sound-toggle-btn btn-glass-surface p-2 rounded-lg shadow-xs cursor-pointer opacity-60" title="Activar sonidos táctiles" aria-label="Activar sonidos" aria-pressed="false">
+            <span class="material-symbols-outlined text-[20px] text-primary">volume_off</span>
         </button>
 
         <div class="h-6 w-px bg-purple-200"></div>

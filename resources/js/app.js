@@ -368,7 +368,14 @@ export function initAdminSpaNavigation() {
  * ==========================================================================
  */
 let audioCtx = null;
-let soundEnabled = localStorage.getItem('archivum_sound_enabled') !== 'false';
+// Cada pestaña nueva inicia de forma independiente en estado por defecto (audio silenciado)
+let soundEnabled = (() => {
+    try {
+        return sessionStorage.getItem('archivum_audio') === 'true';
+    } catch (e) {
+        return false;
+    }
+})();
 
 function getAudioContext() {
     if (!audioCtx) {
@@ -420,7 +427,9 @@ export function playTactileClick() {
 
 export function toggleArchivumSound() {
     soundEnabled = !soundEnabled;
-    localStorage.setItem('archivum_sound_enabled', soundEnabled ? 'true' : 'false');
+    try {
+        sessionStorage.setItem('archivum_audio', soundEnabled ? 'true' : 'false');
+    } catch (e) {}
     updateSoundToggleButtons();
     if (soundEnabled) {
         playTactileClick();
@@ -429,14 +438,15 @@ export function toggleArchivumSound() {
 }
 
 function updateSoundToggleButtons() {
-    const buttons = document.querySelectorAll('.sound-toggle-btn');
+    const buttons = document.querySelectorAll('#btn-toggle-audio, .sound-toggle-btn');
     buttons.forEach((btn) => {
-        const icon = btn.querySelector('.material-symbols-outlined, span');
+        const icon = btn.querySelector('.material-symbols-outlined');
         if (icon) {
             icon.textContent = soundEnabled ? 'volume_up' : 'volume_off';
         }
         btn.setAttribute('title', soundEnabled ? 'Silenciar sonidos del sistema' : 'Activar sonidos táctiles');
         btn.setAttribute('aria-label', soundEnabled ? 'Silenciar sonidos' : 'Activar sonidos');
+        btn.setAttribute('aria-pressed', soundEnabled ? 'true' : 'false');
         if (soundEnabled) {
             btn.classList.remove('opacity-60');
         } else {
@@ -445,45 +455,117 @@ function updateSoundToggleButtons() {
     });
 }
 
-export function initArchivumSound() {
-    // Desbloquear AudioContext al primer gesto del usuario
-    const unlockEvents = ['pointerdown', 'keydown', 'touchstart'];
-    const unlockHandler = () => {
-        getAudioContext();
-        unlockEvents.forEach((ev) => window.removeEventListener(ev, unlockHandler, { capture: true }));
-    };
-    unlockEvents.forEach((ev) => window.addEventListener(ev, unlockHandler, { capture: true, once: true }));
-
-    // Delegación global para cualquier botón, píldora o enlace de navegación
-    document.addEventListener('click', (event) => {
-        const target = event.target;
-        if (!target) {
-            return;
+function syncThemeToggleButtons(isDark) {
+    const buttons = document.querySelectorAll('#btn-toggle-theme');
+    buttons.forEach((btn) => {
+        const icon = btn.querySelector('.material-symbols-outlined');
+        if (icon) {
+            icon.textContent = isDark ? 'dark_mode' : 'light_mode';
         }
-
-        const soundBtn = target.closest('.sound-toggle-btn');
-        if (soundBtn) {
-            event.preventDefault();
-            toggleArchivumSound();
-            return;
-        }
-
-        const interactive = target.closest(
-            'button, .btn, [role="button"], a.btn-glass-purple, a.btn-glass-surface, ' +
-            'nav a, #header-main-nav a, .sidebar-link-glossy-active, .sidebar-link-glossy-idle, ' +
-            '#theme-toggle-btn, #admin-theme-toggle, .chart-range-pill, input[type="submit"]'
-        );
-
-        if (interactive) {
-            playTactileClick();
-        }
+        btn.setAttribute('aria-pressed', isDark ? 'true' : 'false');
+        btn.setAttribute('title', isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro');
     });
+}
+
+function applyArchivumTheme(isDark, persist = true) {
+    if (isDark) {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light');
+        document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+        document.documentElement.classList.add('light');
+        document.documentElement.setAttribute('data-theme', 'light');
+    }
+
+    if (persist) {
+        try {
+            sessionStorage.setItem('archivum_theme', isDark ? 'dark' : 'light');
+        } catch (e) {}
+    }
+
+    syncThemeToggleButtons(isDark);
+    window.dispatchEvent(new CustomEvent('themeChanged', { detail: { isDark } }));
+    window.dispatchEvent(new CustomEvent('archivum-theme-change', { detail: { isDark } }));
+}
+
+export function initArchivumTheme() {
+    if (!window.__archivumThemeInitialized) {
+        window.__archivumThemeInitialized = true;
+
+        document.addEventListener('click', (event) => {
+            const target = event.target;
+            if (!target) {
+                return;
+            }
+
+            const themeBtn = target.closest('#btn-toggle-theme');
+            if (!themeBtn) {
+                return;
+            }
+
+            event.preventDefault();
+            const isDark = !document.documentElement.classList.contains('dark');
+            applyArchivumTheme(isDark, true);
+        });
+
+        window.addEventListener('admin-spa-navigated', () => {
+            syncThemeToggleButtons(document.documentElement.classList.contains('dark'));
+            updateSoundToggleButtons();
+        });
+    }
+
+    let isDarkTab = false;
+    try {
+        isDarkTab = sessionStorage.getItem('archivum_theme') === 'dark';
+    } catch (e) {}
+    applyArchivumTheme(isDarkTab, false);
+}
+
+export function initArchivumSound() {
+    if (!window.__archivumSoundInitialized) {
+        window.__archivumSoundInitialized = true;
+
+        // Desbloquear AudioContext al primer gesto del usuario
+        const unlockEvents = ['pointerdown', 'keydown', 'touchstart'];
+        const unlockHandler = () => {
+            getAudioContext();
+            unlockEvents.forEach((ev) => window.removeEventListener(ev, unlockHandler, { capture: true }));
+        };
+        unlockEvents.forEach((ev) => window.addEventListener(ev, unlockHandler, { capture: true, once: true }));
+
+        // Delegación global exclusiva para audio y clic táctil
+        document.addEventListener('click', (event) => {
+            const target = event.target;
+            if (!target) {
+                return;
+            }
+
+            const soundBtn = target.closest('#btn-toggle-audio, .sound-toggle-btn');
+            if (soundBtn) {
+                event.preventDefault();
+                toggleArchivumSound();
+                return;
+            }
+
+            const interactive = target.closest(
+                'button, .btn, [role="button"], a.btn-glass-purple, a.btn-glass-surface, ' +
+                'nav a, #header-main-nav a, .sidebar-link-glossy-active, .sidebar-link-glossy-idle, ' +
+                '#btn-toggle-theme, .chart-range-pill, input[type="submit"]'
+            );
+
+            if (interactive) {
+                playTactileClick();
+            }
+        });
+    }
 
     updateSoundToggleButtons();
 }
 
 window.playTactileClick = playTactileClick;
 window.toggleArchivumSound = toggleArchivumSound;
+window.syncAdminThemeUI = syncThemeToggleButtons;
 
 // Inicialización automática al cargar el DOM inicial
 function bootApp() {
@@ -494,6 +576,7 @@ function bootApp() {
     }
     initAdminSpaNavigation();
     initCoverflowCarousel();
+    initArchivumTheme();
     initArchivumSound();
 }
 

@@ -36,7 +36,7 @@ CREATE TABLE `bitacoras` (
   KEY `bitacoras_usuario_id_foreign` (`usuario_id`),
   KEY `bitacoras_tabla_afectada_registro_id_index` (`tabla_afectada`,`registro_id`),
   CONSTRAINT `bitacoras_usuario_id_foreign` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=86 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -59,7 +59,78 @@ INSERT INTO `bitacoras` VALUES
 (11,11,'IMPORTACION_MASIVA_PRODUCTOS','productos',NULL,'{\"archivo_datos\":\"plantilla_productos_archivum.xlsx\",\"archivo_zip\":\"imagenes.zip\",\"creados\":1,\"actualizados\":14,\"omitidos\":0,\"imagenes_extraidas\":15,\"por_pestana\":{\"Libros\":{\"creados\":0,\"actualizados\":6,\"errores\":0},\"Discos\":{\"creados\":0,\"actualizados\":6,\"errores\":0},\"Coleccionables\":{\"creados\":1,\"actualizados\":2,\"errores\":0}},\"usuario_nombre\":\"Administrador ARCHIVUM\"}','172.19.0.1','2026-11-23 06:18:55'),
 (12,NULL,'LOGIN_FALLIDO','usuarios',NULL,'{\"email\":\"quijadaevelin82@gmail.com\",\"ip\":\"172.19.0.1\"}','172.19.0.1','2026-11-23 06:20:12'),
 (13,13,'CLIENTE_REGISTRADO','usuarios',13,'{\"email\":\"quijadaevelin82@gmail.com\",\"cliente_id\":5,\"rol\":\"cliente\"}','172.19.0.1','2026-11-23 06:20:32'),
-(14,11,'IMPORTACION_MASIVA_PRODUCTOS','productos',NULL,'{\"archivo_datos\":\"plantilla_productos_archivum.xlsx\",\"archivo_zip\":\"imagenes.zip\",\"creados\":0,\"actualizados\":15,\"omitidos\":0,\"imagenes_extraidas\":15,\"por_pestana\":{\"Libros\":{\"creados\":0,\"actualizados\":6,\"errores\":0},\"Discos\":{\"creados\":0,\"actualizados\":6,\"errores\":0},\"Coleccionables\":{\"creados\":0,\"actualizados\":3,\"errores\":0}},\"usuario_nombre\":\"Administrador ARCHIVUM\"}','172.19.0.1','2026-11-23 06:39:35');
+(14,11,'IMPORTACION_MASIVA_PRODUCTOS','productos',NULL,'{\"archivo_datos\":\"plantilla_productos_archivum.xlsx\",\"archivo_zip\":\"imagenes.zip\",\"creados\":0,\"actualizados\":15,\"omitidos\":0,\"imagenes_extraidas\":15,\"por_pestana\":{\"Libros\":{\"creados\":0,\"actualizados\":6,\"errores\":0},\"Discos\":{\"creados\":0,\"actualizados\":6,\"errores\":0},\"Coleccionables\":{\"creados\":0,\"actualizados\":3,\"errores\":0}},\"usuario_nombre\":\"Administrador ARCHIVUM\"}','172.19.0.1','2026-11-23 06:39:35'),
+(15,13,'LOGOUT','usuarios',13,'{\"ip\":\"172.19.0.1\"}','172.19.0.1','2026-11-23 06:41:22'),
+(16,13,'SOLICITUD_RECUPERACION_CONTRASENA','recuperacion_contrasenas',13,'{\"email\":\"quijadaevelin82@gmail.com\",\"ip\":\"172.19.0.1\",\"expira_en\":\"2026-11-23 07:41:38\"}','172.19.0.1','2026-11-23 06:41:38'),
+(17,13,'LOGIN_EXITOSO','usuarios',13,'{\"email\":\"quijadaevelin82@gmail.com\",\"roles\":[\"cliente\"],\"tab_session_id\":\"tab_mwsum1yn_dvcjeo0x7dwqq7oj6ky0\"}','172.19.0.1','2026-11-23 06:41:58'),
+(18,11,'ACTUALIZACION_IMAGEN_PRODUCTO','productos',140,'{\"nombre\":\"Cartucho The Legend of Zelda (Gold Cartridge NES 1987 Sellado)\",\"nueva_imagen\":\"productos\\/lMStJFZVoRaFgiGxdH3QPglfHsNjnBzPESNRtTbh.avif\",\"usuario_nombre\":\"Administrador ARCHIVUM\"}','172.19.0.1','2026-11-23 06:44:59'),
+(19,11,'ACTUALIZACION_IMAGEN_PRODUCTO','productos',139,'{\"nombre\":\"Consola Nintendo Game & Watch Ball (Primera Edici\\u00f3n Jap\\u00f3n 1980)\",\"nueva_imagen\":\"productos\\/Ov8dBeHpr9qzg7jBmxx6rzvIFBVrcyrIfVdQyYNz.webp\",\"usuario_nombre\":\"Administrador ARCHIVUM\"}','172.19.0.1','2026-11-23 06:45:14'),
+(20,11,'BAJA_PRODUCTO','productos',138,'{\"nombre\":\"Moneda Virreinal 8 Reales Columnario de Plata (1768)\",\"estado_anterior\":\"activo\",\"nuevo_estado\":\"baja\",\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"]}','172.19.0.1','2026-11-23 06:45:21'),
+(21,11,'ACTUALIZACION_IMAGEN_PRODUCTO','productos',137,'{\"nombre\":\"Billete Revolucionario 10 Pesos Ej\\u00e9rcito Constitucionalista (1914)\",\"nueva_imagen\":\"productos\\/paiPRw6iKSvFPyK4TkoNDxvKiIMdvW2cGgNfRCgz.jpg\",\"usuario_nombre\":\"Administrador ARCHIVUM\"}','172.19.0.1','2026-11-23 06:45:33'),
+(22,11,'ACTUALIZAR_PRECIO_PRODUCTO','productos',137,'{\"nombre\":\"Billete Revolucionario 10 Pesos Ej\\u00e9rcito Constitucionalista (1914)\",\"precio_anterior\":8900,\"precio_nuevo\":500,\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"]}','172.19.0.1','2026-11-23 06:45:40'),
+(23,11,'ACTUALIZAR_PRECIO_PRODUCTO','productos',140,'{\"nombre\":\"Cartucho The Legend of Zelda (Gold Cartridge NES 1987 Sellado)\",\"precio_anterior\":34000,\"precio_nuevo\":2500,\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"]}','172.19.0.1','2026-11-23 06:45:46'),
+(24,11,'ACTUALIZAR_PRECIO_PRODUCTO','productos',139,'{\"nombre\":\"Consola Nintendo Game & Watch Ball (Primera Edici\\u00f3n Jap\\u00f3n 1980)\",\"precio_anterior\":26900,\"precio_nuevo\":2500,\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"]}','172.19.0.1','2026-11-23 06:45:57'),
+(25,11,'BAJA_PRODUCTO','productos',136,'{\"nombre\":\"Robot Mec\\u00e1nico de Hojalata Space Trooper (Jap\\u00f3n Vintage 1965)\",\"estado_anterior\":\"activo\",\"nuevo_estado\":\"baja\",\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"]}','172.19.0.1','2026-11-23 06:46:04'),
+(26,11,'ACTUALIZACION_IMAGEN_PRODUCTO','productos',135,'{\"nombre\":\"Figura Dragon Ball Z Super Saiyan Goku (Banpresto Jap\\u00f3n 1993)\",\"nueva_imagen\":\"productos\\/pURPIuY5YUTPvNs5V0NuCOACVAXYA0rdg10gsJVB.jpg\",\"usuario_nombre\":\"Administrador ARCHIVUM\"}','172.19.0.1','2026-11-23 06:46:16'),
+(27,11,'BAJA_PRODUCTO','productos',125,'{\"nombre\":\"Centenario de Oro (50 Pesos)\",\"estado_anterior\":\"activo\",\"nuevo_estado\":\"baja\",\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"]}','172.19.0.1','2026-11-23 06:46:37'),
+(28,11,'BAJA_PRODUCTO','productos',119,'{\"nombre\":\"Estatua Evangelion Test Type-01 (Edici\\u00f3n Limitada Kaiyodo 1997)\",\"estado_anterior\":\"activo\",\"nuevo_estado\":\"baja\",\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"]}','172.19.0.1','2026-11-23 06:46:47'),
+(29,11,'BAJA_PRODUCTO','productos',118,'{\"nombre\":\"Kit de Conservaci\\u00f3n Museogr\\u00e1fica & Estuche Anti\\u00e1cido\",\"estado_anterior\":\"activo\",\"nuevo_estado\":\"baja\",\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"]}','172.19.0.1','2026-11-23 06:46:54'),
+(30,11,'BAJA_PRODUCTO','productos',116,'{\"nombre\":\"Programa Inaugural Palacio de Bellas Artes (1934)\",\"estado_anterior\":\"activo\",\"nuevo_estado\":\"baja\",\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"]}','172.19.0.1','2026-11-23 06:47:06'),
+(31,11,'BAJA_PRODUCTO','productos',117,'{\"nombre\":\"Litograf\\u00eda Taller de Gr\\u00e1fica Popular Coyoac\\u00e1n (1954)\",\"estado_anterior\":\"activo\",\"nuevo_estado\":\"baja\",\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"]}','172.19.0.1','2026-11-23 06:47:11'),
+(32,11,'BAJA_PRODUCTO','productos',115,'{\"nombre\":\"Partitura Aut\\u00f3grafa de Estudio en Sol Menor (1912)\",\"estado_anterior\":\"activo\",\"nuevo_estado\":\"baja\",\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"]}','172.19.0.1','2026-11-23 06:47:18'),
+(33,11,'BAJA_PRODUCTO','productos',114,'{\"nombre\":\"Fotograf\\u00eda en Plata sobre Gelatina Firmada (1934)\",\"estado_anterior\":\"activo\",\"nuevo_estado\":\"baja\",\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"]}','172.19.0.1','2026-11-23 06:47:22'),
+(34,11,'BAJA_PRODUCTO','productos',113,'{\"nombre\":\"Medalla Conmemorativa del Centenario (1910)\",\"estado_anterior\":\"activo\",\"nuevo_estado\":\"baja\",\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"]}','172.19.0.1','2026-11-23 06:47:25'),
+(35,11,'BAJA_PRODUCTO','productos',112,'{\"nombre\":\"Manuscrito Aut\\u00f3grafo Casa Azul Coyoac\\u00e1n (1940)\",\"estado_anterior\":\"activo\",\"nuevo_estado\":\"baja\",\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"]}','172.19.0.1','2026-11-23 06:47:31'),
+(36,11,'BAJA_PRODUCTO','productos',111,'{\"nombre\":\"Carta Manuscrita Bellas Artes (1928)\",\"estado_anterior\":\"activo\",\"nuevo_estado\":\"baja\",\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"]}','172.19.0.1','2026-11-23 06:47:36'),
+(37,11,'BAJA_PRODUCTO','productos',110,'{\"nombre\":\"Buena Vista Social Club (Edici\\u00f3n CD Remasterizada World Circuit)\",\"estado_anterior\":\"activo\",\"nuevo_estado\":\"baja\",\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"]}','172.19.0.1','2026-11-23 06:47:46'),
+(38,11,'ACTUALIZACION_IMAGEN_PRODUCTO','productos',98,'{\"nombre\":\"OK Computer (Collector\'s Edition 2-CD Parlophone)\",\"nueva_imagen\":\"productos\\/Q456A28SU5bldfSxRvIVCataUpdvgzyxOcZnpPhn.webp\",\"usuario_nombre\":\"Administrador ARCHIVUM\"}','172.19.0.1','2026-11-23 06:48:15'),
+(39,11,'ACTUALIZACION_IMAGEN_PRODUCTO','productos',83,'{\"nombre\":\"El Se\\u00f1or de los Anillos: La Comunidad del Anillo (1\\u00aa Edici\\u00f3n Minotauro 1977)\",\"nueva_imagen\":\"productos\\/Yp21v7nB63v6WboOV3gMWawFicNu2LvUSVwstArn.jpg\",\"usuario_nombre\":\"Administrador ARCHIVUM\"}','172.19.0.1','2026-11-23 06:48:44'),
+(40,11,'ACTUALIZACION_IMAGEN_PRODUCTO','productos',84,'{\"nombre\":\"El Nombre de la Rosa (1\\u00aa Edici\\u00f3n en Castellano Lumen 1982)\",\"nueva_imagen\":\"productos\\/X4kWplGRxzkWUJRimbhbzdRoKhLkCuFO6MKjm3Ja.jpg\",\"usuario_nombre\":\"Administrador ARCHIVUM\"}','172.19.0.1','2026-11-23 06:48:59'),
+(41,11,'ACTUALIZACION_IMAGEN_PRODUCTO','productos',85,'{\"nombre\":\"Estudio en Escarlata & El Sabueso de los Baskerville (Edici\\u00f3n Anotada 1928)\",\"nueva_imagen\":\"productos\\/w4o5WSAutGgYS2vUk76XEpDfmhmw7q6VP7ApUm9R.webp\",\"usuario_nombre\":\"Administrador ARCHIVUM\"}','172.19.0.1','2026-11-23 06:49:21'),
+(42,11,'ACTUALIZACION_IMAGEN_PRODUCTO','productos',86,'{\"nombre\":\"As\\u00ed Habl\\u00f3 Zaratustra: Un Libro para Todos y para Nadie (Edici\\u00f3n Aguilar 1932)\",\"nueva_imagen\":\"productos\\/w3PmtPgXy1u6PJEWZiZEP1nHRm9i4COxdwSt2aYz.jpg\",\"usuario_nombre\":\"Administrador ARCHIVUM\"}','172.19.0.1','2026-11-23 06:49:37'),
+(43,11,'ACTUALIZACION_IMAGEN_PRODUCTO','productos',87,'{\"nombre\":\"El Banquete y Fed\\u00f3n (Traducci\\u00f3n Cl\\u00e1sica Bibliotheca Scriptorum 1944)\",\"nueva_imagen\":\"productos\\/zeytArWzUEWrUhsrWamTQN6XnDoEdGvcF0ib5c2T.jpg\",\"usuario_nombre\":\"Administrador ARCHIVUM\"}','172.19.0.1','2026-11-23 06:49:52'),
+(44,11,'ACTUALIZACION_IMAGEN_PRODUCTO','productos',88,'{\"nombre\":\"Don Quijote de la Mancha (Edici\\u00f3n Conmemorativa Facsimilar RAE 1947)\",\"nueva_imagen\":\"productos\\/dgIYo3PHjBqj7MFrwT0MfScUdOzwhYJfXeS6yHN5.jpg\",\"usuario_nombre\":\"Administrador ARCHIVUM\"}','172.19.0.1','2026-11-23 06:50:05'),
+(45,11,'ACTUALIZACION_IMAGEN_PRODUCTO','productos',89,'{\"nombre\":\"La Divina Comedia (Edici\\u00f3n Biling\\u00fce con Grabados de Gustave Dor\\u00e9 1921)\",\"nueva_imagen\":\"productos\\/RoHPqdVCnxcwTtWnv4jkG8HHqvJ1XLqrSnNG9eSM.webp\",\"usuario_nombre\":\"Administrador ARCHIVUM\"}','172.19.0.1','2026-11-23 06:50:27'),
+(46,11,'BAJA_PRODUCTO','productos',90,'{\"nombre\":\"Confieso que he Vivido: Memorias (Primera Edici\\u00f3n Seix Barral 1974)\",\"estado_anterior\":\"activo\",\"nuevo_estado\":\"baja\",\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"]}','172.19.0.1','2026-11-23 06:50:38'),
+(47,11,'BAJA_PRODUCTO','productos',91,'{\"nombre\":\"Historia Verdadera de la Conquista de la Nueva Espa\\u00f1a (Edici\\u00f3n Cr\\u00edtica 1960)\",\"estado_anterior\":\"activo\",\"nuevo_estado\":\"baja\",\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"]}','172.19.0.1','2026-11-23 06:50:43'),
+(48,11,'BAJA_PRODUCTO','productos',92,'{\"nombre\":\"Kind of Blue (Mono 1st Press 6-Eye)\",\"estado_anterior\":\"activo\",\"nuevo_estado\":\"baja\",\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"]}','172.19.0.1','2026-11-23 06:50:48'),
+(49,11,'BAJA_PRODUCTO','productos',93,'{\"nombre\":\"Blue Train (Plastylite RVG Ear Press)\",\"estado_anterior\":\"activo\",\"nuevo_estado\":\"baja\",\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"]}','172.19.0.1','2026-11-23 06:50:54'),
+(50,11,'BAJA_PRODUCTO','productos',94,'{\"nombre\":\"A Love Supreme (Gatefold 1st Impulse! Mono)\",\"estado_anterior\":\"activo\",\"nuevo_estado\":\"baja\",\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"]}','172.19.0.1','2026-11-23 06:51:00'),
+(51,11,'ACTUALIZACION_IMAGEN_PRODUCTO','productos',96,'{\"nombre\":\"The Dark Side of the Moon (1st Japan Black Triangle CD)\",\"nueva_imagen\":\"productos\\/C3qtAHVSU9LoQlb9SU4WFgz187Cz84fDeAZXu3pt.jpg\",\"usuario_nombre\":\"Administrador ARCHIVUM\"}','172.19.0.1','2026-11-23 06:51:22'),
+(52,11,'BAJA_PRODUCTO','productos',95,'{\"nombre\":\"Abbey Road (UK 1st Press Misaligned Apple)\",\"estado_anterior\":\"activo\",\"nuevo_estado\":\"baja\",\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"]}','172.19.0.1','2026-11-23 06:51:28'),
+(53,11,'BAJA_PRODUCTO','productos',97,'{\"nombre\":\"Led Zeppelin IV (Prensado Audi\\u00f3filo Atlantic 180g)\",\"estado_anterior\":\"activo\",\"nuevo_estado\":\"baja\",\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"]}','172.19.0.1','2026-11-23 06:51:34'),
+(54,11,'ACTUALIZAR_PRECIO_PRODUCTO','productos',88,'{\"nombre\":\"Don Quijote de la Mancha (Edici\\u00f3n Conmemorativa Facsimilar RAE 1947)\",\"precio_anterior\":38000,\"precio_nuevo\":1000,\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"]}','172.19.0.1','2026-11-23 06:51:40'),
+(55,11,'ACTUALIZAR_PRECIO_PRODUCTO','productos',89,'{\"nombre\":\"La Divina Comedia (Edici\\u00f3n Biling\\u00fce con Grabados de Gustave Dor\\u00e9 1921)\",\"precio_anterior\":42000,\"precio_nuevo\":500,\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"]}','172.19.0.1','2026-11-23 06:51:49'),
+(56,11,'ACTUALIZAR_PRECIO_PRODUCTO','productos',96,'{\"nombre\":\"The Dark Side of the Moon (1st Japan Black Triangle CD)\",\"precio_anterior\":14800,\"precio_nuevo\":530,\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"]}','172.19.0.1','2026-11-23 06:51:54'),
+(57,11,'ACTUALIZAR_PRECIO_PRODUCTO','productos',87,'{\"nombre\":\"El Banquete y Fed\\u00f3n (Traducci\\u00f3n Cl\\u00e1sica Bibliotheca Scriptorum 1944)\",\"precio_anterior\":13400,\"precio_nuevo\":360,\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"]}','172.19.0.1','2026-11-23 06:52:05'),
+(58,11,'ACTUALIZAR_PRECIO_PRODUCTO','productos',86,'{\"nombre\":\"As\\u00ed Habl\\u00f3 Zaratustra: Un Libro para Todos y para Nadie (Edici\\u00f3n Aguilar 1932)\",\"precio_anterior\":19500,\"precio_nuevo\":380,\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"]}','172.19.0.1','2026-11-23 06:52:15'),
+(59,11,'ACTUALIZAR_PRECIO_PRODUCTO','productos',84,'{\"nombre\":\"El Nombre de la Rosa (1\\u00aa Edici\\u00f3n en Castellano Lumen 1982)\",\"precio_anterior\":14200,\"precio_nuevo\":250,\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"]}','172.19.0.1','2026-11-23 06:52:22'),
+(60,11,'ACTUALIZAR_PRECIO_PRODUCTO','productos',83,'{\"nombre\":\"El Se\\u00f1or de los Anillos: La Comunidad del Anillo (1\\u00aa Edici\\u00f3n Minotauro 1977)\",\"precio_anterior\":29800,\"precio_nuevo\":300,\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"]}','172.19.0.1','2026-11-23 06:52:29'),
+(61,11,'ACTUALIZAR_PRECIO_PRODUCTO','productos',85,'{\"nombre\":\"Estudio en Escarlata & El Sabueso de los Baskerville (Edici\\u00f3n Anotada 1928)\",\"precio_anterior\":17800,\"precio_nuevo\":280,\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"]}','172.19.0.1','2026-11-23 06:52:40'),
+(62,11,'ACTUALIZACION_IMAGEN_PRODUCTO','productos',82,'{\"nombre\":\"Cr\\u00f3nicas Marcianas (Edici\\u00f3n Pr\\u00edncipe con Pr\\u00f3logo de Borges 1955)\",\"nueva_imagen\":\"productos\\/DDJgwHy3Hd6EbSR0LA67OVwBhiLBakis3xI3bHm9.jpg\",\"usuario_nombre\":\"Administrador ARCHIVUM\"}','172.19.0.1','2026-11-23 06:52:59'),
+(63,11,'ACTUALIZACION_IMAGEN_PRODUCTO','productos',81,'{\"nombre\":\"Fahrenheit 451 (Primera Edici\\u00f3n en Espa\\u00f1ol Minotauro 1955)\",\"nueva_imagen\":\"productos\\/TLYiBzkepp04SsB7cHRFLORSJA1IGPiPXW1O7BH9.jpg\",\"usuario_nombre\":\"Administrador ARCHIVUM\"}','172.19.0.1','2026-11-23 06:53:18'),
+(64,11,'ACTUALIZACION_IMAGEN_PRODUCTO','productos',80,'{\"nombre\":\"Narraciones Extraordinarias & El Cuervo (Edici\\u00f3n Ilustrada 1945)\",\"nueva_imagen\":\"productos\\/p9Cf6Nskf3dQFBA3Vr6G1QtqVH6HutScpRqC1q8b.webp\",\"usuario_nombre\":\"Administrador ARCHIVUM\"}','172.19.0.1','2026-11-23 06:54:12'),
+(65,11,'ACTUALIZACION_IMAGEN_PRODUCTO','productos',79,'{\"nombre\":\"La Estructura de las Revoluciones Cient\\u00edficas (1\\u00aa Edici\\u00f3n FCE)\",\"nueva_imagen\":\"productos\\/7HzDLydxgzIHkTURYQu6UJMifjJKndEvoRs0aUPs.jpg\",\"usuario_nombre\":\"Administrador ARCHIVUM\"}','172.19.0.1','2026-11-23 06:54:25'),
+(66,11,'BAJA_PRODUCTO','productos',78,'{\"nombre\":\"Visi\\u00f3n de los Vencidos: Relaciones Ind\\u00edgenas de la Conquista\",\"estado_anterior\":\"activo\",\"nuevo_estado\":\"baja\",\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"]}','172.19.0.1','2026-11-23 06:55:09'),
+(67,11,'ACTUALIZACION_IMAGEN_PRODUCTO','productos',77,'{\"nombre\":\"Piedra de Sol y Obra Po\\u00e9tica (Primera Edici\\u00f3n 1957)\",\"nueva_imagen\":\"productos\\/mJvRjktDKa0jbFxCDpRi4FhhQU5o2cvndCFB5xZZ.jpg\",\"usuario_nombre\":\"Administrador ARCHIVUM\"}','172.19.0.1','2026-11-23 06:55:32'),
+(68,11,'ACTUALIZACION_IMAGEN_PRODUCTO','productos',76,'{\"nombre\":\"Rayuela (Tiraje Cl\\u00e1sico Editorial Sudamericana)\",\"nueva_imagen\":\"productos\\/TCPLCpmh1SnaGKU280WLmOfcZPFzSCiWiP89POg9.webp\",\"usuario_nombre\":\"Administrador ARCHIVUM\"}','172.19.0.1','2026-11-23 06:55:47'),
+(69,11,'ACTUALIZACION_IMAGEN_PRODUCTO','productos',75,'{\"nombre\":\"Aura (Edici\\u00f3n Conmemorativa Biblioteca Era Coyoac\\u00e1n)\",\"nueva_imagen\":\"productos\\/aVTFPNupBVuqv8AqdLxNykqPMmHV8d0R3tME0hoB.webp\",\"usuario_nombre\":\"Administrador ARCHIVUM\"}','172.19.0.1','2026-11-23 06:56:02'),
+(70,11,'ACTUALIZACION_IMAGEN_PRODUCTO','productos',74,'{\"nombre\":\"El Laberinto de la Soledad (1\\u00aa Edici\\u00f3n Cuadernos Americanos)\",\"nueva_imagen\":\"productos\\/qYnCho0DwirzbkIQJ1PrhVvyhXI9QRBZWdW6kcXG.jpg\",\"usuario_nombre\":\"Administrador ARCHIVUM\"}','172.19.0.1','2026-11-23 06:56:19'),
+(71,11,'ACTUALIZACION_IMAGEN_PRODUCTO','productos',73,'{\"nombre\":\"El Aleph (Ejemplar Dedicado por el Autor)\",\"nueva_imagen\":\"productos\\/gYa5QlrlkdwvAIGMlq3ldGpHoZuGe8ygDtIKpg2b.jpg\",\"usuario_nombre\":\"Administrador ARCHIVUM\"}','172.19.0.1','2026-11-23 06:56:34'),
+(72,11,'BAJA_PRODUCTO','productos',72,'{\"nombre\":\"Pedro P\\u00e1ramo (Edici\\u00f3n Pr\\u00edncipe FCE)\",\"estado_anterior\":\"activo\",\"nuevo_estado\":\"baja\",\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"]}','172.19.0.1','2026-11-23 06:57:19'),
+(73,11,'ACTUALIZACION_IMAGEN_PRODUCTO','productos',71,'{\"nombre\":\"Cien A\\u00f1os de Soledad (1\\u00aa Edici\\u00f3n Sudamericana)\",\"nueva_imagen\":\"productos\\/9b2xdCyABitnYZYoAAhn8J5OjYrrB4NGxAvBBSJ1.jpg\",\"usuario_nombre\":\"Administrador ARCHIVUM\"}','172.19.0.1','2026-11-23 06:57:32'),
+(74,13,'CHECKOUT_SIMULADO_EXITOSO','pedidos',6,'{\"folio\":\"ARC-20261123-NEW0B\",\"total\":\"3065.00\",\"ultimos_digitos\":\"4242\",\"numero_guia\":\"GUA-ARC-261123-Z6UPEZ\"}','172.19.0.1','2026-11-23 07:07:33'),
+(75,13,'DEVOLUCION_SOLICITADA','devoluciones',1,'{\"folio_devolucion\":\"DEV-ARC-20261123-UNAB\",\"pedido_folio\":\"ARC-20261123-NEW0B\",\"detalle_pedido_id\":1,\"cantidad\":1,\"motivo\":\"producto_defectuoso\",\"evidencias_count\":1}','172.19.0.1','2026-11-23 07:08:15'),
+(76,11,'LOGOUT','usuarios',11,'{\"ip\":\"172.19.0.1\"}','172.19.0.1','2026-11-23 07:09:02'),
+(77,13,'LOGOUT','usuarios',13,'{\"ip\":\"172.19.0.1\"}','172.19.0.1','2026-11-23 07:09:11'),
+(78,NULL,'LOGIN_FALLIDO','usuarios',NULL,'{\"email\":\"ventas1@archivum.com\",\"ip\":\"172.19.0.1\"}','172.19.0.1','2026-11-23 07:09:18'),
+(79,NULL,'LOGIN_FALLIDO','usuarios',NULL,'{\"email\":\"ventas1@archivum.com\",\"ip\":\"172.19.0.1\"}','172.19.0.1','2026-11-23 07:09:23'),
+(80,NULL,'LOGIN_FALLIDO','usuarios',NULL,'{\"email\":\"ventas1@archivum.com\",\"ip\":\"172.19.0.1\"}','172.19.0.1','2026-11-23 07:09:31'),
+(81,12,'LOGIN_EXITOSO','usuarios',12,'{\"email\":\"compras1@archivum.com\",\"roles\":[\"Compras\"],\"tab_session_id\":\"tab_mwsum1yn_dvcjeo0x7dwqq7oj6ky0\"}','172.19.0.1','2026-11-23 07:09:49'),
+(82,12,'LOGOUT','usuarios',12,'{\"ip\":\"172.19.0.1\"}','172.19.0.1','2026-11-23 07:09:52'),
+(83,NULL,'LOGIN_FALLIDO','usuarios',NULL,'{\"email\":\"almacen1@archivum.com\",\"ip\":\"172.19.0.1\"}','172.19.0.1','2026-11-23 07:10:09'),
+(84,NULL,'LOGIN_FALLIDO','usuarios',NULL,'{\"email\":\"admin@archivum.com\",\"ip\":\"172.19.0.1\"}','172.19.0.1','2026-11-23 07:32:12'),
+(85,11,'LOGIN_EXITOSO','usuarios',11,'{\"email\":\"admin@archivum.com\",\"roles\":[\"Administrador\"],\"tab_session_id\":\"tab_mwsum1yn_dvcjeo0x7dwqq7oj6ky0\"}','172.19.0.1','2026-11-23 07:32:37');
 /*!40000 ALTER TABLE `bitacoras` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -86,10 +157,13 @@ CREATE TABLE `cache` (
 LOCK TABLES `cache` WRITE;
 /*!40000 ALTER TABLE `cache` DISABLE KEYS */;
 INSERT INTO `cache` VALUES
-('laravel-cache-archivum_tab_token:tab_mwsl2ezk_6pnqpwxdqq8m75leb39k','a:7:{s:7:\"user_id\";i:11;s:16:\"carrito_archivum\";a:0:{}s:26:\"carrito_precios_congelados\";a:0:{}s:20:\"carrito_reservas_ids\";a:0:{}s:17:\"carrito_expira_en\";N;s:16:\"authenticated_at\";s:25:\"2026-11-23T05:39:30+00:00\";s:10:\"updated_at\";s:25:\"2026-11-23T06:39:35+00:00\";}',1795459175),
-('laravel-cache-archivum_tab_token:tab_mwsum1yn_dvcjeo0x7dwqq7oj6ky0','a:7:{s:7:\"user_id\";i:13;s:16:\"carrito_archivum\";a:0:{}s:26:\"carrito_precios_congelados\";a:0:{}s:20:\"carrito_reservas_ids\";a:0:{}s:17:\"carrito_expira_en\";N;s:16:\"authenticated_at\";s:25:\"2026-11-23T06:20:33+00:00\";s:10:\"updated_at\";s:25:\"2026-11-23T06:40:06+00:00\";}',1795459206),
-('laravel-cache-quijadaevelin82@gmail.com|172.19.0.1','i:1;',1795414872),
-('laravel-cache-quijadaevelin82@gmail.com|172.19.0.1:timer','i:1795414872;',1795414872);
+('laravel-cache-almacen1@archivum.com|172.19.0.1','i:1;',1795417869),
+('laravel-cache-almacen1@archivum.com|172.19.0.1:timer','i:1795417869;',1795417869),
+('laravel-cache-archivum_tab_token:tab_mwsum1yn_dvcjeo0x7dwqq7oj6ky0','a:7:{s:7:\"user_id\";i:11;s:16:\"carrito_archivum\";a:0:{}s:26:\"carrito_precios_congelados\";a:0:{}s:20:\"carrito_reservas_ids\";a:0:{}s:17:\"carrito_expira_en\";N;s:16:\"authenticated_at\";s:25:\"2026-11-23T07:32:37+00:00\";s:10:\"updated_at\";s:25:\"2026-11-23T07:32:48+00:00\";}',1795462368),
+('laravel-cache-forgot-password|quijadaevelin82@gmail.com|172.19.0.1','i:1;',1795416218),
+('laravel-cache-forgot-password|quijadaevelin82@gmail.com|172.19.0.1:timer','i:1795416218;',1795416218),
+('laravel-cache-ventas1@archivum.com|172.19.0.1','i:3;',1795417818),
+('laravel-cache-ventas1@archivum.com|172.19.0.1:timer','i:1795417818;',1795417818);
 /*!40000 ALTER TABLE `cache` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -138,7 +212,7 @@ CREATE TABLE `carrito_items` (
   KEY `carrito_items_variante_sku_id_foreign` (`variante_sku_id`),
   CONSTRAINT `carrito_items_carrito_id_foreign` FOREIGN KEY (`carrito_id`) REFERENCES `carritos` (`id`) ON DELETE CASCADE,
   CONSTRAINT `carrito_items_variante_sku_id_foreign` FOREIGN KEY (`variante_sku_id`) REFERENCES `variantes_sku` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -353,12 +427,12 @@ INSERT INTO `coleccionables` VALUES
 (132,'Artesanías Temáticas','Egyptian Mythology Collection','figuras','Resina Poliéster Pintada a Mano',0,'images/coleccionables/Estatua-Anubis.jpg'),
 (133,'Snowflake Flower (Cochiti Pueblo)','Native American Storyteller Series','figuras','Arcilla y Pigmentos Naturales',1,'images/coleccionables/Figura-ceramica.jpg'),
 (134,'DecoArte Colección','Egyptian Artifacts','figuras','Resina Compuesta',0,'images/coleccionables/Exquisito-Joyero.jpg'),
-(135,'Banpresto / Bird Studio','Dragon Ball Z Vintage Series','figuras','PVC Grado Colección & Acrílico UV',1,NULL),
+(135,'Banpresto / Bird Studio','Dragon Ball Z Vintage Series','figuras','PVC Grado Colección & Acrílico UV',1,'productos/pURPIuY5YUTPvNs5V0NuCOACVAXYA0rdg10gsJVB.jpg'),
 (136,'Yonezawa Toys Japón','Space Age Tin Toy Series','juguetes','Hojalata Litografiada & Resorte de Acero',1,NULL),
-(137,'Gobierno Constitucionalista de México','Papel Moneda de la Revolución Mexicana','numismatica','Papel Moneda de Seguridad',1,NULL),
+(137,'Gobierno Constitucionalista de México','Papel Moneda de la Revolución Mexicana','numismatica','Papel Moneda de Seguridad',1,'productos/paiPRw6iKSvFPyK4TkoNDxvKiIMdvW2cGgNfRCgz.jpg'),
 (138,'Real Casa de Moneda de México','Numismática Virreinal Novohispana','numismatica','Plata Ley .903',1,NULL),
-(139,'Nintendo Co., Ltd. Japón','Silver Series Game & Watch (AC-01)','videojuegos','Plástico ABS & Pantalla LCD Reflectiva',1,NULL),
-(140,'Nintendo of America','NES Classic Gold Series (NES-ZL-USA)','videojuegos','Carcasa Dorada Metalizada & Placa PCB',1,NULL),
+(139,'Nintendo Co., Ltd. Japón','Silver Series Game & Watch (AC-01)','videojuegos','Plástico ABS & Pantalla LCD Reflectiva',1,'productos/Ov8dBeHpr9qzg7jBmxx6rzvIFBVrcyrIfVdQyYNz.webp'),
+(140,'Nintendo of America','NES Classic Gold Series (NES-ZL-USA)','videojuegos','Carcasa Dorada Metalizada & Placa PCB',1,'productos/lMStJFZVoRaFgiGxdH3QPglfHsNjnBzPESNRtTbh.avif'),
 (149,'Fender','Eléctrico','figuras','Madera de aliso, arce y componentes metálicos',1,'productos/plmvqDqWdaonmP4pvCcQKSMShw7H2C9J9gwucizs.jpg'),
 (150,'Sideshow Collectibles','Juguete','figuras','Resina Polystone de Alta Densidad (Pintada a mano)',1,'productos/hTG48Fhmq6xPvzcb7CAI0W16xTvh1tru3VRmVniT.jpg'),
 (162,'Topps Chewing Gum, Inc.','Topps Baseball 1952','figuras','Cartulina de fibra gruesa con impresión litográfica a color.',1,'productos/9x8MOv2UAXphugNEuTxIaW70fAAsbMqhIeQUAvsr.jpg');
@@ -384,7 +458,7 @@ CREATE TABLE `detalle_envios` (
   KEY `detalle_envios_detalle_pedido_id_foreign` (`detalle_pedido_id`),
   CONSTRAINT `detalle_envios_detalle_pedido_id_foreign` FOREIGN KEY (`detalle_pedido_id`) REFERENCES `detalle_pedidos` (`id`),
   CONSTRAINT `detalle_envios_envio_id_foreign` FOREIGN KEY (`envio_id`) REFERENCES `envios` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -393,6 +467,8 @@ CREATE TABLE `detalle_envios` (
 
 LOCK TABLES `detalle_envios` WRITE;
 /*!40000 ALTER TABLE `detalle_envios` DISABLE KEYS */;
+INSERT INTO `detalle_envios` VALUES
+(1,1,1,1,'2026-11-23 07:07:33','2026-11-23 07:07:33');
 /*!40000 ALTER TABLE `detalle_envios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -415,7 +491,7 @@ CREATE TABLE `detalle_pagos` (
   PRIMARY KEY (`id`),
   KEY `detalle_pagos_pago_id_foreign` (`pago_id`),
   CONSTRAINT `detalle_pagos_pago_id_foreign` FOREIGN KEY (`pago_id`) REFERENCES `pagos` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -424,6 +500,8 @@ CREATE TABLE `detalle_pagos` (
 
 LOCK TABLES `detalle_pagos` WRITE;
 /*!40000 ALTER TABLE `detalle_pagos` DISABLE KEYS */;
+INSERT INTO `detalle_pagos` VALUES
+(1,1,'PAS-ARC-PENNCGQE','4242','SIM-AUTH-840602','{\"modo\":\"SIMULACION_PRUEBA\",\"titular\":\"Evelyn\",\"terminacion_tarjeta\":\"4242\",\"codigo_autorizacion\":\"SIM-AUTH-840602\",\"mensaje\":\"Transacci\\u00f3n aprobada satisfactoriamente por Pasarela Simulada ARCHIVUM.\"}','2026-11-23 07:07:33','2026-11-23 07:07:33');
 /*!40000 ALTER TABLE `detalle_pagos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -448,7 +526,7 @@ CREATE TABLE `detalle_pedidos` (
   KEY `detalle_pedidos_variante_sku_id_foreign` (`variante_sku_id`),
   CONSTRAINT `detalle_pedidos_pedido_id_foreign` FOREIGN KEY (`pedido_id`) REFERENCES `pedidos` (`id`) ON DELETE CASCADE,
   CONSTRAINT `detalle_pedidos_variante_sku_id_foreign` FOREIGN KEY (`variante_sku_id`) REFERENCES `variantes_sku` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -457,6 +535,8 @@ CREATE TABLE `detalle_pedidos` (
 
 LOCK TABLES `detalle_pedidos` WRITE;
 /*!40000 ALTER TABLE `detalle_pedidos` DISABLE KEYS */;
+INSERT INTO `detalle_pedidos` VALUES
+(1,6,150,1,3065.00,3065.00,'2026-11-23 07:07:33','2026-11-23 07:07:33');
 /*!40000 ALTER TABLE `detalle_pedidos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -506,7 +586,7 @@ CREATE TABLE `devoluciones` (
   CONSTRAINT `devoluciones_pedido_id_foreign` FOREIGN KEY (`pedido_id`) REFERENCES `pedidos` (`id`),
   CONSTRAINT `devoluciones_revisado_por_foreign` FOREIGN KEY (`revisado_por`) REFERENCES `usuarios` (`id`) ON DELETE SET NULL,
   CONSTRAINT `devoluciones_sucursal_destino_id_foreign` FOREIGN KEY (`sucursal_destino_id`) REFERENCES `sucursales` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -515,6 +595,8 @@ CREATE TABLE `devoluciones` (
 
 LOCK TABLES `devoluciones` WRITE;
 /*!40000 ALTER TABLE `devoluciones` DISABLE KEYS */;
+INSERT INTO `devoluciones` VALUES
+(1,'DEV-ARC-20261123-UNAB',6,5,1,1,'producto_defectuoso','esta roto','[{\"nombre\":\"WhatsApp Image 2026-07-01 at 8.54.17 PM.jpeg\",\"ruta\":\"devoluciones\\/pNGAEfmEgtS9ul8lYBzLofV0BeIXZ88CMitqYUMI.jpg\",\"url\":\"http:\\/\\/localhost:8000\\/storage\\/devoluciones\\/pNGAEfmEgtS9ul8lYBzLofV0BeIXZ88CMitqYUMI.jpg\",\"mime\":\"image\\/jpeg\"}]','solicitada','solicitada',3065.00,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,'2026-11-23 07:08:15','2026-11-23 07:08:15');
 /*!40000 ALTER TABLE `devoluciones` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -544,7 +626,7 @@ CREATE TABLE `direcciones` (
   PRIMARY KEY (`id`),
   KEY `direcciones_cliente_id_foreign` (`cliente_id`),
   CONSTRAINT `direcciones_cliente_id_foreign` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -553,6 +635,8 @@ CREATE TABLE `direcciones` (
 
 LOCK TABLES `direcciones` WRITE;
 /*!40000 ALTER TABLE `direcciones` DISABLE KEYS */;
+INSERT INTO `direcciones` VALUES
+(2,5,'Entrega Custodiada','Av. Álvaro Obregón 185, Col. Roma Norte','S/N',NULL,'Centro','Cuauhtémoc','Ciudad de México','06700','México',NULL,1,'2026-11-23 07:07:33','2026-11-23 07:07:33');
 /*!40000 ALTER TABLE `direcciones` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -587,9 +671,9 @@ INSERT INTO `discos` VALUES
 (93,'John Coltrane','Blue Note BLP 1577','Hard Bop Jazz','vinilo',1957,NULL),
 (94,'John Coltrane Quartet','Impulse! A-77','Spiritual Jazz','vinilo',1965,NULL),
 (95,'The Beatles','Apple Records PCS 7088','Rock Clásico','vinilo',1969,NULL),
-(96,'Pink Floyd','Harvest / Toshiba-EMI CP35-3017','Rock Progresivo','CD',1983,NULL),
+(96,'Pink Floyd','Harvest / Toshiba-EMI CP35-3017','Rock Progresivo','CD',1983,'productos/C3qtAHVSU9LoQlb9SU4WFgz187Cz84fDeAZXu3pt.jpg'),
 (97,'Led Zeppelin','Atlantic Records SD 7208','Hard Rock','vinilo',1971,NULL),
-(98,'Radiohead','Parlophone / EMI 7243 8 55229 2 4','Art Rock & Alternativo','CD',1997,NULL),
+(98,'Radiohead','Parlophone / EMI 7243 8 55229 2 4','Art Rock & Alternativo','CD',1997,'productos/Q456A28SU5bldfSxRvIVCataUpdvgzyxOcZnpPhn.webp'),
 (99,'Las Cabras Montañesas','Independiente','Rock / Indie','vinilo',2017,'images/coleccionables/las-cabras-montañeras.jpg'),
 (100,'Los Yaki','Latin Gold Records','Rock and Roll / Go-Go','vinilo',1970,'images/coleccionables/Los-Yaki.jpg'),
 (101,'Caifanes','RCA Victor (102-02124)','Rock Pop Latino','vinilo',1990,'images/coleccionables/Caifanes.jpg'),
@@ -637,7 +721,7 @@ CREATE TABLE `envios` (
   KEY `envios_sucursal_id_foreign` (`sucursal_id`),
   CONSTRAINT `envios_pedido_id_foreign` FOREIGN KEY (`pedido_id`) REFERENCES `pedidos` (`id`),
   CONSTRAINT `envios_sucursal_id_foreign` FOREIGN KEY (`sucursal_id`) REFERENCES `sucursales` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -646,6 +730,8 @@ CREATE TABLE `envios` (
 
 LOCK TABLES `envios` WRITE;
 /*!40000 ALTER TABLE `envios` DISABLE KEYS */;
+INSERT INTO `envios` VALUES
+(1,6,4,'Custodia Climatizada ARCHIVUM','GUA-ARC-261123-Z6UPEZ','entregado','2026-11-26 07:07:33','entregado','2026-11-23 07:07:39','2026-11-23 07:07:42','2026-11-23 07:07:33','2026-11-23 07:07:42');
 /*!40000 ALTER TABLE `envios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -813,7 +899,7 @@ INSERT INTO `existencias` VALUES
 (251,153,4,5,1,'2026-11-23 06:09:54','2026-11-23 06:09:54'),
 (252,145,4,6,1,'2026-11-23 06:09:54','2026-11-23 06:09:54'),
 (253,154,4,1,1,'2026-11-23 06:09:54','2026-11-23 06:09:54'),
-(258,150,4,1,1,'2026-11-23 06:16:45','2026-11-23 06:16:45'),
+(258,150,4,0,1,'2026-11-23 06:16:45','2026-11-23 07:07:27'),
 (259,162,4,1,1,'2026-11-23 06:18:55','2026-11-23 06:18:55');
 /*!40000 ALTER TABLE `existencias` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -865,7 +951,7 @@ CREATE TABLE `historial_envios` (
   PRIMARY KEY (`id`),
   KEY `historial_envios_envio_id_foreign` (`envio_id`),
   CONSTRAINT `historial_envios_envio_id_foreign` FOREIGN KEY (`envio_id`) REFERENCES `envios` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -874,6 +960,11 @@ CREATE TABLE `historial_envios` (
 
 LOCK TABLES `historial_envios` WRITE;
 /*!40000 ALTER TABLE `historial_envios` DISABLE KEYS */;
+INSERT INTO `historial_envios` VALUES
+(1,1,'en_preparacion','Sucursal Central Bellas Artes, CDMX','Preparando Pedido: Verificación de calidad, certificado de autenticidad y preparación en almacén.','2026-11-23 07:07:33'),
+(2,1,'en_transito','Centro de Empaque ARCHIVUM, CDMX','Empaque Protegido: Embalaje de alta protección con sello de seguridad e inspección física completada.','2026-11-23 07:07:39'),
+(3,1,'en_camino','Unidad de Envío en Ruta','En Camino: Traslado monitoreado hacia la dirección de entrega indicada en tu pedido.','2026-11-23 07:07:41'),
+(4,1,'entregado','Domicilio del Cliente','Entregado en Domicilio: Recepción confirmada con entrega de tu producto y Certificado de Autenticidad.','2026-11-23 07:07:42');
 /*!40000 ALTER TABLE `historial_envios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1180,7 +1271,7 @@ CREATE TABLE `pagos` (
   PRIMARY KEY (`id`),
   KEY `pagos_pedido_id_foreign` (`pedido_id`),
   CONSTRAINT `pagos_pedido_id_foreign` FOREIGN KEY (`pedido_id`) REFERENCES `pedidos` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1189,6 +1280,8 @@ CREATE TABLE `pagos` (
 
 LOCK TABLES `pagos` WRITE;
 /*!40000 ALTER TABLE `pagos` DISABLE KEYS */;
+INSERT INTO `pagos` VALUES
+(1,6,'tarjeta','tarjeta',NULL,'PAS-ARC-PENNCGQE',NULL,NULL,3065.00,'aprobado','2026-11-23 07:07:33','2026-11-23 07:07:33','2026-11-23 07:07:33');
 /*!40000 ALTER TABLE `pagos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1213,6 +1306,8 @@ CREATE TABLE `password_reset_tokens` (
 
 LOCK TABLES `password_reset_tokens` WRITE;
 /*!40000 ALTER TABLE `password_reset_tokens` DISABLE KEYS */;
+INSERT INTO `password_reset_tokens` VALUES
+('quijadaevelin82@gmail.com','$2y$12$67kacjhkLF85q1Dd/0vuYOea2bcJbty87woMxDq5rwVjRr3I23kBC','2026-11-23 06:41:38');
 /*!40000 ALTER TABLE `password_reset_tokens` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1240,7 +1335,7 @@ CREATE TABLE `pedidos` (
   KEY `pedidos_cliente_id_estatus_index` (`cliente_id`,`estatus`),
   CONSTRAINT `pedidos_cliente_id_foreign` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`),
   CONSTRAINT `pedidos_direccion_envio_id_foreign` FOREIGN KEY (`direccion_envio_id`) REFERENCES `direcciones` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1249,6 +1344,8 @@ CREATE TABLE `pedidos` (
 
 LOCK TABLES `pedidos` WRITE;
 /*!40000 ALTER TABLE `pedidos` DISABLE KEYS */;
+INSERT INTO `pedidos` VALUES
+(6,'ARC-20261123-NEW0B',5,2,'entregado',3065.00,0.00,3065.00,'2026-11-23 07:07:33','2026-11-23 07:07:42');
 /*!40000 ALTER TABLE `pedidos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1307,7 +1404,7 @@ INSERT INTO `piezas_unicas` VALUES
 (44,247,'BAS-1/1-CS2026','COA-COL-2026-002','Alta por importación masiva Excel/CSV.','disponible','2026-11-23 06:01:10','2026-11-23 06:01:10'),
 (45,248,'COL-SID-ST1616','COA-COL-2026-003','Alta por importación masiva Excel/CSV.','disponible','2026-11-23 06:01:10','2026-11-23 06:01:10'),
 (46,253,'ARC-DIS-2026-005','COA-BIB-2027-005','Alta por importación masiva Excel/CSV.','disponible','2026-11-23 06:09:54','2026-11-23 06:09:54'),
-(51,258,'COL-SID-ST1678','COA-COL-2026-010','Alta por importación masiva Excel/CSV.','disponible','2026-11-23 06:16:45','2026-11-23 06:16:45'),
+(51,258,'COL-SID-ST1678','COA-COL-2026-010','Alta por importación masiva Excel/CSV.','vendida','2026-11-23 06:16:45','2026-11-23 07:07:33'),
 (52,259,'COL-TOP-MLB52-MM311-SGC89','COA-COL-2026-015','Alta por importación masiva Excel/CSV.','disponible','2026-11-23 06:18:55','2026-11-23 06:18:55');
 /*!40000 ALTER TABLE `piezas_unicas` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -1347,34 +1444,34 @@ CREATE TABLE `productos` (
 LOCK TABLES `productos` WRITE;
 /*!40000 ALTER TABLE `productos` DISABLE KEYS */;
 INSERT INTO `productos` VALUES
-(71,4,'Cien Años de Soledad (1ª Edición Sudamericana)','Pieza Única (1/1) custodiada en Almacén General: Tiraje inicial de Buenos Aires (Mayo 1967) con prueba de galera firmada. Cubierta original con galeón en la selva diseñada por Iris Alba.',NULL,32000.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-22 04:15:56',NULL),
-(72,4,'Pedro Páramo (Edición Príncipe FCE)','Pieza Única (1/1) custodiada en Sucursal Coyoacán: Primera edición de 1955 en la Colección Letras Mexicanas N.º 19 con firma autógrafa de Juan Rulfo en guarda anterior.',NULL,44500.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-22 04:15:56',NULL),
-(73,4,'El Aleph (Ejemplar Dedicado por el Autor)','Pieza Única (1/1) custodiada en Sucursal Central Bellas Artes: Primera edición impresa por Editorial Losada (1949) con dedicatoria manuscrita de Jorge Luis Borges.',NULL,58000.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-22 04:15:56',NULL),
-(74,4,'El Laberinto de la Soledad (1ª Edición Cuadernos Americanos)','Stock Masivo en Sucursal Central Bellas Artes: Edición de tiraje múltiple impresa en los talleres de Cuadernos Americanos en papel Chamois. Permite adquirir múltiples ejemplares.',NULL,16900.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-22 04:15:56',NULL),
-(75,4,'Aura (Edición Conmemorativa Biblioteca Era Coyoacán)','Stock Masivo en Sucursal Coyoacán: Tiraje regular encuadernado en tela editorial por Ediciones Era. Disponible para compra de varias unidades sin bloqueo exclusivo.',NULL,6800.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-22 04:15:56',NULL),
-(76,4,'Rayuela (Tiraje Clásico Editorial Sudamericana)','Stock Masivo en Almacén General: Edición conmemorativa de tiraje amplio con tablero de dirección de lectura. Existencias múltiples disponibles para despacho inmediato.',NULL,8400.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-22 04:15:56',NULL),
-(77,4,'Piedra de Sol y Obra Poética (Primera Edición 1957)','Pieza de Poesía de Alto Valor Curatorial: Primera edición del poema circular de 584 versos endecasílabos numerados. Ejemplar de colección impreso en papel especial.',NULL,24500.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-22 04:15:56',NULL),
-(78,4,'Visión de los Vencidos: Relaciones Indígenas de la Conquista','Obra Fundamental de Historia: Testimonios de los informantes de Sahagún traducidos del náhuatl por Ángel María Garibay con textos y notas de Miguel León-Portilla.',NULL,9800.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-22 04:15:56',NULL),
-(79,4,'La Estructura de las Revoluciones Científicas (1ª Edición FCE)','Obra Cumbre de Ciencia y Epistemología: Traducción clásica al español del tratado pionero de Thomas Kuhn sobre los cambios de paradigma en la investigación científica.',NULL,11200.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-22 04:15:56',NULL),
-(80,4,'Narraciones Extraordinarias & El Cuervo (Edición Ilustrada 1945)','Pieza de Terror Gótico en Bóveda Coyoacán: Traducción canónica de Charles Baudelaire y notas de Julio Cortázar. Encuadernación en tela con grabados xilográficos originales.',NULL,18500.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-22 04:15:56',NULL),
-(81,4,'Fahrenheit 451 (Primera Edición en Español Minotauro 1955)','Pieza Única (1/1) en Sucursal Central Bellas Artes: Primera edición hispanoamericana traducida por Francisco Porrúa con sobrecubierta tipográfica original intacta.',NULL,26000.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-22 04:15:56',NULL),
-(82,4,'Crónicas Marcianas (Edición Príncipe con Prólogo de Borges 1955)','Stock Masivo en Almacén General: Célebre edición con prólogo de Jorge Luis Borges reflexionando sobre la soledad y la condición humana en el cosmos.',NULL,21500.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-22 04:15:56',NULL),
-(83,4,'El Señor de los Anillos: La Comunidad del Anillo (1ª Edición Minotauro 1977)','Obra Cumbre de Fantasía Épica: Primera traducción autorizada al español con sobrecubierta ilustrada y mapa desplegable de la Tierra Media en perfecto estado.',NULL,29800.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-22 04:15:56',NULL),
-(84,4,'El Nombre de la Rosa (1ª Edición en Castellano Lumen 1982)','Pieza Selecta de Misterio & Semiótica: Primera tirada en castellano con sobrecubierta original de diseño medieval. Clásico del thriller histórico monástico.',NULL,14200.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-22 04:15:56',NULL),
-(85,4,'Estudio en Escarlata & El Sabueso de los Baskerville (Edición Anotada 1928)','Clásico de Novela Policíaca y Misterio: Primera traducción de la Colección Misterio de Editorial Juventud con grabados e ilustraciones de época.',NULL,17800.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-22 04:15:56',NULL),
-(86,4,'Así Habló Zaratustra: Un Libro para Todos y para Nadie (Edición Aguilar 1932)','Encuadernación de Lujo en Piel: Edición de la célebre Colección Crisol con cantos dorados y papel biblia. Obra fundamental de la filosofía continental moderna.',NULL,19500.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-22 04:15:56',NULL),
-(87,4,'El Banquete y Fedón (Traducción Clásica Bibliotheca Scriptorum 1944)','Filosofía Griega Clásica: Edición bilingüe griego-español en papel de hilo fabricado especialmente para la imprenta universitaria de la UNAM.',NULL,13400.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-22 04:15:56',NULL),
-(88,4,'Don Quijote de la Mancha (Edición Conmemorativa Facsimilar RAE 1947)','Pieza Cumbre de Clásicos Universales: Edición monumental conmemorativa del IV Centenario de Cervantes en dos volúmenes en papel de tina con estuche de tela inglesa.',NULL,38000.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-22 04:15:56',NULL),
-(89,4,'La Divina Comedia (Edición Bilingüe con Grabados de Gustave Doré 1921)','Gran Folio Monumental: Encuadernado en piel gofrada con 135 láminas calcográficas de Gustave Doré sobre el Infierno, Purgatorio y Paraíso.',NULL,42000.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-22 04:15:56',NULL),
-(90,4,'Confieso que he Vivido: Memorias (Primera Edición Seix Barral 1974)','Biografía & Crónica Esencial: Primera edición póstuma de las memorias de Pablo Neruda preparada por Matilde Urrutia. Colección Biblioteca Breve.',NULL,15600.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-22 04:15:56',NULL),
-(91,4,'Historia Verdadera de la Conquista de la Nueva España (Edición Crítica 1960)','Crónica Fundamental de Indias: Edición canónica de la Colección Sepan Cuantos N.º 5 con estudio y mapas facsimilares de la ruta de Cortés.',NULL,8900.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-22 04:15:56',NULL),
-(92,5,'Kind of Blue (Mono 1st Press 6-Eye)','Pieza Única (1/1) en Sucursal Central Bellas Artes: Matriz original XLP 47324-1A con etiqueta Columbia «6-eye» deep groove y firma certificada.',NULL,18500.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-22 04:15:56',NULL),
-(93,5,'Blue Train (Plastylite RVG Ear Press)','Pieza Única (1/1) en Sucursal Coyoacán: Grabado por Rudy Van Gelder con sello «ear» en surco muerto y dirección 47 West 63rd NYC.',NULL,27500.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-22 04:15:56',NULL),
-(94,5,'A Love Supreme (Gatefold 1st Impulse! Mono)','Stock Masivo en Sucursal Central Bellas Artes: Carpeta desplegable laminada con estampado VAN GELDER. Existencias múltiples disponibles.',NULL,16200.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-22 04:15:56',NULL),
-(95,5,'Abbey Road (UK 1st Press Misaligned Apple)','Pieza Única (1/1) en Almacén General: Prensado británico matriz YEX 749-2 / 750-1 con manzana desalineada en contraportada.',NULL,22900.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-22 04:15:56',NULL),
-(96,5,'The Dark Side of the Moon (1st Japan Black Triangle CD)','Stock Masivo en Sucursal Coyoacán: Edición en Disco Compacto prensada por Toshiba-EMI en Japón (CP35-3017). Permite adquirir múltiples unidades.',NULL,14800.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-22 04:15:56',NULL),
-(97,5,'Led Zeppelin IV (Prensado Audiófilo Atlantic 180g)','Stock Masivo en Almacén General: Reedición audiófila de tiraje regular en vinilo virgen de 180 gramos masterizado desde las cintas analógicas.',NULL,5900.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-22 04:15:56',NULL),
-(98,5,'OK Computer (Collector\'s Edition 2-CD Parlophone)','Edición Maestra en Disco Compacto: Edición doble de 1997 con estuche digipak de colección, libreto con ilustraciones de Stanley Donwood y lados B masterizados.',NULL,4800.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-22 04:15:56',NULL),
+(71,4,'Cien Años de Soledad (1ª Edición Sudamericana)','Pieza Única (1/1) custodiada en Almacén General: Tiraje inicial de Buenos Aires (Mayo 1967) con prueba de galera firmada. Cubierta original con galeón en la selva diseñada por Iris Alba.','productos/9b2xdCyABitnYZYoAAhn8J5OjYrrB4NGxAvBBSJ1.jpg',32000.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-23 06:57:32',NULL),
+(72,4,'Pedro Páramo (Edición Príncipe FCE)','Pieza Única (1/1) custodiada en Sucursal Coyoacán: Primera edición de 1955 en la Colección Letras Mexicanas N.º 19 con firma autógrafa de Juan Rulfo en guarda anterior.',NULL,44500.00,0,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-23 06:57:19',NULL),
+(73,4,'El Aleph (Ejemplar Dedicado por el Autor)','Pieza Única (1/1) custodiada en Sucursal Central Bellas Artes: Primera edición impresa por Editorial Losada (1949) con dedicatoria manuscrita de Jorge Luis Borges.','productos/gYa5QlrlkdwvAIGMlq3ldGpHoZuGe8ygDtIKpg2b.jpg',58000.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-23 06:56:33',NULL),
+(74,4,'El Laberinto de la Soledad (1ª Edición Cuadernos Americanos)','Stock Masivo en Sucursal Central Bellas Artes: Edición de tiraje múltiple impresa en los talleres de Cuadernos Americanos en papel Chamois. Permite adquirir múltiples ejemplares.','productos/qYnCho0DwirzbkIQJ1PrhVvyhXI9QRBZWdW6kcXG.jpg',16900.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-23 06:56:19',NULL),
+(75,4,'Aura (Edición Conmemorativa Biblioteca Era Coyoacán)','Stock Masivo en Sucursal Coyoacán: Tiraje regular encuadernado en tela editorial por Ediciones Era. Disponible para compra de varias unidades sin bloqueo exclusivo.','productos/aVTFPNupBVuqv8AqdLxNykqPMmHV8d0R3tME0hoB.webp',6800.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-23 06:56:02',NULL),
+(76,4,'Rayuela (Tiraje Clásico Editorial Sudamericana)','Stock Masivo en Almacén General: Edición conmemorativa de tiraje amplio con tablero de dirección de lectura. Existencias múltiples disponibles para despacho inmediato.','productos/TCPLCpmh1SnaGKU280WLmOfcZPFzSCiWiP89POg9.webp',8400.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-23 06:55:47',NULL),
+(77,4,'Piedra de Sol y Obra Poética (Primera Edición 1957)','Pieza de Poesía de Alto Valor Curatorial: Primera edición del poema circular de 584 versos endecasílabos numerados. Ejemplar de colección impreso en papel especial.','productos/mJvRjktDKa0jbFxCDpRi4FhhQU5o2cvndCFB5xZZ.jpg',24500.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-23 06:55:32',NULL),
+(78,4,'Visión de los Vencidos: Relaciones Indígenas de la Conquista','Obra Fundamental de Historia: Testimonios de los informantes de Sahagún traducidos del náhuatl por Ángel María Garibay con textos y notas de Miguel León-Portilla.',NULL,9800.00,0,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-23 06:55:09',NULL),
+(79,4,'La Estructura de las Revoluciones Científicas (1ª Edición FCE)','Obra Cumbre de Ciencia y Epistemología: Traducción clásica al español del tratado pionero de Thomas Kuhn sobre los cambios de paradigma en la investigación científica.','productos/7HzDLydxgzIHkTURYQu6UJMifjJKndEvoRs0aUPs.jpg',11200.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-23 06:54:25',NULL),
+(80,4,'Narraciones Extraordinarias & El Cuervo (Edición Ilustrada 1945)','Pieza de Terror Gótico en Bóveda Coyoacán: Traducción canónica de Charles Baudelaire y notas de Julio Cortázar. Encuadernación en tela con grabados xilográficos originales.','productos/p9Cf6Nskf3dQFBA3Vr6G1QtqVH6HutScpRqC1q8b.webp',18500.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-23 06:54:12',NULL),
+(81,4,'Fahrenheit 451 (Primera Edición en Español Minotauro 1955)','Pieza Única (1/1) en Sucursal Central Bellas Artes: Primera edición hispanoamericana traducida por Francisco Porrúa con sobrecubierta tipográfica original intacta.','productos/TLYiBzkepp04SsB7cHRFLORSJA1IGPiPXW1O7BH9.jpg',26000.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-23 06:53:18',NULL),
+(82,4,'Crónicas Marcianas (Edición Príncipe con Prólogo de Borges 1955)','Stock Masivo en Almacén General: Célebre edición con prólogo de Jorge Luis Borges reflexionando sobre la soledad y la condición humana en el cosmos.','productos/DDJgwHy3Hd6EbSR0LA67OVwBhiLBakis3xI3bHm9.jpg',21500.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-23 06:52:59',NULL),
+(83,4,'El Señor de los Anillos: La Comunidad del Anillo (1ª Edición Minotauro 1977)','Obra Cumbre de Fantasía Épica: Primera traducción autorizada al español con sobrecubierta ilustrada y mapa desplegable de la Tierra Media en perfecto estado.','productos/Yp21v7nB63v6WboOV3gMWawFicNu2LvUSVwstArn.jpg',300.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-23 06:52:29',NULL),
+(84,4,'El Nombre de la Rosa (1ª Edición en Castellano Lumen 1982)','Pieza Selecta de Misterio & Semiótica: Primera tirada en castellano con sobrecubierta original de diseño medieval. Clásico del thriller histórico monástico.','productos/X4kWplGRxzkWUJRimbhbzdRoKhLkCuFO6MKjm3Ja.jpg',250.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-23 06:52:22',NULL),
+(85,4,'Estudio en Escarlata & El Sabueso de los Baskerville (Edición Anotada 1928)','Clásico de Novela Policíaca y Misterio: Primera traducción de la Colección Misterio de Editorial Juventud con grabados e ilustraciones de época.','productos/w4o5WSAutGgYS2vUk76XEpDfmhmw7q6VP7ApUm9R.webp',280.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-23 06:52:40',NULL),
+(86,4,'Así Habló Zaratustra: Un Libro para Todos y para Nadie (Edición Aguilar 1932)','Encuadernación de Lujo en Piel: Edición de la célebre Colección Crisol con cantos dorados y papel biblia. Obra fundamental de la filosofía continental moderna.','productos/w3PmtPgXy1u6PJEWZiZEP1nHRm9i4COxdwSt2aYz.jpg',380.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-23 06:52:15',NULL),
+(87,4,'El Banquete y Fedón (Traducción Clásica Bibliotheca Scriptorum 1944)','Filosofía Griega Clásica: Edición bilingüe griego-español en papel de hilo fabricado especialmente para la imprenta universitaria de la UNAM.','productos/zeytArWzUEWrUhsrWamTQN6XnDoEdGvcF0ib5c2T.jpg',360.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-23 06:52:05',NULL),
+(88,4,'Don Quijote de la Mancha (Edición Conmemorativa Facsimilar RAE 1947)','Pieza Cumbre de Clásicos Universales: Edición monumental conmemorativa del IV Centenario de Cervantes en dos volúmenes en papel de tina con estuche de tela inglesa.','productos/dgIYo3PHjBqj7MFrwT0MfScUdOzwhYJfXeS6yHN5.jpg',1000.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-23 06:51:40',NULL),
+(89,4,'La Divina Comedia (Edición Bilingüe con Grabados de Gustave Doré 1921)','Gran Folio Monumental: Encuadernado en piel gofrada con 135 láminas calcográficas de Gustave Doré sobre el Infierno, Purgatorio y Paraíso.','productos/RoHPqdVCnxcwTtWnv4jkG8HHqvJ1XLqrSnNG9eSM.webp',500.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-23 06:51:49',NULL),
+(90,4,'Confieso que he Vivido: Memorias (Primera Edición Seix Barral 1974)','Biografía & Crónica Esencial: Primera edición póstuma de las memorias de Pablo Neruda preparada por Matilde Urrutia. Colección Biblioteca Breve.',NULL,15600.00,0,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-23 06:50:38',NULL),
+(91,4,'Historia Verdadera de la Conquista de la Nueva España (Edición Crítica 1960)','Crónica Fundamental de Indias: Edición canónica de la Colección Sepan Cuantos N.º 5 con estudio y mapas facsimilares de la ruta de Cortés.',NULL,8900.00,0,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-23 06:50:43',NULL),
+(92,5,'Kind of Blue (Mono 1st Press 6-Eye)','Pieza Única (1/1) en Sucursal Central Bellas Artes: Matriz original XLP 47324-1A con etiqueta Columbia «6-eye» deep groove y firma certificada.',NULL,18500.00,0,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-23 06:50:48',NULL),
+(93,5,'Blue Train (Plastylite RVG Ear Press)','Pieza Única (1/1) en Sucursal Coyoacán: Grabado por Rudy Van Gelder con sello «ear» en surco muerto y dirección 47 West 63rd NYC.',NULL,27500.00,0,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-23 06:50:54',NULL),
+(94,5,'A Love Supreme (Gatefold 1st Impulse! Mono)','Stock Masivo en Sucursal Central Bellas Artes: Carpeta desplegable laminada con estampado VAN GELDER. Existencias múltiples disponibles.',NULL,16200.00,0,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-23 06:51:00',NULL),
+(95,5,'Abbey Road (UK 1st Press Misaligned Apple)','Pieza Única (1/1) en Almacén General: Prensado británico matriz YEX 749-2 / 750-1 con manzana desalineada en contraportada.',NULL,22900.00,0,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-23 06:51:28',NULL),
+(96,5,'The Dark Side of the Moon (1st Japan Black Triangle CD)','Stock Masivo en Sucursal Coyoacán: Edición en Disco Compacto prensada por Toshiba-EMI en Japón (CP35-3017). Permite adquirir múltiples unidades.','productos/C3qtAHVSU9LoQlb9SU4WFgz187Cz84fDeAZXu3pt.jpg',530.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-23 06:51:54',NULL),
+(97,5,'Led Zeppelin IV (Prensado Audiófilo Atlantic 180g)','Stock Masivo en Almacén General: Reedición audiófila de tiraje regular en vinilo virgen de 180 gramos masterizado desde las cintas analógicas.',NULL,5900.00,0,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-23 06:51:34',NULL),
+(98,5,'OK Computer (Collector\'s Edition 2-CD Parlophone)','Edición Maestra en Disco Compacto: Edición doble de 1997 con estuche digipak de colección, libreto con ilustraciones de Stanley Donwood y lados B masterizados.','productos/Q456A28SU5bldfSxRvIVCataUpdvgzyxOcZnpPhn.webp',4800.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-23 06:48:15',NULL),
 (99,5,'Las Cabras Montañesas - Góticos (2 LP)','Álbum doble de vinilo (2 LP) en edición de alta calidad.','productos/las-cabras-montañeras.jpg',521.50,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-23 05:55:47',NULL),
 (100,5,'Los Yaki – Los Grandes Años Del Rock','Edición clásica de Latin Gold Records recuperada para coleccionistas de rock en español.','productos/Los-Yaki.jpg',372.56,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-23 05:55:47',NULL),
 (101,5,'Caifanes – Caifanes (LP, Edición Original Venezuela)','Pieza Única (1/1) custodiada en Sucursal Coyoacán: Edición original de 1990 prensada en Venezuela bajo el sello RCA (102-02124).','productos/Caifanes.jpg',7413.93,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-23 05:55:47',NULL),
@@ -1386,22 +1483,22 @@ INSERT INTO `productos` VALUES
 (107,5,'La Sonora Santanera - Tesoros de Colección Vol. 3 (3 Discos)','Edición especial de 3 discos originales en formato CD.','productos/3-cds-La-Sonora.jpg',391.50,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-23 05:55:47',NULL),
 (108,5,'Los Mejores Huapangos | CD Música','CD con selección folklórica de los huapangos tradicionales más emblemáticos.','productos/Huapangos.jpg',69.00,1,0,NULL,NULL,'2026-11-22 04:15:56','2026-11-23 05:55:47',NULL),
 (109,5,'Taylor Swift - Midnights (Korea Edition)','Pieza Única (1/1) custodiada en Almacén General: Edición coleccionable de importación coreana.','productos/TAYLO.jpg',641.68,1,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-23 05:55:47',NULL),
-(110,5,'Buena Vista Social Club (Edición CD Remasterizada World Circuit)','Obra Fonográfica Esencial en Disco Compacto: Grabaciones de La Habana bajo la producción de Ry Cooder, masterizado digital con folleto historiográfico de 48 páginas.',NULL,3950.00,1,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-22 04:15:57',NULL),
-(111,6,'Carta Manuscrita Bellas Artes (1928)','Pieza Única (1/1) en Sucursal Central Bellas Artes: Pluma estilográfica con tinta ferrogálica original sobre papel membretado con COA notariado.',NULL,9400.00,1,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-22 04:15:57',NULL),
-(112,6,'Manuscrito Autógrafo Casa Azul Coyoacán (1940)','Pieza Única (1/1) en Sucursal Coyoacán: Misiva autógrafa en papel de algodón fechada en Villa Coyoacán con sello lacrado original.',NULL,36800.00,1,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-22 04:15:57',NULL),
-(113,6,'Medalla Conmemorativa del Centenario (1910)','Pieza Única (1/1) en Almacén General: Medalla oficial en plata ley .925 acuñada por la Casa de Moneda en 1910 con estuche de terciopelo original.',NULL,29500.00,1,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-22 04:15:57',NULL),
-(114,6,'Fotografía en Plata sobre Gelatina Firmada (1934)','Copia de época (vintage print) revelada en cuarto oscuro por el estudio original, con sello húmedo al reverso y paspartú libre de ácido.',NULL,41000.00,1,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-22 04:15:57',NULL),
-(115,6,'Partitura Autógrafa de Estudio en Sol Menor (1912)','Lote limitado en Sucursal Central Bellas Artes: 2 cuadernos musicales de 12 folios con anotaciones de dinámica a lápiz. Conservado en carpeta museográfica.',NULL,21500.00,1,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-22 04:15:57',NULL),
-(116,6,'Programa Inaugural Palacio de Bellas Artes (1934)','Stock Masivo en Sucursal Central Bellas Artes: Folleto conmemorativo oficial de la inauguración del Palacio de Bellas Artes en septiembre de 1934.',NULL,7800.00,1,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-22 04:15:57',NULL),
-(117,6,'Litografía Taller de Gráfica Popular Coyoacán (1954)','Stock Masivo en Sucursal Coyoacán: Grabado en linóleo de tiraje amplio impreso sobre papel de algodón en Coyoacán. Disponible en múltiples unidades.',NULL,5400.00,1,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-22 04:15:57',NULL),
-(118,6,'Kit de Conservación Museográfica & Estuche Antiácido','Stock Masivo en Almacén General: Set profesional de fundas de polipropileno grado archivo, guantes de nitrilo y caja libre de ácido para libros y vinilos.',NULL,3200.00,1,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-22 04:15:57',NULL),
-(119,6,'Estatua Evangelion Test Type-01 (Edición Limitada Kaiyodo 1997)','Figuras Coleccionables (Cultura Pop & Anime): Escultura en resina pintada a mano supervisada por Gainax Japón. Incluye pedestal con número de serie de tiraje.',NULL,18900.00,1,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-22 04:15:57',NULL),
+(110,5,'Buena Vista Social Club (Edición CD Remasterizada World Circuit)','Obra Fonográfica Esencial en Disco Compacto: Grabaciones de La Habana bajo la producción de Ry Cooder, masterizado digital con folleto historiográfico de 48 páginas.',NULL,3950.00,0,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-23 06:47:46',NULL),
+(111,6,'Carta Manuscrita Bellas Artes (1928)','Pieza Única (1/1) en Sucursal Central Bellas Artes: Pluma estilográfica con tinta ferrogálica original sobre papel membretado con COA notariado.',NULL,9400.00,0,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-23 06:47:36',NULL),
+(112,6,'Manuscrito Autógrafo Casa Azul Coyoacán (1940)','Pieza Única (1/1) en Sucursal Coyoacán: Misiva autógrafa en papel de algodón fechada en Villa Coyoacán con sello lacrado original.',NULL,36800.00,0,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-23 06:47:31',NULL),
+(113,6,'Medalla Conmemorativa del Centenario (1910)','Pieza Única (1/1) en Almacén General: Medalla oficial en plata ley .925 acuñada por la Casa de Moneda en 1910 con estuche de terciopelo original.',NULL,29500.00,0,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-23 06:47:25',NULL),
+(114,6,'Fotografía en Plata sobre Gelatina Firmada (1934)','Copia de época (vintage print) revelada en cuarto oscuro por el estudio original, con sello húmedo al reverso y paspartú libre de ácido.',NULL,41000.00,0,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-23 06:47:22',NULL),
+(115,6,'Partitura Autógrafa de Estudio en Sol Menor (1912)','Lote limitado en Sucursal Central Bellas Artes: 2 cuadernos musicales de 12 folios con anotaciones de dinámica a lápiz. Conservado en carpeta museográfica.',NULL,21500.00,0,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-23 06:47:18',NULL),
+(116,6,'Programa Inaugural Palacio de Bellas Artes (1934)','Stock Masivo en Sucursal Central Bellas Artes: Folleto conmemorativo oficial de la inauguración del Palacio de Bellas Artes en septiembre de 1934.',NULL,7800.00,0,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-23 06:47:06',NULL),
+(117,6,'Litografía Taller de Gráfica Popular Coyoacán (1954)','Stock Masivo en Sucursal Coyoacán: Grabado en linóleo de tiraje amplio impreso sobre papel de algodón en Coyoacán. Disponible en múltiples unidades.',NULL,5400.00,0,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-23 06:47:11',NULL),
+(118,6,'Kit de Conservación Museográfica & Estuche Antiácido','Stock Masivo en Almacén General: Set profesional de fundas de polipropileno grado archivo, guantes de nitrilo y caja libre de ácido para libros y vinilos.',NULL,3200.00,0,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-23 06:46:54',NULL),
+(119,6,'Estatua Evangelion Test Type-01 (Edición Limitada Kaiyodo 1997)','Figuras Coleccionables (Cultura Pop & Anime): Escultura en resina pintada a mano supervisada por Gainax Japón. Incluye pedestal con número de serie de tiraje.',NULL,18900.00,0,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-23 06:46:47',NULL),
 (120,6,'Double Eagle de 1933 (EE. UU.)','Moneda de oro de $20 que el gobierno ordenó fundir durante la Gran Depresión. Pieza de valor histórico incalculable.','productos/Double-Eagle-de-1933.jpg',18872250.00,1,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-23 05:55:47',NULL),
 (121,6,'Dólar Flowing Hair de 1794 (EE. UU.)','El primer dólar de plata acuñado por el gobierno federal estadounidense.','productos/Dolar-Flowing-Hair-de-1794.jpg',175000.00,1,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-23 05:55:47',NULL),
 (122,6,'Florín de Eduardo III de 1344 (Inglaterra)','Legendaria moneda de oro medieval de la cual solo se conocen tres ejemplares en todo el mundo.','productos/Florin-de-Eduardo-III-de-1344.jpg',7000000.00,1,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-23 05:55:47',NULL),
 (123,6,'Dinar de Oro Omeya del año 723 d.C.','Acuñada en la región de la actual Arabia Saudita con oro proveniente de una mina del propio Califa.','productos/Dinar-de-Oro-Omeya-del-año-723.jpg',95600000.00,1,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-23 05:55:47',NULL),
 (124,6,'Monedas de 8 Reales (Época Colonial / Spanish Dollars)','Conocidas mundialmente como columnarios o piezas de 8, fueron la primera moneda de uso internacional.','productos/Monedas-Reales.jpg',5500.00,1,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-23 05:55:47',NULL),
-(125,6,'Centenario de Oro (50 Pesos)','Contiene 37.5 gramos de oro puro y presenta el clásico diseño del Ángel de la Independencia.','productos/Centenario-de-Oro.jpg',92250.00,1,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-23 05:55:47',NULL),
+(125,6,'Centenario de Oro (50 Pesos)','Contiene 37.5 gramos de oro puro y presenta el clásico diseño del Ángel de la Independencia.','productos/Centenario-de-Oro.jpg',92250.00,0,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-23 06:46:37',NULL),
 (126,6,'Moneda de Plata Libertad (Onza Troy)','Una de las monedas de inversión (bullion) de plata más hermosas y cotizadas del mundo.','productos/Moneda-Libertad.jpg',1250.00,1,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-23 05:55:47',NULL),
 (127,6,'Monedas Conmemorativas de 20 Pesos (Familia C y C1)','Piezas recientes conmemorativas (como la Fundación de Veracruz o el Bicentenario de la Independencia).','productos/Monedas-Conmemorativas.jpg',100.00,1,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-23 05:55:47',NULL),
 (128,6,'Familia AA y A (Billetes Desmonetizados)','Billetes antiguos impresos por la American Bank Note Company y de fabricación nacional.','productos/Familia-AAA.jpg',325.00,1,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-23 05:55:47',NULL),
@@ -1411,12 +1508,12 @@ INSERT INTO `productos` VALUES
 (132,6,'Estatua Anubis Egipcia con Recipiente Base','Estatua decorativa de acabado negro con detalles dorados e iconografía del antiguo Egipto.','productos/Estatua-Anubis.jpg',773.08,1,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-23 05:55:47',NULL),
 (133,6,'Figura de Cerámica \"Storyteller\" de Cochiti','Pieza artesanal tradicional de Snowflake Flower, ca. 1992, narrativa tradicional en arcilla.','productos/Figura-ceramica.jpg',4914.54,1,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-23 05:55:47',NULL),
 (134,6,'Exquisito Joyero de Estilo Egipcio Decorado con Anubis','Joyero ornamental decorado con motivos y deidades de la mitología egipcia antigua.','productos/Exquisito-Joyero.jpg',600.49,1,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-23 05:55:47',NULL),
-(135,6,'Figura Dragon Ball Z Super Saiyan Goku (Banpresto Japón 1993)','Figuras Coleccionables (Cultura Pop & Anime): Figura vintage con caja sellada original de Toei Animation Japón. Conservada en acrílico anti-UV de coleccionista.',NULL,14200.00,1,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-22 04:15:57',NULL),
-(136,6,'Robot Mecánico de Hojalata Space Trooper (Japón Vintage 1965)','Juguetes y Objetos Manufacturados: Juguete mecánico a cuerda en hojalata litografiada manufacturado por Yonezawa Toys Japón. Mecanismo de marcha y chispa plenamente funcional.',NULL,21800.00,1,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-22 04:15:57',NULL),
-(137,6,'Billete Revolucionario 10 Pesos Ejército Constitucionalista (1914)','Monedas y Billetes Históricos: Emisión oficial del Gobierno Provisional de México firmada en Monclova. Papel moneda histórico en estado sin circular (UNC).',NULL,8900.00,1,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-22 04:15:57',NULL),
-(138,6,'Moneda Virreinal 8 Reales Columnario de Plata (1768)','Monedas y Billetes Históricos: Moneda de 8 Reales acuñada a volante en la Real Casa de Moneda de México bajo Carlos III. Plata pura con pátina histórica intocada.',NULL,38500.00,1,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-22 04:15:57',NULL),
-(139,6,'Consola Nintendo Game & Watch Ball (Primera Edición Japón 1980)','Coleccionables de Videojuegos: El primer sistema portátil creado por Gunpei Yokoi para Nintendo (Modelo AC-01). En caja de colección con manual y batería sellada.',NULL,26900.00,1,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-22 04:15:57',NULL),
-(140,6,'Cartucho The Legend of Zelda (Gold Cartridge NES 1987 Sellado)','Coleccionables de Videojuegos: Cartucho dorado original para Nintendo Entertainment System con batería de respaldo interna y sello pericial de graduación Wata/VGA.',NULL,34000.00,1,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-22 04:15:57',NULL),
+(135,6,'Figura Dragon Ball Z Super Saiyan Goku (Banpresto Japón 1993)','Figuras Coleccionables (Cultura Pop & Anime): Figura vintage con caja sellada original de Toei Animation Japón. Conservada en acrílico anti-UV de coleccionista.','productos/pURPIuY5YUTPvNs5V0NuCOACVAXYA0rdg10gsJVB.jpg',14200.00,1,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-23 06:46:16',NULL),
+(136,6,'Robot Mecánico de Hojalata Space Trooper (Japón Vintage 1965)','Juguetes y Objetos Manufacturados: Juguete mecánico a cuerda en hojalata litografiada manufacturado por Yonezawa Toys Japón. Mecanismo de marcha y chispa plenamente funcional.',NULL,21800.00,0,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-23 06:46:04',NULL),
+(137,6,'Billete Revolucionario 10 Pesos Ejército Constitucionalista (1914)','Monedas y Billetes Históricos: Emisión oficial del Gobierno Provisional de México firmada en Monclova. Papel moneda histórico en estado sin circular (UNC).','productos/paiPRw6iKSvFPyK4TkoNDxvKiIMdvW2cGgNfRCgz.jpg',500.00,1,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-23 06:45:40',NULL),
+(138,6,'Moneda Virreinal 8 Reales Columnario de Plata (1768)','Monedas y Billetes Históricos: Moneda de 8 Reales acuñada a volante en la Real Casa de Moneda de México bajo Carlos III. Plata pura con pátina histórica intocada.',NULL,38500.00,0,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-23 06:45:21',NULL),
+(139,6,'Consola Nintendo Game & Watch Ball (Primera Edición Japón 1980)','Coleccionables de Videojuegos: El primer sistema portátil creado por Gunpei Yokoi para Nintendo (Modelo AC-01). En caja de colección con manual y batería sellada.','productos/Ov8dBeHpr9qzg7jBmxx6rzvIFBVrcyrIfVdQyYNz.webp',2500.00,1,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-23 06:45:57',NULL),
+(140,6,'Cartucho The Legend of Zelda (Gold Cartridge NES 1987 Sellado)','Coleccionables de Videojuegos: Cartucho dorado original para Nintendo Entertainment System con batería de respaldo interna y sello pericial de graduación Wata/VGA.','productos/lMStJFZVoRaFgiGxdH3QPglfHsNjnBzPESNRtTbh.avif',2500.00,1,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-23 06:45:46',NULL),
 (141,4,'Cancelada encarcelada','A través de las páginas íntimas de su diario en prisión, la autora desnuda el miedo, la soledad y las sombras del sistema penitenciario, revelando lo que ocurre cuando el tribunal de las redes sociales y la justicia real chocan de frente.','productos/z3HOwFAzBCfqVSpc2bwJgNsMIOgEHW6MLMJvgpP9.jpg',249.00,1,0,NULL,NULL,'2026-11-23 06:01:10','2026-11-23 06:39:34',NULL),
 (142,4,'Así es la puta vida','Se presenta como un libro de \"anti-autoayuda\" que busca alejarse de los clichés motivacionales y las frases positivas vacías. Con un tono crudo, directo y apoyado en conceptos psicológicos y sociológicos, Jordi Wild plantea que la vida está llena de golpes inevitables y que nadie es el centro del universo.','productos/mXsakZMRdos8e3XhJrGNMrnfTTFiGGbpbXI5FMds.jpg',150.00,1,0,NULL,NULL,'2026-11-23 06:01:10','2026-11-23 06:39:34',NULL),
 (143,4,'Tres Promesas','Lily Rose, Pablo y Ana, tres jóvenes cuyas vidas dan un giro inesperado cuando los planes que creían seguros cambian de golpe. A través de un viaje entre los recuerdos de su infancia y las decisiones de su presente, los protagonistas deben enfrentar secretos, culpas arrastradas por accidentes del pasado y conflictos sentimentales, descubriendo que el perdón, la lealtad y el amor son clave para sanar sus heridas','productos/bJP8n6wZqmA6HijD0iKhd2zUBAxr8SsM3x7rJnwg.jpg',379.00,1,0,NULL,NULL,'2026-11-23 06:01:10','2026-11-23 06:39:34',NULL),
@@ -1530,7 +1627,7 @@ CREATE TABLE `recuperacion_contrasenas` (
   UNIQUE KEY `recuperacion_contrasenas_token_hash_unique` (`token_hash`),
   KEY `recuperacion_contrasenas_usuario_id_foreign` (`usuario_id`),
   CONSTRAINT `recuperacion_contrasenas_usuario_id_foreign` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1539,6 +1636,8 @@ CREATE TABLE `recuperacion_contrasenas` (
 
 LOCK TABLES `recuperacion_contrasenas` WRITE;
 /*!40000 ALTER TABLE `recuperacion_contrasenas` DISABLE KEYS */;
+INSERT INTO `recuperacion_contrasenas` VALUES
+(1,13,'2e8a1ccd1f3386e968d0e0048e78d23886a223a4529d328ae88847bc4bdab087','2026-11-23 07:41:38',NULL,'2026-11-23 06:41:38','2026-11-23 06:41:38');
 /*!40000 ALTER TABLE `recuperacion_contrasenas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1566,7 +1665,7 @@ CREATE TABLE `reservas_stock` (
   CONSTRAINT `reservas_stock_carrito_id_foreign` FOREIGN KEY (`carrito_id`) REFERENCES `carritos` (`id`) ON DELETE CASCADE,
   CONSTRAINT `reservas_stock_existencia_id_foreign` FOREIGN KEY (`existencia_id`) REFERENCES `existencias` (`id`) ON DELETE CASCADE,
   CONSTRAINT `reservas_stock_pedido_id_foreign` FOREIGN KEY (`pedido_id`) REFERENCES `pedidos` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1576,7 +1675,8 @@ CREATE TABLE `reservas_stock` (
 LOCK TABLES `reservas_stock` WRITE;
 /*!40000 ALTER TABLE `reservas_stock` DISABLE KEYS */;
 INSERT INTO `reservas_stock` VALUES
-(1,157,NULL,5,1,'2026-11-23 06:25:40','expirada','2026-11-23 06:20:40','2026-11-23 06:39:53');
+(1,157,NULL,5,1,'2026-11-23 06:25:40','expirada','2026-11-23 06:20:40','2026-11-23 06:39:53'),
+(2,258,6,5,1,NULL,'confirmada','2026-11-23 07:07:27','2026-11-23 07:07:33');
 /*!40000 ALTER TABLE `reservas_stock` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1640,7 +1740,8 @@ CREATE TABLE `sessions` (
 LOCK TABLES `sessions` WRITE;
 /*!40000 ALTER TABLE `sessions` DISABLE KEYS */;
 INSERT INTO `sessions` VALUES
-('ixm6ASBXHlHBQT6lQUE3vj6evVrkrlCD5VraXGTB',13,'172.19.0.1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.0.0 Safari/537.36 Edg/158.0.0.0','eyJfdG9rZW4iOiJVcDRJbVd2dXZVZjRvSmo1eExxU3lqNVJPWGVlcDh4ZmU2enhrVG5DIiwiYXJjaGl2dW1fdGFiX3Nlc3Npb25zIjp7InRhYl9td3NsMmV6a182cG5xcHd4ZHFxOG03NWxlYjM5ayI6eyJ1c2VyX2lkIjoxMSwiY2Fycml0b19hcmNoaXZ1bSI6W10sImNhcnJpdG9fcHJlY2lvc19jb25nZWxhZG9zIjpbXSwiY2Fycml0b19yZXNlcnZhc19pZHMiOltdLCJjYXJyaXRvX2V4cGlyYV9lbiI6bnVsbCwiYXV0aGVudGljYXRlZF9hdCI6IjIwMjYtMTEtMjNUMDU6Mzk6MzArMDA6MDAiLCJ1cGRhdGVkX2F0IjoiMjAyNi0xMS0yM1QwNjozOTozNSswMDowMCJ9LCJ0YWJfbXdzdW0xeW5fZHZjamVvMHg3ZHdxcTdvajZreTAiOnsidXNlcl9pZCI6MTMsImNhcnJpdG9fYXJjaGl2dW0iOltdLCJjYXJyaXRvX3ByZWNpb3NfY29uZ2VsYWRvcyI6W10sImNhcnJpdG9fcmVzZXJ2YXNfaWRzIjpbXSwiY2Fycml0b19leHBpcmFfZW4iOm51bGwsImF1dGhlbnRpY2F0ZWRfYXQiOiIyMDI2LTExLTIzVDA2OjIwOjMzKzAwOjAwIiwidXBkYXRlZF9hdCI6IjIwMjYtMTEtMjNUMDY6NDA6MDYrMDA6MDAifX0sIl9wcmV2aW91cyI6eyJ1cmwiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvY2F0YWxvZ29cL3Zpbmlsb3M/X3RhYj10YWJfbXdzdW0xeW5fZHZjamVvMHg3ZHdxcTdvajZreTAiLCJyb3V0ZSI6InB1YmxpYy52aW5pbG9zIn0sIl9mbGFzaCI6eyJvbGQiOltdLCJuZXciOltdfX0=',1795416006),
+('OgY4P9OxOy9qFijIqOSxjZb72MFdzTG9Rgg8Gnnt',11,'172.19.0.1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.0.0 Safari/537.36 Edg/158.0.0.0','eyJfdG9rZW4iOiJ4NjVjaHFNeVRqYlRoWmZPcVJmeG5LdXNUT3IwRDhCZkRYWkUxeU5WIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cL2xvY2FsaG9zdDo4MDAwXC9hZG1pblwvcmVwb3J0ZXNcL2V4cG9ydGFyXC9wZGY/X3RhYj10YWJfbXdzdW0xeW5fZHZjamVvMHg3ZHdxcTdvajZreTAiLCJyb3V0ZSI6ImFkbWluLnJlcG9ydGVzLnBkZiJ9LCJfZmxhc2giOnsib2xkIjpbXSwibmV3IjpbXX0sInBhc3N3b3JkX2hhc2hfd2ViIjoiZmNmZWY3YmQzMjM4YWVkNWFkN2M2NTczMDUzMDRjMjcyMzg2ZTZmMWJlMDE1YjVmMjhjZWU2ODBiNGFmZmQ2YyIsImFyY2hpdnVtX3RhYl9zZXNzaW9ucyI6eyJ0YWJfbXdzdW0xeW5fZHZjamVvMHg3ZHdxcTdvajZreTAiOnsidXNlcl9pZCI6MTEsImNhcnJpdG9fYXJjaGl2dW0iOltdLCJjYXJyaXRvX3ByZWNpb3NfY29uZ2VsYWRvcyI6W10sImNhcnJpdG9fcmVzZXJ2YXNfaWRzIjpbXSwiY2Fycml0b19leHBpcmFfZW4iOm51bGwsImF1dGhlbnRpY2F0ZWRfYXQiOiIyMDI2LTExLTIzVDA3OjMyOjM3KzAwOjAwIiwidXBkYXRlZF9hdCI6IjIwMjYtMTEtMjNUMDc6MzI6NDgrMDA6MDAifX0sImFyY2hpdnVtX2p1c3RfbG9nZ2VkX2luX3RhYl90b2tlbiI6InRhYl9td3N1bTF5bl9kdmNqZW8weDdkd3FxN29qNmt5MCJ9',1795419168),
+('WciJPVZSAnivmQiOBy1I3ThvRTaWpQO9G1lST2tt',NULL,'172.19.0.1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.0.0 Safari/537.36 Edg/158.0.0.0','eyJfdG9rZW4iOiJ3eW51ZzhlNXlZN2ZpREc4bUFoSHBndU5xNWw2cDRub3d6UkU1TGNlIiwiYXJjaGl2dW1fdGFiX3Nlc3Npb25zIjpbXSwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cL2xvY2FsaG9zdDo4MDAwIiwicm91dGUiOiJwdWJsaWMuaG9tZSJ9LCJfZmxhc2giOnsib2xkIjpbXSwibmV3IjpbXX0sInBhc3N3b3JkX2hhc2hfd2ViIjoiYzdmY2E0OTBkNDA0NjQ2Y2EyMjM4ZjM1NjJiYmI5YmRmMTZhYTdkMjJjOTAzZWU5ZTJiNjFmYzdkMmY1YjhiMiIsInBlZGlkb3NfcmVjaWVudGVzIjpbNl0sImFyY2hpdnVtX3N1Y3Vyc2FsX2lkIjo0fQ==',1795417809),
 ('yZXYi6qYkE8iFvYxiZdJFMbL24OS4HtIucjEaswV',13,'172.19.0.1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.0.0 Safari/537.36 Edg/158.0.0.0','eyJfdG9rZW4iOiJXaTB3TUdRRHpCMVpuSmNuelN3Tk43dmFxcWpvVTFNYnpMU3NJNkI2IiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cL2xvY2FsaG9zdDo4MDAwXC9jYXRhbG9nb1wvbGlicm9zP190YWI9dGFiX213c3VtMXluX2R2Y2plbzB4N2R3cXE3b2o2a3kwIiwicm91dGUiOiJwdWJsaWMubGlicm9zIn0sIl9mbGFzaCI6eyJvbGQiOltdLCJuZXciOltdfSwicGFzc3dvcmRfaGFzaF93ZWIiOiI0MzQyZDhkMDE0MDM1M2YxYzAwY2NkMzY5NDRiNmI5ZGRlZTI5NjEzOTAyZWFlMWM1YTdmYmIzYzRmYWE2NTA1IiwiYXJjaGl2dW1fdGFiX3Nlc3Npb25zIjp7InRhYl9td3NsMmV6a182cG5xcHd4ZHFxOG03NWxlYjM5ayI6eyJ1c2VyX2lkIjoxMSwiY2Fycml0b19hcmNoaXZ1bSI6W10sImNhcnJpdG9fcHJlY2lvc19jb25nZWxhZG9zIjpbXSwiY2Fycml0b19yZXNlcnZhc19pZHMiOltdLCJjYXJyaXRvX2V4cGlyYV9lbiI6bnVsbCwiYXV0aGVudGljYXRlZF9hdCI6IjIwMjYtMTEtMjNUMDU6Mzk6MzArMDA6MDAiLCJ1cGRhdGVkX2F0IjoiMjAyNi0xMS0yM1QwNjoxODo1NSswMDowMCJ9LCJ0YWJfbXdzdW0xeW5fZHZjamVvMHg3ZHdxcTdvajZreTAiOnsidXNlcl9pZCI6MTMsImNhcnJpdG9fYXJjaGl2dW0iOnsiOTMiOjF9LCJjYXJyaXRvX3ByZWNpb3NfY29uZ2VsYWRvcyI6W10sImNhcnJpdG9fcmVzZXJ2YXNfaWRzIjpbMV0sImNhcnJpdG9fZXhwaXJhX2VuIjoiMjAyNi0xMS0yM1QwNjoyNTo0MCswMDowMCIsImF1dGhlbnRpY2F0ZWRfYXQiOiIyMDI2LTExLTIzVDA2OjIwOjMzKzAwOjAwIiwidXBkYXRlZF9hdCI6IjIwMjYtMTEtMjNUMDY6MjE6MjkrMDA6MDAifX0sImFyY2hpdnVtX2p1c3RfbG9nZ2VkX2luX3RhYl90b2tlbiI6InRhYl9td3N1bTF5bl9kdmNqZW8weDdkd3FxN29qNmt5MCJ9',1795414889);
 /*!40000 ALTER TABLE `sessions` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -1734,9 +1835,11 @@ CREATE TABLE `usuario_rol` (
 LOCK TABLES `usuario_rol` WRITE;
 /*!40000 ALTER TABLE `usuario_rol` DISABLE KEYS */;
 INSERT INTO `usuario_rol` VALUES
-(11,6,'2026-11-23 05:40:06','2026-11-23 05:40:06'),
-(12,7,'2026-11-23 05:40:06','2026-11-23 05:40:06'),
-(13,10,'2026-11-23 06:20:32','2026-11-23 06:20:32');
+(11,6,'2026-11-23 07:31:56','2026-11-23 07:31:56'),
+(12,7,'2026-11-23 07:31:56','2026-11-23 07:31:56'),
+(13,10,'2026-11-23 06:20:32','2026-11-23 06:20:32'),
+(14,8,'2026-11-23 07:31:57','2026-11-23 07:31:57'),
+(15,9,'2026-11-23 07:31:57','2026-11-23 07:31:57');
 /*!40000 ALTER TABLE `usuario_rol` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1760,7 +1863,7 @@ CREATE TABLE `usuarios` (
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `usuarios_email_unique` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1770,9 +1873,11 @@ CREATE TABLE `usuarios` (
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
 INSERT INTO `usuarios` VALUES
-(11,'Administrador ARCHIVUM','admin@archivum.com','$2y$12$aAnQDnf4WmEI8jfVn2pXH.ENWS5fZbTglF4Ld5K6jtOs66XEQAz42',1,NULL,NULL,'2026-11-23 03:23:24','2026-11-23 05:39:01',NULL),
-(12,'Encargado Compras','compras1@archivum.com','$2y$12$lDRW5iAswFmut6HVcJ11wuRfAJlx6NVXuxz8CmBVlURGHIbAs45Ru',1,NULL,NULL,'2026-11-23 05:39:14','2026-11-23 05:51:15',NULL),
-(13,'Evelyn','quijadaevelin82@gmail.com','$2y$12$0V0gcOlVkYw1UFRo2sic6OiIb8Z/7Fz.uL/5W.mggWYK07SoniAuu',1,NULL,NULL,'2026-11-23 06:20:32','2026-11-23 06:20:32',NULL);
+(11,'Administrador ARCHIVUM','admin@archivum.com','$2y$12$l8ECJ8z9KxriKWp2H3W.DeZGfoBstt67WFFsdh.owt5zy6RBIFy0.',1,NULL,NULL,'2026-11-23 03:23:24','2026-11-23 07:31:56',NULL),
+(12,'Encargado Compras','compras1@archivum.com','$2y$12$lEwU6NbdK0vTTRtk3QJmnepkRZd9pkAl25AwT8Fz1S5k1ArJNDxRG',1,NULL,NULL,'2026-11-23 05:39:14','2026-11-23 07:31:56',NULL),
+(13,'Evelyn','quijadaevelin82@gmail.com','$2y$12$0V0gcOlVkYw1UFRo2sic6OiIb8Z/7Fz.uL/5W.mggWYK07SoniAuu',1,NULL,NULL,'2026-11-23 06:20:32','2026-11-23 06:20:32',NULL),
+(14,'Encargado Ventas','ventas1@archivum.com','$2y$12$OgSZlvA0vdfdzIGE2gT6hORzbpB/S3AAT00JWSVryRUc4SeBmm/.i',1,NULL,NULL,'2026-11-23 07:13:45','2026-11-23 07:31:57',NULL),
+(15,'Encargado Almacen','almacen1@archivum.com','$2y$12$9GVADqqIayH0PHEHsPY1f.fmZI6CooJ/kFPKfyAZluwrHxW9Dod36',1,NULL,NULL,'2026-11-23 07:13:45','2026-11-23 07:31:57',NULL);
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1807,34 +1912,34 @@ CREATE TABLE `variantes_sku` (
 LOCK TABLES `variantes_sku` WRITE;
 /*!40000 ALTER TABLE `variantes_sku` DISABLE KEYS */;
 INSERT INTO `variantes_sku` VALUES
-(71,71,'LIB-1967-SUD','VERY FINE (VF) · PIEZA ÚNICA 1/1',NULL,32000.00,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(72,72,'LIB-1955-FCE','NEAR MINT (NM) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA',NULL,44500.00,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(73,73,'LIB-1949-LOS','MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA',NULL,58000.00,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(74,74,'LIB-1950-FCE','VERY FINE (VF) · TIRAJE MÚLTIPLE',NULL,16900.00,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(75,75,'LIB-1962-ERA','NEAR MINT (NM) · TIRAJE REGULAR · TERROR GÓTICO',NULL,6800.00,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(76,76,'LIB-1963-SUD','MINT (M) · TIRAJE MÚLTIPLE',NULL,8400.00,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(77,77,'LIB-1957-FCE','MINT (M) · PRIMERA EDICIÓN · POESÍA',NULL,24500.00,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(78,78,'LIB-1959-UNAM','NEAR MINT (NM) · HISTORIA · BIBLIOTECA DEL ESTUDIANTE',NULL,9800.00,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(79,79,'LIB-1971-FCE','VERY FINE (VF) · CIENCIA & FILOSOFÍA',NULL,11200.00,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(80,80,'LIB-1845-POE','VERY FINE (VF) · TERROR GÓTICO · GRABADOS XILOGRÁFICOS',NULL,18500.00,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(81,81,'LIB-1955-MIN','MINT (M) · PIEZA ÚNICA 1/1 · CIENCIA FICCIÓN DISTÓPICA',NULL,26000.00,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(82,82,'LIB-1955-BUE','NEAR MINT (NM) · CIENCIA FICCIÓN CLÁSICA',NULL,21500.00,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(83,83,'LIB-1977-TOL','VERY FINE (VF) · FANTASÍA ÉPICA · MAPAS DESPLEGABLES',NULL,29800.00,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(84,84,'LIB-1982-LUM','NEAR MINT (NM) · MISTERIO MONÁSTICO & THRILLER',NULL,14200.00,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(85,85,'LIB-1928-JUV','VERY FINE (VF) · POLICÍACO CLÁSICO SHERLOCK HOLMES',NULL,17800.00,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(86,86,'LIB-1932-AGU','MINT (M) · FILOSOFÍA MODERNA · ENCUADERNACIÓN EN PIEL',NULL,19500.00,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(87,87,'LIB-1944-UNA','NEAR MINT (NM) · FILOSOFÍA CLÁSICA GRIEGA',NULL,13400.00,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(88,88,'LIB-1947-RAE','MINT (M) · CLÁSICOS UNIVERSALES · ESTUCHE DE TELA',NULL,38000.00,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(89,89,'LIB-1921-DIV','NEAR MINT (NM) · PIEZA ÚNICA 1/1 · GRAN FOLIO DORÉ',NULL,42000.00,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(90,90,'LIB-1974-NER','VERY FINE (VF) · MEMORIAS & BIOGRAFÍA · EDICIÓN PÓSTUMA',NULL,15600.00,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(91,91,'LIB-1960-POR','MINT (M) · CRÓNICA DE INDIAS · EDICIÓN CRÍTICA',NULL,8900.00,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(92,92,'VIN-1959-COL','MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA',NULL,18500.00,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(93,93,'VIN-1957-BN1577','NEAR MINT (NM) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA',NULL,27500.00,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(94,94,'VIN-1965-IMP77','VERY FINE (VF) · VINILO LP 180G',NULL,16200.00,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(95,95,'VIN-1969-PCS7088','MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA',NULL,22900.00,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(96,96,'CD-1983-CP35','MINT (M) · CD COMPACT DISC · ADQUISICIÓN SELECTA',NULL,14800.00,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(97,97,'VIN-1971-LED4','MINT (M) · VINILO LP 180G',NULL,5900.00,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(98,98,'CD-1997-RAD1','MINT (M) · CD COMPACT DISC',NULL,4800.00,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
+(71,71,'LIB-1967-SUD','VERY FINE (VF) · PIEZA ÚNICA 1/1','productos/9b2xdCyABitnYZYoAAhn8J5OjYrrB4NGxAvBBSJ1.jpg',32000.00,1,'2026-11-22 04:15:56','2026-11-23 06:57:32'),
+(72,72,'LIB-1955-FCE','NEAR MINT (NM) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA',NULL,44500.00,0,'2026-11-22 04:15:56','2026-11-23 06:57:19'),
+(73,73,'LIB-1949-LOS','MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA','productos/gYa5QlrlkdwvAIGMlq3ldGpHoZuGe8ygDtIKpg2b.jpg',58000.00,1,'2026-11-22 04:15:56','2026-11-23 06:56:34'),
+(74,74,'LIB-1950-FCE','VERY FINE (VF) · TIRAJE MÚLTIPLE','productos/qYnCho0DwirzbkIQJ1PrhVvyhXI9QRBZWdW6kcXG.jpg',16900.00,1,'2026-11-22 04:15:56','2026-11-23 06:56:19'),
+(75,75,'LIB-1962-ERA','NEAR MINT (NM) · TIRAJE REGULAR · TERROR GÓTICO','productos/aVTFPNupBVuqv8AqdLxNykqPMmHV8d0R3tME0hoB.webp',6800.00,1,'2026-11-22 04:15:56','2026-11-23 06:56:02'),
+(76,76,'LIB-1963-SUD','MINT (M) · TIRAJE MÚLTIPLE','productos/TCPLCpmh1SnaGKU280WLmOfcZPFzSCiWiP89POg9.webp',8400.00,1,'2026-11-22 04:15:56','2026-11-23 06:55:47'),
+(77,77,'LIB-1957-FCE','MINT (M) · PRIMERA EDICIÓN · POESÍA','productos/mJvRjktDKa0jbFxCDpRi4FhhQU5o2cvndCFB5xZZ.jpg',24500.00,1,'2026-11-22 04:15:56','2026-11-23 06:55:32'),
+(78,78,'LIB-1959-UNAM','NEAR MINT (NM) · HISTORIA · BIBLIOTECA DEL ESTUDIANTE',NULL,9800.00,0,'2026-11-22 04:15:56','2026-11-23 06:55:09'),
+(79,79,'LIB-1971-FCE','VERY FINE (VF) · CIENCIA & FILOSOFÍA','productos/7HzDLydxgzIHkTURYQu6UJMifjJKndEvoRs0aUPs.jpg',11200.00,1,'2026-11-22 04:15:56','2026-11-23 06:54:25'),
+(80,80,'LIB-1845-POE','VERY FINE (VF) · TERROR GÓTICO · GRABADOS XILOGRÁFICOS','productos/p9Cf6Nskf3dQFBA3Vr6G1QtqVH6HutScpRqC1q8b.webp',18500.00,1,'2026-11-22 04:15:56','2026-11-23 06:54:12'),
+(81,81,'LIB-1955-MIN','MINT (M) · PIEZA ÚNICA 1/1 · CIENCIA FICCIÓN DISTÓPICA','productos/TLYiBzkepp04SsB7cHRFLORSJA1IGPiPXW1O7BH9.jpg',26000.00,1,'2026-11-22 04:15:56','2026-11-23 06:53:18'),
+(82,82,'LIB-1955-BUE','NEAR MINT (NM) · CIENCIA FICCIÓN CLÁSICA','productos/DDJgwHy3Hd6EbSR0LA67OVwBhiLBakis3xI3bHm9.jpg',21500.00,1,'2026-11-22 04:15:56','2026-11-23 06:52:59'),
+(83,83,'LIB-1977-TOL','VERY FINE (VF) · FANTASÍA ÉPICA · MAPAS DESPLEGABLES','productos/Yp21v7nB63v6WboOV3gMWawFicNu2LvUSVwstArn.jpg',300.00,1,'2026-11-22 04:15:56','2026-11-23 06:52:29'),
+(84,84,'LIB-1982-LUM','NEAR MINT (NM) · MISTERIO MONÁSTICO & THRILLER','productos/X4kWplGRxzkWUJRimbhbzdRoKhLkCuFO6MKjm3Ja.jpg',250.00,1,'2026-11-22 04:15:56','2026-11-23 06:52:22'),
+(85,85,'LIB-1928-JUV','VERY FINE (VF) · POLICÍACO CLÁSICO SHERLOCK HOLMES','productos/w4o5WSAutGgYS2vUk76XEpDfmhmw7q6VP7ApUm9R.webp',280.00,1,'2026-11-22 04:15:56','2026-11-23 06:52:40'),
+(86,86,'LIB-1932-AGU','MINT (M) · FILOSOFÍA MODERNA · ENCUADERNACIÓN EN PIEL','productos/w3PmtPgXy1u6PJEWZiZEP1nHRm9i4COxdwSt2aYz.jpg',380.00,1,'2026-11-22 04:15:56','2026-11-23 06:52:15'),
+(87,87,'LIB-1944-UNA','NEAR MINT (NM) · FILOSOFÍA CLÁSICA GRIEGA','productos/zeytArWzUEWrUhsrWamTQN6XnDoEdGvcF0ib5c2T.jpg',360.00,1,'2026-11-22 04:15:56','2026-11-23 06:52:05'),
+(88,88,'LIB-1947-RAE','MINT (M) · CLÁSICOS UNIVERSALES · ESTUCHE DE TELA','productos/dgIYo3PHjBqj7MFrwT0MfScUdOzwhYJfXeS6yHN5.jpg',1000.00,1,'2026-11-22 04:15:56','2026-11-23 06:51:40'),
+(89,89,'LIB-1921-DIV','NEAR MINT (NM) · PIEZA ÚNICA 1/1 · GRAN FOLIO DORÉ','productos/RoHPqdVCnxcwTtWnv4jkG8HHqvJ1XLqrSnNG9eSM.webp',500.00,1,'2026-11-22 04:15:56','2026-11-23 06:51:49'),
+(90,90,'LIB-1974-NER','VERY FINE (VF) · MEMORIAS & BIOGRAFÍA · EDICIÓN PÓSTUMA',NULL,15600.00,0,'2026-11-22 04:15:56','2026-11-23 06:50:38'),
+(91,91,'LIB-1960-POR','MINT (M) · CRÓNICA DE INDIAS · EDICIÓN CRÍTICA',NULL,8900.00,0,'2026-11-22 04:15:56','2026-11-23 06:50:43'),
+(92,92,'VIN-1959-COL','MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA',NULL,18500.00,0,'2026-11-22 04:15:56','2026-11-23 06:50:48'),
+(93,93,'VIN-1957-BN1577','NEAR MINT (NM) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA',NULL,27500.00,0,'2026-11-22 04:15:56','2026-11-23 06:50:54'),
+(94,94,'VIN-1965-IMP77','VERY FINE (VF) · VINILO LP 180G',NULL,16200.00,0,'2026-11-22 04:15:56','2026-11-23 06:51:00'),
+(95,95,'VIN-1969-PCS7088','MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA',NULL,22900.00,0,'2026-11-22 04:15:56','2026-11-23 06:51:28'),
+(96,96,'CD-1983-CP35','MINT (M) · CD COMPACT DISC · ADQUISICIÓN SELECTA','productos/C3qtAHVSU9LoQlb9SU4WFgz187Cz84fDeAZXu3pt.jpg',530.00,1,'2026-11-22 04:15:56','2026-11-23 06:51:54'),
+(97,97,'VIN-1971-LED4','MINT (M) · VINILO LP 180G',NULL,5900.00,0,'2026-11-22 04:15:56','2026-11-23 06:51:34'),
+(98,98,'CD-1997-RAD1','MINT (M) · CD COMPACT DISC','productos/Q456A28SU5bldfSxRvIVCataUpdvgzyxOcZnpPhn.webp',4800.00,1,'2026-11-22 04:15:56','2026-11-23 06:48:15'),
 (99,99,'VIN-2017-GOT','MINT (M) · VINILO LP',NULL,521.50,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
 (100,100,'VIN-1970-YAK','VERY FINE (VF) · VINILO LP',NULL,372.56,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
 (101,101,'VIN-1990-CAI','NEAR MINT (NM) · PIEZA ÚNICA 1/1',NULL,7413.93,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
@@ -1846,22 +1951,22 @@ INSERT INTO `variantes_sku` VALUES
 (107,107,'CD-2010-SON','MINT (M) · CD COMPACT DISC',NULL,391.50,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
 (108,108,'CD-2000-HUA','VERY FINE (VF) · CD COMPACT DISC',NULL,69.00,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
 (109,109,'VIN-2022-MID','MINT (M) · PIEZA ÚNICA 1/1',NULL,641.68,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
-(110,110,'CD-1997-BVSC','MINT (M) · CD COMPACT DISC',NULL,3950.00,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
-(111,111,'MEM-1928-AUT','COA NOTARIADO · PIEZA ÚNICA 1/1',NULL,9400.00,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
-(112,112,'MEM-1940-COY','MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA',NULL,36800.00,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
-(113,113,'MEM-1910-ALM','MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA',NULL,29500.00,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
-(114,114,'MEM-1934-FOT','MINT (M) · COA NOTARIADO · ADQUISICIÓN SELECTA',NULL,41000.00,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
-(115,115,'MEM-1912-PAR','VERY FINE (VF) · ADQUISICIÓN SELECTA',NULL,21500.00,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
-(116,116,'MEM-1934-PBA','VERY FINE (VF) · TIRAJE MÚLTIPLE',NULL,7800.00,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
-(117,117,'MEM-1954-COY','NEAR MINT (NM) · TIRAJE MÚLTIPLE',NULL,5400.00,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
-(118,118,'MEM-1968-IMP','MINT (M) · ACCESORIO DE BÓVEDA',NULL,3200.00,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
-(119,119,'COL-1997-EVA1','MINT (M) · FIGURA ANIME · EDICIÓN LIMITADA',NULL,18900.00,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
+(110,110,'CD-1997-BVSC','MINT (M) · CD COMPACT DISC',NULL,3950.00,0,'2026-11-22 04:15:57','2026-11-23 06:47:46'),
+(111,111,'MEM-1928-AUT','COA NOTARIADO · PIEZA ÚNICA 1/1',NULL,9400.00,0,'2026-11-22 04:15:57','2026-11-23 06:47:36'),
+(112,112,'MEM-1940-COY','MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA',NULL,36800.00,0,'2026-11-22 04:15:57','2026-11-23 06:47:31'),
+(113,113,'MEM-1910-ALM','MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA',NULL,29500.00,0,'2026-11-22 04:15:57','2026-11-23 06:47:25'),
+(114,114,'MEM-1934-FOT','MINT (M) · COA NOTARIADO · ADQUISICIÓN SELECTA',NULL,41000.00,0,'2026-11-22 04:15:57','2026-11-23 06:47:22'),
+(115,115,'MEM-1912-PAR','VERY FINE (VF) · ADQUISICIÓN SELECTA',NULL,21500.00,0,'2026-11-22 04:15:57','2026-11-23 06:47:18'),
+(116,116,'MEM-1934-PBA','VERY FINE (VF) · TIRAJE MÚLTIPLE',NULL,7800.00,0,'2026-11-22 04:15:57','2026-11-23 06:47:06'),
+(117,117,'MEM-1954-COY','NEAR MINT (NM) · TIRAJE MÚLTIPLE',NULL,5400.00,0,'2026-11-22 04:15:57','2026-11-23 06:47:11'),
+(118,118,'MEM-1968-IMP','MINT (M) · ACCESORIO DE BÓVEDA',NULL,3200.00,0,'2026-11-22 04:15:57','2026-11-23 06:46:54'),
+(119,119,'COL-1997-EVA1','MINT (M) · FIGURA ANIME · EDICIÓN LIMITADA',NULL,18900.00,0,'2026-11-22 04:15:57','2026-11-23 06:46:47'),
 (120,120,'COL-1933-DOU','MINT (M) · MONEDA HISTÓRICA RARA',NULL,18872250.00,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
 (121,121,'COL-1794-FLO','VERY FINE (VF) · PRIMER DÓLAR FEDERAL',NULL,175000.00,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
 (122,122,'COL-1344-EDU','NEAR MINT (NM) · PIEZA ÚNICA MEDIEVAL',NULL,7000000.00,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
 (123,123,'COL-0723-DIN','MINT (M) · CALIFATO OMEYA',NULL,95600000.00,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
 (124,124,'COL-1800-REA','VERY FINE (VF) · COLONIAL',NULL,5500.00,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
-(125,125,'COL-1947-CEN','MINT (M) · BULLION MEXICANO',NULL,92250.00,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
+(125,125,'COL-1947-CEN','MINT (M) · BULLION MEXICANO',NULL,92250.00,0,'2026-11-22 04:15:57','2026-11-23 06:46:37'),
 (126,126,'COL-2020-LIB','MINT (M) · ONZA PLATA PURA',NULL,1250.00,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
 (127,127,'COL-2023-20P','VERY FINE (VF) · COMMEMORATIVE',NULL,100.00,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
 (128,128,'COL-1975-BIL','FINE (F) · NOTAFILIA HISTÓRICA',NULL,325.00,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
@@ -1871,12 +1976,12 @@ INSERT INTO `variantes_sku` VALUES
 (132,132,'COL-2023-ANU','MINT (M) · FIGURA ORNAMENTAL',NULL,773.08,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
 (133,133,'COL-1992-COC','VERY FINE (VF) · ARTE POPULAR INDÍGENA',NULL,4914.54,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
 (134,134,'COL-2023-JOY','MINT (M) · ARTESANÍA DECORATIVA',NULL,600.49,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
-(135,135,'COL-1993-DBZG','MINT (M) · CULTURA POP & ANIME · EN CAJA ORIGINAL',NULL,14200.00,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
-(136,136,'COL-1965-ROB','VERY FINE (VF) · JUGUETE MECÁNICO VINTAGE',NULL,21800.00,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
-(137,137,'COL-1914-BIL','MINT (M) · NUMISMÁTICA & NOTAFILIA REVOLUCIONARIA',NULL,8900.00,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
-(138,138,'COL-1768-COL8','VERY FINE (VF) · MONEDAS & BILLETES HISTÓRICOS',NULL,38500.00,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
-(139,139,'COL-1980-NIN','NEAR MINT (NM) · VIDEOJUEGOS RETRO EN CAJA',NULL,26900.00,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
-(140,140,'COL-1987-ZEL','MINT (M) · CARTUCHO DORADO DE COLECCIÓN · VIDEOJUEGOS',NULL,34000.00,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
+(135,135,'COL-1993-DBZG','MINT (M) · CULTURA POP & ANIME · EN CAJA ORIGINAL','productos/pURPIuY5YUTPvNs5V0NuCOACVAXYA0rdg10gsJVB.jpg',14200.00,1,'2026-11-22 04:15:57','2026-11-23 06:46:16'),
+(136,136,'COL-1965-ROB','VERY FINE (VF) · JUGUETE MECÁNICO VINTAGE',NULL,21800.00,0,'2026-11-22 04:15:57','2026-11-23 06:46:04'),
+(137,137,'COL-1914-BIL','MINT (M) · NUMISMÁTICA & NOTAFILIA REVOLUCIONARIA','productos/paiPRw6iKSvFPyK4TkoNDxvKiIMdvW2cGgNfRCgz.jpg',500.00,1,'2026-11-22 04:15:57','2026-11-23 06:45:40'),
+(138,138,'COL-1768-COL8','VERY FINE (VF) · MONEDAS & BILLETES HISTÓRICOS',NULL,38500.00,0,'2026-11-22 04:15:57','2026-11-23 06:45:21'),
+(139,139,'COL-1980-NIN','NEAR MINT (NM) · VIDEOJUEGOS RETRO EN CAJA','productos/Ov8dBeHpr9qzg7jBmxx6rzvIFBVrcyrIfVdQyYNz.webp',2500.00,1,'2026-11-22 04:15:57','2026-11-23 06:45:57'),
+(140,140,'COL-1987-ZEL','MINT (M) · CARTUCHO DORADO DE COLECCIÓN · VIDEOJUEGOS','productos/lMStJFZVoRaFgiGxdH3QPglfHsNjnBzPESNRtTbh.avif',2500.00,1,'2026-11-22 04:15:57','2026-11-23 06:45:46'),
 (141,141,'LIB-2026-003','MINT (M) · Cancelada encarcelada','productos/z3HOwFAzBCfqVSpc2bwJgNsMIOgEHW6MLMJvgpP9.jpg',249.00,1,'2026-11-23 06:01:10','2026-11-23 06:39:34'),
 (142,142,'LIB-2026-005','MINT (M) · Así es la puta vida','productos/mXsakZMRdos8e3XhJrGNMrnfTTFiGGbpbXI5FMds.jpg',150.00,1,'2026-11-23 06:01:10','2026-11-23 06:39:34'),
 (143,143,'LIB-2026-007','MINT (M) · Tres Promesas','productos/bJP8n6wZqmA6HijD0iKhd2zUBAxr8SsM3x7rJnwg.jpg',379.00,1,'2026-11-23 06:01:10','2026-11-23 06:39:34'),
@@ -1904,4 +2009,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-11-23  6:41:15
+-- Dump completed on 2026-11-23  7:33:46

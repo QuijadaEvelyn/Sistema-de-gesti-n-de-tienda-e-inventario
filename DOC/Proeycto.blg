@@ -1,14 +1,14 @@
 [0] Config.pm:328> INFO - This is Biber 2.21
 [0] Config.pm:331> INFO - Logfile is 'Proeycto.blg'
-[85] biber-MSWIN64:342> INFO - === 
-[110] Biber.pm:421> INFO - Reading 'Proeycto.bcf'
-[245] Biber.pm:1002> INFO - Found 13 citekeys in bib section 0
-[266] Biber.pm:4487> INFO - Processing section 0
-[285] Biber.pm:4678> INFO - Looking for bibtex file 'Referencias.bib' for section 0
-[293] bibtex.pm:1713> INFO - LaTeX decoding ...
-[313] bibtex.pm:1519> INFO - Found BibTeX data source 'Referencias.bib'
-[465] UCollate.pm:68> INFO - Overriding locale 'es-ES' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[465] UCollate.pm:68> INFO - Overriding locale 'es-ES' defaults 'variable = shifted' with 'variable = non-ignorable'
-[465] Biber.pm:4307> INFO - Sorting list 'none/global//global/global/global' of type 'entry' with template 'none' and locale 'es-ES'
-[483] bbl.pm:676> INFO - Writing 'Proeycto.bbl' with encoding 'UTF-8'
-[495] bbl.pm:779> INFO - Output to Proeycto.bbl
+[96] biber-MSWIN64:342> INFO - === 
+[122] Biber.pm:421> INFO - Reading 'Proeycto.bcf'
+[243] Biber.pm:1002> INFO - Found 13 citekeys in bib section 0
+[264] Biber.pm:4487> INFO - Processing section 0
+[278] Biber.pm:4678> INFO - Looking for bibtex file 'Referencias.bib' for section 0
+[285] bibtex.pm:1713> INFO - LaTeX decoding ...
+[306] bibtex.pm:1519> INFO - Found BibTeX data source 'Referencias.bib'
+[445] UCollate.pm:68> INFO - Overriding locale 'es-ES' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[446] UCollate.pm:68> INFO - Overriding locale 'es-ES' defaults 'variable = shifted' with 'variable = non-ignorable'
+[446] Biber.pm:4307> INFO - Sorting list 'none/global//global/global/global' of type 'entry' with template 'none' and locale 'es-ES'
+[466] bbl.pm:676> INFO - Writing 'Proeycto.bbl' with encoding 'UTF-8'
+[478] bbl.pm:779> INFO - Output to Proeycto.bbl

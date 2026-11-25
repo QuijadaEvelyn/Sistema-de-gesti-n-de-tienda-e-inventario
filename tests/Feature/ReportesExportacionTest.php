@@ -182,4 +182,37 @@ class ReportesExportacionTest extends TestCase
             ->assertSee('PIEZA / TITULO CURATORIAL')
             ->assertSee('[EN BOVEDA]');
     }
+
+    public function test_reportes_excluyen_productos_dados_de_baja_o_eliminados_y_priorizan_precio_actualizado(): void
+    {
+        $admin = $this->crearAdminAutenticado();
+        $datos = $this->sembrarInventarioDePrueba();
+
+        // Dar de baja el vinilo (activo = false) y actualizar el precio del libro vía PUT /admin/productos/{id}
+        $datos['vinilo']->darDeBaja();
+
+        $this->actingAs($admin)->put(route('admin.productos.update', $datos['libro']->id), [
+            'nombre' => $datos['libro']->nombre,
+            'sku' => $datos['skuLibro']->sku,
+            'precio' => 50000.00,
+            'stock' => 2,
+        ])->assertRedirect();
+
+        $this->assertEquals(50000.00, (float) $datos['skuLibro']->fresh()->precio);
+
+        // El reporte CSV debe incluir el libro con 50000.00 / 100000.00 y excluir el vinilo dado de baja
+        $resCsv = $this->actingAs($admin)->get(route('admin.reportes.csv'));
+        $resCsv->assertOk();
+        $csv = $resCsv->streamedContent();
+        $this->assertStringContainsString('ARC-LIB-1603-N01', $csv);
+        $this->assertStringContainsString('50000.00', $csv);
+        $this->assertStringContainsString('100000.00', $csv);
+        $this->assertStringNotContainsString('ARC-VIN-1961-J09', $csv);
+
+        // La vista previa PDF tampoco debe incluir el vinilo dado de baja
+        $resPdfPreview = $this->actingAs($admin)->get(route('admin.reportes.pdf', ['vista_previa' => 1]));
+        $resPdfPreview->assertOk()
+            ->assertSee('ARC-LIB-1603-N01')
+            ->assertDontSee('ARC-VIN-1961-J09');
+    }
 }

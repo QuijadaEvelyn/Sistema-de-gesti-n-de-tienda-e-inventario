@@ -31,7 +31,12 @@ class ReporteInventarioService
             $query->where('id', $sucursalId);
         }
 
-        $sucursales = $query->with(['existencias.varianteSku.producto'])->get();
+        $sucursales = $query->with([
+            'existencias' => function ($q): void {
+                $q->whereHas('varianteSku.producto', fn ($p) => $p->whereNull('deleted_at')->where('activo', true))
+                    ->with('varianteSku.producto');
+            },
+        ])->get();
 
         $reporte = [];
 
@@ -42,11 +47,12 @@ class ReporteInventarioService
 
             foreach ($sucursal->existencias as $existencia) {
                 $variante = $existencia->varianteSku;
-                if (! $variante) {
+                $producto = $variante?->producto;
+                if (! $variante || ! $producto) {
                     continue;
                 }
 
-                $precioUnitario = (float) ($variante->precio ?? $variante->producto?->precio ?? 0.0);
+                $precioUnitario = (float) ($producto->precio ?? $variante->precio ?? 0.0);
                 $unidades = (int) $existencia->cantidad;
 
                 $totalSkus++;
@@ -74,6 +80,7 @@ class ReporteInventarioService
     public function rotacionPiezasUnicas(?int $sucursalId = null): array
     {
         $query = PiezaUnica::query()
+            ->whereHas('existencia.varianteSku.producto', fn ($q) => $q->whereNull('deleted_at')->where('activo', true))
             ->with(['existencia.varianteSku.producto', 'existencia.sucursal']);
 
         if ($sucursalId !== null) {
@@ -144,6 +151,7 @@ class ReporteInventarioService
     public function stockBajoMinimo(?int $sucursalId = null): Collection
     {
         $query = Existencia::query()
+            ->whereHas('varianteSku.producto', fn ($q) => $q->whereNull('deleted_at')->where('activo', true))
             ->whereColumn('cantidad', '<', 'stock_minimo')
             ->where('stock_minimo', '>', 0)
             ->with(['varianteSku.producto', 'sucursal']);
@@ -189,7 +197,8 @@ class ReporteInventarioService
         }
         $reservasActivas = (int) $reservasQuery->sum('cantidad');
 
-        $piezasQuery = PiezaUnica::query();
+        $piezasQuery = PiezaUnica::query()
+            ->whereHas('existencia.varianteSku.producto', fn ($q) => $q->whereNull('deleted_at')->where('activo', true));
         if ($sucursalId !== null) {
             $piezasQuery->whereHas('existencia', function ($q) use ($sucursalId): void {
                 $q->where('sucursal_id', $sucursalId);
@@ -279,6 +288,7 @@ class ReporteInventarioService
     public function obtenerFilasExportacion(?int $sucursalId = null, ?string $tipoCatalogo = null): Collection
     {
         $query = Existencia::query()
+            ->whereHas('varianteSku.producto', fn ($q) => $q->whereNull('deleted_at')->where('activo', true))
             ->with([
                 'varianteSku.producto.catalogo',
                 'sucursal',
@@ -311,7 +321,7 @@ class ReporteInventarioService
             $categoriaEtiqueta = $catalogo?->nombre
                 ?? ($mapaTipos[$tipo] ?? ucfirst($tipo));
 
-            $precioUnitario = round((float) ($variante?->precio ?? $producto?->precio ?? 0.0), 2);
+            $precioUnitario = round((float) ($producto?->precio ?? $variante?->precio ?? 0.0), 2);
             $cantidad = (int) $existencia->cantidad;
             $stockMinimo = (int) $existencia->stock_minimo;
             $valorTotal = round($cantidad * $precioUnitario, 2);

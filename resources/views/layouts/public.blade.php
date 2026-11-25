@@ -9,18 +9,19 @@
     <!-- Aislamiento de Sesión por Pestaña (sessionStorage) e Interceptor de Reserva con Login -->
     <x-auth.tab-session-isolation />
 
-    <!-- Script de Inicialización Inmediata de Tema (Zero-FOUC Dark Mode) -->
+    <!-- Script de Inicialización Inmediata de Tema por Pestaña (Zero-FOUC · Default Modo Claro) -->
     <script>
         (function() {
             try {
-                const savedTheme = localStorage.getItem('theme');
-                const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-                if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                const savedTheme = sessionStorage.getItem('archivum_theme');
+                if (savedTheme === 'dark') {
                     document.documentElement.classList.add('dark');
                     document.documentElement.classList.remove('light');
+                    document.documentElement.setAttribute('data-theme', 'dark');
                 } else {
                     document.documentElement.classList.remove('dark');
                     document.documentElement.classList.add('light');
+                    document.documentElement.setAttribute('data-theme', 'light');
                 }
             } catch (e) {}
         })();
@@ -97,51 +98,6 @@
             if (openBtn) openBtn.addEventListener('click', () => toggleDrawer(true));
             if (closeBtn) closeBtn.addEventListener('click', () => toggleDrawer(false));
             if (overlay) overlay.addEventListener('click', () => toggleDrawer(false));
-
-            // Conmutador de Tema Claro / Oscuro
-            const themeBtn = document.getElementById('theme-toggle-btn');
-
-            function syncPublicThemeUI(isDark) {
-                if (themeBtn) {
-                    const icon = themeBtn.querySelector('.material-symbols-outlined');
-                    if (icon) {
-                        icon.textContent = isDark ? 'dark_mode' : 'light_mode';
-                    }
-                    themeBtn.setAttribute('aria-pressed', isDark ? 'true' : 'false');
-                    themeBtn.setAttribute('title', isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro');
-                }
-            }
-
-            if (themeBtn) {
-                themeBtn.addEventListener('click', () => {
-                    const isDark = document.documentElement.classList.toggle('dark');
-                    if (isDark) {
-                        document.documentElement.classList.remove('light');
-                        localStorage.setItem('theme', 'dark');
-                    } else {
-                        document.documentElement.classList.add('light');
-                        localStorage.setItem('theme', 'light');
-                    }
-                    syncPublicThemeUI(isDark);
-                });
-            }
-
-            syncPublicThemeUI(document.documentElement.classList.contains('dark'));
-
-            // Sincronización en tiempo real al cambiar entre pestañas del navegador
-            window.addEventListener('storage', (event) => {
-                if (event.key === 'theme') {
-                    const isDark = event.newValue === 'dark';
-                    if (isDark) {
-                        document.documentElement.classList.add('dark');
-                        document.documentElement.classList.remove('light');
-                    } else {
-                        document.documentElement.classList.remove('dark');
-                        document.documentElement.classList.add('light');
-                    }
-                    syncPublicThemeUI(isDark);
-                }
-            });
         });
     </script>
 

@@ -5,18 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <!-- Script de Inicialización Inmediata de Tema (Zero-FOUC Dark Mode) -->
+    <!-- Script de Inicialización Inmediata de Tema por Pestaña (Zero-FOUC · Default Modo Claro) -->
     <script>
         (function() {
             try {
-                const savedTheme = localStorage.getItem('theme');
-                const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-                if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                const savedTheme = sessionStorage.getItem('archivum_theme');
+                if (savedTheme === 'dark') {
                     document.documentElement.classList.add('dark');
                     document.documentElement.classList.remove('light');
+                    document.documentElement.setAttribute('data-theme', 'dark');
                 } else {
                     document.documentElement.classList.remove('dark');
                     document.documentElement.classList.add('light');
+                    document.documentElement.setAttribute('data-theme', 'light');
                 }
             } catch (e) {}
         })();
