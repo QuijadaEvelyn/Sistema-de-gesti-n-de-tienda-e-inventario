@@ -103,17 +103,36 @@
                     class="bookshelf-stage relative w-full max-w-full min-h-[290px] sm:min-h-[430px] flex items-center justify-center select-none overflow-hidden py-4 px-1"
                     style="perspective: 1400px; min-height: 290px;"
                 >
-                    <div id="bookshelf-row" class="flex items-center justify-center gap-1.5 sm:gap-3 transition-all duration-300">
+                    <div id="bookshelf-row" class="flex items-end justify-center gap-1 sm:gap-1.5 transition-all duration-300">
+                        @php
+                            $espesoresXs = [40, 44, 38, 46, 40, 42, 38, 44];
+                            $espesoresSm = [44, 48, 42, 50, 42, 46, 42, 46];
+                            $espesoresLg = [50, 56, 44, 58, 46, 54, 42, 52];
+                            $alturasRatio = [0.97, 1.00, 0.90, 0.95, 0.88, 0.99, 0.92, 0.96];
+                        @endphp
                         @foreach ($librosEstante as $idx => $libro)
                             @php
                                 $esInicial = $idx === 0;
                                 $paleta = $libro['paleta'];
+                                $wXs = $espesoresXs[$idx % count($espesoresXs)];
+                                $wSm = $espesoresSm[$idx % count($espesoresSm)];
+                                $wLg = $espesoresLg[$idx % count($espesoresLg)];
+                                $hRatio = $alturasRatio[$idx % count($alturasRatio)];
+                                $bandPrimary = $paleta['band_hex'] ?? '#d4af37';
+                                $bandSecondary = $paleta['band_secondary_hex'] ?? 'rgba(212, 175, 55, 0.45)';
+                                $tejueloBg = $paleta['tejuelo_bg'] ?? 'rgba(15, 10, 20, 0.58)';
+                                $tejueloText = $paleta['tejuelo_text'] ?? '#f5e1a4';
+                                $bgTop = $paleta['bg_top'] ?? ($paleta['bg_hex'] ?? '#4a0e17');
+                                $bgMid = $paleta['bg_hex'] ?? '#4a0e17';
+                                $bgBottom = $paleta['bg_bottom'] ?? ($paleta['bg_hex'] ?? '#2d080e');
+                                $borderHex = $paleta['border_hex'] ?? 'rgba(212, 175, 55, 0.45)';
                             @endphp
 
                             <!-- Ranura de Libro 3D -->
                             <div
                                 class="shelf-book-slot group relative cursor-pointer select-none transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] {{ $esInicial ? 'active is-expanded' : '' }}"
                                 data-book-index="{{ $idx }}"
+                                style="--spine-w-xs: {{ $wXs }}px; --spine-w-sm: {{ $wSm }}px; --spine-w-lg: {{ $wLg }}px; --book-h-ratio: {{ $hRatio }};"
                                 role="button"
                                 tabindex="0"
                                 aria-label="Seleccionar libro {{ $libro['nombre'] }}"
@@ -122,56 +141,66 @@
                                 <div class="shelf-book-3d transform-gpu transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]">
                                     
                                     <!-- ==========================================
-                                         1. VISTA EN REPOSO: LOMO 3D (SPINE)
+                                         1. VISTA EN REPOSO: LOMO 3D FRONTAL (SPINE)
                                          ========================================== -->
                                     <div
-                                        class="shelf-book-spine absolute inset-y-0 left-0 w-10 sm:w-14 rounded-l-md overflow-hidden bg-gradient-to-b {{ $paleta['bg'] }} border-l-2 {{ $paleta['border'] }} shadow-2xl flex flex-col justify-between py-3 px-1 transition-opacity duration-300"
+                                        class="shelf-book-spine absolute inset-0 w-full h-full rounded-[3px] overflow-hidden shadow-[0_8px_18px_rgba(0,0,0,0.45)] flex flex-col justify-between py-2.5 px-1"
+                                        style="background: linear-gradient(180deg, {{ $bgTop }} 0%, {{ $bgMid }} 52%, {{ $bgBottom }} 100%); border-left: 1px solid {{ $borderHex }}; border-right: 1px solid rgba(0,0,0,0.55);"
                                         title="{{ $libro['nombre'] }} · {{ $libro['autor'] }}"
                                     >
-                                        <!-- Costilla superior / Nervio gofrado -->
-                                        <div class="w-full space-y-1">
-                                            <div class="h-0.5 w-full bg-purple-400/40"></div>
-                                            <div class="h-0.5 w-full bg-purple-400/20"></div>
-                                            <div class="text-center pt-1">
-                                                <span class="text-[9px] font-mono {{ $paleta['text_gold'] }} font-bold tracking-widest block opacity-90">
+                                        <!-- Costilla superior: Bandas doradas/plateadas y tejuelo del año -->
+                                        <div class="relative z-10 w-full space-y-1">
+                                            <div class="h-[2px] w-full rounded-full opacity-90" style="background-color: {{ $bandPrimary }};"></div>
+                                            <div class="h-px w-full opacity-75" style="background-color: {{ $bandSecondary }};"></div>
+                                            <div class="mx-auto px-0.5 py-0.5 rounded-[2px] border text-center" style="background-color: {{ $tejueloBg }}; border-color: {{ $bandSecondary }};">
+                                                <span class="text-[8px] sm:text-[9px] font-mono font-bold tracking-wider block leading-none" style="color: {{ $tejueloText }};">
                                                     {{ $libro['anio'] }}
                                                 </span>
                                             </div>
+                                            <div class="h-px w-4/5 mx-auto opacity-60" style="background-color: {{ $bandSecondary }};"></div>
                                         </div>
 
-                                        <!-- Título Vertical del Lomo (writing-mode vertical) -->
-                                        <div class="flex-1 flex items-center justify-center py-2 overflow-hidden">
+                                        <!-- Título Vertical del Lomo (centrado, legible y sin cortes) -->
+                                        <div class="relative z-10 flex-1 min-h-0 w-full flex items-center justify-center py-2 px-0.5 overflow-hidden">
                                             <span
-                                                class="font-title-editorial text-[10px] sm:text-[12px] font-bold text-purple-100 tracking-wider whitespace-nowrap drop-shadow-sm select-none"
-                                                style="writing-mode: vertical-rl; transform: rotate(180deg);"
+                                                class="font-title-editorial text-[9.5px] sm:text-[11px] font-bold tracking-wide text-center leading-[1.15] drop-shadow-[0_1px_2px_rgba(0,0,0,0.85)] select-none"
+                                                style="writing-mode: vertical-rl; transform: rotate(180deg); color: #f8f3e6; max-height: 100%; overflow-wrap: break-word;"
                                             >
-                                                {{ Str::limit($libro['nombre'], 28) }}
+                                                {{ Str::limit($libro['nombre'], 46) }}
                                             </span>
                                         </div>
 
-                                        <!-- Costilla inferior / Sello de archivo -->
-                                        <div class="w-full space-y-1 pt-1">
+                                        <!-- Costilla inferior: Sello editorial, autor/editorial y bandas -->
+                                        <div class="relative z-10 w-full space-y-1 pt-1">
+                                            <div class="h-px w-4/5 mx-auto opacity-60" style="background-color: {{ $bandSecondary }};"></div>
                                             <div class="flex items-center justify-center">
-                                                <span class="material-symbols-outlined text-[12px] sm:text-[13px] {{ $paleta['text_gold'] }}">
+                                                <span class="material-symbols-outlined text-[11px] sm:text-[12px]" style="color: {{ $bandPrimary }};">
                                                     {{ $libro['genero_icono'] }}
                                                 </span>
                                             </div>
-                                            <div class="h-0.5 w-full bg-purple-400/20"></div>
-                                            <div class="h-0.5 w-full bg-purple-400/40"></div>
-                                            <p class="text-[8px] font-label-code text-center text-purple-200/70 uppercase tracking-tighter truncate">
-                                                {{ Str::limit($libro['autor'], 10) }}
+                                            <p
+                                                class="text-[7px] sm:text-[8px] font-label-code font-semibold text-center uppercase tracking-tight leading-[1.1] line-clamp-2 px-0.5"
+                                                style="color: {{ $tejueloText }};"
+                                            >
+                                                {{ $libro['autor'] ?: $libro['editorial'] }}
                                             </p>
+                                            <div class="h-px w-full opacity-75" style="background-color: {{ $bandSecondary }};"></div>
+                                            <div class="h-[2px] w-full rounded-full opacity-90" style="background-color: {{ $bandPrimary }};"></div>
                                         </div>
 
-                                        <!-- Efecto de relieve en los cantos del lomo -->
-                                        <div class="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/30"></div>
+                                        <!-- Relieve cilíndrico realista del lomo -->
+                                        <div
+                                            class="pointer-events-none absolute inset-0"
+                                            style="background: linear-gradient(90deg, rgba(0,0,0,0.42) 0%, rgba(255,255,255,0.14) 16%, rgba(255,255,255,0.03) 48%, rgba(0,0,0,0.2) 86%, rgba(0,0,0,0.46) 100%);"
+                                        ></div>
                                     </div>
 
                                     <!-- ==========================================
                                          2. VISTA ACTIVA: PORTADA FRONTAL 3D (COVER)
                                          ========================================== -->
                                     <div
-                                        class="shelf-book-cover absolute inset-0 w-[170px] sm:w-[240px] h-[240px] sm:h-[340px] rounded-r-xl overflow-hidden shadow-2xl transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] bg-gradient-to-b {{ $paleta['bg'] }} border-2 {{ $paleta['border'] }}"
+                                        class="shelf-book-cover absolute inset-0 w-[170px] sm:w-[240px] h-[240px] sm:h-[340px] rounded-r-xl overflow-hidden shadow-2xl transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] border-2 {{ $paleta['border'] }}"
+                                        style="background: linear-gradient(180deg, {{ $bgTop }} 0%, {{ $bgMid }} 52%, {{ $bgBottom }} 100%);"
                                     >
                                         @if (! empty($libro['imagen']))
                                             <!-- Imagen Real de la Portada con Fallback Integrado -->
@@ -185,7 +214,10 @@
                                         @endif
 
                                         <!-- Carátula Tipográfica Curatorial de Archivo (Usada como fallback o diseño editorial de lujo) -->
-                                        <div class="shelf-book-typographic-cover {{ ! empty($libro['imagen']) ? 'hidden' : '' }} w-full h-full p-4 sm:p-5 flex flex-col justify-between relative bg-gradient-to-b {{ $paleta['bg'] }}">
+                                        <div
+                                            class="shelf-book-typographic-cover {{ ! empty($libro['imagen']) ? 'hidden' : '' }} w-full h-full p-4 sm:p-5 flex flex-col justify-between relative"
+                                            style="background: linear-gradient(180deg, {{ $bgTop }} 0%, {{ $bgMid }} 52%, {{ $bgBottom }} 100%);"
+                                        >
                                             <!-- Marco Ornamental de Filigrana Púrpura y Plata -->
                                             <div class="pointer-events-none absolute inset-2.5 rounded-lg border-2 border-purple-400/40 ring-1 ring-purple-400/20"></div>
                                             <div class="pointer-events-none absolute inset-3.5 rounded border border-purple-400/25"></div>
@@ -239,8 +271,8 @@
                                     <!-- ==========================================
                                          3. DETALLES DE VOLUMEN 3D: CANTOS DE HOJAS
                                          ========================================== -->
-                                    <div class="shelf-book-top-pages absolute -top-3 left-0 right-0 h-3 bg-gradient-to-r from-stone-200 via-stone-100 to-stone-200 border-t border-purple-300/40 opacity-80"></div>
-                                    <div class="shelf-book-side-pages absolute top-0 bottom-0 -right-3 w-3 bg-gradient-to-b from-stone-200 via-stone-100 to-stone-200 border-r border-purple-300/40 opacity-80"></div>
+                                    <div class="shelf-book-top-pages absolute -top-3 left-0 right-0 h-3 bg-gradient-to-r from-stone-200 via-stone-100 to-stone-200 border-t border-purple-300/40"></div>
+                                    <div class="shelf-book-side-pages absolute top-0 bottom-0 -right-3 w-3 bg-gradient-to-b from-stone-200 via-stone-100 to-stone-200 border-r border-purple-300/40"></div>
                                 </div>
 
                                 <!-- Etiqueta Curatorial Flotante al Pasar el Cursor -->
@@ -553,8 +585,8 @@
 
         /* Ranura de Libro 3D */
         .shelf-book-slot {
-            width: 36px;
-            height: 240px;
+            width: var(--spine-w-xs, 42px);
+            height: calc(240px * var(--book-h-ratio, 1));
             transform-style: preserve-3d;
             perspective: 1000px;
             flex-shrink: 0;
@@ -562,47 +594,50 @@
 
         @media (min-width: 400px) {
             .shelf-book-slot {
-                width: 42px;
-                height: 260px;
+                width: var(--spine-w-sm, 46px);
+                height: calc(260px * var(--book-h-ratio, 1));
             }
         }
 
         @media (min-width: 640px) {
             .shelf-book-slot {
-                width: 58px;
-                height: 350px;
+                width: var(--spine-w-lg, 52px);
+                height: calc(350px * var(--book-h-ratio, 1));
             }
         }
 
         /* Cuando la ranura está activa o expandida */
         .shelf-book-slot.is-expanded {
             width: 170px;
+            height: 240px;
             z-index: 25;
         }
 
         @media (min-width: 400px) {
             .shelf-book-slot.is-expanded {
                 width: 185px;
+                height: 260px;
             }
         }
 
         @media (min-width: 640px) {
             .shelf-book-slot.is-expanded {
                 width: 255px;
+                height: 350px;
             }
         }
 
-        /* Transformación 3D del cuerpo del libro */
+        /* Transformación 3D del cuerpo del libro (vista frontal de lomo en reposo) */
         .shelf-book-3d {
             width: 100%;
             height: 100%;
             position: relative;
             transform-style: preserve-3d;
             transform-origin: left center;
-            transform: rotateY(-68deg) translateZ(0);
+            transform: rotateY(0deg) translateZ(0);
         }
 
-        /* Estado Activo: Se orienta frontalmente a 0deg y se eleva */
+        /* Estado Activo: Se orienta frontalmente y se eleva hacia adelante */
         .shelf-book-slot.is-expanded .shelf-book-3d {
             transform: rotateY(0deg) translateZ(50px) scale(1.03);
         }
@@ -611,13 +646,14 @@
         .shelf-book-spine {
             backface-visibility: hidden;
             transform-origin: left center;
-            transform: translateZ(0);
-            transition: opacity 0.4s ease, transform 0.4s ease;
+            transform: rotateY(0deg) translateZ(0);
+            transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1), transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
-        /* Cuando está expandido, el lomo se pliega suavemente como borde izquierdo */
+        /* Cuando está expandido, el lomo gira suavemente hacia la izquierda */
         .shelf-book-slot.is-expanded .shelf-book-spine {
             opacity: 0;
+            transform: rotateY(-88deg) translateZ(0);
             pointer-events: none;
         }
 
@@ -626,25 +662,38 @@
             backface-visibility: hidden;
             transform-origin: left center;
             opacity: 0;
+            transform: rotateY(88deg) translateZ(0);
             pointer-events: none;
-            transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1), transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1), transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
-        /* Cuando está expandido, la portada frontal resplandece en toda su plenitud */
+        /* Cuando está expandido, la portada frontal gira hacia el frente en toda su plenitud */
         .shelf-book-slot.is-expanded .shelf-book-cover {
             opacity: 1;
+            transform: rotateY(0deg) translateZ(0);
             pointer-events: auto;
         }
 
-        /* Cantos de Páginas (Top and Side) */
+        /* Cantos de Páginas (ocultos en reposo, visibles solo al abrir el libro) */
         .shelf-book-top-pages {
             transform-origin: top;
             transform: rotateX(90deg) translateZ(0);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
         }
 
         .shelf-book-side-pages {
             transform-origin: right;
             transform: rotateY(90deg) translateZ(0);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        .shelf-book-slot.is-expanded .shelf-book-top-pages,
+        .shelf-book-slot.is-expanded .shelf-book-side-pages {
+            opacity: 0.85;
         }
 
         /* Ocultar barra de scroll en navegadores WebKit y Firefox */

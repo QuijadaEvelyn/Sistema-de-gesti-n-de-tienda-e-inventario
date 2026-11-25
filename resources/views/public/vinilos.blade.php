@@ -338,6 +338,31 @@
                             </button>
                         </div>
 
+                        <!-- Indicador Discreto de Vista Previa (30s) -->
+                        <div
+                            id="disc-preview-bar"
+                            class="w-full max-w-md bg-white/85 dark:bg-white/5 backdrop-blur-md border border-purple-200/80 dark:border-white/10 rounded-xl px-3.5 py-2 shadow-xs space-y-1.5"
+                            aria-live="polite"
+                        >
+                            <div class="flex items-center justify-between gap-2 text-[11px]">
+                                <div class="flex items-center gap-1.5 min-w-0">
+                                    <span id="disc-preview-icon" class="material-symbols-outlined text-[15px] text-purple-600 dark:text-amber-300 shrink-0">music_note</span>
+                                    <span id="disc-preview-track" class="font-medium text-slate-800 dark:text-purple-100 truncate">
+                                        Presiona Play para escuchar vista previa (30s)
+                                    </span>
+                                </div>
+                                <span id="disc-preview-time" class="font-mono text-[10px] font-bold text-purple-700 dark:text-purple-300 shrink-0">
+                                    0:00 / 0:30
+                                </span>
+                            </div>
+                            <div class="w-full h-1.5 rounded-full bg-purple-200/70 dark:bg-white/10 overflow-hidden">
+                                <div
+                                    id="disc-preview-progress"
+                                    class="h-full w-0 rounded-full bg-purple-600 dark:bg-amber-400 transition-[width] duration-150 ease-linear"
+                                ></div>
+                            </div>
+                        </div>
+
                         <!-- Selector Rápido de Discos en la Galería -->
                         <div class="flex flex-wrap items-center justify-center gap-2">
                             @foreach ($discosShowcase as $idx => $disco)
@@ -561,12 +586,20 @@
         @push('scripts')
             <script>
                 (function () {
+                    let showcaseInitialized = false;
+
                     function setupDiscShowcase() {
+                        if (showcaseInitialized) {
+                            return;
+                        }
+                        showcaseInitialized = true;
+
                         const discos = @json($discosShowcase);
                         if (!Array.isArray(discos) || discos.length === 0) {
                             return;
                         }
 
+                        const showcaseSection = document.getElementById('disc-showcase-section');
                         const stage = document.getElementById('disc-showcase-stage');
                         const slots = Array.from(document.querySelectorAll('.disc-3d-slot'));
                         const pills = Array.from(document.querySelectorAll('.disc-selector-pill'));
@@ -579,6 +612,11 @@
                     const playPauseIcon = document.getElementById('disc-play-pause-icon');
                     const playPauseText = document.getElementById('disc-play-pause-text');
                     const replayBtn = document.getElementById('disc-replay-btn');
+
+                    const previewIcon = document.getElementById('disc-preview-icon');
+                    const previewTrack = document.getElementById('disc-preview-track');
+                    const previewTime = document.getElementById('disc-preview-time');
+                    const previewProgress = document.getElementById('disc-preview-progress');
 
                     const ambientGlow = document.getElementById('showcase-ambient-glow');
                     const statusLabel = document.getElementById('showcase-status-label');
@@ -601,8 +639,285 @@
                     const reserveIcon = document.getElementById('showcase-reserve-icon');
 
                     let activeIndex = 0;
-                    let isPaused = false;
+                    let isPaused = true;
                     let isFlipped = false;
+
+                    // =========================================================================
+                    // REPRODUCTOR DE VISTA PREVIA DE 30s (INDEPENDIENTE DEL SONIDO AMBIENTAL)
+                    // =========================================================================
+                    const MAX_PREVIEW_SECONDS = 30;
+                    const TARGET_VOLUME = 0.45;
+                    const previewAudio = new Audio();
+                    previewAudio.preload = 'none';
+
+                    const previewCache = new Map();
+                    let fadeInterval = null;
+                    let fetchSerial = 0;
+                    let vinylFallbackTimer = null;
+
+                    function formatSeconds(sec) {
+                        const clamped = Math.max(0, Math.min(MAX_PREVIEW_SECONDS, Math.floor(sec || 0)));
+                        const mins = Math.floor(clamped / 60);
+                        const rem = String(clamped % 60).padStart(2, '0');
+                        return mins + ':' + rem;
+                    }
+
+                    function updatePreviewUI(trackLabel, currentSec, hasError) {
+                        if (previewTrack && typeof trackLabel === 'string') {
+                            previewTrack.textContent = trackLabel;
+                        }
+                        if (previewTime) {
+                            previewTime.textContent = formatSeconds(currentSec) + ' / 0:30';
+                        }
+                        if (previewProgress) {
+                            const pct = Math.max(0, Math.min(100, ((currentSec || 0) / MAX_PREVIEW_SECONDS) * 100));
+                            previewProgress.style.width = pct.toFixed(1) + '%';
+                        }
+                        if (previewIcon) {
+                            previewIcon.textContent = hasError ? 'album' : (isPaused ? 'music_note' : 'graphic_eq');
+                        }
+                    }
+
+                    function clearFadeIn() {
+                        if (fadeInterval) {
+                            clearInterval(fadeInterval);
+                            fadeInterval = null;
+                        }
+                    }
+
+                    function clearVinylFallbackTimer() {
+                        if (vinylFallbackTimer) {
+                            clearInterval(vinylFallbackTimer);
+                            vinylFallbackTimer = null;
+                        }
+                    }
+
+                    function playSubtleVinylNeedleDrop() {
+                        try {
+                            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                            if (!AudioCtx) return;
+                            const ctx = new AudioCtx();
+                            const bufferSize = Math.floor(ctx.sampleRate * 0.25);
+                            const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+                            const data = buffer.getChannelData(0);
+                            for (let i = 0; i < bufferSize; i++) {
+                                const decay = 1 - i / bufferSize;
+                                data[i] = (Math.random() * 2 - 1) * 0.035 * decay;
+                            }
+                            const source = ctx.createBufferSource();
+                            source.buffer = buffer;
+
+                            const filter = ctx.createBiquadFilter();
+                            filter.type = 'bandpass';
+                            filter.frequency.value = 1100;
+
+                            source.connect(filter);
+                            filter.connect(ctx.destination);
+                            source.start();
+                            source.onended = function () {
+                                ctx.close().catch(function () {});
+                            };
+                        } catch (_) {
+                            // Ignorar si Web Audio no está disponible
+                        }
+                    }
+
+                    function stopPreviewAudio(resetTime) {
+                        clearFadeIn();
+                        clearVinylFallbackTimer();
+                        previewAudio.pause();
+                        if (resetTime) {
+                            try {
+                                previewAudio.currentTime = 0;
+                            } catch (_) {}
+                        }
+                    }
+
+                    function startAudioFadeIn() {
+                        clearFadeIn();
+                        previewAudio.volume = 0.02;
+                        const step = 0.04;
+                        fadeInterval = setInterval(function () {
+                            if (previewAudio.paused) {
+                                clearFadeIn();
+                                return;
+                            }
+                            const nextVol = Math.min(TARGET_VOLUME, previewAudio.volume + step);
+                            previewAudio.volume = nextVol;
+                            if (nextVol >= TARGET_VOLUME) {
+                                clearFadeIn();
+                            }
+                        }, 45);
+                    }
+
+                    function cleanSearchQuery(text) {
+                        return String(text || '')
+                            .replace(/\([^)]*\)/g, ' ')
+                            .replace(/\[[^\]]*\]/g, ' ')
+                            .replace(/\s+/g, ' ')
+                            .trim();
+                    }
+
+                    async function fetchItunesPreviewForDisc(disco) {
+                        const cacheKey = String(disco.producto_id || disco.sku || disco.nombre);
+                        if (previewCache.has(cacheKey)) {
+                            return previewCache.get(cacheKey);
+                        }
+
+                        const artista = cleanSearchQuery(disco.artista);
+                        const titulo = cleanSearchQuery(disco.nombre);
+                        const queries = [
+                            artista + ' ' + titulo,
+                            titulo,
+                        ].filter(Boolean);
+
+                        let tracks = [];
+                        for (let q = 0; q < queries.length; q++) {
+                            try {
+                                const url = 'https://itunes.apple.com/search?term=' + encodeURIComponent(queries[q]) + '&entity=song&limit=2';
+                                const resp = await fetch(url);
+                                if (!resp.ok) continue;
+                                const data = await resp.json();
+                                if (data && Array.isArray(data.results)) {
+                                    const validos = data.results.filter(function (item) {
+                                        return Boolean(item && item.previewUrl);
+                                    });
+                                    if (validos.length > 0) {
+                                        tracks = validos;
+                                        break;
+                                    }
+                                }
+                            } catch (_) {
+                                // Intentar siguiente consulta o usar respaldo
+                            }
+                        }
+
+                        const entry = {
+                            sideA: tracks[0] ? {
+                                previewUrl: tracks[0].previewUrl,
+                                trackName: tracks[0].trackName || disco.nombre,
+                            } : null,
+                            sideB: tracks[1] ? {
+                                previewUrl: tracks[1].previewUrl,
+                                trackName: tracks[1].trackName || (disco.nombre + ' (Lado B)'),
+                            } : (tracks[0] ? {
+                                previewUrl: tracks[0].previewUrl,
+                                trackName: tracks[0].trackName || disco.nombre,
+                            } : null),
+                        };
+
+                        previewCache.set(cacheKey, entry);
+                        return entry;
+                    }
+
+                    async function loadAndSyncPreview(shouldAutoPlay, forceRestart) {
+                        const disco = discos[activeIndex];
+                        if (!disco) return;
+
+                        const currentSerial = ++fetchSerial;
+                        const ladoEtiqueta = isFlipped ? 'Lado B' : 'Lado A';
+
+                        if (forceRestart) {
+                            stopPreviewAudio(true);
+                        }
+
+                        updatePreviewUI('Cargando vista previa · ' + ladoEtiqueta + '...', forceRestart ? 0 : previewAudio.currentTime, false);
+
+                        const entry = await fetchItunesPreviewForDisc(disco);
+                        if (currentSerial !== fetchSerial) {
+                            return;
+                        }
+
+                        const trackData = isFlipped ? entry.sideB : entry.sideA;
+
+                        if (!trackData || !trackData.previewUrl) {
+                            stopPreviewAudio(true);
+                            updatePreviewUI('Vista previa no disponible para esta edición', 0, true);
+                            if (shouldAutoPlay && !isPaused) {
+                                playSubtleVinylNeedleDrop();
+                                let elapsed = 0;
+                                clearVinylFallbackTimer();
+                                vinylFallbackTimer = setInterval(function () {
+                                    if (isPaused) {
+                                        clearVinylFallbackTimer();
+                                        return;
+                                    }
+                                    elapsed += 0.25;
+                                    updatePreviewUI('Vista previa no disponible para esta edición', elapsed, true);
+                                    if (elapsed >= MAX_PREVIEW_SECONDS) {
+                                        clearVinylFallbackTimer();
+                                        isPaused = true;
+                                        updateStatusBanner();
+                                        renderStagePositions();
+                                        updatePreviewUI('Vista previa no disponible para esta edición', 0, true);
+                                    }
+                                }, 250);
+                            }
+                            return;
+                        }
+
+                        const isSameSrc = previewAudio.src === trackData.previewUrl;
+                        if (!isSameSrc) {
+                            stopPreviewAudio(true);
+                            previewAudio.src = trackData.previewUrl;
+                        } else if (forceRestart) {
+                            try {
+                                previewAudio.currentTime = 0;
+                            } catch (_) {}
+                        }
+
+                        const displayLabel = ladoEtiqueta + ' · ' + trackData.trackName;
+                        updatePreviewUI(displayLabel, previewAudio.currentTime || 0, false);
+
+                        if (shouldAutoPlay && !isPaused) {
+                            try {
+                                startAudioFadeIn();
+                                await previewAudio.play();
+                                updatePreviewUI(displayLabel, previewAudio.currentTime || 0, false);
+                            } catch (_) {
+                                isPaused = true;
+                                clearFadeIn();
+                                updateStatusBanner();
+                                renderStagePositions();
+                                updatePreviewUI(displayLabel, 0, false);
+                            }
+                        }
+                    }
+
+                    previewAudio.addEventListener('timeupdate', function () {
+                        const disco = discos[activeIndex];
+                        const cacheKey = disco ? String(disco.producto_id || disco.sku || disco.nombre) : '';
+                        const entry = cacheKey ? previewCache.get(cacheKey) : null;
+                        const trackData = entry ? (isFlipped ? entry.sideB : entry.sideA) : null;
+                        const ladoEtiqueta = isFlipped ? 'Lado B' : 'Lado A';
+                        const label = trackData ? (ladoEtiqueta + ' · ' + trackData.trackName) : 'Vista previa (30s)';
+
+                        if (previewAudio.currentTime >= MAX_PREVIEW_SECONDS) {
+                            stopPreviewAudio(true);
+                            isPaused = true;
+                            updateStatusBanner();
+                            renderStagePositions();
+                            updatePreviewUI(label, 0, false);
+                            return;
+                        }
+
+                        updatePreviewUI(label, previewAudio.currentTime, false);
+                    });
+
+                    previewAudio.addEventListener('ended', function () {
+                        const disco = discos[activeIndex];
+                        const cacheKey = disco ? String(disco.producto_id || disco.sku || disco.nombre) : '';
+                        const entry = cacheKey ? previewCache.get(cacheKey) : null;
+                        const trackData = entry ? (isFlipped ? entry.sideB : entry.sideA) : null;
+                        const ladoEtiqueta = isFlipped ? 'Lado B' : 'Lado A';
+                        const label = trackData ? (ladoEtiqueta + ' · ' + trackData.trackName) : 'Vista previa (30s)';
+
+                        stopPreviewAudio(true);
+                        isPaused = true;
+                        updateStatusBanner();
+                        renderStagePositions();
+                        updatePreviewUI(label, 0, false);
+                    });
 
                     function updateStatusBanner() {
                         const ladoTexto = isFlipped ? 'LADO B (MATRIZ)' : 'LADO A';
@@ -760,13 +1075,17 @@
                         }
                     }
 
-                    function selectDisc(newIndex) {
+                    function selectDisc(newIndex, shouldAutoPlay) {
+                        const autoPlay = typeof shouldAutoPlay === 'boolean' ? shouldAutoPlay : true;
                         const total = discos.length;
+                        stopPreviewAudio(true);
                         activeIndex = ((newIndex % total) + total) % total;
                         isFlipped = false;
+                        isPaused = !autoPlay;
                         updateStatusBanner();
                         renderStagePositions();
                         updateCuratorialCard();
+                        loadAndSyncPreview(autoPlay, true);
                     }
 
                     // Eventos de clic en cada disco o píldora
@@ -776,8 +1095,9 @@
                                 isFlipped = !isFlipped;
                                 updateStatusBanner();
                                 renderStagePositions();
+                                loadAndSyncPreview(!isPaused, true);
                             } else {
-                                selectDisc(idx);
+                                selectDisc(idx, true);
                             }
                         });
                     });
@@ -785,20 +1105,20 @@
                     pills.forEach(function (pill) {
                         pill.addEventListener('click', function () {
                             const targetIdx = parseInt(pill.dataset.selectDisc || '0', 10);
-                            selectDisc(targetIdx);
+                            selectDisc(targetIdx, true);
                         });
                     });
 
                     // Controles Inferiores: Prev, Next, Flip, Pause/Play, Replay
                     if (prevBtn) {
                         prevBtn.addEventListener('click', function () {
-                            selectDisc(activeIndex - 1);
+                            selectDisc(activeIndex - 1, true);
                         });
                     }
 
                     if (nextBtn) {
                         nextBtn.addEventListener('click', function () {
-                            selectDisc(activeIndex + 1);
+                            selectDisc(activeIndex + 1, true);
                         });
                     }
 
@@ -807,6 +1127,7 @@
                             isFlipped = !isFlipped;
                             updateStatusBanner();
                             renderStagePositions();
+                            loadAndSyncPreview(!isPaused, true);
                         });
                     }
 
@@ -815,6 +1136,12 @@
                             isPaused = !isPaused;
                             updateStatusBanner();
                             renderStagePositions();
+                            if (isPaused) {
+                                stopPreviewAudio(false);
+                                updatePreviewUI(undefined, previewAudio.currentTime || 0, false);
+                            } else {
+                                loadAndSyncPreview(true, false);
+                            }
                         });
                     }
 
@@ -833,8 +1160,37 @@
                             }
                             updateStatusBanner();
                             renderStagePositions();
+                            loadAndSyncPreview(true, true);
                         });
                     }
+
+                    // Detener audio al salir de la sección, cambiar de pestaña o abandonar la página
+                    if (showcaseSection && 'IntersectionObserver' in window) {
+                        const sectionObserver = new IntersectionObserver(function (entries) {
+                            entries.forEach(function (entry) {
+                                if (!entry.isIntersecting && !isPaused) {
+                                    isPaused = true;
+                                    stopPreviewAudio(false);
+                                    updateStatusBanner();
+                                    renderStagePositions();
+                                }
+                            });
+                        }, { threshold: 0.05 });
+                        sectionObserver.observe(showcaseSection);
+                    }
+
+                    document.addEventListener('visibilitychange', function () {
+                        if (document.hidden && !isPaused) {
+                            isPaused = true;
+                            stopPreviewAudio(false);
+                            updateStatusBanner();
+                            renderStagePositions();
+                        }
+                    });
+
+                    window.addEventListener('pagehide', function () {
+                        stopPreviewAudio(true);
+                    });
 
                     // Perspectiva Tridimensional Interactiva al Pasar el Cursor (Tilt 3D en Ejes X/Y)
                     if (stage) {
@@ -870,10 +1226,11 @@
                         });
                     }
 
-                    // Inicializar posiciones 3D
+                    // Inicializar posiciones 3D y precargar metadatos del primer disco
                     updateStatusBanner();
                     renderStagePositions();
                     updateCuratorialCard();
+                    loadAndSyncPreview(false, true);
 
                     window.addEventListener('resize', renderStagePositions);
                 }
