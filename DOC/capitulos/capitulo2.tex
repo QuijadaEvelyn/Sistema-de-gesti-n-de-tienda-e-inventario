@@ -1,59 +1,34 @@
 \chapter{Marco Teórico}
+A continuación se explican los conceptos fundamentales del dominio y las tecnologías empleadas en el desarrollo de ARCHIVUM, vinculando cada elemento teórico con las decisiones técnicas implementadas en el sistema.
 
-\section{Arquitectura de Software y Patrón Modelo-Vista-Controlador (MVC)}
-En la ingeniería de software moderna, la separación de responsabilidades constituye un principio medular para garantizar la escalabilidad, mantenibilidad y modularidad de las aplicaciones web \cite{pressman2010, sommerville2011}. El patrón arquitectónico Modelo-Vista-Controlador (MVC), introducido originalmente por Trygve Reenskaug y consolidado en la arquitectura de aplicaciones empresariales por Martin Fowler \cite{fowler_patterns}, desacopla el sistema en tres capas interconectadas:
+\section{Desarrollo Web Moderno: HTML5, CSS3 y JavaScript}
+El desarrollo web moderno se basa en la separación clara entre la estructura del contenido, su presentación visual y el comportamiento interactivo en el navegador del usuario. HTML5 proporciona etiquetas semánticas que organizan la información de manera estructurada; CSS3 controla el diseño visual, la tipografía y la adaptación responsiva a distintos tamaños de pantalla; y JavaScript permite añadir interactividad dinámica sin recargar completamente cada página.
 
-\begin{itemize}
-    \item \textbf{Modelo (Model):} Representa la capa lógica del dominio del negocio y gobierna las reglas de acceso, validación y persistencia de datos. En el ecosistema Laravel, los modelos extienden la clase \texttt{Illuminate\textbackslash Database\textbackslash Eloquent\textbackslash Model}, implementando el patrón \textit{Active Record} \cite{laravel_doc}.
-    \item \textbf{Vista (View):} Constituye la capa de presentación que se encarga de estructurar y desplegar la información al usuario final. Se implementa mediante el motor de plantillas Blade, permitiendo la composición de interfaces limpias, reutilizables y con soporte de componentes jerárquicos.
-    \item \textbf{Controlador (Controller):} Actúa como el intermediario orquestador que intercepta las peticiones HTTP despachadas por el sistema de enrutamiento, invoca la lógica de los modelos correspondientes y retorna la respuesta adecuada (vistas renderizadas o respuestas JSON estructuradas).
-\end{itemize}
+En ARCHIVUM, estas tres tecnologías se combinan con el motor de plantillas Blade para construir tanto las vistas interactivas del portal público (como el estante 3D de libros, el reproductor visual de discos y los filtros dinámicos de búsqueda) como los paneles administrativos operativos utilizados por el personal de cada sucursal.
 
-\section{Entorno de Ejecución Backend: PHP 8.4 y Framework Laravel 11}
-El backend de la plataforma se cimenta sobre la versión \textbf{PHP 8.4}, la cual introduce mejoras significativas en el compilador JIT (Just-In-Time), soporte nativo de tipos estrictos, promoción de propiedades en constructores y tipado de retorno explícito \cite{php_manual}. Estas características incrementan la seguridad en tiempo de compilación/ejecución y reducen errores comunes de tipado.
+\section{Arquitectura Modelo-Vista-Controlador (MVC) con PHP 8.4 y Laravel 13}
+El patrón arquitectónico Modelo-Vista-Controlador (MVC) organiza el código fuente en tres capas independientes: el Modelo representa las entidades de datos y sus relaciones; la Vista se encarga de mostrar la interfaz gráfica al usuario; y el Controlador recibe las peticiones HTTP, coordina las acciones necesarias y devuelve una respuesta. Esta división facilita el mantenimiento, evita la duplicidad de código y permite que el sistema crezca de manera ordenada.
 
-Sobre este entorno opera el framework \textbf{Laravel 11.x}, que destaca por su robusto contenedor de inyección de dependencias, sistema de eventos, cola de tareas en segundo plano y una capa de abstracción de base de datos de alto nivel \cite{laravel_doc}. La arquitectura de rutas de Laravel permite definir filtros declarativos mediante \textit{Middleware}, asegurando la verificación de sesiones y roles antes de transferir el control a los controladores.
+El proyecto está programado en PHP 8.4 utilizando el framework Laravel 13. Para mantener los controladores limpios y reutilizables, se incorporó adicionalmente una capa de Servicios de dominio (como \texttt{VentaService}, \texttt{ReservaService}, \texttt{InventarioService} y \texttt{ReporteInventarioService}), donde reside la lógica transaccional del inventario híbrido, el cálculo de precios y la exportación de reportes.
 
-\section{Persistencia de Datos Relacional y Eloquent ORM}
-La gestión de inventario multisede y bienes coleccionables exige un motor de base de datos relacional que cumpla rigurosamente con las propiedades ACID (Atomicidad, Consistencia, Aislamiento y Durabilidad) \cite{sommerville2011}. Para tal fin se emplea \textbf{MariaDB}, utilizando el motor transaccional InnoDB \cite{mariadb_foundation}.
+\section{Bases de Datos Relacionales y Consistencia Transaccional (MariaDB 11.2)}
+Una base de datos relacional estructura la información en tablas vinculadas mediante llaves primarias y llaves foráneas, asegurando que no existan registros huérfanos ni inconsistencias entre entidades relacionadas. Asimismo, mediante el uso de transacciones atómicas, el motor garantiza que un conjunto de operaciones sobre múltiples tablas se complete en su totalidad o se revierta por completo en caso de error.
 
-\begin{figure}[htbp]
+ARCHIVUM utiliza MariaDB 11.2 para almacenar de forma normalizada el catálogo general (\texttt{productos} y \texttt{variantes\_sku}), sus categorías especializadas (\texttt{libros}, \texttt{discos} y \texttt{coleccionables}), el inventario por sucursal (\texttt{existencias}), los ejemplares individuales (\texttt{piezas\_unicas}) y el historial financiero (\texttt{pedidos} y \texttt{detalle\_pedidos}). Además, el uso de eliminación lógica mediante el campo \texttt{deleted\_at} permite dar de baja productos en el catálogo sin romper la integridad histórica de las ventas ya realizadas.
+
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.82\textwidth, height=8.5cm, keepaspectratio]{imagenes/inventario_unificado.png}
     \caption{Visualización y control unificado de inventario y existencias patrimoniales.}
     \label{fig:teoria_inventario_unificado}
 \end{figure}
 
-El mapeador objeto-relacional (ORM) Eloquent simplifica la interacción con la base de datos permitiendo definir relaciones complejas:
-\begin{itemize}
-    \item \textbf{Relaciones de Uno a Muchos (\texttt{hasMany} / \texttt{belongsTo}):} Aplicadas entre categorías y productos, así como entre sucursales y sus registros específicos de inventario.
-    \item \textbf{Relaciones de Muchos a Muchos (\texttt{belongsToMany}):} Utilizadas en pedidos y productos a través de tablas pivote con metadatos asociados (cantidad, precio unitario de venta y estado de entrega).
-    \item \textbf{Migraciones y Seeders:} Permiten versionar la estructura de la base de datos en código PHP reproducible y poblar registros semilla iniciales para pruebas controladas.
-\end{itemize}
+\section{Seguridad en Aplicaciones Web y Control de Acceso Basado en Roles (RBAC)}
+La seguridad en aplicaciones web comprende los mecanismos destinados a proteger la confidencialidad e integridad de la información frente a accesos no autorizados. El Control de Acceso Basado en Roles (RBAC) establece que los permisos de operación no se asignan directamente a personas individuales, sino a perfiles funcionales definidos dentro de la organización, aplicando el principio de mínimo privilegio.
 
-\section{Virtualización Ligera y Orquestación con Docker}
-El despliegue de soluciones web corporativas demanda independencia del sistema operativo anfitrión. \textbf{Docker} proporciona un mecanismo de virtualización a nivel de sistema operativo mediante contenedores Linux ligeros, compartiendo el kernel pero aislando por completo los procesos, librerías y dependencias de la aplicación \cite{docker_overview}.
+En el sistema desarrollado, todas las contraseñas se almacenan cifradas mediante el algoritmo Bcrypt, los formularios incorporan tokens de protección contra falsificación de peticiones (CSRF) y las rutas privadas se protegen con middlewares personalizados (\texttt{CheckRole} y \texttt{VerifyBranchAccess}) que validan en cada solicitud tanto el rol asignado (Administrador, Compras, Ventas, Almacén o Cliente) como la sucursal correspondiente.
 
-Mediante la herramienta de orquestación \textbf{Docker Compose}, el entorno de \say{Archivum} se organiza en una topología de tres servicios coordinados sobre una red privada virtual:
-\begin{enumerate}
-    \item \textbf{Servidor Web Nginx:} Procesa peticiones HTTP/HTTPS concurrentes, sirve archivos estáticos optimizados y actúa como proxy inverso hacia el backend \cite{nginx_admin}.
-    \item \textbf{Contenedor PHP-FPM:} Aloja el intérprete de PHP 8.4 y la aplicación Laravel, ejecutando el código fuente montado en volúmenes compartidos.
-    \item \textbf{Servidor MariaDB:} Provee almacenamiento persistente montado sobre un volumen Docker dedicado, protegiendo los datos ante reinicios de contenedor.
-\end{enumerate}
+\section{Control de Versiones con Git y Despliegue Contenerizado con Docker}
+El control de versiones distribuido mediante Git permite registrar de manera ordenada cada modificación realizada sobre el código fuente, facilitando el trabajo colaborativo y la recuperación de versiones estables. Por su parte, la contenerización con Docker empaqueta la aplicación y sus dependencias exactas en entornos aislados y portables, asegurando que el sistema funcione de manera idéntica en cualquier equipo.
 
-\section{Diseño Frontend, Reactividad y Visualización Analítica}
-Para garantizar una experiencia de usuario interactiva y fluida sin incurrir en la sobrecarga computacional de un entorno Single Page Application (SPA) monolítico, se adoptó un enfoque híbrido y ligero:
-\begin{itemize}
-    \item \textbf{Tailwind CSS:} Framework CSS orientado a utilidades que permite estructurar interfaces modernas con un sistema de tokens de diseño uniforme (espaciado, paleta amatista, tipografía y soporte nativo de tema oscuro/claro) \cite{tailwind_docs}.
-    \item \textbf{Alpine.js:} Provee reactividad declarativa para componentes interactivos del cliente (modales, menús desplegables, carritos flotantes) directamente en el marcado HTML de las vistas Blade, manteniendo un footprint inferior a 15 KB \cite{alpinejs_docs}.
-    \item \textbf{Chart.js:} Biblioteca gráfica basada en el elemento \texttt{<canvas>} de HTML5, utilizada en el panel administrativo para generar gráficas de líneas y áreas degradadas con renderizado adaptativo según el tema activo \cite{chartjs_org}.
-\end{itemize}
-
-\section{Seguridad Web y Control de Acceso Basado en Roles (RBAC)}
-La seguridad de la información es un requerimiento no funcional de máxima prioridad en la plataforma. Siguiendo las directrices del proyecto \textit{OWASP Top 10} \cite{owasp_top10}, se implementaron los siguientes mecanismos de defensa:
-\begin{itemize}
-    \item \textbf{Mitigación de Inyección SQL:} El ORM Eloquent y el constructor de consultas utilizan internamente vinculación de parámetros PDO (\textit{prepared statements}), impidiendo la inyección de sentencias SQL maliciosas.
-    \item \textbf{Protección contra Cross-Site Request Forgery (CSRF):} Cada formulario generado por Blade incluye un token criptográfico único verificado por el middleware \texttt{VerifyCsrfToken}.
-    \item \textbf{Control de Acceso Basado en Roles (RBAC):} Diferenciación estricta de privilegios entre los roles \texttt{Administrador}, \texttt{Encargado de Sucursal} y \texttt{Cliente}, impidiendo que usuarios sin autorización accedan a rutas operativas o de auditoría financiera.
-    \item \textbf{Cifrado de Contraseñas:} Empleo del algoritmo de hash seguro \texttt{Bcrypt} con factores de trabajo dinámicos para el resguardo de credenciales de usuario.
-\end{itemize}
+En ARCHIVUM, el repositorio se gestiona con Git y GitHub, mientras que la ejecución se orquesta mediante Docker Compose con tres contenedores separados: \texttt{archivum\_app} (PHP 8.4 y Laravel 13), \texttt{archivum\_nginx} (servidor web) y \texttt{archivum\_db} (MariaDB 11.2), respaldados por volúmenes persistentes independientes (\texttt{db\_data} y \texttt{app\_storage}) que conservan tanto la base de datos como las fotografías de los productos.

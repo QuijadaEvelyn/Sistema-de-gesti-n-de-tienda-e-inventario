@@ -36,7 +36,7 @@ CREATE TABLE `bitacoras` (
   KEY `bitacoras_usuario_id_foreign` (`usuario_id`),
   KEY `bitacoras_tabla_afectada_registro_id_index` (`tabla_afectada`,`registro_id`),
   CONSTRAINT `bitacoras_usuario_id_foreign` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=86 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=110 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -130,7 +130,31 @@ INSERT INTO `bitacoras` VALUES
 (82,12,'LOGOUT','usuarios',12,'{\"ip\":\"172.19.0.1\"}','172.19.0.1','2026-11-23 07:09:52'),
 (83,NULL,'LOGIN_FALLIDO','usuarios',NULL,'{\"email\":\"almacen1@archivum.com\",\"ip\":\"172.19.0.1\"}','172.19.0.1','2026-11-23 07:10:09'),
 (84,NULL,'LOGIN_FALLIDO','usuarios',NULL,'{\"email\":\"admin@archivum.com\",\"ip\":\"172.19.0.1\"}','172.19.0.1','2026-11-23 07:32:12'),
-(85,11,'LOGIN_EXITOSO','usuarios',11,'{\"email\":\"admin@archivum.com\",\"roles\":[\"Administrador\"],\"tab_session_id\":\"tab_mwsum1yn_dvcjeo0x7dwqq7oj6ky0\"}','172.19.0.1','2026-11-23 07:32:37');
+(85,11,'LOGIN_EXITOSO','usuarios',11,'{\"email\":\"admin@archivum.com\",\"roles\":[\"Administrador\"],\"tab_session_id\":\"tab_mwsum1yn_dvcjeo0x7dwqq7oj6ky0\"}','172.19.0.1','2026-11-23 07:32:37'),
+(86,13,'LOGIN_EXITOSO','usuarios',13,'{\"email\":\"quijadaevelin82@gmail.com\",\"roles\":[\"cliente\"],\"tab_session_id\":\"tab_mwsy9rsh_1vkvjh5txzhbo51dfjv9\"}','172.19.0.1','2026-11-23 07:34:32'),
+(87,11,'ACTUALIZAR_PRECIO_PRODUCTO','productos',140,'{\"nombre\":\"Cartucho The Legend of Zelda (Gold Cartridge NES 1987 Sellado)\",\"precio_anterior\":2500,\"precio_nuevo\":2600,\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"]}','172.19.0.1','2026-11-23 07:35:42'),
+(88,11,'ACTUALIZAR_PRECIO_PRODUCTO','productos',152,'{\"nombre\":\"C\\u00f3mo ser youtuber\",\"precio_anterior\":189,\"precio_nuevo\":200,\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"]}','172.19.0.1','2026-11-23 07:36:47'),
+(89,13,'LOGIN_EXITOSO','usuarios',13,'{\"email\":\"quijadaevelin82@gmail.com\",\"roles\":[\"cliente\"],\"tab_session_id\":\"tab_mwtcvui3_af69dhs2umubxqk25ps3\"}','172.19.0.1','2026-11-23 14:25:29'),
+(90,11,'LOGIN_EXITOSO','usuarios',11,'{\"email\":\"admin@archivum.com\",\"roles\":[\"Administrador\"],\"tab_session_id\":\"tab_mwtczk9d_ghg0wb8dbspmqf8vwmdu\"}','172.19.0.1','2026-11-23 14:27:23'),
+(91,NULL,'LOGIN_FALLIDO','usuarios',NULL,'{\"email\":\"vanequialva@gmail.com\",\"ip\":\"172.19.0.1\"}','172.19.0.1','2026-11-23 14:55:53'),
+(92,13,'CHECKOUT_SIMULADO_EXITOSO','pedidos',7,'{\"folio\":\"ARC-20261123-SQZIZ\",\"total\":\"24563.00\",\"ultimos_digitos\":\"4242\",\"numero_guia\":\"GUA-ARC-261123-X4UNQ9\"}','172.19.0.1','2026-11-23 15:35:16'),
+(93,13,'CHECKOUT_SIMULADO_EXITOSO','pedidos',8,'{\"folio\":\"ARC-20261123-VMBDB\",\"total\":\"1566.55\",\"ultimos_digitos\":\"4242\",\"numero_guia\":\"GUA-ARC-261123-J67RFF\"}','172.19.0.1','2026-11-23 15:37:19'),
+(94,13,'CHECKOUT_SIMULADO_EXITOSO','pedidos',9,'{\"folio\":\"ARC-20261123-F1NRM\",\"total\":\"5500.00\",\"ultimos_digitos\":\"4242\",\"numero_guia\":\"GUA-ARC-261123-4CG7AI\"}','172.19.0.1','2026-11-23 15:37:41'),
+(95,13,'CHECKOUT_SIMULADO_EXITOSO','pedidos',10,'{\"folio\":\"ARC-20261123-CSL6L\",\"total\":\"4800.00\",\"ultimos_digitos\":\"4242\",\"numero_guia\":\"GUA-ARC-261123-USNDUT\"}','172.19.0.1','2026-11-23 15:38:19'),
+(96,13,'CHECKOUT_SIMULADO_EXITOSO','pedidos',11,'{\"folio\":\"ARC-20261123-VPXCC\",\"total\":\"58000.00\",\"ultimos_digitos\":\"4242\",\"numero_guia\":\"GUA-ARC-261123-6GM6SA\"}','172.19.0.1','2026-11-23 17:46:57'),
+(97,13,'CHECKOUT_SIMULADO_EXITOSO','pedidos',12,'{\"folio\":\"ARC-20261123-EXKD3\",\"total\":\"32000.00\",\"ultimos_digitos\":\"4242\",\"numero_guia\":\"GUA-ARC-261123-3ZU3CQ\"}','172.19.0.1','2026-11-23 17:50:40'),
+(98,13,'CHECKOUT_SIMULADO_EXITOSO','pedidos',13,'{\"folio\":\"ARC-20261123-WARHQ\",\"total\":\"4800.00\",\"ultimos_digitos\":\"4242\",\"numero_guia\":\"GUA-ARC-261123-7EL7BX\"}','172.19.0.1','2026-11-23 18:02:53'),
+(99,13,'CHECKOUT_SIMULADO_EXITOSO','pedidos',14,'{\"folio\":\"ARC-20261123-1U1YM\",\"total\":\"1000.00\",\"ultimos_digitos\":\"4242\",\"numero_guia\":\"GUA-ARC-261123-2WZF42\"}','172.19.0.1','2026-11-23 18:11:03'),
+(100,13,'CHECKOUT_SIMULADO_EXITOSO','pedidos',15,'{\"folio\":\"ARC-20261123-AINDZ\",\"total\":\"11494.00\",\"ultimos_digitos\":\"4242\",\"numero_guia\":\"GUA-ARC-261123-OJQC0Y\"}','172.19.0.1','2026-11-23 18:36:47'),
+(101,13,'CHECKOUT_SIMULADO_EXITOSO','pedidos',16,'{\"folio\":\"ARC-20261123-IOOS0\",\"total\":\"11200.00\",\"ultimos_digitos\":\"4242\",\"numero_guia\":\"GUA-ARC-261123-94XI9M\"}','172.19.0.1','2026-11-23 18:57:06'),
+(102,11,'LOGIN_EXITOSO','usuarios',11,'{\"email\":\"admin@archivum.com\",\"roles\":[\"Administrador\"],\"tab_session_id\":\"tab_mwv5v8x8_5f5k5cc7su0526msdvft\"}','172.19.0.1','2026-11-24 21:01:34'),
+(103,11,'LOGOUT','usuarios',11,'{\"ip\":\"172.19.0.1\"}','172.19.0.1','2026-11-24 22:51:17'),
+(104,13,'LOGIN_EXITOSO','usuarios',13,'{\"email\":\"quijadaevelin82@gmail.com\",\"roles\":[\"cliente\"],\"tab_session_id\":\"tab_mwvfrhgj_q1w2ll7a5tp554lum45h\"}','172.19.0.1','2026-11-25 01:20:36'),
+(105,13,'LOGIN_EXITOSO','usuarios',13,'{\"email\":\"quijadaevelin82@gmail.com\",\"roles\":[\"cliente\"],\"tab_session_id\":\"tab_mwvg7mro_s4sz2qz8y4i66mqsrh7a\"}','172.19.0.1','2026-11-25 01:32:54'),
+(106,11,'LOGIN_EXITOSO','usuarios',11,'{\"email\":\"admin@archivum.com\",\"roles\":[\"Administrador\"],\"tab_session_id\":\"tab_mwwmggj0_gpuwr62p67n9j3jtkfr1\"}','172.19.0.1','2026-11-25 21:32:52'),
+(107,11,'ALTA_PRODUCTO','productos',163,'{\"nombre\":\"Rain In My Heart\",\"sku\":\"VIN-FS-1968-R51026\",\"precio\":\"150.00\",\"stock_inicial\":5,\"es_pieza_unica\":false,\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"],\"imagen\":\"productos\\/1HL0V4cl2WoW0LIBPKatIhbqwyCtABQvnS9sayJm.webp\"}','172.19.0.1','2026-11-25 21:40:58'),
+(108,11,'ALTA_PRODUCTO','productos',164,'{\"nombre\":\"El Amor Manda\",\"sku\":\"CD-MJ-2013-887654156426\",\"precio\":\"150.00\",\"stock_inicial\":5,\"es_pieza_unica\":false,\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"],\"imagen\":\"productos\\/jxYSgpkqMiZTYpXe0VHbQTVLXPkmlY1dLdaKBMsT.webp\"}','172.19.0.1','2026-11-25 21:52:24'),
+(109,11,'ALTA_PRODUCTO','productos',165,'{\"nombre\":\"Gotas de Fuego\",\"sku\":\"VIN-JJ-2026-198029747416\",\"precio\":\"899.00\",\"stock_inicial\":6,\"es_pieza_unica\":false,\"usuario_nombre\":\"Administrador ARCHIVUM\",\"usuario_rol\":[\"Administrador\"],\"imagen\":\"productos\\/rmyeOIA6gOL4UNwzJNtfWc5EAEqtIXKxU9fysQqO.webp\"}','172.19.0.1','2026-11-25 22:11:38');
 /*!40000 ALTER TABLE `bitacoras` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -157,13 +181,9 @@ CREATE TABLE `cache` (
 LOCK TABLES `cache` WRITE;
 /*!40000 ALTER TABLE `cache` DISABLE KEYS */;
 INSERT INTO `cache` VALUES
-('laravel-cache-almacen1@archivum.com|172.19.0.1','i:1;',1795417869),
-('laravel-cache-almacen1@archivum.com|172.19.0.1:timer','i:1795417869;',1795417869),
-('laravel-cache-archivum_tab_token:tab_mwsum1yn_dvcjeo0x7dwqq7oj6ky0','a:7:{s:7:\"user_id\";i:11;s:16:\"carrito_archivum\";a:0:{}s:26:\"carrito_precios_congelados\";a:0:{}s:20:\"carrito_reservas_ids\";a:0:{}s:17:\"carrito_expira_en\";N;s:16:\"authenticated_at\";s:25:\"2026-11-23T07:32:37+00:00\";s:10:\"updated_at\";s:25:\"2026-11-23T07:32:48+00:00\";}',1795462368),
-('laravel-cache-forgot-password|quijadaevelin82@gmail.com|172.19.0.1','i:1;',1795416218),
-('laravel-cache-forgot-password|quijadaevelin82@gmail.com|172.19.0.1:timer','i:1795416218;',1795416218),
-('laravel-cache-ventas1@archivum.com|172.19.0.1','i:3;',1795417818),
-('laravel-cache-ventas1@archivum.com|172.19.0.1:timer','i:1795417818;',1795417818);
+('laravel-cache-archivum_tab_token:tab_mwvfrhgj_q1w2ll7a5tp554lum45h','a:7:{s:7:\"user_id\";i:13;s:16:\"carrito_archivum\";a:2:{i:76;i:1;i:75;i:1;}s:26:\"carrito_precios_congelados\";a:2:{i:76;i:8400;i:75;i:6800;}s:20:\"carrito_reservas_ids\";a:2:{i:0;i:26;i:1;i:27;}s:17:\"carrito_expira_en\";N;s:16:\"authenticated_at\";s:25:\"2026-11-25T01:20:36+00:00\";s:10:\"updated_at\";s:25:\"2026-11-25T01:31:53+00:00\";}',1795613513),
+('laravel-cache-archivum_tab_token:tab_mwvg7mro_s4sz2qz8y4i66mqsrh7a','a:7:{s:7:\"user_id\";i:13;s:16:\"carrito_archivum\";a:3:{i:75;i:1;i:76;i:1;i:74;i:1;}s:26:\"carrito_precios_congelados\";a:3:{i:75;i:6800;i:76;i:8400;i:74;i:16900;}s:20:\"carrito_reservas_ids\";a:1:{i:0;i:28;}s:17:\"carrito_expira_en\";N;s:16:\"authenticated_at\";s:25:\"2026-11-25T01:32:54+00:00\";s:10:\"updated_at\";s:25:\"2026-11-25T01:32:59+00:00\";}',1795613579),
+('laravel-cache-archivum_tab_token:tab_mwwmggj0_gpuwr62p67n9j3jtkfr1','a:7:{s:7:\"user_id\";i:11;s:16:\"carrito_archivum\";a:0:{}s:26:\"carrito_precios_congelados\";a:0:{}s:20:\"carrito_reservas_ids\";a:0:{}s:17:\"carrito_expira_en\";N;s:16:\"authenticated_at\";s:25:\"2026-11-25T21:32:52+00:00\";s:10:\"updated_at\";s:25:\"2026-11-25T22:11:38+00:00\";}',1795687898);
 /*!40000 ALTER TABLE `cache` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -212,7 +232,7 @@ CREATE TABLE `carrito_items` (
   KEY `carrito_items_variante_sku_id_foreign` (`variante_sku_id`),
   CONSTRAINT `carrito_items_carrito_id_foreign` FOREIGN KEY (`carrito_id`) REFERENCES `carritos` (`id`) ON DELETE CASCADE,
   CONSTRAINT `carrito_items_variante_sku_id_foreign` FOREIGN KEY (`variante_sku_id`) REFERENCES `variantes_sku` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -221,6 +241,10 @@ CREATE TABLE `carrito_items` (
 
 LOCK TABLES `carrito_items` WRITE;
 /*!40000 ALTER TABLE `carrito_items` DISABLE KEYS */;
+INSERT INTO `carrito_items` VALUES
+(49,5,75,1,6800.00,'2026-11-25 01:32:58','2026-11-25 01:32:58'),
+(50,5,76,1,8400.00,'2026-11-25 01:32:59','2026-11-25 01:32:59'),
+(51,5,74,1,16900.00,'2026-11-25 01:32:59','2026-11-25 01:32:59');
 /*!40000 ALTER TABLE `carrito_items` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -311,6 +335,10 @@ CREATE TABLE `cliente_promocion` (
 
 LOCK TABLES `cliente_promocion` WRITE;
 /*!40000 ALTER TABLE `cliente_promocion` DISABLE KEYS */;
+INSERT INTO `cliente_promocion` VALUES
+(5,4,'2026-11-23 15:38:19',NULL),
+(5,5,'2026-11-23 15:38:19',NULL),
+(5,6,'2026-11-23 15:38:19',NULL);
 /*!40000 ALTER TABLE `cliente_promocion` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -373,6 +401,8 @@ CREATE TABLE `clientes_frecuentes` (
 
 LOCK TABLES `clientes_frecuentes` WRITE;
 /*!40000 ALTER TABLE `clientes_frecuentes` DISABLE KEYS */;
+INSERT INTO `clientes_frecuentes` VALUES
+(5,'2026-11-23',1100,'2026-11-23 15:38:19','2026-11-23 18:57:06');
 /*!40000 ALTER TABLE `clientes_frecuentes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -458,7 +488,7 @@ CREATE TABLE `detalle_envios` (
   KEY `detalle_envios_detalle_pedido_id_foreign` (`detalle_pedido_id`),
   CONSTRAINT `detalle_envios_detalle_pedido_id_foreign` FOREIGN KEY (`detalle_pedido_id`) REFERENCES `detalle_pedidos` (`id`),
   CONSTRAINT `detalle_envios_envio_id_foreign` FOREIGN KEY (`envio_id`) REFERENCES `envios` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -468,7 +498,21 @@ CREATE TABLE `detalle_envios` (
 LOCK TABLES `detalle_envios` WRITE;
 /*!40000 ALTER TABLE `detalle_envios` DISABLE KEYS */;
 INSERT INTO `detalle_envios` VALUES
-(1,1,1,1,'2026-11-23 07:07:33','2026-11-23 07:07:33');
+(1,1,1,1,'2026-11-23 07:07:33','2026-11-23 07:07:33'),
+(2,2,6,1,'2026-11-23 15:35:16','2026-11-23 15:35:16'),
+(3,2,5,1,'2026-11-23 15:35:16','2026-11-23 15:35:16'),
+(4,2,3,1,'2026-11-23 15:35:16','2026-11-23 15:35:16'),
+(5,2,4,1,'2026-11-23 15:35:16','2026-11-23 15:35:16'),
+(6,2,2,1,'2026-11-23 15:35:16','2026-11-23 15:35:16'),
+(7,3,7,1,'2026-11-23 15:37:19','2026-11-23 15:37:19'),
+(8,4,8,1,'2026-11-23 15:37:41','2026-11-23 15:37:41'),
+(9,5,9,1,'2026-11-23 15:38:19','2026-11-23 15:38:19'),
+(10,6,10,1,'2026-11-23 17:46:57','2026-11-23 17:46:57'),
+(11,7,11,1,'2026-11-23 17:50:40','2026-11-23 17:50:40'),
+(12,8,12,1,'2026-11-23 18:02:53','2026-11-23 18:02:53'),
+(13,9,13,1,'2026-11-23 18:11:03','2026-11-23 18:11:03'),
+(14,10,14,1,'2026-11-23 18:36:47','2026-11-23 18:36:47'),
+(15,11,15,1,'2026-11-23 18:57:06','2026-11-23 18:57:06');
 /*!40000 ALTER TABLE `detalle_envios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -491,7 +535,7 @@ CREATE TABLE `detalle_pagos` (
   PRIMARY KEY (`id`),
   KEY `detalle_pagos_pago_id_foreign` (`pago_id`),
   CONSTRAINT `detalle_pagos_pago_id_foreign` FOREIGN KEY (`pago_id`) REFERENCES `pagos` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -501,7 +545,17 @@ CREATE TABLE `detalle_pagos` (
 LOCK TABLES `detalle_pagos` WRITE;
 /*!40000 ALTER TABLE `detalle_pagos` DISABLE KEYS */;
 INSERT INTO `detalle_pagos` VALUES
-(1,1,'PAS-ARC-PENNCGQE','4242','SIM-AUTH-840602','{\"modo\":\"SIMULACION_PRUEBA\",\"titular\":\"Evelyn\",\"terminacion_tarjeta\":\"4242\",\"codigo_autorizacion\":\"SIM-AUTH-840602\",\"mensaje\":\"Transacci\\u00f3n aprobada satisfactoriamente por Pasarela Simulada ARCHIVUM.\"}','2026-11-23 07:07:33','2026-11-23 07:07:33');
+(1,1,'PAS-ARC-PENNCGQE','4242','SIM-AUTH-840602','{\"modo\":\"SIMULACION_PRUEBA\",\"titular\":\"Evelyn\",\"terminacion_tarjeta\":\"4242\",\"codigo_autorizacion\":\"SIM-AUTH-840602\",\"mensaje\":\"Transacci\\u00f3n aprobada satisfactoriamente por Pasarela Simulada ARCHIVUM.\"}','2026-11-23 07:07:33','2026-11-23 07:07:33'),
+(2,2,'PAS-ARC-HEDLTF1A','4242','SIM-AUTH-815095','{\"modo\":\"SIMULACION_PRUEBA\",\"titular\":\"Evelyn\",\"terminacion_tarjeta\":\"4242\",\"codigo_autorizacion\":\"SIM-AUTH-815095\",\"mensaje\":\"Transacci\\u00f3n aprobada satisfactoriamente por Pasarela Simulada ARCHIVUM.\"}','2026-11-23 15:35:16','2026-11-23 15:35:16'),
+(3,3,'PAS-ARC-DWJ2IGKW','4242','SIM-AUTH-507919','{\"modo\":\"SIMULACION_PRUEBA\",\"titular\":\"Evelyn\",\"terminacion_tarjeta\":\"4242\",\"codigo_autorizacion\":\"SIM-AUTH-507919\",\"mensaje\":\"Transacci\\u00f3n aprobada satisfactoriamente por Pasarela Simulada ARCHIVUM.\"}','2026-11-23 15:37:19','2026-11-23 15:37:19'),
+(4,4,'PAS-ARC-A7BRVCTC','4242','SIM-AUTH-876118','{\"modo\":\"SIMULACION_PRUEBA\",\"titular\":\"Evelyn\",\"terminacion_tarjeta\":\"4242\",\"codigo_autorizacion\":\"SIM-AUTH-876118\",\"mensaje\":\"Transacci\\u00f3n aprobada satisfactoriamente por Pasarela Simulada ARCHIVUM.\"}','2026-11-23 15:37:41','2026-11-23 15:37:41'),
+(5,5,'PAS-ARC-67U2OGAH','4242','SIM-AUTH-137278','{\"modo\":\"SIMULACION_PRUEBA\",\"titular\":\"Evelyn\",\"terminacion_tarjeta\":\"4242\",\"codigo_autorizacion\":\"SIM-AUTH-137278\",\"mensaje\":\"Transacci\\u00f3n aprobada satisfactoriamente por Pasarela Simulada ARCHIVUM.\"}','2026-11-23 15:38:19','2026-11-23 15:38:19'),
+(6,6,'PAS-ARC-INMSNRSV','4242','SIM-AUTH-457773','{\"modo\":\"SIMULACION_PRUEBA\",\"titular\":\"Evelyn\",\"terminacion_tarjeta\":\"4242\",\"codigo_autorizacion\":\"SIM-AUTH-457773\",\"mensaje\":\"Transacci\\u00f3n aprobada satisfactoriamente por Pasarela Simulada ARCHIVUM.\"}','2026-11-23 17:46:57','2026-11-23 17:46:57'),
+(7,7,'PAS-ARC-4D2UYEEK','4242','SIM-AUTH-761486','{\"modo\":\"SIMULACION_PRUEBA\",\"titular\":\"Evelyn\",\"terminacion_tarjeta\":\"4242\",\"codigo_autorizacion\":\"SIM-AUTH-761486\",\"mensaje\":\"Transacci\\u00f3n aprobada satisfactoriamente por Pasarela Simulada ARCHIVUM.\"}','2026-11-23 17:50:40','2026-11-23 17:50:40'),
+(8,8,'PAS-ARC-TJX6DH6B','4242','SIM-AUTH-125084','{\"modo\":\"SIMULACION_PRUEBA\",\"titular\":\"Evelyn\",\"terminacion_tarjeta\":\"4242\",\"codigo_autorizacion\":\"SIM-AUTH-125084\",\"mensaje\":\"Transacci\\u00f3n aprobada satisfactoriamente por Pasarela Simulada ARCHIVUM.\"}','2026-11-23 18:02:52','2026-11-23 18:02:52'),
+(9,9,'PAS-ARC-XAR0WE6U','4242','SIM-AUTH-488928','{\"modo\":\"SIMULACION_PRUEBA\",\"titular\":\"Evelyn\",\"terminacion_tarjeta\":\"4242\",\"codigo_autorizacion\":\"SIM-AUTH-488928\",\"mensaje\":\"Transacci\\u00f3n aprobada satisfactoriamente por Pasarela Simulada ARCHIVUM.\"}','2026-11-23 18:11:03','2026-11-23 18:11:03'),
+(10,10,'PAS-ARC-CZFOJNCA','4242','SIM-AUTH-760586','{\"modo\":\"SIMULACION_PRUEBA\",\"titular\":\"Evelyn\",\"terminacion_tarjeta\":\"4242\",\"codigo_autorizacion\":\"SIM-AUTH-760586\",\"mensaje\":\"Transacci\\u00f3n aprobada satisfactoriamente por Pasarela Simulada ARCHIVUM.\"}','2026-11-23 18:36:47','2026-11-23 18:36:47'),
+(11,11,'PAS-ARC-UTQWA3MC','4242','SIM-AUTH-367760','{\"modo\":\"SIMULACION_PRUEBA\",\"titular\":\"Evelyn\",\"terminacion_tarjeta\":\"4242\",\"codigo_autorizacion\":\"SIM-AUTH-367760\",\"mensaje\":\"Transacci\\u00f3n aprobada satisfactoriamente por Pasarela Simulada ARCHIVUM.\"}','2026-11-23 18:57:06','2026-11-23 18:57:06');
 /*!40000 ALTER TABLE `detalle_pagos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -526,7 +580,7 @@ CREATE TABLE `detalle_pedidos` (
   KEY `detalle_pedidos_variante_sku_id_foreign` (`variante_sku_id`),
   CONSTRAINT `detalle_pedidos_pedido_id_foreign` FOREIGN KEY (`pedido_id`) REFERENCES `pedidos` (`id`) ON DELETE CASCADE,
   CONSTRAINT `detalle_pedidos_variante_sku_id_foreign` FOREIGN KEY (`variante_sku_id`) REFERENCES `variantes_sku` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -536,7 +590,21 @@ CREATE TABLE `detalle_pedidos` (
 LOCK TABLES `detalle_pedidos` WRITE;
 /*!40000 ALTER TABLE `detalle_pedidos` DISABLE KEYS */;
 INSERT INTO `detalle_pedidos` VALUES
-(1,6,150,1,3065.00,3065.00,'2026-11-23 07:07:33','2026-11-23 07:07:33');
+(1,6,150,1,3065.00,3065.00,'2026-11-23 07:07:33','2026-11-23 07:07:33'),
+(2,7,152,1,189.00,189.00,'2026-11-23 15:35:16','2026-11-23 15:35:16'),
+(3,7,135,1,14200.00,14200.00,'2026-11-23 15:35:16','2026-11-23 15:35:16'),
+(4,7,148,1,699.00,699.00,'2026-11-23 15:35:16','2026-11-23 15:35:16'),
+(5,7,130,1,1075.00,1075.00,'2026-11-23 15:35:16','2026-11-23 15:35:16'),
+(6,7,76,1,8400.00,8400.00,'2026-11-23 15:35:16','2026-11-23 15:35:16'),
+(7,8,102,1,1566.55,1566.55,'2026-11-23 15:37:19','2026-11-23 15:37:19'),
+(8,9,124,1,5500.00,5500.00,'2026-11-23 15:37:41','2026-11-23 15:37:41'),
+(9,10,98,1,4800.00,4800.00,'2026-11-23 15:38:19','2026-11-23 15:38:19'),
+(10,11,73,1,58000.00,58000.00,'2026-11-23 17:46:57','2026-11-23 17:46:57'),
+(11,12,71,1,32000.00,32000.00,'2026-11-23 17:50:40','2026-11-23 17:50:40'),
+(12,13,98,1,4800.00,4800.00,'2026-11-23 18:02:52','2026-11-23 18:02:52'),
+(13,14,88,1,1000.00,1000.00,'2026-11-23 18:11:03','2026-11-23 18:11:03'),
+(14,15,149,1,11494.00,11494.00,'2026-11-23 18:36:47','2026-11-23 18:36:47'),
+(15,16,79,1,11200.00,11200.00,'2026-11-23 18:57:06','2026-11-23 18:57:06');
 /*!40000 ALTER TABLE `detalle_pedidos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -626,7 +694,7 @@ CREATE TABLE `direcciones` (
   PRIMARY KEY (`id`),
   KEY `direcciones_cliente_id_foreign` (`cliente_id`),
   CONSTRAINT `direcciones_cliente_id_foreign` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -636,7 +704,17 @@ CREATE TABLE `direcciones` (
 LOCK TABLES `direcciones` WRITE;
 /*!40000 ALTER TABLE `direcciones` DISABLE KEYS */;
 INSERT INTO `direcciones` VALUES
-(2,5,'Entrega Custodiada','Av. Álvaro Obregón 185, Col. Roma Norte','S/N',NULL,'Centro','Cuauhtémoc','Ciudad de México','06700','México',NULL,1,'2026-11-23 07:07:33','2026-11-23 07:07:33');
+(2,5,'Entrega Custodiada','Av. Álvaro Obregón 185, Col. Roma Norte','S/N',NULL,'Centro','Cuauhtémoc','Ciudad de México','06700','México',NULL,1,'2026-11-23 07:07:33','2026-11-23 07:07:33'),
+(3,5,'Entrega Custodiada','Av. Álvaro Obregón 185, Col. Roma Norte','S/N',NULL,'Centro','Cuauhtémoc','Ciudad de México','06700','México',NULL,1,'2026-11-23 15:35:15','2026-11-23 15:35:15'),
+(4,5,'Entrega Custodiada','Av. Álvaro Obregón 185, Col. Roma Norte','S/N',NULL,'Centro','Cuauhtémoc','Ciudad de México','06700','México',NULL,1,'2026-11-23 15:37:19','2026-11-23 15:37:19'),
+(5,5,'Entrega Custodiada','Av. Álvaro Obregón 185, Col. Roma Norte','S/N',NULL,'Centro','Cuauhtémoc','Ciudad de México','06700','México',NULL,1,'2026-11-23 15:37:41','2026-11-23 15:37:41'),
+(6,5,'Entrega Custodiada','Av. Álvaro Obregón 185, Col. Roma Norte','S/N',NULL,'Centro','Cuauhtémoc','Ciudad de México','06700','México',NULL,1,'2026-11-23 15:38:19','2026-11-23 15:38:19'),
+(7,5,'Entrega Custodiada','Av. Álvaro Obregón 185, Col. Roma Norte','S/N',NULL,'Centro','Cuauhtémoc','Ciudad de México','06700','México',NULL,1,'2026-11-23 17:46:57','2026-11-23 17:46:57'),
+(8,5,'Entrega Custodiada','Av. Álvaro Obregón 185, Col. Roma Norte','S/N',NULL,'Centro','Cuauhtémoc','Ciudad de México','06700','México',NULL,1,'2026-11-23 17:50:40','2026-11-23 17:50:40'),
+(9,5,'Entrega Custodiada','Av. Álvaro Obregón 185, Col. Roma Norte','S/N',NULL,'Centro','Cuauhtémoc','Ciudad de México','06700','México',NULL,1,'2026-11-23 18:02:52','2026-11-23 18:02:52'),
+(10,5,'Entrega Custodiada','Av. Álvaro Obregón 185, Col. Roma Norte','S/N',NULL,'Centro','Cuauhtémoc','Ciudad de México','06700','México',NULL,1,'2026-11-23 18:11:03','2026-11-23 18:11:03'),
+(11,5,'Entrega Custodiada','Av. Álvaro Obregón 185, Col. Roma Norte','S/N',NULL,'Centro','Cuauhtémoc','Ciudad de México','06700','México',NULL,1,'2026-11-23 18:36:47','2026-11-23 18:36:47'),
+(12,5,'Entrega Custodiada','Av. Álvaro Obregón 185, Col. Roma Norte','S/N',NULL,'Centro','Cuauhtémoc','Ciudad de México','06700','México',NULL,1,'2026-11-23 18:57:06','2026-11-23 18:57:06');
 /*!40000 ALTER TABLE `direcciones` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -691,7 +769,10 @@ INSERT INTO `discos` VALUES
 (146,'Bomba Estéreo','Sony Music Latin','Pop electrónico','vinilo',2022,'productos/WqX1d2lcnJs5age66LvrEyQm3D7eoz1xrqux1RrT.jpg'),
 (147,'Pink Floyd','Pink Floyd Records','Rock progresivo','vinilo',1973,'productos/zKFBnBudGTxAYJGNOcV5r5jBFQQG3KFmo33OThBh.jpg'),
 (148,'Whitney Houston','Arista Records','Banda sonora','vinilo',1992,'productos/Q6L3WnKI7ANA97CbCeSskGNFQtJZZAXd1duc230A.jpg'),
-(154,'ACDC','Columbia','Hard Rock','vinilo',1980,'productos/59ku0yscQyCH9x4N0Vdn8q1gpaf5imKSHz2g38Wz.jpg');
+(154,'ACDC','Columbia','Hard Rock','vinilo',1980,'productos/59ku0yscQyCH9x4N0Vdn8q1gpaf5imKSHz2g38Wz.jpg'),
+(163,'Frank Sinatra','Reprise Records','Música','vinilo',1968,'productos/1HL0V4cl2WoW0LIBPKatIhbqwyCtABQvnS9sayJm.webp'),
+(164,'María José','Sony Music Entertainment México','Música','CD',2013,'productos/jxYSgpkqMiZTYpXe0VHbQTVLXPkmlY1dLdaKBMsT.webp'),
+(165,'José José','Sony Music Entertainment México','Música','vinilo',2026,'productos/rmyeOIA6gOL4UNwzJNtfWc5EAEqtIXKxU9fysQqO.webp');
 /*!40000 ALTER TABLE `discos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -721,7 +802,7 @@ CREATE TABLE `envios` (
   KEY `envios_sucursal_id_foreign` (`sucursal_id`),
   CONSTRAINT `envios_pedido_id_foreign` FOREIGN KEY (`pedido_id`) REFERENCES `pedidos` (`id`),
   CONSTRAINT `envios_sucursal_id_foreign` FOREIGN KEY (`sucursal_id`) REFERENCES `sucursales` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -731,7 +812,17 @@ CREATE TABLE `envios` (
 LOCK TABLES `envios` WRITE;
 /*!40000 ALTER TABLE `envios` DISABLE KEYS */;
 INSERT INTO `envios` VALUES
-(1,6,4,'Custodia Climatizada ARCHIVUM','GUA-ARC-261123-Z6UPEZ','entregado','2026-11-26 07:07:33','entregado','2026-11-23 07:07:39','2026-11-23 07:07:42','2026-11-23 07:07:33','2026-11-23 07:07:42');
+(1,6,4,'Custodia Climatizada ARCHIVUM','GUA-ARC-261123-Z6UPEZ','entregado','2026-11-26 07:07:33','entregado','2026-11-23 07:07:39','2026-11-23 07:07:42','2026-11-23 07:07:33','2026-11-23 07:07:42'),
+(2,7,4,'Custodia Climatizada ARCHIVUM','GUA-ARC-261123-X4UNQ9','entregado','2026-11-26 15:35:16','entregado','2026-11-23 15:35:25','2026-11-23 15:35:28','2026-11-23 15:35:16','2026-11-23 15:35:28'),
+(3,8,4,'Custodia Climatizada ARCHIVUM','GUA-ARC-261123-J67RFF','en_preparacion','2026-11-26 15:37:19','preparando',NULL,NULL,'2026-11-23 15:37:19','2026-11-23 15:37:19'),
+(4,9,4,'Custodia Climatizada ARCHIVUM','GUA-ARC-261123-4CG7AI','en_preparacion','2026-11-26 15:37:41','preparando',NULL,NULL,'2026-11-23 15:37:41','2026-11-23 15:37:41'),
+(5,10,4,'Custodia Climatizada ARCHIVUM','GUA-ARC-261123-USNDUT','en_preparacion','2026-11-26 15:38:19','preparando',NULL,NULL,'2026-11-23 15:38:19','2026-11-23 15:38:19'),
+(6,11,4,'Custodia Climatizada ARCHIVUM','GUA-ARC-261123-6GM6SA','en_transito','2026-11-26 17:46:57','en_transito','2026-11-23 17:47:01',NULL,'2026-11-23 17:46:57','2026-11-23 17:47:01'),
+(7,12,4,'Custodia Climatizada ARCHIVUM','GUA-ARC-261123-3ZU3CQ','en_camino','2026-11-26 17:50:40','en_transito','2026-11-23 17:50:43',NULL,'2026-11-23 17:50:40','2026-11-23 17:50:45'),
+(8,13,4,'Custodia Climatizada ARCHIVUM','GUA-ARC-261123-7EL7BX','entregado','2026-11-26 18:02:53','entregado','2026-11-23 18:02:56','2026-11-23 18:02:59','2026-11-23 18:02:53','2026-11-23 18:02:59'),
+(9,14,4,'Custodia Climatizada ARCHIVUM','GUA-ARC-261123-2WZF42','en_camino','2026-11-26 18:11:03','en_transito','2026-11-23 18:11:07',NULL,'2026-11-23 18:11:03','2026-11-23 18:11:08'),
+(10,15,4,'Custodia Climatizada ARCHIVUM','GUA-ARC-261123-OJQC0Y','en_camino','2026-11-26 18:36:47','en_transito','2026-11-23 18:36:51',NULL,'2026-11-23 18:36:47','2026-11-23 18:36:56'),
+(11,16,4,'Custodia Climatizada ARCHIVUM','GUA-ARC-261123-94XI9M','entregado','2026-11-26 18:57:06','entregado','2026-11-23 18:57:08','2026-11-23 18:57:20','2026-11-23 18:57:06','2026-11-23 18:57:20');
 /*!40000 ALTER TABLE `envios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -755,7 +846,7 @@ CREATE TABLE `existencias` (
   KEY `existencias_sucursal_id_foreign` (`sucursal_id`),
   CONSTRAINT `existencias_sucursal_id_foreign` FOREIGN KEY (`sucursal_id`) REFERENCES `sucursales` (`id`) ON DELETE CASCADE,
   CONSTRAINT `existencias_variante_sku_id_foreign` FOREIGN KEY (`variante_sku_id`) REFERENCES `variantes_sku` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=260 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=269 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -765,24 +856,24 @@ CREATE TABLE `existencias` (
 LOCK TABLES `existencias` WRITE;
 /*!40000 ALTER TABLE `existencias` DISABLE KEYS */;
 INSERT INTO `existencias` VALUES
-(120,71,6,1,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
+(120,71,6,0,1,'2026-11-22 04:15:56','2026-11-23 17:50:32'),
 (121,72,5,1,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(122,73,4,1,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(123,74,4,8,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(124,75,5,9,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(125,76,6,15,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
+(122,73,4,0,1,'2026-11-22 04:15:56','2026-11-23 17:46:45'),
+(123,74,4,7,1,'2026-11-22 04:15:56','2026-11-25 01:32:58'),
+(124,75,5,8,1,'2026-11-22 04:15:56','2026-11-25 01:24:53'),
+(125,76,6,13,1,'2026-11-22 04:15:56','2026-11-25 01:24:44'),
 (126,77,4,2,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
 (127,77,5,1,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
 (128,78,4,4,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
 (129,78,5,3,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
 (130,78,6,6,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
 (131,79,4,3,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(132,79,6,5,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(133,80,5,1,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
+(132,79,6,4,1,'2026-11-22 04:15:56','2026-11-23 18:42:10'),
+(133,80,5,1,1,'2026-11-22 04:15:56','2026-11-23 18:55:14'),
 (134,81,4,1,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
 (135,82,4,2,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
 (136,82,5,1,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(137,82,6,4,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
+(137,82,6,4,1,'2026-11-22 04:15:56','2026-11-23 07:36:17'),
 (138,83,4,1,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
 (139,83,5,1,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
 (140,84,4,2,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
@@ -794,7 +885,7 @@ INSERT INTO `existencias` VALUES
 (146,87,4,2,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
 (147,87,5,1,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
 (148,87,6,2,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(149,88,4,1,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
+(149,88,4,0,1,'2026-11-22 04:15:56','2026-11-23 18:10:46'),
 (150,89,6,1,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
 (151,90,4,3,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
 (152,90,5,2,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
@@ -809,12 +900,12 @@ INSERT INTO `existencias` VALUES
 (161,97,6,14,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
 (162,98,4,5,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
 (163,98,5,2,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(164,98,6,8,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
+(164,98,6,6,1,'2026-11-22 04:15:56','2026-11-23 17:51:50'),
 (165,99,4,4,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
 (166,99,5,2,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
 (167,100,5,5,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(168,101,5,1,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(169,102,4,6,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
+(168,101,5,1,1,'2026-11-22 04:15:56','2026-11-23 18:08:35'),
+(169,102,4,5,1,'2026-11-22 04:15:56','2026-11-23 15:37:15'),
 (170,103,4,3,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
 (171,103,5,2,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
 (172,104,6,12,1,'2026-11-22 04:15:56','2026-11-22 04:15:56'),
@@ -838,13 +929,13 @@ INSERT INTO `existencias` VALUES
 (190,118,6,18,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
 (191,119,4,2,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
 (192,119,5,1,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
-(193,120,6,1,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
+(193,120,6,1,1,'2026-11-22 04:15:57','2026-11-23 18:43:19'),
 (194,121,4,1,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
 (195,122,5,1,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
-(196,123,6,1,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
+(196,123,6,1,1,'2026-11-22 04:15:57','2026-11-23 15:14:31'),
 (197,124,4,4,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
 (198,124,5,3,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
-(199,124,6,5,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
+(199,124,6,4,1,'2026-11-22 04:15:57','2026-11-23 15:37:29'),
 (200,125,4,2,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
 (201,125,5,1,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
 (202,125,6,2,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
@@ -862,7 +953,7 @@ INSERT INTO `existencias` VALUES
 (214,129,6,6,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
 (215,130,4,8,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
 (216,130,5,6,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
-(217,130,6,10,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
+(217,130,6,9,1,'2026-11-22 04:15:57','2026-11-23 15:34:58'),
 (218,131,4,1,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
 (219,131,6,2,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
 (220,132,4,3,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
@@ -873,7 +964,7 @@ INSERT INTO `existencias` VALUES
 (225,134,5,3,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
 (226,134,6,4,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
 (227,135,4,1,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
-(228,135,5,2,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
+(228,135,5,1,1,'2026-11-22 04:15:57','2026-11-23 15:34:35'),
 (229,136,4,1,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
 (230,136,6,1,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
 (231,137,4,3,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
@@ -882,7 +973,7 @@ INSERT INTO `existencias` VALUES
 (234,138,4,1,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
 (235,139,4,1,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
 (236,139,5,1,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
-(237,140,4,1,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
+(237,140,4,2,1,'2026-11-22 04:15:57','2026-11-23 14:23:24'),
 (238,140,6,1,1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
 (239,141,4,8,1,'2026-11-23 06:01:10','2026-11-23 06:01:10'),
 (240,142,4,9,1,'2026-11-23 06:01:10','2026-11-23 06:01:10'),
@@ -891,16 +982,25 @@ INSERT INTO `existencias` VALUES
 (243,145,5,6,1,'2026-11-23 06:01:10','2026-11-23 06:01:10'),
 (244,146,4,4,1,'2026-11-23 06:01:10','2026-11-23 06:01:10'),
 (245,147,4,1,1,'2026-11-23 06:01:10','2026-11-23 06:01:10'),
-(246,148,4,5,1,'2026-11-23 06:01:10','2026-11-23 06:01:10'),
-(247,149,4,1,1,'2026-11-23 06:01:10','2026-11-23 06:01:10'),
+(246,148,4,4,1,'2026-11-23 06:01:10','2026-11-23 15:34:47'),
+(247,149,4,0,1,'2026-11-23 06:01:10','2026-11-23 18:36:33'),
 (248,150,5,1,1,'2026-11-23 06:01:10','2026-11-23 06:01:10'),
 (249,151,4,10,1,'2026-11-23 06:09:54','2026-11-23 06:09:54'),
-(250,152,4,15,1,'2026-11-23 06:09:54','2026-11-23 06:09:54'),
+(250,152,4,14,1,'2026-11-23 06:09:54','2026-11-23 07:36:31'),
 (251,153,4,5,1,'2026-11-23 06:09:54','2026-11-23 06:09:54'),
 (252,145,4,6,1,'2026-11-23 06:09:54','2026-11-23 06:09:54'),
 (253,154,4,1,1,'2026-11-23 06:09:54','2026-11-23 06:09:54'),
 (258,150,4,0,1,'2026-11-23 06:16:45','2026-11-23 07:07:27'),
-(259,162,4,1,1,'2026-11-23 06:18:55','2026-11-23 06:18:55');
+(259,162,4,1,1,'2026-11-23 06:18:55','2026-11-23 15:34:18'),
+(260,163,4,0,1,'2026-11-25 21:40:58','2026-11-25 21:40:58'),
+(261,163,5,5,1,'2026-11-25 21:40:58','2026-11-25 21:40:58'),
+(262,163,6,0,1,'2026-11-25 21:40:58','2026-11-25 21:40:58'),
+(263,164,4,0,1,'2026-11-25 21:52:24','2026-11-25 21:52:24'),
+(264,164,5,5,1,'2026-11-25 21:52:24','2026-11-25 21:52:24'),
+(265,164,6,0,1,'2026-11-25 21:52:24','2026-11-25 21:52:24'),
+(266,165,4,6,1,'2026-11-25 22:11:38','2026-11-25 22:11:38'),
+(267,165,5,0,1,'2026-11-25 22:11:38','2026-11-25 22:11:38'),
+(268,165,6,0,1,'2026-11-25 22:11:38','2026-11-25 22:11:38');
 /*!40000 ALTER TABLE `existencias` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -951,7 +1051,7 @@ CREATE TABLE `historial_envios` (
   PRIMARY KEY (`id`),
   KEY `historial_envios_envio_id_foreign` (`envio_id`),
   CONSTRAINT `historial_envios_envio_id_foreign` FOREIGN KEY (`envio_id`) REFERENCES `envios` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -964,7 +1064,37 @@ INSERT INTO `historial_envios` VALUES
 (1,1,'en_preparacion','Sucursal Central Bellas Artes, CDMX','Preparando Pedido: Verificación de calidad, certificado de autenticidad y preparación en almacén.','2026-11-23 07:07:33'),
 (2,1,'en_transito','Centro de Empaque ARCHIVUM, CDMX','Empaque Protegido: Embalaje de alta protección con sello de seguridad e inspección física completada.','2026-11-23 07:07:39'),
 (3,1,'en_camino','Unidad de Envío en Ruta','En Camino: Traslado monitoreado hacia la dirección de entrega indicada en tu pedido.','2026-11-23 07:07:41'),
-(4,1,'entregado','Domicilio del Cliente','Entregado en Domicilio: Recepción confirmada con entrega de tu producto y Certificado de Autenticidad.','2026-11-23 07:07:42');
+(4,1,'entregado','Domicilio del Cliente','Entregado en Domicilio: Recepción confirmada con entrega de tu producto y Certificado de Autenticidad.','2026-11-23 07:07:42'),
+(5,2,'en_preparacion','Sucursal Central Bellas Artes, CDMX','Preparando Pedido: Verificación de calidad, certificado de autenticidad y preparación en almacén.','2026-11-23 15:35:16'),
+(6,2,'en_transito','Centro de Empaque ARCHIVUM, CDMX','Empaque Protegido: Embalaje de alta protección con sello de seguridad e inspección física completada.','2026-11-23 15:35:25'),
+(7,2,'en_camino','Unidad de Envío en Ruta','En Camino: Traslado monitoreado hacia la dirección de entrega indicada en tu pedido.','2026-11-23 15:35:26'),
+(8,2,'entregado','Domicilio del Cliente','Entregado en Domicilio: Recepción confirmada con entrega de tu producto y Certificado de Autenticidad.','2026-11-23 15:35:27'),
+(9,2,'entregado','Domicilio del Cliente','Entregado en Domicilio: Recepción confirmada con entrega de tu producto y Certificado de Autenticidad.','2026-11-23 15:35:27'),
+(10,2,'entregado','Domicilio del Cliente','Entregado en Domicilio: Recepción confirmada con entrega de tu producto y Certificado de Autenticidad.','2026-11-23 15:35:27'),
+(11,2,'entregado','Domicilio del Cliente','Entregado en Domicilio: Recepción confirmada con entrega de tu producto y Certificado de Autenticidad.','2026-11-23 15:35:28'),
+(12,2,'entregado','Domicilio del Cliente','Entregado en Domicilio: Recepción confirmada con entrega de tu producto y Certificado de Autenticidad.','2026-11-23 15:35:28'),
+(13,3,'en_preparacion','Sucursal Central Bellas Artes, CDMX','Preparando Pedido: Verificación de calidad, certificado de autenticidad y preparación en almacén.','2026-11-23 15:37:19'),
+(14,4,'en_preparacion','Sucursal Central Bellas Artes, CDMX','Preparando Pedido: Verificación de calidad, certificado de autenticidad y preparación en almacén.','2026-11-23 15:37:41'),
+(15,5,'en_preparacion','Sucursal Central Bellas Artes, CDMX','Preparando Pedido: Verificación de calidad, certificado de autenticidad y preparación en almacén.','2026-11-23 15:38:19'),
+(16,6,'en_preparacion','Sucursal Central Bellas Artes, CDMX','Preparando Pedido: Verificación de calidad, certificado de autenticidad y preparación en almacén.','2026-11-23 17:46:57'),
+(17,6,'en_transito','Centro de Empaque ARCHIVUM, CDMX','Empaque Protegido: Embalaje de alta protección con sello de seguridad e inspección física completada.','2026-11-23 17:47:01'),
+(18,7,'en_preparacion','Sucursal Central Bellas Artes, CDMX','Preparando Pedido: Verificación de calidad, certificado de autenticidad y preparación en almacén.','2026-11-23 17:50:40'),
+(19,7,'en_transito','Centro de Empaque ARCHIVUM, CDMX','Empaque Protegido: Embalaje de alta protección con sello de seguridad e inspección física completada.','2026-11-23 17:50:43'),
+(20,7,'en_camino','Unidad de Envío en Ruta','En Camino: Traslado monitoreado hacia la dirección de entrega indicada en tu pedido.','2026-11-23 17:50:46'),
+(21,8,'en_preparacion','Sucursal Central Bellas Artes, CDMX','Preparando Pedido: Verificación de calidad, certificado de autenticidad y preparación en almacén.','2026-11-23 18:02:53'),
+(22,8,'en_transito','Centro de Empaque ARCHIVUM, CDMX','Empaque Protegido: Embalaje de alta protección con sello de seguridad e inspección física completada.','2026-11-23 18:02:56'),
+(23,8,'en_camino','Unidad de Envío en Ruta','En Camino: Traslado monitoreado hacia la dirección de entrega indicada en tu pedido.','2026-11-23 18:02:57'),
+(24,8,'entregado','Domicilio del Cliente','Entregado en Domicilio: Recepción confirmada con entrega de tu producto y Certificado de Autenticidad.','2026-11-23 18:02:59'),
+(25,9,'en_preparacion','Sucursal Central Bellas Artes, CDMX','Preparando Pedido: Verificación de calidad, certificado de autenticidad y preparación en almacén.','2026-11-23 18:11:03'),
+(26,9,'en_transito','Centro de Empaque ARCHIVUM, CDMX','Empaque Protegido: Embalaje de alta protección con sello de seguridad e inspección física completada.','2026-11-23 18:11:07'),
+(27,9,'en_camino','Unidad de Envío en Ruta','En Camino: Traslado monitoreado hacia la dirección de entrega indicada en tu pedido.','2026-11-23 18:11:08'),
+(28,10,'en_preparacion','Sucursal Central Bellas Artes, CDMX','Preparando Pedido: Verificación de calidad, certificado de autenticidad y preparación en almacén.','2026-11-23 18:36:47'),
+(29,10,'en_transito','Centro de Empaque ARCHIVUM, CDMX','Empaque Protegido: Embalaje de alta protección con sello de seguridad e inspección física completada.','2026-11-23 18:36:51'),
+(30,10,'en_camino','Unidad de Envío en Ruta','En Camino: Traslado monitoreado hacia la dirección de entrega indicada en tu pedido.','2026-11-23 18:36:56'),
+(31,11,'en_preparacion','Sucursal Central Bellas Artes, CDMX','Preparando Pedido: Verificación de calidad, certificado de autenticidad y preparación en almacén.','2026-11-23 18:57:06'),
+(32,11,'en_transito','Centro de Empaque ARCHIVUM, CDMX','Empaque Protegido: Embalaje de alta protección con sello de seguridad e inspección física completada.','2026-11-23 18:57:08'),
+(33,11,'en_camino','Unidad de Envío en Ruta','En Camino: Traslado monitoreado hacia la dirección de entrega indicada en tu pedido.','2026-11-23 18:57:19'),
+(34,11,'entregado','Domicilio del Cliente','Entregado en Domicilio: Recepción confirmada con entrega de tu producto y Certificado de Autenticidad.','2026-11-23 18:57:20');
 /*!40000 ALTER TABLE `historial_envios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1217,7 +1347,7 @@ CREATE TABLE `movimientos_inventario` (
   CONSTRAINT `movimientos_inventario_existencia_id_foreign` FOREIGN KEY (`existencia_id`) REFERENCES `existencias` (`id`),
   CONSTRAINT `movimientos_inventario_proveedor_id_foreign` FOREIGN KEY (`proveedor_id`) REFERENCES `proveedores` (`id`) ON DELETE SET NULL,
   CONSTRAINT `movimientos_inventario_usuario_id_foreign` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1243,7 +1373,10 @@ INSERT INTO `movimientos_inventario` VALUES
 (14,252,11,'entrada',6,'Importación masiva [DIS-2026-003]',NULL,NULL,'2026-11-23 06:09:54',NULL),
 (15,253,11,'entrada',1,'Importación masiva [DIS-2026-005]',NULL,NULL,'2026-11-23 06:09:54',NULL),
 (16,258,11,'entrada',1,'Importación masiva [COL-2036.003]',NULL,NULL,'2026-11-23 06:16:45',NULL),
-(17,259,11,'entrada',1,'Importación masiva [COL-2076.010]',NULL,NULL,'2026-11-23 06:18:55',NULL);
+(17,259,11,'entrada',1,'Importación masiva [COL-2076.010]',NULL,NULL,'2026-11-23 06:18:55',NULL),
+(18,261,11,'entrada',5,'Alta de producto [VIN-FS-1968-R51026] por Administrador ARCHIVUM',NULL,NULL,'2026-11-25 21:40:58',NULL),
+(19,264,11,'entrada',5,'Alta de producto [CD-MJ-2013-887654156426] por Administrador ARCHIVUM',NULL,NULL,'2026-11-25 21:52:24',NULL),
+(20,266,11,'entrada',6,'Alta de producto [VIN-JJ-2026-198029747416] por Administrador ARCHIVUM',NULL,NULL,'2026-11-25 22:11:38',NULL);
 /*!40000 ALTER TABLE `movimientos_inventario` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1271,7 +1404,7 @@ CREATE TABLE `pagos` (
   PRIMARY KEY (`id`),
   KEY `pagos_pedido_id_foreign` (`pedido_id`),
   CONSTRAINT `pagos_pedido_id_foreign` FOREIGN KEY (`pedido_id`) REFERENCES `pedidos` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1281,7 +1414,17 @@ CREATE TABLE `pagos` (
 LOCK TABLES `pagos` WRITE;
 /*!40000 ALTER TABLE `pagos` DISABLE KEYS */;
 INSERT INTO `pagos` VALUES
-(1,6,'tarjeta','tarjeta',NULL,'PAS-ARC-PENNCGQE',NULL,NULL,3065.00,'aprobado','2026-11-23 07:07:33','2026-11-23 07:07:33','2026-11-23 07:07:33');
+(1,6,'tarjeta','tarjeta',NULL,'PAS-ARC-PENNCGQE',NULL,NULL,3065.00,'aprobado','2026-11-23 07:07:33','2026-11-23 07:07:33','2026-11-23 07:07:33'),
+(2,7,'tarjeta','tarjeta',NULL,'PAS-ARC-HEDLTF1A',NULL,NULL,24563.00,'aprobado','2026-11-23 15:35:16','2026-11-23 15:35:16','2026-11-23 15:35:16'),
+(3,8,'tarjeta','tarjeta',NULL,'PAS-ARC-DWJ2IGKW',NULL,NULL,1566.55,'aprobado','2026-11-23 15:37:19','2026-11-23 15:37:19','2026-11-23 15:37:19'),
+(4,9,'tarjeta','tarjeta',NULL,'PAS-ARC-A7BRVCTC',NULL,NULL,5500.00,'aprobado','2026-11-23 15:37:41','2026-11-23 15:37:41','2026-11-23 15:37:41'),
+(5,10,'tarjeta','tarjeta',NULL,'PAS-ARC-67U2OGAH',NULL,NULL,4800.00,'aprobado','2026-11-23 15:38:19','2026-11-23 15:38:19','2026-11-23 15:38:19'),
+(6,11,'tarjeta','tarjeta',NULL,'PAS-ARC-INMSNRSV',NULL,NULL,58000.00,'aprobado','2026-11-23 17:46:57','2026-11-23 17:46:57','2026-11-23 17:46:57'),
+(7,12,'tarjeta','tarjeta',NULL,'PAS-ARC-4D2UYEEK',NULL,NULL,32000.00,'aprobado','2026-11-23 17:50:40','2026-11-23 17:50:40','2026-11-23 17:50:40'),
+(8,13,'tarjeta','tarjeta',NULL,'PAS-ARC-TJX6DH6B',NULL,NULL,4800.00,'aprobado','2026-11-23 18:02:52','2026-11-23 18:02:52','2026-11-23 18:02:52'),
+(9,14,'tarjeta','tarjeta',NULL,'PAS-ARC-XAR0WE6U',NULL,NULL,1000.00,'aprobado','2026-11-23 18:11:03','2026-11-23 18:11:03','2026-11-23 18:11:03'),
+(10,15,'tarjeta','tarjeta',NULL,'PAS-ARC-CZFOJNCA',NULL,NULL,11494.00,'aprobado','2026-11-23 18:36:47','2026-11-23 18:36:47','2026-11-23 18:36:47'),
+(11,16,'tarjeta','tarjeta',NULL,'PAS-ARC-UTQWA3MC',NULL,NULL,11200.00,'aprobado','2026-11-23 18:57:06','2026-11-23 18:57:06','2026-11-23 18:57:06');
 /*!40000 ALTER TABLE `pagos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1335,7 +1478,7 @@ CREATE TABLE `pedidos` (
   KEY `pedidos_cliente_id_estatus_index` (`cliente_id`,`estatus`),
   CONSTRAINT `pedidos_cliente_id_foreign` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`),
   CONSTRAINT `pedidos_direccion_envio_id_foreign` FOREIGN KEY (`direccion_envio_id`) REFERENCES `direcciones` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1345,7 +1488,17 @@ CREATE TABLE `pedidos` (
 LOCK TABLES `pedidos` WRITE;
 /*!40000 ALTER TABLE `pedidos` DISABLE KEYS */;
 INSERT INTO `pedidos` VALUES
-(6,'ARC-20261123-NEW0B',5,2,'entregado',3065.00,0.00,3065.00,'2026-11-23 07:07:33','2026-11-23 07:07:42');
+(6,'ARC-20261123-NEW0B',5,2,'entregado',3065.00,0.00,3065.00,'2026-11-23 07:07:33','2026-11-23 07:07:42'),
+(7,'ARC-20261123-SQZIZ',5,3,'entregado',24563.00,0.00,24563.00,'2026-11-23 15:35:15','2026-11-23 15:35:27'),
+(8,'ARC-20261123-VMBDB',5,4,'pagado',1566.55,0.00,1566.55,'2026-11-23 15:37:19','2026-11-23 15:37:19'),
+(9,'ARC-20261123-F1NRM',5,5,'pagado',5500.00,0.00,5500.00,'2026-11-23 15:37:41','2026-11-23 15:37:41'),
+(10,'ARC-20261123-CSL6L',5,6,'pagado',4800.00,0.00,4800.00,'2026-11-23 15:38:19','2026-11-23 15:38:19'),
+(11,'ARC-20261123-VPXCC',5,7,'enviado',58000.00,0.00,58000.00,'2026-11-23 17:46:57','2026-11-23 17:47:01'),
+(12,'ARC-20261123-EXKD3',5,8,'enviado',32000.00,0.00,32000.00,'2026-11-23 17:50:40','2026-11-23 17:50:43'),
+(13,'ARC-20261123-WARHQ',5,9,'entregado',4800.00,0.00,4800.00,'2026-11-23 18:02:52','2026-11-23 18:02:59'),
+(14,'ARC-20261123-1U1YM',5,10,'enviado',1000.00,0.00,1000.00,'2026-11-23 18:11:03','2026-11-23 18:11:07'),
+(15,'ARC-20261123-AINDZ',5,11,'enviado',11494.00,0.00,11494.00,'2026-11-23 18:36:47','2026-11-23 18:36:51'),
+(16,'ARC-20261123-IOOS0',5,12,'entregado',11200.00,0.00,11200.00,'2026-11-23 18:57:06','2026-11-23 18:57:20');
 /*!40000 ALTER TABLE `pedidos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1379,33 +1532,33 @@ CREATE TABLE `piezas_unicas` (
 LOCK TABLES `piezas_unicas` WRITE;
 /*!40000 ALTER TABLE `piezas_unicas` DISABLE KEYS */;
 INSERT INTO `piezas_unicas` VALUES
-(22,120,'ARC-LIB-1967-001','COA-BIB-2026-014','Ejemplar único 1/1 catalogado en bóveda climatizada (VERY FINE (VF) · PIEZA ÚNICA 1/1).','disponible','2026-11-22 04:15:56','2026-11-22 04:15:56'),
+(22,120,'ARC-LIB-1967-001','COA-BIB-2026-014','Ejemplar único 1/1 catalogado en bóveda climatizada (VERY FINE (VF) · PIEZA ÚNICA 1/1).','vendida','2026-11-22 04:15:56','2026-11-23 17:50:40'),
 (23,121,'ARC-LIB-1955-002','COA-BIB-2026-019','Ejemplar único 1/1 catalogado en bóveda climatizada (NEAR MINT (NM) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA).','disponible','2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(24,122,'ARC-LIB-1949-003','COA-BIB-2026-022','Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA).','disponible','2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(25,133,'ARC-LIB-1845-010','COA-BIB-2026-031','Ejemplar único 1/1 catalogado en bóveda climatizada (VERY FINE (VF) · TERROR GÓTICO · GRABADOS XILOGRÁFICOS).','disponible','2026-11-22 04:15:56','2026-11-22 04:15:56'),
+(24,122,'ARC-LIB-1949-003','COA-BIB-2026-022','Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA).','vendida','2026-11-22 04:15:56','2026-11-23 17:46:57'),
+(25,133,'ARC-LIB-1845-010','COA-BIB-2026-031','Ejemplar único 1/1 catalogado en bóveda climatizada (VERY FINE (VF) · TERROR GÓTICO · GRABADOS XILOGRÁFICOS).','disponible','2026-11-22 04:15:56','2026-11-23 18:55:14'),
 (26,134,'ARC-LIB-1955-011','COA-BIB-2026-034','Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · PIEZA ÚNICA 1/1 · CIENCIA FICCIÓN DISTÓPICA).','disponible','2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(27,149,'ARC-LIB-1605-015','COA-BIB-2026-045','Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · CLÁSICOS UNIVERSALES · ESTUCHE DE TELA).','disponible','2026-11-22 04:15:56','2026-11-22 04:15:56'),
+(27,149,'ARC-LIB-1605-015','COA-BIB-2026-045','Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · CLÁSICOS UNIVERSALES · ESTUCHE DE TELA).','vendida','2026-11-22 04:15:56','2026-11-23 18:11:03'),
 (28,150,'ARC-LIB-1320-016','COA-BIB-2026-048','Ejemplar único 1/1 catalogado en bóveda climatizada (NEAR MINT (NM) · PIEZA ÚNICA 1/1 · GRAN FOLIO DORÉ).','disponible','2026-11-22 04:15:56','2026-11-22 04:15:56'),
 (29,156,'ARC-VIN-1959-001','COA-AUD-2026-101','Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA).','disponible','2026-11-22 04:15:56','2026-11-22 04:15:56'),
 (30,157,'ARC-VIN-1957-002','COA-AUD-2026-104','Ejemplar único 1/1 catalogado en bóveda climatizada (NEAR MINT (NM) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA).','disponible','2026-11-22 04:15:56','2026-11-23 06:39:53'),
 (31,159,'ARC-VIN-1969-004','COA-AUD-2026-112','Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA).','disponible','2026-11-22 04:15:56','2026-11-22 04:15:56'),
-(32,168,'ARC-VIN-1990-001','COA-MUS-2026-101','Ejemplar único 1/1 catalogado en bóveda climatizada (NEAR MINT (NM) · PIEZA ÚNICA 1/1).','disponible','2026-11-22 04:15:56','2026-11-22 04:15:56'),
+(32,168,'ARC-VIN-1990-001','COA-MUS-2026-101','Ejemplar único 1/1 catalogado en bóveda climatizada (NEAR MINT (NM) · PIEZA ÚNICA 1/1).','disponible','2026-11-22 04:15:56','2026-11-23 18:08:35'),
 (33,179,'ARC-VIN-2024-002','COA-MUS-2026-102','Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · PIEZA ÚNICA 1/1).','disponible','2026-11-22 04:15:57','2026-11-22 04:15:57'),
 (34,183,'ARC-MEM-1928-001','COA-NOT-2026-301','Ejemplar único 1/1 catalogado en bóveda climatizada (COA NOTARIADO · PIEZA ÚNICA 1/1).','disponible','2026-11-22 04:15:57','2026-11-22 04:15:57'),
 (35,184,'ARC-MEM-1940-004','COA-NOT-2026-320','Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA).','disponible','2026-11-22 04:15:57','2026-11-22 04:15:57'),
 (36,185,'ARC-MEM-1910-005','COA-NOT-2026-335','Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · PIEZA ÚNICA 1/1 · ADQUISICIÓN SELECTA).','disponible','2026-11-22 04:15:57','2026-11-22 04:15:57'),
 (37,186,'ARC-MEM-1934-002','COA-NOT-2026-309','Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · COA NOTARIADO · ADQUISICIÓN SELECTA).','vendida','2026-11-22 04:15:57','2026-11-22 04:15:57'),
-(38,193,'ARC-COL-1933-001','COA-COL-2026-001','Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · MONEDA HISTÓRICA RARA).','disponible','2026-11-22 04:15:57','2026-11-22 04:15:57'),
+(38,193,'ARC-COL-1933-001','COA-COL-2026-001','Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · MONEDA HISTÓRICA RARA).','disponible','2026-11-22 04:15:57','2026-11-23 18:43:19'),
 (39,194,'ARC-COL-1794-002','COA-COL-2026-002','Ejemplar único 1/1 catalogado en bóveda climatizada (VERY FINE (VF) · PRIMER DÓLAR FEDERAL).','disponible','2026-11-22 04:15:57','2026-11-22 04:15:57'),
 (40,195,'ARC-COL-1344-003','COA-COL-2026-003','Ejemplar único 1/1 catalogado en bóveda climatizada (NEAR MINT (NM) · PIEZA ÚNICA MEDIEVAL).','disponible','2026-11-22 04:15:57','2026-11-22 04:15:57'),
-(41,196,'ARC-COL-0723-004','COA-COL-2026-004','Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · CALIFATO OMEYA).','disponible','2026-11-22 04:15:57','2026-11-22 04:15:57'),
+(41,196,'ARC-COL-0723-004','COA-COL-2026-004','Ejemplar único 1/1 catalogado en bóveda climatizada (MINT (M) · CALIFATO OMEYA).','disponible','2026-11-22 04:15:57','2026-11-23 15:14:31'),
 (42,223,'ARC-FIG-1992-005','COA-FIG-2026-005','Ejemplar único 1/1 catalogado en bóveda climatizada (VERY FINE (VF) · ARTE POPULAR INDÍGENA).','disponible','2026-11-22 04:15:57','2026-11-22 04:15:57'),
 (43,245,'ARC-DIS-2026-006','COA-BIB-2027-006','Alta por importación masiva Excel/CSV.','disponible','2026-11-23 06:01:10','2026-11-23 06:01:10'),
-(44,247,'BAS-1/1-CS2026','COA-COL-2026-002','Alta por importación masiva Excel/CSV.','disponible','2026-11-23 06:01:10','2026-11-23 06:01:10'),
+(44,247,'BAS-1/1-CS2026','COA-COL-2026-002','Alta por importación masiva Excel/CSV.','vendida','2026-11-23 06:01:10','2026-11-23 18:36:47'),
 (45,248,'COL-SID-ST1616','COA-COL-2026-003','Alta por importación masiva Excel/CSV.','disponible','2026-11-23 06:01:10','2026-11-23 06:01:10'),
 (46,253,'ARC-DIS-2026-005','COA-BIB-2027-005','Alta por importación masiva Excel/CSV.','disponible','2026-11-23 06:09:54','2026-11-23 06:09:54'),
 (51,258,'COL-SID-ST1678','COA-COL-2026-010','Alta por importación masiva Excel/CSV.','vendida','2026-11-23 06:16:45','2026-11-23 07:07:33'),
-(52,259,'COL-TOP-MLB52-MM311-SGC89','COA-COL-2026-015','Alta por importación masiva Excel/CSV.','disponible','2026-11-23 06:18:55','2026-11-23 06:18:55');
+(52,259,'COL-TOP-MLB52-MM311-SGC89','COA-COL-2026-015','Alta por importación masiva Excel/CSV.','disponible','2026-11-23 06:18:55','2026-11-23 15:34:18');
 /*!40000 ALTER TABLE `piezas_unicas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1434,7 +1587,7 @@ CREATE TABLE `productos` (
   KEY `productos_catalogo_id_foreign` (`catalogo_id`),
   KEY `productos_nombre_index` (`nombre`),
   CONSTRAINT `productos_catalogo_id_foreign` FOREIGN KEY (`catalogo_id`) REFERENCES `catalogos` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=163 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=166 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1513,7 +1666,7 @@ INSERT INTO `productos` VALUES
 (137,6,'Billete Revolucionario 10 Pesos Ejército Constitucionalista (1914)','Monedas y Billetes Históricos: Emisión oficial del Gobierno Provisional de México firmada en Monclova. Papel moneda histórico en estado sin circular (UNC).','productos/paiPRw6iKSvFPyK4TkoNDxvKiIMdvW2cGgNfRCgz.jpg',500.00,1,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-23 06:45:40',NULL),
 (138,6,'Moneda Virreinal 8 Reales Columnario de Plata (1768)','Monedas y Billetes Históricos: Moneda de 8 Reales acuñada a volante en la Real Casa de Moneda de México bajo Carlos III. Plata pura con pátina histórica intocada.',NULL,38500.00,0,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-23 06:45:21',NULL),
 (139,6,'Consola Nintendo Game & Watch Ball (Primera Edición Japón 1980)','Coleccionables de Videojuegos: El primer sistema portátil creado por Gunpei Yokoi para Nintendo (Modelo AC-01). En caja de colección con manual y batería sellada.','productos/Ov8dBeHpr9qzg7jBmxx6rzvIFBVrcyrIfVdQyYNz.webp',2500.00,1,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-23 06:45:57',NULL),
-(140,6,'Cartucho The Legend of Zelda (Gold Cartridge NES 1987 Sellado)','Coleccionables de Videojuegos: Cartucho dorado original para Nintendo Entertainment System con batería de respaldo interna y sello pericial de graduación Wata/VGA.','productos/lMStJFZVoRaFgiGxdH3QPglfHsNjnBzPESNRtTbh.avif',2500.00,1,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-23 06:45:46',NULL),
+(140,6,'Cartucho The Legend of Zelda (Gold Cartridge NES 1987 Sellado)','Coleccionables de Videojuegos: Cartucho dorado original para Nintendo Entertainment System con batería de respaldo interna y sello pericial de graduación Wata/VGA.','productos/lMStJFZVoRaFgiGxdH3QPglfHsNjnBzPESNRtTbh.avif',2600.00,1,0,NULL,NULL,'2026-11-22 04:15:57','2026-11-23 07:35:42',NULL),
 (141,4,'Cancelada encarcelada','A través de las páginas íntimas de su diario en prisión, la autora desnuda el miedo, la soledad y las sombras del sistema penitenciario, revelando lo que ocurre cuando el tribunal de las redes sociales y la justicia real chocan de frente.','productos/z3HOwFAzBCfqVSpc2bwJgNsMIOgEHW6MLMJvgpP9.jpg',249.00,1,0,NULL,NULL,'2026-11-23 06:01:10','2026-11-23 06:39:34',NULL),
 (142,4,'Así es la puta vida','Se presenta como un libro de \"anti-autoayuda\" que busca alejarse de los clichés motivacionales y las frases positivas vacías. Con un tono crudo, directo y apoyado en conceptos psicológicos y sociológicos, Jordi Wild plantea que la vida está llena de golpes inevitables y que nadie es el centro del universo.','productos/mXsakZMRdos8e3XhJrGNMrnfTTFiGGbpbXI5FMds.jpg',150.00,1,0,NULL,NULL,'2026-11-23 06:01:10','2026-11-23 06:39:34',NULL),
 (143,4,'Tres Promesas','Lily Rose, Pablo y Ana, tres jóvenes cuyas vidas dan un giro inesperado cuando los planes que creían seguros cambian de golpe. A través de un viaje entre los recuerdos de su infancia y las decisiones de su presente, los protagonistas deben enfrentar secretos, culpas arrastradas por accidentes del pasado y conflictos sentimentales, descubriendo que el perdón, la lealtad y el amor son clave para sanar sus heridas','productos/bJP8n6wZqmA6HijD0iKhd2zUBAxr8SsM3x7rJnwg.jpg',379.00,1,0,NULL,NULL,'2026-11-23 06:01:10','2026-11-23 06:39:34',NULL),
@@ -1525,10 +1678,13 @@ INSERT INTO `productos` VALUES
 (149,6,'Guitarra Eléctrica Autografiada por Claudio Sánchez','Pieza única de colección (1/1). Guitarra eléctrica firmada de puño y letra sobre el golpeador por Claudio Sánchez, vocalista y guitarrista de Coheed and Cambria.','productos/plmvqDqWdaonmP4pvCcQKSMShw7H2C9J9gwucizs.jpg',11494.00,1,0,NULL,NULL,'2026-11-23 06:01:10','2026-11-23 06:39:35',NULL),
 (150,6,'Busto de colección Star Trek','Busto oficial de colección fabricado por Sideshow Collectibles en resina Polystone maciza con acabados pintados a mano. Edición limitada mundialmente a 3,000 piezas numeradas en la base','productos/hTG48Fhmq6xPvzcb7CAI0W16xTvh1tru3VRmVniT.jpg',3065.00,1,0,NULL,NULL,'2026-11-23 06:01:10','2026-11-23 06:39:35',NULL),
 (151,4,'Los secretos de YouTube','Es una guía práctica y reflexiva sobre la realidad de dedicarse a crear contenido en internet. TheGrefg responde dudas frecuentes sobre cómo funciona la plataforma, cómo monetizar un canal y qué diferencia hay entre hacerlo por hobby o como trabajo.','productos/0QCI76yUzRyTebI6k8JkqZfAhvRE1Wu06xBaPkuE.jpg',149.00,1,0,NULL,NULL,'2026-11-23 06:09:54','2026-11-23 06:39:34',NULL),
-(152,4,'Cómo ser youtuber','Este libro mezcla una historia biográfica con consejos para quienes quieren empezar en redes sociales. Exi relata cómo pasó de ser un adolescente sin motivación en los estudios a convertirse en un creador de contenido reconocido en España y Latinoamérica','productos/eYHeYy3Fgl2TSMLSPkz6QpWRG9ltOtsi83r3BB5R.jpg',189.00,1,0,NULL,NULL,'2026-11-23 06:09:54','2026-11-23 06:39:34',NULL),
+(152,4,'Cómo ser youtuber','Este libro mezcla una historia biográfica con consejos para quienes quieren empezar en redes sociales. Exi relata cómo pasó de ser un adolescente sin motivación en los estudios a convertirse en un creador de contenido reconocido en España y Latinoamérica','productos/eYHeYy3Fgl2TSMLSPkz6QpWRG9ltOtsi83r3BB5R.jpg',200.00,1,0,NULL,NULL,'2026-11-23 06:09:54','2026-11-23 07:36:47',NULL),
 (153,4,'Auronplay el libro','Con su característico estilo directo, sarcástico y sin filtros, repasa su vida desde su infancia en Badalona, su paso por la escuela, sus primeras amistades y fiestas, hasta sus inicios en internet','productos/vHKpgYflGJSIj0WAnRHtKR7YWsMGX92LxWe7nfou.jpg',138.00,1,0,NULL,NULL,'2026-11-23 06:09:54','2026-11-23 06:39:34',NULL),
 (154,5,'Back in black','Séptimo álbum de estudio de la banda australiana AC/DC y el primero grabado con el vocalista Brian Johnson tras el fallecimiento de Bon Scott. Producido por Robert John «Mutt» Lange, este disco emblemático de portada completamente negra en señal de luto incluye 10 clásicos imprescindibles del rock','productos/59ku0yscQyCH9x4N0Vdn8q1gpaf5imKSHz2g38Wz.jpg',938.00,1,0,NULL,NULL,'2026-11-23 06:09:54','2026-11-23 06:39:34',NULL),
-(162,6,'Micky Mantle','Considerada el \"Santo Grial\" del coleccionismo deportivo de posguerra. Pertenece a la última tirada de 1952 cuya mercancía no vendida fue arrojada al océano Atlántico por la propia compañía, lo que provocó una escasez extrema.','productos/9x8MOv2UAXphugNEuTxIaW70fAAsbMqhIeQUAvsr.jpg',12600000.00,1,0,NULL,NULL,'2026-11-23 06:18:55','2026-11-23 06:39:35',NULL);
+(162,6,'Micky Mantle','Considerada el \"Santo Grial\" del coleccionismo deportivo de posguerra. Pertenece a la última tirada de 1952 cuya mercancía no vendida fue arrojada al océano Atlántico por la propia compañía, lo que provocó una escasez extrema.','productos/9x8MOv2UAXphugNEuTxIaW70fAAsbMqhIeQUAvsr.jpg',12600000.00,1,0,NULL,NULL,'2026-11-23 06:18:55','2026-11-23 06:39:35',NULL),
+(163,5,'Rain In My Heart','Este prensado analógico de 12 pulgadas en formato estereofónico cuenta con los arreglos y la producción del maestro Don Costa. Una pieza clásica de vocal jazz y pop tradicional que reúne diez interpretaciones emblemáticas, incluyendo \"Rain In My Heart\", \"Cycles\", \"Little Green Apples\" y \"Gentle On My Mind\".','productos/1HL0V4cl2WoW0LIBPKatIhbqwyCtABQvnS9sayJm.webp',150.00,1,0,NULL,NULL,'2026-11-25 21:40:58','2026-11-25 21:40:58',NULL),
+(164,5,'El Amor Manda','Edición especial en CD del cuarto álbum de estudio de la cantante mexicana María José, De Noche (reedición de 14 canciones lanzada bajo el sello Sony Music / OCESA Seitrack). Incluye el exitoso tema principal de telenovela «El Amor Manda», además de éxitos como «Tú Ya Sabes A Mí», «Prefiero Ser Su Amante» y «El Brillo De La Luna». Disco compacto en formato Jewel Case original.','productos/jxYSgpkqMiZTYpXe0VHbQTVLXPkmlY1dLdaKBMsT.webp',150.00,1,0,NULL,NULL,'2026-11-25 21:52:24','2026-11-25 21:52:24',NULL),
+(165,5,'Gotas de Fuego','Edición especial de colección en vinilo LP color dorado traslúcido con efecto humo (Mystik Sparkle) del álbum recopilatorio Gotas de Fuego de José José, lanzado en 2026 por Sony Music México. Reúne 12 baladas emblemáticas del Príncipe de la Canción, incluyendo «Gotas de Fuego», «Insaciable Amante», «Amor Para los Dos», «Farolero», «Te Recordaré», «Cirano», «Infiel» y «New York, New York (En Inglés)».','productos/rmyeOIA6gOL4UNwzJNtfWc5EAEqtIXKxU9fysQqO.webp',899.00,1,0,NULL,NULL,'2026-11-25 22:11:38','2026-11-25 22:11:38',NULL);
 /*!40000 ALTER TABLE `productos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1568,9 +1724,9 @@ CREATE TABLE `promociones` (
 LOCK TABLES `promociones` WRITE;
 /*!40000 ALTER TABLE `promociones` DISABLE KEYS */;
 INSERT INTO `promociones` VALUES
-(4,116,'Preventa Exclusiva VIP: Programa Inaugural Palacio de Bellas Artes (Edición Especial)','Acceso anticipado exclusivo para Clientes Frecuentes (5+ compras) antes de la apertura oficial al público general. Incluye carpeta museográfica conmemorativa.','porcentaje',15.00,1,'2026-11-20 04:15:57','2026-11-24 04:15:57','PREVENTA ACTIVA · ACCESO ANTICIPADO VIP','2026-11-20','2026-12-02',1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
-(5,94,'Apertura Oficial: A Love Supreme (Lanzamiento Audiófilo 180g)','Promoción desbloqueada en Fase de Apertura para todos los clientes comunes de la tienda. Prensado audiófilo con carpeta desplegable laminada.','porcentaje',12.00,1,'2026-11-17 04:15:57','2026-11-21 04:15:57','EDICIÓN ESPECIAL · APERTURA PÚBLICA','2026-11-17','2026-11-27',1,'2026-11-22 04:15:57','2026-11-22 04:15:57'),
-(6,97,'Edición Especial: Led Zeppelin IV (Prensado Audiófilo 180g)','Lanzamiento especial en Fase de Preventa Anticipada para Clientes Frecuentes VIP (5+ compras). Masterizado desde las cintas analógicas originales.','monto',900.00,1,'2026-11-21 04:15:57','2026-11-25 04:15:57','EDICIÓN ESPECIAL · PREVENTA VIP','2026-11-21','2026-12-04',1,'2026-11-22 04:15:57','2026-11-22 04:15:57');
+(4,74,'Preventa Exclusiva VIP: Programa Inaugural Palacio de Bellas Artes (Edición Especial)','Acceso anticipado exclusivo para Clientes Frecuentes (5+ compras) antes de la apertura oficial al público general. Incluye carpeta museográfica conmemorativa.','porcentaje',15.00,1,'2026-11-20 04:15:57','2026-11-24 04:15:57','PREVENTA ACTIVA · ACCESO ANTICIPADO VIP','2026-11-20','2026-12-02',1,'2026-11-22 04:15:57','2026-11-25 01:23:45'),
+(5,75,'Apertura Oficial: A Love Supreme (Lanzamiento Audiófilo 180g)','Promoción desbloqueada en Fase de Apertura para todos los clientes comunes de la tienda. Prensado audiófilo con carpeta desplegable laminada.','porcentaje',12.00,1,'2026-11-17 04:15:57','2026-11-21 04:15:57','EDICIÓN ESPECIAL · APERTURA PÚBLICA','2026-11-17','2026-11-27',1,'2026-11-22 04:15:57','2026-11-25 01:23:45'),
+(6,76,'Edición Especial: Led Zeppelin IV (Prensado Audiófilo 180g)','Lanzamiento especial en Fase de Preventa Anticipada para Clientes Frecuentes VIP (5+ compras). Masterizado desde las cintas analógicas originales.','monto',900.00,1,'2026-11-21 04:15:57','2026-11-25 04:15:57','EDICIÓN ESPECIAL · PREVENTA VIP','2026-11-21','2026-12-04',1,'2026-11-22 04:15:57','2026-11-25 01:23:45');
 /*!40000 ALTER TABLE `promociones` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1665,7 +1821,7 @@ CREATE TABLE `reservas_stock` (
   CONSTRAINT `reservas_stock_carrito_id_foreign` FOREIGN KEY (`carrito_id`) REFERENCES `carritos` (`id`) ON DELETE CASCADE,
   CONSTRAINT `reservas_stock_existencia_id_foreign` FOREIGN KEY (`existencia_id`) REFERENCES `existencias` (`id`) ON DELETE CASCADE,
   CONSTRAINT `reservas_stock_pedido_id_foreign` FOREIGN KEY (`pedido_id`) REFERENCES `pedidos` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1676,7 +1832,33 @@ LOCK TABLES `reservas_stock` WRITE;
 /*!40000 ALTER TABLE `reservas_stock` DISABLE KEYS */;
 INSERT INTO `reservas_stock` VALUES
 (1,157,NULL,5,1,'2026-11-23 06:25:40','expirada','2026-11-23 06:20:40','2026-11-23 06:39:53'),
-(2,258,6,5,1,NULL,'confirmada','2026-11-23 07:07:27','2026-11-23 07:07:33');
+(2,258,6,5,1,NULL,'confirmada','2026-11-23 07:07:27','2026-11-23 07:07:33'),
+(3,237,NULL,5,1,'2026-11-23 07:40:09','expirada','2026-11-23 07:35:09','2026-11-23 14:23:24'),
+(4,137,NULL,5,1,'2026-11-30 07:36:14','liberada','2026-11-23 07:36:14','2026-11-23 07:36:17'),
+(5,250,7,5,1,NULL,'confirmada','2026-11-23 07:36:31','2026-11-23 15:35:16'),
+(6,196,NULL,5,1,'2026-11-23 14:53:05','expirada','2026-11-23 14:48:05','2026-11-23 15:14:31'),
+(7,259,NULL,5,1,'2026-11-23 15:39:14','liberada','2026-11-23 15:34:14','2026-11-23 15:34:18'),
+(8,228,7,5,1,NULL,'confirmada','2026-11-23 15:34:35','2026-11-23 15:35:16'),
+(9,246,7,5,1,NULL,'confirmada','2026-11-23 15:34:47','2026-11-23 15:35:16'),
+(10,217,7,5,1,NULL,'confirmada','2026-11-23 15:34:58','2026-11-23 15:35:16'),
+(11,125,7,5,1,NULL,'confirmada','2026-11-23 15:35:07','2026-11-23 15:35:16'),
+(12,169,8,5,1,NULL,'confirmada','2026-11-23 15:37:15','2026-11-23 15:37:19'),
+(13,199,9,5,1,NULL,'confirmada','2026-11-23 15:37:29','2026-11-23 15:37:41'),
+(14,164,10,5,1,NULL,'confirmada','2026-11-23 15:37:53','2026-11-23 15:38:19'),
+(15,122,11,5,1,NULL,'confirmada','2026-11-23 17:46:45','2026-11-23 17:46:57'),
+(16,120,12,5,1,NULL,'confirmada','2026-11-23 17:50:32','2026-11-23 17:50:40'),
+(17,168,NULL,5,1,'2026-11-23 17:56:39','expirada','2026-11-23 17:51:39','2026-11-23 18:02:19'),
+(18,164,13,5,1,NULL,'confirmada','2026-11-23 17:51:50','2026-11-23 18:02:52'),
+(19,168,NULL,5,1,'2026-11-23 18:08:35','expirada','2026-11-23 18:03:35','2026-11-23 18:08:35'),
+(20,149,14,5,1,NULL,'confirmada','2026-11-23 18:10:46','2026-11-23 18:11:03'),
+(21,247,15,5,1,NULL,'confirmada','2026-11-23 18:36:33','2026-11-23 18:36:47'),
+(22,193,NULL,5,1,'2026-11-23 18:43:20','expirada','2026-11-23 18:38:20','2026-11-23 18:43:19'),
+(23,132,16,5,1,NULL,'confirmada','2026-11-23 18:42:10','2026-11-23 18:57:06'),
+(24,133,NULL,5,1,'2026-11-23 18:52:57','expirada','2026-11-23 18:47:57','2026-11-23 18:55:14'),
+(25,123,NULL,5,1,'2026-12-02 01:24:34','liberada','2026-11-25 01:24:34','2026-11-25 01:24:39'),
+(26,125,NULL,5,1,'2026-12-02 01:24:44','activa','2026-11-25 01:24:44','2026-11-25 01:24:44'),
+(27,124,NULL,5,1,'2026-12-02 01:24:53','activa','2026-11-25 01:24:53','2026-11-25 01:24:53'),
+(28,123,NULL,5,1,'2026-12-02 01:32:58','activa','2026-11-25 01:32:58','2026-11-25 01:32:58');
 /*!40000 ALTER TABLE `reservas_stock` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1740,9 +1922,8 @@ CREATE TABLE `sessions` (
 LOCK TABLES `sessions` WRITE;
 /*!40000 ALTER TABLE `sessions` DISABLE KEYS */;
 INSERT INTO `sessions` VALUES
-('OgY4P9OxOy9qFijIqOSxjZb72MFdzTG9Rgg8Gnnt',11,'172.19.0.1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.0.0 Safari/537.36 Edg/158.0.0.0','eyJfdG9rZW4iOiJ4NjVjaHFNeVRqYlRoWmZPcVJmeG5LdXNUT3IwRDhCZkRYWkUxeU5WIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cL2xvY2FsaG9zdDo4MDAwXC9hZG1pblwvcmVwb3J0ZXNcL2V4cG9ydGFyXC9wZGY/X3RhYj10YWJfbXdzdW0xeW5fZHZjamVvMHg3ZHdxcTdvajZreTAiLCJyb3V0ZSI6ImFkbWluLnJlcG9ydGVzLnBkZiJ9LCJfZmxhc2giOnsib2xkIjpbXSwibmV3IjpbXX0sInBhc3N3b3JkX2hhc2hfd2ViIjoiZmNmZWY3YmQzMjM4YWVkNWFkN2M2NTczMDUzMDRjMjcyMzg2ZTZmMWJlMDE1YjVmMjhjZWU2ODBiNGFmZmQ2YyIsImFyY2hpdnVtX3RhYl9zZXNzaW9ucyI6eyJ0YWJfbXdzdW0xeW5fZHZjamVvMHg3ZHdxcTdvajZreTAiOnsidXNlcl9pZCI6MTEsImNhcnJpdG9fYXJjaGl2dW0iOltdLCJjYXJyaXRvX3ByZWNpb3NfY29uZ2VsYWRvcyI6W10sImNhcnJpdG9fcmVzZXJ2YXNfaWRzIjpbXSwiY2Fycml0b19leHBpcmFfZW4iOm51bGwsImF1dGhlbnRpY2F0ZWRfYXQiOiIyMDI2LTExLTIzVDA3OjMyOjM3KzAwOjAwIiwidXBkYXRlZF9hdCI6IjIwMjYtMTEtMjNUMDc6MzI6NDgrMDA6MDAifX0sImFyY2hpdnVtX2p1c3RfbG9nZ2VkX2luX3RhYl90b2tlbiI6InRhYl9td3N1bTF5bl9kdmNqZW8weDdkd3FxN29qNmt5MCJ9',1795419168),
-('WciJPVZSAnivmQiOBy1I3ThvRTaWpQO9G1lST2tt',NULL,'172.19.0.1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.0.0 Safari/537.36 Edg/158.0.0.0','eyJfdG9rZW4iOiJ3eW51ZzhlNXlZN2ZpREc4bUFoSHBndU5xNWw2cDRub3d6UkU1TGNlIiwiYXJjaGl2dW1fdGFiX3Nlc3Npb25zIjpbXSwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cL2xvY2FsaG9zdDo4MDAwIiwicm91dGUiOiJwdWJsaWMuaG9tZSJ9LCJfZmxhc2giOnsib2xkIjpbXSwibmV3IjpbXX0sInBhc3N3b3JkX2hhc2hfd2ViIjoiYzdmY2E0OTBkNDA0NjQ2Y2EyMjM4ZjM1NjJiYmI5YmRmMTZhYTdkMjJjOTAzZWU5ZTJiNjFmYzdkMmY1YjhiMiIsInBlZGlkb3NfcmVjaWVudGVzIjpbNl0sImFyY2hpdnVtX3N1Y3Vyc2FsX2lkIjo0fQ==',1795417809),
-('yZXYi6qYkE8iFvYxiZdJFMbL24OS4HtIucjEaswV',13,'172.19.0.1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.0.0 Safari/537.36 Edg/158.0.0.0','eyJfdG9rZW4iOiJXaTB3TUdRRHpCMVpuSmNuelN3Tk43dmFxcWpvVTFNYnpMU3NJNkI2IiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cL2xvY2FsaG9zdDo4MDAwXC9jYXRhbG9nb1wvbGlicm9zP190YWI9dGFiX213c3VtMXluX2R2Y2plbzB4N2R3cXE3b2o2a3kwIiwicm91dGUiOiJwdWJsaWMubGlicm9zIn0sIl9mbGFzaCI6eyJvbGQiOltdLCJuZXciOltdfSwicGFzc3dvcmRfaGFzaF93ZWIiOiI0MzQyZDhkMDE0MDM1M2YxYzAwY2NkMzY5NDRiNmI5ZGRlZTI5NjEzOTAyZWFlMWM1YTdmYmIzYzRmYWE2NTA1IiwiYXJjaGl2dW1fdGFiX3Nlc3Npb25zIjp7InRhYl9td3NsMmV6a182cG5xcHd4ZHFxOG03NWxlYjM5ayI6eyJ1c2VyX2lkIjoxMSwiY2Fycml0b19hcmNoaXZ1bSI6W10sImNhcnJpdG9fcHJlY2lvc19jb25nZWxhZG9zIjpbXSwiY2Fycml0b19yZXNlcnZhc19pZHMiOltdLCJjYXJyaXRvX2V4cGlyYV9lbiI6bnVsbCwiYXV0aGVudGljYXRlZF9hdCI6IjIwMjYtMTEtMjNUMDU6Mzk6MzArMDA6MDAiLCJ1cGRhdGVkX2F0IjoiMjAyNi0xMS0yM1QwNjoxODo1NSswMDowMCJ9LCJ0YWJfbXdzdW0xeW5fZHZjamVvMHg3ZHdxcTdvajZreTAiOnsidXNlcl9pZCI6MTMsImNhcnJpdG9fYXJjaGl2dW0iOnsiOTMiOjF9LCJjYXJyaXRvX3ByZWNpb3NfY29uZ2VsYWRvcyI6W10sImNhcnJpdG9fcmVzZXJ2YXNfaWRzIjpbMV0sImNhcnJpdG9fZXhwaXJhX2VuIjoiMjAyNi0xMS0yM1QwNjoyNTo0MCswMDowMCIsImF1dGhlbnRpY2F0ZWRfYXQiOiIyMDI2LTExLTIzVDA2OjIwOjMzKzAwOjAwIiwidXBkYXRlZF9hdCI6IjIwMjYtMTEtMjNUMDY6MjE6MjkrMDA6MDAifX0sImFyY2hpdnVtX2p1c3RfbG9nZ2VkX2luX3RhYl90b2tlbiI6InRhYl9td3N1bTF5bl9kdmNqZW8weDdkd3FxN29qNmt5MCJ9',1795414889);
+('4IzWmrpU6pk2OcmXpmzvO6SYYBoUlWf2h79ef4Kw',NULL,'172.19.0.1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.0.0 Safari/537.36 Edg/158.0.0.0','eyJfdG9rZW4iOiJXb1BtRXlnWU1kcTRuV09zb0hVdFpnZzJkMDkwdmZVT3JvU2UxUzNtIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cL2xvY2FsaG9zdDo4MDAwIiwicm91dGUiOiJwdWJsaWMuaG9tZSJ9LCJfZmxhc2giOnsib2xkIjpbXSwibmV3IjpbXX19',1795641281),
+('xvHo65ton4Zt5VFKAlqnzQw2Saly6ei6tMG1rPHf',NULL,'172.19.0.1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.0.0 Safari/537.36 Edg/158.0.0.0','eyJfdG9rZW4iOiJYZjZkUnpjRmJyaWxpYnlCdWRRQWJCeWVvemFMRVJPcUlMajFabDZMIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cL2xvY2FsaG9zdDo4MDAwXC9jYXRhbG9nb1wvdmluaWxvcyIsInJvdXRlIjoicHVibGljLnZpbmlsb3MifSwiX2ZsYXNoIjp7Im9sZCI6W10sIm5ldyI6W119LCJwYXNzd29yZF9oYXNoX3dlYiI6ImE4MDkzNjVlNzA3MWRjODc3MTIxYTVlNDQyNjMxMzZmODA5NzY3ZTEwOWNjOTQ2MTllNjg5MDNhY2E1MGU4ODAiLCJhcmNoaXZ1bV90YWJfc2Vzc2lvbnMiOnsidGFiX213d21nZ2owX2dwdXdyNjJwNjduOWozanRrZnIxIjp7InVzZXJfaWQiOjExLCJjYXJyaXRvX2FyY2hpdnVtIjpbXSwiY2Fycml0b19wcmVjaW9zX2NvbmdlbGFkb3MiOltdLCJjYXJyaXRvX3Jlc2VydmFzX2lkcyI6W10sImNhcnJpdG9fZXhwaXJhX2VuIjpudWxsLCJhdXRoZW50aWNhdGVkX2F0IjoiMjAyNi0xMS0yNVQyMTozMjo1MiswMDowMCIsInVwZGF0ZWRfYXQiOiIyMDI2LTExLTI1VDIyOjExOjM4KzAwOjAwIn19fQ==',1795644825);
 /*!40000 ALTER TABLE `sessions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1902,7 +2083,7 @@ CREATE TABLE `variantes_sku` (
   UNIQUE KEY `variantes_sku_sku_unique` (`sku`),
   KEY `variantes_sku_producto_id_foreign` (`producto_id`),
   CONSTRAINT `variantes_sku_producto_id_foreign` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=163 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=166 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1981,7 +2162,7 @@ INSERT INTO `variantes_sku` VALUES
 (137,137,'COL-1914-BIL','MINT (M) · NUMISMÁTICA & NOTAFILIA REVOLUCIONARIA','productos/paiPRw6iKSvFPyK4TkoNDxvKiIMdvW2cGgNfRCgz.jpg',500.00,1,'2026-11-22 04:15:57','2026-11-23 06:45:40'),
 (138,138,'COL-1768-COL8','VERY FINE (VF) · MONEDAS & BILLETES HISTÓRICOS',NULL,38500.00,0,'2026-11-22 04:15:57','2026-11-23 06:45:21'),
 (139,139,'COL-1980-NIN','NEAR MINT (NM) · VIDEOJUEGOS RETRO EN CAJA','productos/Ov8dBeHpr9qzg7jBmxx6rzvIFBVrcyrIfVdQyYNz.webp',2500.00,1,'2026-11-22 04:15:57','2026-11-23 06:45:57'),
-(140,140,'COL-1987-ZEL','MINT (M) · CARTUCHO DORADO DE COLECCIÓN · VIDEOJUEGOS','productos/lMStJFZVoRaFgiGxdH3QPglfHsNjnBzPESNRtTbh.avif',2500.00,1,'2026-11-22 04:15:57','2026-11-23 06:45:46'),
+(140,140,'COL-1987-ZEL','MINT (M) · CARTUCHO DORADO DE COLECCIÓN · VIDEOJUEGOS','productos/lMStJFZVoRaFgiGxdH3QPglfHsNjnBzPESNRtTbh.avif',2600.00,1,'2026-11-22 04:15:57','2026-11-23 07:35:42'),
 (141,141,'LIB-2026-003','MINT (M) · Cancelada encarcelada','productos/z3HOwFAzBCfqVSpc2bwJgNsMIOgEHW6MLMJvgpP9.jpg',249.00,1,'2026-11-23 06:01:10','2026-11-23 06:39:34'),
 (142,142,'LIB-2026-005','MINT (M) · Así es la puta vida','productos/mXsakZMRdos8e3XhJrGNMrnfTTFiGGbpbXI5FMds.jpg',150.00,1,'2026-11-23 06:01:10','2026-11-23 06:39:34'),
 (143,143,'LIB-2026-007','MINT (M) · Tres Promesas','productos/bJP8n6wZqmA6HijD0iKhd2zUBAxr8SsM3x7rJnwg.jpg',379.00,1,'2026-11-23 06:01:10','2026-11-23 06:39:34'),
@@ -1993,10 +2174,13 @@ INSERT INTO `variantes_sku` VALUES
 (149,149,'COL-2036.002','MINT (M) · PIEZA ÚNICA 1/1 · Guitarra Eléctrica Autografiada por Claudio Sánchez','productos/plmvqDqWdaonmP4pvCcQKSMShw7H2C9J9gwucizs.jpg',11494.00,1,'2026-11-23 06:01:10','2026-11-23 06:39:35'),
 (150,150,'COL-2036.003','MINT (M) · PIEZA ÚNICA 1/1 · Busto de colección Star Trek','productos/hTG48Fhmq6xPvzcb7CAI0W16xTvh1tru3VRmVniT.jpg',3065.00,1,'2026-11-23 06:01:10','2026-11-23 06:39:35'),
 (151,151,'LIB-2026-002','MINT (M) · Los secretos de YouTube','productos/0QCI76yUzRyTebI6k8JkqZfAhvRE1Wu06xBaPkuE.jpg',149.00,1,'2026-11-23 06:09:54','2026-11-23 06:39:34'),
-(152,152,'LIB-2026-004','MINT (M) · Cómo ser youtuber','productos/eYHeYy3Fgl2TSMLSPkz6QpWRG9ltOtsi83r3BB5R.jpg',189.00,1,'2026-11-23 06:09:54','2026-11-23 06:39:34'),
+(152,152,'LIB-2026-004','MINT (M) · Cómo ser youtuber','productos/eYHeYy3Fgl2TSMLSPkz6QpWRG9ltOtsi83r3BB5R.jpg',200.00,1,'2026-11-23 06:09:54','2026-11-23 07:36:47'),
 (153,153,'LIB-2026-006','MINT (M) · Auronplay el libro','productos/vHKpgYflGJSIj0WAnRHtKR7YWsMGX92LxWe7nfou.jpg',138.00,1,'2026-11-23 06:09:54','2026-11-23 06:39:34'),
 (154,154,'DIS-2026-005','MINT(M) · PIEZA ÚNICA 1/1 · Back in black','productos/59ku0yscQyCH9x4N0Vdn8q1gpaf5imKSHz2g38Wz.jpg',938.00,1,'2026-11-23 06:09:54','2026-11-23 06:39:34'),
-(162,162,'COL-2076.010','MINT (M) · PIEZA ÚNICA 1/1 · Micky Mantle','productos/9x8MOv2UAXphugNEuTxIaW70fAAsbMqhIeQUAvsr.jpg',12600000.00,1,'2026-11-23 06:18:55','2026-11-23 06:39:35');
+(162,162,'COL-2076.010','MINT (M) · PIEZA ÚNICA 1/1 · Micky Mantle','productos/9x8MOv2UAXphugNEuTxIaW70fAAsbMqhIeQUAvsr.jpg',12600000.00,1,'2026-11-23 06:18:55','2026-11-23 06:39:35'),
+(163,163,'VIN-FS-1968-R51026','MINT (M) · Rain In My Heart','productos/1HL0V4cl2WoW0LIBPKatIhbqwyCtABQvnS9sayJm.webp',150.00,1,'2026-11-25 21:40:58','2026-11-25 21:40:58'),
+(164,164,'CD-MJ-2013-887654156426','MINT (M) · El Amor Manda','productos/jxYSgpkqMiZTYpXe0VHbQTVLXPkmlY1dLdaKBMsT.webp',150.00,1,'2026-11-25 21:52:24','2026-11-25 21:52:24'),
+(165,165,'VIN-JJ-2026-198029747416','MINT (M) · Gotas de Fuego','productos/rmyeOIA6gOL4UNwzJNtfWc5EAEqtIXKxU9fysQqO.webp',899.00,1,'2026-11-25 22:11:38','2026-11-25 22:11:38');
 /*!40000 ALTER TABLE `variantes_sku` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -2009,4 +2193,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-11-23  7:33:46
+-- Dump completed on 2026-11-25 22:19:39

@@ -19,38 +19,42 @@
 
 \refsection{0}
   \datalist[entry]{none/global//global/global/global}
-    \entry{pressman2010}{book}{}{}
-      \name{author}{1}{}{%
+    \entry{pressman2021}{book}{}{}
+      \name{author}{2}{}{%
         {{hash=4d3f81788d99cf425c4b6e0a454baab0}{%
            family={Pressman},
            familyi={P\bibinitperiod},
            given={Roger\bibnamedelima S.},
            giveni={R\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=13b3d71ce7fd3614b4e2e9ce804597f3}{%
+           family={Maxim},
+           familyi={M\bibinitperiod},
+           given={Bruce\bibnamedelima R.},
+           giveni={B\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
       }
       \list{location}{1}{%
-        {México D.F.}%
+        {Ciudad de México, México}%
       }
       \list{publisher}{1}{%
         {McGraw-Hill Interamericana}%
       }
-      \strng{namehash}{4d3f81788d99cf425c4b6e0a454baab0}
-      \strng{fullhash}{4d3f81788d99cf425c4b6e0a454baab0}
-      \strng{fullhashraw}{4d3f81788d99cf425c4b6e0a454baab0}
-      \strng{bibnamehash}{4d3f81788d99cf425c4b6e0a454baab0}
-      \strng{authorbibnamehash}{4d3f81788d99cf425c4b6e0a454baab0}
-      \strng{authornamehash}{4d3f81788d99cf425c4b6e0a454baab0}
-      \strng{authorfullhash}{4d3f81788d99cf425c4b6e0a454baab0}
-      \strng{authorfullhashraw}{4d3f81788d99cf425c4b6e0a454baab0}
+      \strng{namehash}{da6ec91488daec8c3c9eddf18c78dad8}
+      \strng{fullhash}{da6ec91488daec8c3c9eddf18c78dad8}
+      \strng{fullhashraw}{da6ec91488daec8c3c9eddf18c78dad8}
+      \strng{bibnamehash}{da6ec91488daec8c3c9eddf18c78dad8}
+      \strng{authorbibnamehash}{da6ec91488daec8c3c9eddf18c78dad8}
+      \strng{authornamehash}{da6ec91488daec8c3c9eddf18c78dad8}
+      \strng{authorfullhash}{da6ec91488daec8c3c9eddf18c78dad8}
+      \strng{authorfullhashraw}{da6ec91488daec8c3c9eddf18c78dad8}
       \field{sortinit}{1}
       \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{edition}{7ma}
-      \field{isbn}{978-607-15-0314-5}
-      \field{title}{Ingeniería del Software: Un enfoque práctico}
-      \field{year}{2010}
+      \field{edition}{9.ª}
+      \field{title}{Ingeniería del software: Un enfoque práctico}
+      \field{year}{2021}
     \endentry
-    \entry{sommerville2011}{book}{}{}
+    \entry{sommerville2020}{book}{}{}
       \name{author}{1}{}{%
         {{hash=70341b3bfcce7026902f4eb1e4111b58}{%
            family={Sommerville},
@@ -59,7 +63,7 @@
            giveni={I\bibinitperiod}}}%
       }
       \list{location}{1}{%
-        {Madrid, España}%
+        {Ciudad de México, México}%
       }
       \list{publisher}{1}{%
         {Pearson Educación}%
@@ -72,84 +76,22 @@
       \strng{authornamehash}{70341b3bfcce7026902f4eb1e4111b58}
       \strng{authorfullhash}{70341b3bfcce7026902f4eb1e4111b58}
       \strng{authorfullhashraw}{70341b3bfcce7026902f4eb1e4111b58}
-      \field{sortinit}{2}
-      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{edition}{9na}
-      \field{isbn}{978-84-7829-139-7}
-      \field{title}{Ingeniería del Software}
-      \field{year}{2011}
-    \endentry
-    \entry{laravel_doc}{online}{}{}
-      \name{author}{1}{}{%
-        {{hash=784eb70e168b62a831c6884055ed28c0}{%
-           family={{Laravel LLC}},
-           familyi={L\bibinitperiod}}}%
-      }
-      \strng{namehash}{784eb70e168b62a831c6884055ed28c0}
-      \strng{fullhash}{784eb70e168b62a831c6884055ed28c0}
-      \strng{fullhashraw}{784eb70e168b62a831c6884055ed28c0}
-      \strng{bibnamehash}{784eb70e168b62a831c6884055ed28c0}
-      \strng{authorbibnamehash}{784eb70e168b62a831c6884055ed28c0}
-      \strng{authornamehash}{784eb70e168b62a831c6884055ed28c0}
-      \strng{authorfullhash}{784eb70e168b62a831c6884055ed28c0}
-      \strng{authorfullhashraw}{784eb70e168b62a831c6884055ed28c0}
-      \field{sortinit}{3}
-      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{note}{Guía oficial de desarrollo para aplicaciones web empresariales basadas en PHP}
-      \field{title}{Documentación Oficial del Framework Laravel 11.x: Arquitectura, Enrutamiento y Eloquent ORM}
-      \field{urlday}{15}
-      \field{urlmonth}{1}
-      \field{urlyear}{2025}
-      \field{year}{2024}
-      \field{urldateera}{ce}
-      \verb{urlraw}
-      \verb https://laravel.com/docs/11.x
-      \endverb
-      \verb{url}
-      \verb https://laravel.com/docs/11.x
-      \endverb
-    \endentry
-    \entry{docker_overview}{online}{}{}
-      \name{author}{1}{}{%
-        {{hash=4bd3b392874c74fba4ed57a24eae0ac1}{%
-           family={{Docker Inc.}},
-           familyi={D\bibinitperiod}}}%
-      }
-      \strng{namehash}{4bd3b392874c74fba4ed57a24eae0ac1}
-      \strng{fullhash}{4bd3b392874c74fba4ed57a24eae0ac1}
-      \strng{fullhashraw}{4bd3b392874c74fba4ed57a24eae0ac1}
-      \strng{bibnamehash}{4bd3b392874c74fba4ed57a24eae0ac1}
-      \strng{authorbibnamehash}{4bd3b392874c74fba4ed57a24eae0ac1}
-      \strng{authornamehash}{4bd3b392874c74fba4ed57a24eae0ac1}
-      \strng{authorfullhash}{4bd3b392874c74fba4ed57a24eae0ac1}
-      \strng{authorfullhashraw}{4bd3b392874c74fba4ed57a24eae0ac1}
-      \field{sortinit}{3}
-      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{note}{Plataforma estándar para empaquetado, distribución y ejecución de servicios web}
-      \field{title}{Docker Engine y Docker Compose: Documentación de Arquitectura de Contenedores y Virtualización Ligera}
-      \field{urlday}{15}
-      \field{urlmonth}{1}
-      \field{urlyear}{2025}
-      \field{year}{2024}
-      \field{urldateera}{ce}
-      \verb{urlraw}
-      \verb https://docs.docker.com/
-      \endverb
-      \verb{url}
-      \verb https://docs.docker.com/
-      \endverb
+      \field{edition}{10.ª}
+      \field{title}{Ingeniería de software}
+      \field{year}{2020}
     \endentry
     \entry{owasp_top10}{online}{}{}
       \name{author}{1}{}{%
         {{hash=b0d7a4bf1a0878d4e92cdd7461e48710}{%
            family={{OWASP Foundation}},
            familyi={O\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {OWASP}%
       }
       \strng{namehash}{b0d7a4bf1a0878d4e92cdd7461e48710}
       \strng{fullhash}{b0d7a4bf1a0878d4e92cdd7461e48710}
@@ -159,84 +101,169 @@
       \strng{authornamehash}{b0d7a4bf1a0878d4e92cdd7461e48710}
       \strng{authorfullhash}{b0d7a4bf1a0878d4e92cdd7461e48710}
       \strng{authorfullhashraw}{b0d7a4bf1a0878d4e92cdd7461e48710}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{OWASP Top 10: Los diez riesgos de seguridad más críticos en aplicaciones web}
+      \field{year}{2021}
+      \verb{urlraw}
+      \verb https://owasp.org/Top10/es/
+      \endverb
+      \verb{url}
+      \verb https://owasp.org/Top10/es/
+      \endverb
+    \endentry
+    \entry{docker_compose}{online}{}{}
+      \name{author}{1}{}{%
+        {{hash=4bd3b392874c74fba4ed57a24eae0ac1}{%
+           family={{Docker Inc.}},
+           familyi={D\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {Docker Docs}%
+      }
+      \strng{namehash}{4bd3b392874c74fba4ed57a24eae0ac1}
+      \strng{fullhash}{4bd3b392874c74fba4ed57a24eae0ac1}
+      \strng{fullhashraw}{4bd3b392874c74fba4ed57a24eae0ac1}
+      \strng{bibnamehash}{4bd3b392874c74fba4ed57a24eae0ac1}
+      \strng{authorbibnamehash}{4bd3b392874c74fba4ed57a24eae0ac1}
+      \strng{authornamehash}{4bd3b392874c74fba4ed57a24eae0ac1}
+      \strng{authorfullhash}{4bd3b392874c74fba4ed57a24eae0ac1}
+      \strng{authorfullhashraw}{4bd3b392874c74fba4ed57a24eae0ac1}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Documentación de Docker y Docker Compose: Contenerización y Volúmenes Persistentes}
+      \field{year}{2024}
+      \verb{urlraw}
+      \verb https://docs.docker.com/compose/
+      \endverb
+      \verb{url}
+      \verb https://docs.docker.com/compose/
+      \endverb
+    \endentry
+    \entry{woocommerce_docs}{online}{}{}
+      \name{author}{1}{}{%
+        {{hash=07eb5eab96aef4402389d1667636fe7f}{%
+           family={{Automattic Inc.}},
+           familyi={A\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {WooCommerce Docs}%
+      }
+      \strng{namehash}{07eb5eab96aef4402389d1667636fe7f}
+      \strng{fullhash}{07eb5eab96aef4402389d1667636fe7f}
+      \strng{fullhashraw}{07eb5eab96aef4402389d1667636fe7f}
+      \strng{bibnamehash}{07eb5eab96aef4402389d1667636fe7f}
+      \strng{authorbibnamehash}{07eb5eab96aef4402389d1667636fe7f}
+      \strng{authornamehash}{07eb5eab96aef4402389d1667636fe7f}
+      \strng{authorfullhash}{07eb5eab96aef4402389d1667636fe7f}
+      \strng{authorfullhashraw}{07eb5eab96aef4402389d1667636fe7f}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Documentación Oficial de WooCommerce: Gestión de Catálogo, Inventario y Pedidos}
+      \field{year}{2024}
+      \verb{urlraw}
+      \verb https://woocommerce.com/documentation/
+      \endverb
+      \verb{url}
+      \verb https://woocommerce.com/documentation/
+      \endverb
+    \endentry
+    \entry{odoo_docs}{online}{}{}
+      \name{author}{1}{}{%
+        {{hash=3687a6b2ce735fa274675202926d88df}{%
+           family={{Odoo S.A.}},
+           familyi={O\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {Odoo Documentation}%
+      }
+      \strng{namehash}{3687a6b2ce735fa274675202926d88df}
+      \strng{fullhash}{3687a6b2ce735fa274675202926d88df}
+      \strng{fullhashraw}{3687a6b2ce735fa274675202926d88df}
+      \strng{bibnamehash}{3687a6b2ce735fa274675202926d88df}
+      \strng{authorbibnamehash}{3687a6b2ce735fa274675202926d88df}
+      \strng{authornamehash}{3687a6b2ce735fa274675202926d88df}
+      \strng{authorfullhash}{3687a6b2ce735fa274675202926d88df}
+      \strng{authorfullhashraw}{3687a6b2ce735fa274675202926d88df}
       \field{sortinit}{4}
       \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{note}{Estándar internacional de mitigación de vulnerabilidades como Inyección SQL, XSS y CSRF}
-      \field{title}{OWASP Top 10: Los Diez Riesgos Críticos de Seguridad en Aplicaciones Web}
-      \field{urlday}{15}
-      \field{urlmonth}{1}
-      \field{urlyear}{2025}
-      \field{year}{2021}
-      \field{urldateera}{ce}
+      \field{title}{Documentación Oficial de Odoo: Gestión de Inventarios y Comercio Electrónico}
+      \field{year}{2024}
       \verb{urlraw}
-      \verb https://owasp.org/www-project-top-ten/
+      \verb https://www.odoo.com/documentation/
       \endverb
       \verb{url}
-      \verb https://owasp.org/www-project-top-ten/
+      \verb https://www.odoo.com/documentation/
       \endverb
     \endentry
-    \entry{fowler_patterns}{book}{}{}
+    \entry{snipeit_docs}{online}{}{}
       \name{author}{1}{}{%
-        {{hash=312ac886938a9b2be4f8eb607567fe4c}{%
-           family={Fowler},
-           familyi={F\bibinitperiod},
-           given={Martin},
-           giveni={M\bibinitperiod}}}%
+        {{hash=255594e1184cfc50de1398908fd891a5}{%
+           family={{Grokability Inc.}},
+           familyi={G\bibinitperiod}}}%
       }
-      \list{location}{1}{%
-        {Boston, MA, USA}%
+      \list{organization}{1}{%
+        {Snipe-IT Docs}%
       }
-      \list{publisher}{1}{%
-        {Addison-Wesley Professional}%
+      \strng{namehash}{255594e1184cfc50de1398908fd891a5}
+      \strng{fullhash}{255594e1184cfc50de1398908fd891a5}
+      \strng{fullhashraw}{255594e1184cfc50de1398908fd891a5}
+      \strng{bibnamehash}{255594e1184cfc50de1398908fd891a5}
+      \strng{authorbibnamehash}{255594e1184cfc50de1398908fd891a5}
+      \strng{authornamehash}{255594e1184cfc50de1398908fd891a5}
+      \strng{authorfullhash}{255594e1184cfc50de1398908fd891a5}
+      \strng{authorfullhashraw}{255594e1184cfc50de1398908fd891a5}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Snipe-IT Open Source Asset Management Documentation}
+      \field{year}{2024}
+      \verb{urlraw}
+      \verb https://snipe-it.readme.io/
+      \endverb
+      \verb{url}
+      \verb https://snipe-it.readme.io/
+      \endverb
+    \endentry
+    \entry{laravel_doc}{online}{}{}
+      \name{author}{1}{}{%
+        {{hash=014fa26b3b0c59e1bdec61314fc8d11b}{%
+           family={Otwell},
+           familyi={O\bibinitperiod},
+           given={Taylor},
+           giveni={T\bibinitperiod}}}%
       }
-      \strng{namehash}{312ac886938a9b2be4f8eb607567fe4c}
-      \strng{fullhash}{312ac886938a9b2be4f8eb607567fe4c}
-      \strng{fullhashraw}{312ac886938a9b2be4f8eb607567fe4c}
-      \strng{bibnamehash}{312ac886938a9b2be4f8eb607567fe4c}
-      \strng{authorbibnamehash}{312ac886938a9b2be4f8eb607567fe4c}
-      \strng{authornamehash}{312ac886938a9b2be4f8eb607567fe4c}
-      \strng{authorfullhash}{312ac886938a9b2be4f8eb607567fe4c}
-      \strng{authorfullhashraw}{312ac886938a9b2be4f8eb607567fe4c}
+      \list{organization}{1}{%
+        {Laravel LLC}%
+      }
+      \strng{namehash}{014fa26b3b0c59e1bdec61314fc8d11b}
+      \strng{fullhash}{014fa26b3b0c59e1bdec61314fc8d11b}
+      \strng{fullhashraw}{014fa26b3b0c59e1bdec61314fc8d11b}
+      \strng{bibnamehash}{014fa26b3b0c59e1bdec61314fc8d11b}
+      \strng{authorbibnamehash}{014fa26b3b0c59e1bdec61314fc8d11b}
+      \strng{authornamehash}{014fa26b3b0c59e1bdec61314fc8d11b}
+      \strng{authorfullhash}{014fa26b3b0c59e1bdec61314fc8d11b}
+      \strng{authorfullhashraw}{014fa26b3b0c59e1bdec61314fc8d11b}
       \field{sortinit}{6}
       \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{isbn}{978-0321127426}
-      \field{title}{Patterns of Enterprise Application Architecture}
-      \field{year}{2002}
-    \endentry
-    \entry{php_manual}{online}{}{}
-      \name{author}{1}{}{%
-        {{hash=8891c29d42d5f739b253244425090885}{%
-           family={{The PHP Group}},
-           familyi={T\bibinitperiod}}}%
-      }
-      \strng{namehash}{8891c29d42d5f739b253244425090885}
-      \strng{fullhash}{8891c29d42d5f739b253244425090885}
-      \strng{fullhashraw}{8891c29d42d5f739b253244425090885}
-      \strng{bibnamehash}{8891c29d42d5f739b253244425090885}
-      \strng{authorbibnamehash}{8891c29d42d5f739b253244425090885}
-      \strng{authornamehash}{8891c29d42d5f739b253244425090885}
-      \strng{authorfullhash}{8891c29d42d5f739b253244425090885}
-      \strng{authorfullhashraw}{8891c29d42d5f739b253244425090885}
-      \field{sortinit}{8}
-      \field{sortinithash}{a231b008ebf0ecbe0b4d96dcc159445f}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{note}{Documentación técnica oficial en español}
-      \field{title}{Manual Oficial de PHP 8.4: Referencia del Lenguaje y Programación Orientada a Objetos}
-      \field{urlday}{15}
-      \field{urlmonth}{1}
-      \field{urlyear}{2025}
-      \field{year}{2024}
-      \field{urldateera}{ce}
+      \field{title}{Documentación Oficial de Laravel: Arquitectura MVC, Eloquent ORM y Seguridad}
+      \field{year}{2025}
       \verb{urlraw}
-      \verb https://www.php.net/manual/es/
+      \verb https://laravel.com/docs
       \endverb
       \verb{url}
-      \verb https://www.php.net/manual/es/
+      \verb https://laravel.com/docs
       \endverb
     \endentry
     \entry{mariadb_foundation}{online}{}{}
@@ -244,6 +271,9 @@
         {{hash=1dc102a68b76700cdc02f1d7a578b433}{%
            family={{MariaDB Foundation}},
            familyi={M\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {MariaDB.org}%
       }
       \strng{namehash}{1dc102a68b76700cdc02f1d7a578b433}
       \strng{fullhash}{1dc102a68b76700cdc02f1d7a578b433}
@@ -253,274 +283,58 @@
       \strng{authornamehash}{1dc102a68b76700cdc02f1d7a578b433}
       \strng{authorfullhash}{1dc102a68b76700cdc02f1d7a578b433}
       \strng{authorfullhashraw}{1dc102a68b76700cdc02f1d7a578b433}
-      \field{sortinit}{1}
-      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{note}{Sistema de gestión de bases de datos relacionales compatible con SQL e integridad ACID}
-      \field{title}{Servidor de Base de Datos MariaDB: Guía de Referencia y Motor de Almacenamiento InnoDB}
-      \field{urlday}{15}
-      \field{urlmonth}{1}
-      \field{urlyear}{2025}
+      \field{title}{MariaDB Server Documentation: Transacciones InnoDB e Integridad Referencial}
       \field{year}{2024}
-      \field{urldateera}{ce}
       \verb{urlraw}
-      \verb https://mariadb.org/documentation/
+      \verb https://mariadb.com/kb/es/
       \endverb
       \verb{url}
-      \verb https://mariadb.org/documentation/
+      \verb https://mariadb.com/kb/es/
       \endverb
     \endentry
-    \entry{nginx_admin}{online}{}{}
-      \name{author}{1}{}{%
-        {{hash=ee0b4236e04232f5923d6f9715ede8a0}{%
-           family={{F5 NGINX Inc.}},
-           familyi={F\bibinitperiod}}}%
-      }
-      \strng{namehash}{ee0b4236e04232f5923d6f9715ede8a0}
-      \strng{fullhash}{ee0b4236e04232f5923d6f9715ede8a0}
-      \strng{fullhashraw}{ee0b4236e04232f5923d6f9715ede8a0}
-      \strng{bibnamehash}{ee0b4236e04232f5923d6f9715ede8a0}
-      \strng{authorbibnamehash}{ee0b4236e04232f5923d6f9715ede8a0}
-      \strng{authornamehash}{ee0b4236e04232f5923d6f9715ede8a0}
-      \strng{authorfullhash}{ee0b4236e04232f5923d6f9715ede8a0}
-      \strng{authorfullhashraw}{ee0b4236e04232f5923d6f9715ede8a0}
-      \field{sortinit}{1}
-      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{note}{Infraestructura de terminación TLS, compresión y distribución estática}
-      \field{title}{Guía de Administración de NGINX: Servidor Web HTTP de Alto Rendimiento y Proxy Inverso}
-      \field{urlday}{15}
-      \field{urlmonth}{1}
-      \field{urlyear}{2025}
-      \field{year}{2024}
-      \field{urldateera}{ce}
-      \verb{urlraw}
-      \verb https://nginx.org/en/docs/
-      \endverb
-      \verb{url}
-      \verb https://nginx.org/en/docs/
-      \endverb
-    \endentry
-    \entry{tailwind_docs}{online}{}{}
-      \name{author}{2}{}{%
-        {{hash=82d399ca2d4eaf122321c8b59c00ec1c}{%
-           family={Wathan},
-           familyi={W\bibinitperiod},
-           given={Adam},
+    \entry{silberschatz2020}{book}{}{}
+      \name{author}{3}{}{%
+        {{hash=525ecdcf12996b3d68e3c71d7526bf35}{%
+           family={Silberschatz},
+           familyi={S\bibinitperiod},
+           given={Abraham},
            giveni={A\bibinitperiod}}}%
-        {{hash=766d42c0267fcbdbbd0d67b32f6642ff}{%
-           family={{Tailwind Labs Inc.}},
-           familyi={T\bibinitperiod}}}%
-      }
-      \strng{namehash}{4eceb799618a22d84a2ac69adb4d4b49}
-      \strng{fullhash}{4eceb799618a22d84a2ac69adb4d4b49}
-      \strng{fullhashraw}{4eceb799618a22d84a2ac69adb4d4b49}
-      \strng{bibnamehash}{4eceb799618a22d84a2ac69adb4d4b49}
-      \strng{authorbibnamehash}{4eceb799618a22d84a2ac69adb4d4b49}
-      \strng{authornamehash}{4eceb799618a22d84a2ac69adb4d4b49}
-      \strng{authorfullhash}{4eceb799618a22d84a2ac69adb4d4b49}
-      \strng{authorfullhashraw}{4eceb799618a22d84a2ac69adb4d4b49}
-      \field{sortinit}{1}
-      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{note}{Motor de estilizado reactivo y adaptativo para la web}
-      \field{title}{Documentación de Tailwind CSS: Framework de CSS Orientado a Clases de Utilidad para Interfaces Modernas}
-      \field{urlday}{15}
-      \field{urlmonth}{1}
-      \field{urlyear}{2025}
-      \field{year}{2024}
-      \field{urldateera}{ce}
-      \verb{urlraw}
-      \verb https://tailwindcss.com/docs
-      \endverb
-      \verb{url}
-      \verb https://tailwindcss.com/docs
-      \endverb
-    \endentry
-    \entry{alpinejs_docs}{online}{}{}
-      \name{author}{1}{}{%
-        {{hash=a3282aec429ad0ef4fcc6c596558a512}{%
-           family={Porzio},
-           familyi={P\bibinitperiod},
-           given={Caleb},
-           giveni={C\bibinitperiod}}}%
-      }
-      \strng{namehash}{a3282aec429ad0ef4fcc6c596558a512}
-      \strng{fullhash}{a3282aec429ad0ef4fcc6c596558a512}
-      \strng{fullhashraw}{a3282aec429ad0ef4fcc6c596558a512}
-      \strng{bibnamehash}{a3282aec429ad0ef4fcc6c596558a512}
-      \strng{authorbibnamehash}{a3282aec429ad0ef4fcc6c596558a512}
-      \strng{authornamehash}{a3282aec429ad0ef4fcc6c596558a512}
-      \strng{authorfullhash}{a3282aec429ad0ef4fcc6c596558a512}
-      \strng{authorfullhashraw}{a3282aec429ad0ef4fcc6c596558a512}
-      \field{sortinit}{1}
-      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{note}{Micro-framework para interactividad frontend con renderizado del lado del servidor}
-      \field{title}{Documentación Oficial de Alpine.js: Reactividad Declarativa para Plantillas de Servidor}
-      \field{urlday}{15}
-      \field{urlmonth}{1}
-      \field{urlyear}{2025}
-      \field{year}{2024}
-      \field{urldateera}{ce}
-      \verb{urlraw}
-      \verb https://alpinejs.dev/
-      \endverb
-      \verb{url}
-      \verb https://alpinejs.dev/
-      \endverb
-    \endentry
-    \entry{chartjs_org}{online}{}{}
-      \name{author}{1}{}{%
-        {{hash=19ede518d25543c94b651ab8a19a49fd}{%
-           family={{Chart.js Community}},
-           familyi={C\bibinitperiod}}}%
-      }
-      \strng{namehash}{19ede518d25543c94b651ab8a19a49fd}
-      \strng{fullhash}{19ede518d25543c94b651ab8a19a49fd}
-      \strng{fullhashraw}{19ede518d25543c94b651ab8a19a49fd}
-      \strng{bibnamehash}{19ede518d25543c94b651ab8a19a49fd}
-      \strng{authorbibnamehash}{19ede518d25543c94b651ab8a19a49fd}
-      \strng{authornamehash}{19ede518d25543c94b651ab8a19a49fd}
-      \strng{authorfullhash}{19ede518d25543c94b651ab8a19a49fd}
-      \strng{authorfullhashraw}{19ede518d25543c94b651ab8a19a49fd}
-      \field{sortinit}{1}
-      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{note}{Visualización de datos analíticos de ventas y flujo de inventario}
-      \field{title}{Chart.js: Biblioteca de Gráficos Interactivos HTML5 Canvas para Aplicaciones Web}
-      \field{urlday}{15}
-      \field{urlmonth}{1}
-      \field{urlyear}{2025}
-      \field{year}{2024}
-      \field{urldateera}{ce}
-      \verb{urlraw}
-      \verb https://www.chartjs.org/docs/latest/
-      \endverb
-      \verb{url}
-      \verb https://www.chartjs.org/docs/latest/
-      \endverb
-    \endentry
-    \entry{beck2001manifiesto}{online}{}{}
-      \name{author}{17}{}{%
-        {{hash=c5dcbe71f60a8d55caa11fe1493614d0}{%
-           family={Beck},
-           familyi={B\bibinitperiod},
-           given={Kent},
-           giveni={K\bibinitperiod}}}%
-        {{hash=b081a82bcbc247aeb2a2ca9ae72f9566}{%
-           family={Beedle},
-           familyi={B\bibinitperiod},
-           given={Mike},
-           giveni={M\bibinitperiod}}}%
-        {{hash=a3d49db7c8b6de036095a80d96ee1461}{%
-           family={Bennekum},
-           familyi={B\bibinitperiod},
-           given={Arie},
-           giveni={A\bibinitperiod},
-           prefix={van},
-           prefixi={v\bibinitperiod}}}%
-        {{hash=c1e5acec4259bb4c17ca1a00866f32e1}{%
-           family={Cockburn},
-           familyi={C\bibinitperiod},
-           given={Alistair},
-           giveni={A\bibinitperiod}}}%
-        {{hash=dc98036d5d01f88b9fdd0b5ff2bc8a2d}{%
-           family={Cunningham},
-           familyi={C\bibinitperiod},
-           given={Ward},
-           giveni={W\bibinitperiod}}}%
-        {{hash=312ac886938a9b2be4f8eb607567fe4c}{%
-           family={Fowler},
-           familyi={F\bibinitperiod},
-           given={Martin},
-           giveni={M\bibinitperiod}}}%
-        {{hash=61bdeb09cfbfab0465639014ab3b69be}{%
-           family={Grenning},
-           familyi={G\bibinitperiod},
-           given={James},
-           giveni={J\bibinitperiod}}}%
-        {{hash=bae406ad0a87e2f65be045fff38c80ad}{%
-           family={Highsmith},
-           familyi={H\bibinitperiod},
-           given={Jim},
-           giveni={J\bibinitperiod}}}%
-        {{hash=10383d05f32f2a21518b493a3c546e5c}{%
-           family={Hunt},
-           familyi={H\bibinitperiod},
-           given={Andrew},
-           giveni={A\bibinitperiod}}}%
-        {{hash=3673ee61a410ba25401f2aeaf593748a}{%
-           family={Jeffries},
-           familyi={J\bibinitperiod},
-           given={Ron},
-           giveni={R\bibinitperiod}}}%
-        {{hash=0dd621758d63b6f0b80fb66db4c3f61e}{%
-           family={Kern},
+        {{hash=1640aebebaf3b1913d7477fe0f7675e0}{%
+           family={Korth},
            familyi={K\bibinitperiod},
-           given={Jon},
-           giveni={J\bibinitperiod}}}%
-        {{hash=f520225da3039cab062eedb1e4ddc8d0}{%
-           family={Marick},
-           familyi={M\bibinitperiod},
-           given={Brian},
-           giveni={B\bibinitperiod}}}%
-        {{hash=6f41df64eb0dc4855be70172368604c2}{%
-           family={Martin},
-           familyi={M\bibinitperiod},
-           given={Robert\bibnamedelima C.},
-           giveni={R\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
-        {{hash=6ec958c6516fd90847b3266799d82f77}{%
-           family={Mellor},
-           familyi={M\bibinitperiod},
-           given={Steve},
+           given={Henry\bibnamedelima F.},
+           giveni={H\bibinitperiod\bibinitdelim F\bibinitperiod}}}%
+        {{hash=61d6a2d7215571ff54eadda8d36a2d58}{%
+           family={Sudarshan},
+           familyi={S\bibinitperiod},
+           given={S.},
            giveni={S\bibinitperiod}}}%
-        {{hash=ee6f08fcba839e09471a0bc69152b6a5}{%
-           family={Schwaber},
-           familyi={S\bibinitperiod},
-           given={Ken},
-           giveni={K\bibinitperiod}}}%
-        {{hash=6e3f26f6f816a26c6ab36bc7a899bcde}{%
-           family={Sutherland},
-           familyi={S\bibinitperiod},
-           given={Jeff},
-           giveni={J\bibinitperiod}}}%
-        {{hash=eb92fc3e1bc50392c9349cc38124af4c}{%
-           family={Thomas},
-           familyi={T\bibinitperiod},
-           given={Dave},
-           giveni={D\bibinitperiod}}}%
       }
-      \strng{namehash}{e0e8f5a23c6124fea7c2eb7da286ea5e}
-      \strng{fullhash}{6319ce73345b9ed5d04efa6747044498}
-      \strng{fullhashraw}{6319ce73345b9ed5d04efa6747044498}
-      \strng{bibnamehash}{e0e8f5a23c6124fea7c2eb7da286ea5e}
-      \strng{authorbibnamehash}{e0e8f5a23c6124fea7c2eb7da286ea5e}
-      \strng{authornamehash}{e0e8f5a23c6124fea7c2eb7da286ea5e}
-      \strng{authorfullhash}{6319ce73345b9ed5d04efa6747044498}
-      \strng{authorfullhashraw}{6319ce73345b9ed5d04efa6747044498}
-      \field{sortinit}{1}
-      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \list{location}{1}{%
+        {Madrid, España}%
+      }
+      \list{publisher}{1}{%
+        {McGraw-Hill}%
+      }
+      \strng{namehash}{59c006bedfd0408796f05183940decf3}
+      \strng{fullhash}{4c269a32abf2e4056c1b534993062a6b}
+      \strng{fullhashraw}{4c269a32abf2e4056c1b534993062a6b}
+      \strng{bibnamehash}{4c269a32abf2e4056c1b534993062a6b}
+      \strng{authorbibnamehash}{4c269a32abf2e4056c1b534993062a6b}
+      \strng{authornamehash}{59c006bedfd0408796f05183940decf3}
+      \strng{authorfullhash}{4c269a32abf2e4056c1b534993062a6b}
+      \strng{authorfullhashraw}{4c269a32abf2e4056c1b534993062a6b}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{note}{Principios fundamentales del desarrollo ágil y metodologías Scrum}
-      \field{title}{Manifiesto por el Desarrollo Ágil de Software}
-      \field{urlday}{15}
-      \field{urlmonth}{1}
-      \field{urlyear}{2025}
-      \field{year}{2001}
-      \field{urldateera}{ce}
-      \verb{urlraw}
-      \verb https://agilemanifesto.org/iso/es/manifesto.html
-      \endverb
-      \verb{url}
-      \verb https://agilemanifesto.org/iso/es/manifesto.html
-      \endverb
+      \field{edition}{7.ª}
+      \field{title}{Fundamentos de bases de datos}
+      \field{year}{2020}
     \endentry
   \enddatalist
 \endrefsection

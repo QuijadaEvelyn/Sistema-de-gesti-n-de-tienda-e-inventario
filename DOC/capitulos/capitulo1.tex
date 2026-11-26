@@ -1,11 +1,73 @@
 \chapter{Marco de Referencia}
+La digitalización de comercios especializados requiere integrar plataformas web capaces de gestionar inventarios complejos, concurrencia de usuarios y trazabilidad documental sin comprometer la integridad de los datos. En el ámbito de la ingeniería de software aplicada al comercio electrónico, diversos estudios y estándares coinciden en que el uso de arquitecturas en capas y modelos relacionales transaccionales permite reducir discrepancias operativas y mejorar el control administrativo en entornos multi-sucursal \cite{pressman2021, sommerville2020}. Asimismo, la adopción de controles de acceso basados en roles (RBAC) y mecanismos de aislamiento mediante contenedores se ha consolidado como una práctica recomendada para garantizar la seguridad y disponibilidad de los servicios web modernos \cite{owasp_top10, docker_compose}.
+Dentro de las soluciones existentes en el mercado para la venta en línea y el control de existencias destacan plataformas genéricas de comercio electrónico como WooCommerce \cite{woocommerce_docs}, sistemas de planificación de recursos empresariales (ERP) como Odoo \cite{odoo_docs} y herramientas especializadas en el seguimiento de activos individuales como Snipe-IT \cite{snipeit_docs}. Por su parte, los marcos de trabajo orientados a aplicaciones web empresariales como Laravel y los motores de bases de datos relacionales como MariaDB proporcionan las bases técnicas necesarias para construir sistemas a la medida con alta integridad transaccional y separación clara de responsabilidades \cite{laravel_doc, mariadb_foundation, silberschatz2020}.
+Para fundamentar el diseño de ARCHIVUM, se realizó una comparativa técnica frente a tres sistemas semejantes representativos, evaluando su capacidad para atender el inventario híbrido, el bloqueo temporal de piezas únicas, el congelamiento histórico de precios y la operación por sucursal:
+
+\begin{table}[H]
+\centering
+\caption{Comparativa técnica entre sistemas semejantes y ARCHIVUM.}
+\label{tab:comparativa_sistemas}
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{5pt}
+\footnotesize
+\begin{tabularx}{\textwidth}{>{\bfseries\color[HTML]{3B1E54}\raggedright\arraybackslash}p{3.0cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X}
+\rowcolor[HTML]{3B1E54}
+\textcolor{white}{\textbf{Criterio Evaluado}} & 
+\textcolor{white}{\textbf{WooCommerce \cite{woocommerce_docs}}} & 
+\textcolor{white}{\textbf{Odoo (Inventario + Web) \cite{odoo_docs}}} & 
+\textcolor{white}{\textbf{Snipe-IT \cite{snipeit_docs}}} & 
+\textcolor{white}{\textbf{ARCHIVUM}} \\
+\hline
+
+Enfoque principal & 
+Tienda en línea genérica orientada a venta minorista estándar. & 
+Planificación empresarial integral (ERP) multipropósito. & 
+Control interno de activos físicos y números de serie. & 
+Comercio electrónico e inventario híbrido para coleccionables. \\
+\hline
+
+\rowcolor[HTML]{F4F0F8}
+Inventario híbrido (volumen + pieza única) & 
+Limitado; requiere complementos externos complejos. & 
+Soporta lotes y números de serie, con alta complejidad de configuración. & 
+Solo activos individuales; carece de venta por volumen. & 
+Nativo: combina existencias por volumen y piezas únicas con COA. \\
+\hline
+
+Reserva temporal en carrito (anti-sobreventa) & 
+No bloquea stock hasta finalizar el pago; riesgo de sobreventa. & 
+Reserva al confirmar orden de venta, no en navegación web. & 
+No aplica (no es plataforma de comercio electrónico). & 
+Reserva transaccional inmediata con expiración automática. \\
+\hline
+
+\rowcolor[HTML]{F4F0F8}
+Congelamiento histórico de precios & 
+Guarda precios en orden, pero los reportes dependen de plugins. & 
+Mantiene historial contable en líneas de pedido. & 
+No gestiona precios de venta ni facturación comercial. & 
+Congela precio unitario y descuentos en \texttt{detalle\_pedidos} al comprar. \\
+\hline
+
+Operación por roles y sucursal & 
+Roles básicos de tienda; multi-sucursal requiere extensiones. & 
+Control granular multi-almacén con curva de aprendizaje alta. & 
+Roles administrativos internos sin portal de clientes. & 
+5 roles específicos (Admin, Compras, Ventas, Almacén, Cliente) por sede. \\
+\hline
+\end{tabularx}
+\end{table}
+\FloatBarrier
+\clearpage
 
 \section{Introducción}
-El auge del comercio digital y la preservación del patrimonio cultural han generado una demanda creciente de plataformas tecnológicas capaces de gestionar bienes físicos con un alto nivel de especialización y valor histórico. A diferencia de las tiendas convencionales que administran artículos homogéneos de consumo masivo, las librerías anticuarias, tiendas de discos en vinilo y casas de coleccionismo enfrentan retos operativos singulares: cada ejemplar puede poseer un estado de conservación único, un dictamen notarial o Certificado de Autenticidad (COA) \cite{pressman2010}, y una procedencia histórica que determina su valoración comercial.
+El comercio especializado de artículos culturales y de colección —como primeras ediciones bibliográficas, discos de vinilo originales, ediciones conmemorativas y memorabilia certificada— demanda mecanismos de control mucho más precisos que el comercio minorista convencional. Mientras que un producto comercial puede contabilizarse simplemente por volumen total, una pieza única o numerada exige trazabilidad individual desde su ingreso en bóveda hasta su entrega final al comprador, manteniendo intacta su ficha técnica, su estado de conservación y su respaldo documental.
 
-En este contexto surge \textbf{\say{Archivum: Bibliotheca \& Discos}}, una solución integral de software web concebida para unificar la exhibición inmersiva de catálogos patrimoniales con un robusto motor de control de inventarios, transferencias de existencias entre sedes y seguimiento transaccional en tiempo real \cite{sommerville2011}.
+El propósito de este proyecto es diseñar y construir ARCHIVUM — Bibliotheca \& Discos, un sistema web que unifica en una sola plataforma el portal público de comercio electrónico y la terminal operativa interna de la empresa. Por un lado, brinda a los clientes un catálogo interactivo organizado por colecciones (Inicio, Libros, Discos, Coleccionables, Ediciones Especiales, Conoce más de nosotros y Contacto y Horarios) con búsqueda rápida y apartado inmediato. Por otro lado, dota al personal interno de herramientas específicas según su responsabilidad operativa para controlar existencias entre sucursales, gestionar órdenes a proveedores, validar pagos, preparar envíos y emitir reportes auditables.
 
-\begin{figure}[htbp]
+En cuanto a su alcance, la presente memoria abarca desde el diagnóstico de la problemática y la fundamentación teórica hasta el modelado formal y la implementación funcional del sistema en un entorno contenerizado. Se documenta la arquitectura completa en Laravel 13, la estructura de la base de datos en MariaDB, las reglas de negocio que protegen la integridad del inventario y las evidencias reales de funcionamiento de cada módulo operativo.
+
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{imagenes/dashboard_admin.png}
     \caption{Panel centralizado de administración y análisis operativo en Archivum.}
@@ -13,43 +75,34 @@ En este contexto surge \textbf{\say{Archivum: Bibliotheca \& Discos}}, una soluc
 \end{figure}
 
 \section{Antecedentes}
-Tradicionalmente, los establecimientos orientados al comercio de coleccionables, obras bibliográficas raras y soportes musicales analógicos han gestionado sus existencias mediante métodos empíricos o aplicaciones ofimáticas desarticuladas, como hojas de cálculo locales y libros contables manuales. Esta práctica introduce serias vulnerabilidades operativas:
-\begin{itemize}
-    \item \textbf{Discrepancias en existencias multisede:} La falta de un registro centralizado genera desincronización entre el almacén central (bóveda) y las sucursales físicas abiertas al público.
-    \item \textbf{Carencia de trazabilidad patrimonial:} La ausencia de vinculación digital entre el número de serie de una pieza y su dictamen de certificación dificulta la auditoría y garantía ofrecida a los clientes.
-    \item \textbf{Experiencias de usuario limitadas:} Los catálogos estáticos no transmiten el detalle físico, artístico ni sonoro característico de los discos de vinilo o piezas de colección, mermando el interés y confianza de compradores internacionales.
-\end{itemize}
+Históricamente, las librerías y tiendas de discos independientes han resuelto su control operativo mediante dos alternativas: el uso de hojas de cálculo locales o la adopción de plataformas genéricas de comercio electrónico y punto de venta. Las hojas de cálculo carecen de control de concurrencia, historial de auditoría y validación de roles, lo que vuelve inviable la venta simultánea en línea y en mostrador. Por su parte, las plataformas genéricas de comercio electrónico están diseñadas para productos homogéneos con inventario puramente cuantitativo, por lo que no distinguen entre un lote estándar y una pieza única numerada con certificado de autenticidad ni gestionan reservas temporales automatizadas durante el pago.
 
-Frente a este escenario, la ingeniería de software actual ofrece patrones arquitectónicos desacoplados y marcos de trabajo maduros, tales como el ecosistema Laravel y la virtualización basada en contenedores ligeros \cite{laravel_doc, docker_overview}, que permiten desplegar soluciones seguras, transaccionales y con alta fidelidad gráfica.
+Ante estas limitaciones, surgió la necesidad de desarrollar una solución a la medida que integrara en una misma arquitectura web la exhibición curatorial del catálogo, la gestión de inventario híbrido por sucursal y los flujos administrativos de compras, ventas y almacén.
 
 \section{Objetivo General}
-Diseñar, desarrollar e implementar una plataforma web integral de comercio electrónico y gestión de inventario multisede denominada \textbf{\say{Archivum: Bibliotheca \& Discos}}, aplicando el patrón arquitectónico Modelo-Vista-Controlador (MVC) sobre el framework Laravel 11 y PHP 8.4, que garantice la trazabilidad de artículos coleccionables, certificación notarial y una experiencia interactiva inmersiva para el usuario.
+Desarrollar un sistema web de gestión de inventario y punto de venta en línea para libros, discos y coleccionables, utilizando el framework Laravel y arquitectura MVC, con el propósito eficaz del control de existencias y mejora de procesos administrativos de las sucursales.
 
 \section{Objetivos Específicos}
-\begin{enumerate}
-    \item Modelar e implementar una base de datos relacional normalizada en MariaDB con soporte de integridad referencial, transacciones ACID y control de inventarios multisede (bóveda central y sucursales).
-    \item Desarrollar una interfaz de usuario pública responsive y accesible con estética temática (\say{Archival Amethyst}), incorporando un visor interactivo 3D para discos de vinilo y exploración fluida de libros raros y memorabilia.
-    \item Construir un panel administrativo seguro dotado de visualizaciones analíticas dinámicas (Chart.js), auditoría de movimientos de stock, conciliación de transferencias y gestión de dictámenes de autenticidad (COA).
-    \item Implementar mecanismos de seguridad informática y control de acceso basado en roles (RBAC), mitigando vulnerabilidades críticas web según las directrices de OWASP \cite{owasp_top10}.
-    \item Empaquetar y configurar la infraestructura de servicios (Nginx, PHP-FPM, MariaDB) utilizando contenedores Docker para garantizar la portabilidad y reproductibilidad del entorno en entornos de desarrollo y producción.
-\end{enumerate}
+\begin{itemize}
+    \item Recopilar las necesidades de la tienda para la mejora de funciones clave del sistema, como las ventas diarias, la administración de productos y el control entre las sucursales.
+    \item Diseñar la estructura del sistema y el modelo de la base de datos, para la precisión de la información de manera clara y el buen funcionamiento del sistema.
+    \item Programar el sistema web utilizando la tecnología necesaria para la gestión de los usuarios, permisos y el catálogo de libros, discos y coleccionables.
+    \item Crear una interfaz sencilla y visual para el usuario, donde el punto de venta sea ágil y las búsquedas sean rápidas.
+    \item Realizar pruebas de funcionamiento para la corrección de errores, asegurando la cantidad exacta del inventario.
+\end{itemize}
 
 \section{Alcance}
-El proyecto abarca el ciclo de vida completo de desarrollo de la plataforma web, incluyendo:
 \begin{itemize}
-    \item Módulo de catálogo público con filtrado por categorías (Libros, Discos, Coleccionables), estado de conservación y precios.
-    \item Visor interactivo 3D para la sección de discos, con rotación continua, perspectiva dinámica e inspección visual de carátula y surcos.
-    \item Módulo transaccional de compras (carrito de compras, pasarela de pago simulada, emisión de orden y comprobante digital).
-    \item Panel de administración general con indicadores clave de rendimiento (KPIs), gráficas de ingresos y volumen de pedidos.
-    \item Módulo de control de almacén: ajustes de stock por mermas/recepciones, envíos y transferencias intersedes con confirmación de custodia.
+    \item \textbf{Gestión de Tienda y Sucursales:} Catálogo de productos especializado para libros, discos de vinilo y piezas de colección. Manejo de inventario híbrido: control por volumen para productos comunes y control individual para piezas únicas o de edición limitada. Panel de acceso privado donde el personal administra únicamente el inventario y los pedidos de su sucursal asignada.
+    \item \textbf{Tienda en Línea (E-Commerce):} Portal público para clientes con catálogo interactivo (Inicio, Libros, Discos, Coleccionables, Ediciones Especiales, Conoce más de nosotros y Contacto y Horarios), filtros de búsqueda rápidos, carrito de compras y registro de usuarios. Panel interno para que los trabajadores procesen, preparen y gestionen las compras recibidas por la plataforma web.
+    \item \textbf{Seguridad en las Compras e Inventarios:} Congelamiento inmediato del producto exclusivo durante el proceso de compra para evitar que dos personas adquieran la misma pieza única al mismo tiempo. Registro permanente del precio, descuentos y totales aplicados en el momento exacto en que el cliente realiza su pedido.
+    \item \textbf{Automatización del Sistema:} Cancelación automática de fichas de pago y liberación de productos apartados cuando vence el tiempo límite sin requerir intervención manual. Envío automático de correos electrónicos al cliente para confirmar su pago, notificar la salida del almacén y compartir su número de guía.
 \end{itemize}
 
 \section{Limitaciones}
-Las principales delimitaciones del presente trabajo son:
 \begin{itemize}
-    \item El procesamiento de pagos opera en un entorno de pruebas (sandbox), sin procesar cobros reales con instituciones bancarias para esta fase institucional.
-    \item La digitalización y captura de metadatos de los artículos requiere el ingreso manual inicial por parte de los administradores o curadores del inventario.
-    \item El soporte del visor interactivo 3D depende de navegadores web compatibles con tecnologías modernas de renderizado CSS 3D y JavaScript estándar.
+    \item \textbf{Verificación Bancaria Directa (Open Banking):} La validación de pagos por transferencia depende del registro y verificación administrativa del comprobante y no de una comunicación directa vía API con el core de las entidades bancarias (Se realiza de manera simulada).
+    \item \textbf{Conexión API en Tiempo Real con Paqueterías Externas (Se realiza de manera simulada):} La generación de guías y el rastreo paso a paso se gestionan internamente dentro del ecosistema del sistema, salvo integración posterior mediante APIs de proveedores logísticos terceros (como FedEx o DHL).
 \end{itemize}
 
 \section{Problemática}
@@ -58,6 +111,8 @@ El comercio y preservación de piezas de colección presenta desafíos operativo
 Asimismo, la falta de transparencia en la cadena de custodia y la inexistencia de un repositorio centralizado de dictámenes notariales aumentan el riesgo de falsificaciones. Resulta indispensable contar con un sistema unificado que integre la venta directa al público con la fiscalización estricta de las existencias resguardadas en cada sucursal.
 
 \section{Justificación}
-Desde la perspectiva tecnológica, este proyecto demuestra la viabilidad y potencia de utilizar estándares modernos de desarrollo web (PHP 8.4, Laravel 11, Tailwind CSS, Alpine.js y MariaDB) articulados en una infraestructura contenerizada con Docker. Esta combinación asegura mantenibilidad a largo plazo, bajo acoplamiento y un uso eficiente de recursos de hardware.
+El desarrollo de esta plataforma en Laravel se justifica por la necesidad de ofrecer un entorno moderno, seguro y automatizado que resuelva de manera eficiente la administración de tiendas especializadas en libros, vinilos y artículos de colección.
 
-Desde la perspectiva económica y operativa, la adopción de Archivum permite a la institución automatizar la auditoría de activos, reducir en un 100\% las duplicidades en ventas, y ofrecer a los coleccionistas una plataforma de confianza y prestigio. La experiencia estética y técnica refuerza el valor del acervo cultural y posiciona a la empresa a la vanguardia tecnológica del comercio de antigüedades y coleccionables.
+Al estructurar la información de forma flexible, el sistema optimiza el almacenamiento de los detalles propios de cada producto sin desperdiciar espacio. Asimismo, cuenta con mecanismos de control estrictos que garantizan que los precios acordados al momento de la compra se conserven intactos en el historial de los pedidos, y que las piezas exclusivas de edición limitada no sufran problemas de sobreventa.
+
+Finalmente, la integración de servicios automatizados reduce significativamente la carga de trabajo manual, encargándose de tareas rutinarias como la liberación de apartados expirados, la actualización del inventario en tiempo real y el envío automático de notificaciones a los clientes tras confirmar su pago. Esto no solo mejora la experiencia de compra en línea, sino que asegura un control administrativo confiable y transparente en cada una de las sucursales.

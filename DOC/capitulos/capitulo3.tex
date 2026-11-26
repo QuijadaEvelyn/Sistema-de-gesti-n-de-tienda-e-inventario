@@ -1,7 +1,7 @@
-\chapter{Desarrollo e Implementación}
+\chapter{Análisis y diseño}
 
 \section{Metodología de Desarrollo}
-Para la planificación y ejecución del proyecto se adoptó el marco de trabajo ágil \textbf{Scrum} \cite{beck2001manifiesto, pressman2010}, debido a su flexibilidad ante cambios y enfoque en entregas de valor continuas e incrementales. El ciclo de vida del desarrollo se estructuró en cuatro \textit{Sprints} de dos semanas cada uno:
+Para la planificación y ejecución del proyecto se adoptó el marco de trabajo ágil \textbf{Scrum} \cite{pressman2021}, debido a su flexibilidad ante cambios y enfoque en entregas de valor continuas e incrementales. El ciclo de vida del desarrollo se estructuró en cuatro \textit{Sprints} de dos semanas cada uno:
 
 \begin{enumerate}
     \item \textbf{Sprint 1: Análisis de Requerimientos y Capa de Persistencia.} Definición de historias de usuario, diseño del esquema relacional de la base de datos, implementación de migraciones de MariaDB y configuración del entorno de desarrollo contenerizado con Docker Compose.
@@ -13,7 +13,7 @@ Para la planificación y ejecución del proyecto se adoptó el marco de trabajo 
 \section{Diseño y Modelado de la Base de Datos}
 La persistencia de la información fue modelada conforme a las reglas de normalización de bases de datos relacionales para evitar redundancias y anomalías de actualización. La tabla \ref{tab:estructura_bd} sintetiza las entidades fundamentales del sistema y su propósito en el dominio:
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \small
 \begin{tabularx}{\textwidth}{|l|l|X|}
