@@ -31,3 +31,5 @@ Thumbs.db
 #!public/images/productos/
 !database/seeders/assets/
 !database/seeders/assets/productos/
+
+*.sql
